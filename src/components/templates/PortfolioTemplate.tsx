@@ -1,4 +1,5 @@
 import Header from '../organisms/Header'
+import Hero from '../organisms/Hero'
 import About from '../organisms/About'
 import CaseStudies from '../organisms/CaseStudies'
 import CodeSamples from '../organisms/CodeSamples'
@@ -8,6 +9,7 @@ function PortfolioTemplate() {
   return (
     <>
       <Header />
+      <Hero />
       <About />
       <CaseStudies />
       <CodeSamples />
