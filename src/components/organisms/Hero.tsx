@@ -1,10 +1,15 @@
 import Heading from '../atoms/Heading'
 
-function Hero() {
+type HeroProps = {
+  name: string
+  tagline: string
+}
+
+function Hero({ name, tagline }: HeroProps) {
   return (
     <section id="hero" className="hero">
-      <Heading level={1}>Your Name</Heading>
-      <p>Placeholder tagline — a one-line summary of what you do and who you do it for.</p>
+      <Heading level={1}>{name}</Heading>
+      <p>{tagline}</p>
     </section>
   )
 }
