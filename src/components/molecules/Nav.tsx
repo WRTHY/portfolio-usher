@@ -1,4 +1,6 @@
+import { useState } from 'react'
 import NavLink from '../atoms/NavLink'
+import MenuToggle from '../atoms/MenuToggle'
 
 const links = [
   { href: '#about', label: 'About' },
@@ -8,12 +10,17 @@ const links = [
 ]
 
 function Nav() {
+  const [isOpen, setIsOpen] = useState(false)
+
   return (
     <nav>
-      <ul>
+      <MenuToggle isOpen={isOpen} onClick={() => setIsOpen((open) => !open)} />
+      <ul id="site-nav-list" className={isOpen ? 'open' : undefined}>
         {links.map((link) => (
           <li key={link.href}>
-            <NavLink href={link.href}>{link.label}</NavLink>
+            <NavLink href={link.href} onClick={() => setIsOpen(false)}>
+              {link.label}
+            </NavLink>
           </li>
         ))}
       </ul>
