@@ -1,7 +1,9 @@
+import Heading from '../atoms/Heading'
+
 function Contact() {
   return (
     <section id="contact">
-      <h2>Contact</h2>
+      <Heading>Contact</Heading>
       <p>Placeholder — email, LinkedIn, GitHub, however you want people to reach you.</p>
     </section>
   )
