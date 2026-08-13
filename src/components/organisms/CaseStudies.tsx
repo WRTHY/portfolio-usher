@@ -1,7 +1,9 @@
+import Heading from '../atoms/Heading'
+
 function CaseStudies() {
   return (
     <section id="case-studies">
-      <h2>Case Studies</h2>
+      <Heading>Case Studies</Heading>
       <p>Placeholder — a few in-depth write-ups of real projects: problem, approach, outcome.</p>
     </section>
   )
