@@ -23,3 +23,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Licensed webfont — not for public redistribution
+public/fonts/
