@@ -1,30 +1,8 @@
-import { useEffect, useState } from 'react'
+import useActiveSection from '../../hooks/useActiveSection'
 import { sections } from '../../content/navigation'
 
 function SectionDots() {
-  const [activeId, setActiveId] = useState<string>(sections[0].id)
-
-  useEffect(() => {
-    const elements = sections
-      .map((section) => document.getElementById(section.id))
-      .filter((el): el is HTMLElement => el !== null)
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const mostVisible = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0]
-
-        if (mostVisible) {
-          setActiveId(mostVisible.target.id)
-        }
-      },
-      { threshold: 0.5 },
-    )
-
-    elements.forEach((el) => observer.observe(el))
-    return () => observer.disconnect()
-  }, [])
+  const activeId = useActiveSection()
 
   return (
     <ul className="section-dots">
