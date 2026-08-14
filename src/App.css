@@ -77,6 +77,11 @@ nav a {
   &:hover {
     color: var(--accent);
   }
+
+  &.active {
+    color: var(--accent);
+    font-weight: 700;
+  }
 }
 
 @media (min-width: 640px) {
@@ -142,12 +147,12 @@ section,
   }
 }
 
-#contact.bump {
+#about.bump {
   animation: overscroll-bump 0.3s ease-out;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  #contact.bump {
+  #about.bump {
     animation: none;
   }
 }
@@ -165,12 +170,106 @@ section,
   z-index: 1;
 }
 
+#case-studies {
+  background: var(--section-alt-bg);
+}
+
 #about {
   background: var(--section-alt-bg);
 }
 
-#code-samples {
-  background: var(--section-alt-bg);
+@media (min-width: 640px) {
+  #about {
+    /* Extra clearance so centering happens within the space actually free
+       of the fixed sidebar (left: 24px + its width), not the raw viewport —
+       otherwise a centered block can still butt up against it at narrower
+       desktop widths where there isn't room to be both centered and clear. */
+    padding-left: 64px;
+  }
+}
+
+.framed-image {
+  overflow: hidden;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  flex: 0 0 auto;
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Bias the crop toward the top instead of the default center — portrait
+       photos typically have little headroom above the subject, so an even
+       top/bottom crop tends to cut into the head before it touches the
+       (usually more forgiving) bottom of the frame. */
+    object-position: 50% 20%;
+  }
+}
+
+/* Reusable image-beside-text layout (stacks on mobile). The generic
+   `section > *` rule caps direct children at 640px — .media-text's own
+   class specificity overrides that with a wider, two-column-appropriate
+   max-width, while still being centered by the section the same as every
+   other section's content. */
+.media-text {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 24px;
+  max-width: 900px;
+  width: 100%;
+}
+
+.media-text-image {
+  width: 100%;
+  /* 16/10 (very short/wide) was mathematically incompatible with a portrait
+     headshot — no crop position could avoid cutting into the head. 4/5
+     needs far less vertical crop from a ~2/3 source. */
+  aspect-ratio: 4 / 5;
+}
+
+.media-text-content {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+@media (min-width: 640px) {
+  .media-text {
+    flex-direction: row;
+    /* stretch (the mobile value) would force the image to match the text
+       column's height — with a few paragraphs that's easily 700px+. Center
+       instead: the image keeps its own fixed size but sits centered against
+       the (usually taller) text column rather than pinned to its top. */
+    align-items: center;
+  }
+
+  .media-text-image {
+    width: 320px;
+    aspect-ratio: 4 / 5;
+  }
+
+  .media-text-content {
+    flex: 1;
+    justify-content: center;
+  }
+}
+
+#about .media-text-content {
+  h2 {
+    font-weight: 700;
+    font-size: 28px;
+  }
+
+  p {
+    font-size: 15px;
+    line-height: 145%;
+  }
+
+  p + p {
+    margin-top: 12px;
+  }
 }
 
 .social-links {
