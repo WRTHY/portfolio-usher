@@ -4,12 +4,14 @@ import About from '../organisms/About'
 import CaseStudies from '../organisms/CaseStudies'
 import CodeSamples from '../organisms/CodeSamples'
 import Contact from '../organisms/Contact'
+import Sidebar from '../organisms/Sidebar'
 import { siteContent } from '../../content/site'
 
 function PortfolioTemplate() {
   return (
     <>
       <Header />
+      <Sidebar />
       <Hero name={siteContent.name} tagline={siteContent.tagline} />
       <About />
       <CaseStudies />
