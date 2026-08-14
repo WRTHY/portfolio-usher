@@ -6,6 +6,7 @@ import Nav from './Nav'
 describe('Nav', () => {
   it('renders a link for each section', () => {
     render(<Nav />)
+    expect(screen.getByRole('link', { name: 'Home' })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'About' })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Case Studies' })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Code Samples' })).toBeInTheDocument()
