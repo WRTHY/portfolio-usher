@@ -5,6 +5,19 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>portfolio</title>
+    <script>
+      // Runs before first paint so a previously chosen light/dark mode applies
+      // immediately, instead of flashing the system-default mode for a frame
+      // before React mounts. (data-theme, set separately, picks the palette.)
+      (function () {
+        try {
+          var storedMode = localStorage.getItem('mode')
+          if (storedMode === 'light' || storedMode === 'dark') {
+            document.documentElement.setAttribute('data-mode', storedMode)
+          }
+        } catch (e) {}
+      })()
+    </script>
   </head>
   <body>
     <div id="root"></div>

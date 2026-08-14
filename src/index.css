@@ -1,3 +1,9 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 @font-face {
   font-family: 'TBJ Orcherum Mini';
   src:
@@ -9,17 +15,31 @@
 }
 
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+  color-scheme: light dark;
+
+  /* Cream & Violet — the active theme. Each token names its light value,
+     then its dark value; the browser picks based on the computed
+     color-scheme below, which defaults to following the OS preference.
+     Dark mode reuses the original mono theme's gray/navy neutrals rather
+     than a warm brown — only the light side and the accent are cream/violet. */
+  --text: light-dark(#5c5346, #9ca3af);
+  --text-h: light-dark(#1f1710, #f3f4f6);
+  --bg: light-dark(#f8f1e1, #16171d);
+  --border: light-dark(#dccba3, #2e303a);
+  --code-bg: light-dark(#efe3c8, #1f2028);
+  --accent: light-dark(#6d28d9, #a78bfa);
+  --accent-bg: light-dark(rgba(109, 40, 217, 0.1), rgba(167, 139, 250, 0.15));
+  --accent-border: light-dark(rgba(109, 40, 217, 0.4), rgba(167, 139, 250, 0.5));
+  --social-bg: light-dark(rgba(239, 227, 200, 0.5), rgba(47, 48, 58, 0.5));
+  --section-alt-bg: light-dark(#f1e6cc, #1c1e26);
+  /* Deliberately darker/more saturated than --accent: a handful of small,
+     low-opacity dots needs stronger contrast than text/UI elements do to
+     stay visible against the light cream background. */
+  --particle-color: light-dark(#4c1d95, #a78bfa);
+  --shadow: light-dark(
+    rgba(60, 40, 10, 0.12) 0 10px 24px -8px,
+    rgba(0, 0, 0, 0.4) 0 10px 24px -8px
+  );
 
   --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
   --heading: 'TBJ Orcherum Mini', system-ui, 'Segoe UI', Roboto, sans-serif;
@@ -27,7 +47,6 @@
 
   font: 18px/145% var(--sans);
   letter-spacing: 0.18px;
-  color-scheme: light dark;
   color: var(--text);
   background: var(--bg);
   font-synthesis: none;
@@ -40,31 +59,52 @@
   }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
+/* The original grayscale palette, kept around as a selectable alternate
+   (data-theme="mono") rather than deleted, since more themes are coming. */
+:root[data-theme='mono'] {
+  --text: light-dark(#6b6375, #9ca3af);
+  --text-h: light-dark(#08060d, #f3f4f6);
+  --bg: light-dark(#fff, #16171d);
+  --border: light-dark(#e5e4e7, #2e303a);
+  --code-bg: light-dark(#f4f3ec, #1f2028);
+  --accent: light-dark(#aa3bff, #c084fc);
+  --accent-bg: light-dark(rgba(170, 59, 255, 0.1), rgba(192, 132, 252, 0.15));
+  --accent-border: light-dark(rgba(170, 59, 255, 0.5), rgba(192, 132, 252, 0.5));
+  --social-bg: light-dark(rgba(244, 243, 236, 0.5), rgba(47, 48, 58, 0.5));
+  --section-alt-bg: light-dark(#f7f6f3, #1c1e26);
+  --particle-color: light-dark(#7c1fd6, #c084fc);
+  --shadow: light-dark(
+    rgba(0, 0, 0, 0.1) 0 10px 15px -3px,
+    rgba(0, 0, 0, 0.4) 0 10px 15px -3px
+  );
+}
+
+/* data-mode overrides the OS-level light/dark preference (set by the sidebar
+   toggle). Unset means "follow the system," on either theme. */
+:root[data-mode='light'] {
+  color-scheme: light;
+}
+
+:root[data-mode='dark'] {
+  color-scheme: dark;
+}
+
+html {
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-snap-type: none;
+    scroll-behavior: auto;
   }
 }
 
 #root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  border-inline: 1px solid var(--border);
   min-height: 100svh;
   display: flex;
   flex-direction: column;
-  box-sizing: border-box;
 }
 
 body {
@@ -80,11 +120,12 @@ h2 {
 
 h1 {
   font-size: 56px;
+  font-weight: 700;
   letter-spacing: -1.68px;
-  margin: 32px 0;
+  margin: 16px 0;
   @media (max-width: 1024px) {
     font-size: 36px;
-    margin: 20px 0;
+    margin: 12px 0;
   }
 }
 h2 {
