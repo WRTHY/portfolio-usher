@@ -11,7 +11,7 @@ function PortfolioTemplate() {
     <>
       <Header />
       <Sidebar />
-      <Hero name={siteContent.name} tagline={siteContent.tagline} />
+      <Hero name={siteContent.name} tagline={siteContent.tagline} resumeUrl={siteContent.resumeUrl} />
       <CaseStudies />
       <CodeSamples />
       <About />
