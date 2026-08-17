@@ -114,8 +114,8 @@ section,
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
-  padding: 32px 20px;
+  align-items: flex-start;
+  padding: 32px var(--page-gutter);
   text-align: left;
   /* Own stacking context, so the watermark's negative z-index (below) is
      scoped to just this section instead of being compared against
@@ -125,8 +125,16 @@ section,
   overflow: hidden;
 
   & > * {
-    max-width: 640px;
+    max-width: var(--content-width);
     width: 100%;
+    /* The content-alignment standard: every section's content starts this
+       far from the section's own left edge — split the difference between
+       hugging that edge (0) and being fully centered in the space the
+       sidebar leaves free (which reads as too far right on wide screens).
+       Anything that intentionally breaks out of --content-width (wider
+       media, the bento grid) should reuse this same formula so its left
+       edge still lines up with the rest of the section's content. */
+    margin-left: max(0px, calc((100% - var(--content-width)) / 4));
   }
 }
 
@@ -137,6 +145,13 @@ section,
   h1 {
     margin: 0 0 8px;
   }
+}
+
+.hero-content {
+  /* Hero is a centered showcase, not part of the reading-column standard
+     above — cancel the shared inset so `align-items: center` on .hero
+     centers it precisely, same as before. */
+  margin-left: 0;
 }
 
 .section-watermark {
@@ -204,11 +219,17 @@ section,
   #about,
   #case-studies {
     /* Extra clearance so centering happens within the space actually free
-       of the fixed sidebar (left: 24px + its width), not the raw viewport —
-       otherwise a centered block can still butt up against it at narrower
-       desktop widths where there isn't room to be both centered and clear. */
-    padding-left: 64px;
+       of the fixed sidebar, not the raw viewport — otherwise a centered
+       block can still butt up against it at narrower desktop widths where
+       there isn't room to be both centered and clear. */
+    padding-left: var(--page-gutter-desktop);
   }
+}
+
+.bento-grid-wrap {
+  position: relative;
+  max-width: var(--content-width-wide);
+  width: 100%;
 }
 
 .bento-grid {
@@ -216,8 +237,15 @@ section,
   grid-template-columns: 1fr;
   grid-auto-rows: 160px;
   gap: 12px;
-  max-width: 900px;
   width: 100%;
+  /* The native scrollbar is replaced by .bento-scroll-hint below — hiding
+     it here still leaves the element scrollable by drag/wheel/touch/
+     keyboard, just without the visual bar. */
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .bento-tile {
@@ -294,11 +322,71 @@ section,
    one member on the `TileSize` union (src/content/caseStudies.ts) plus one
    rule here — nothing else needs to change. */
 @media (min-width: 640px) {
+  .bento-grid-wrap {
+    /* Full width of the section here — the visual anchor is created by
+       padding inside .bento-grid instead of a margin on this wrap (see
+       below), so the scroll container's own clipping edge sits at the
+       section's true left edge rather than at the anchor line. */
+    margin-left: 0;
+    max-width: none;
+    width: 100%;
+  }
+
   .bento-grid {
-    grid-template-columns: repeat(4, 1fr);
-    grid-auto-rows: 140px;
-    grid-auto-flow: dense;
+    /* #case-studies carries extra left padding to keep normal reading
+       content clear of the fixed sidebar (see the --page-gutter-desktop
+       rule above) — but the sidebar itself has no background, and its
+       pointer-events/z-index are already set up so its icons stay
+       clickable and on top of whatever's beneath them. Pull the scroll
+       container's own box out past that clearance, to the section's true
+       left edge, so tiles can slide underneath the sidebar instead of
+       stopping short of it. The compensating padding-left below adds the
+       same amount back, so the anchor position doesn't move — it's still
+       exactly where .bento-grid-wrap (unchanged) would have put it. */
+    margin-left: calc(-1 * var(--page-gutter-desktop));
+    width: calc(100% + var(--page-gutter-desktop));
+
+    /* Leading space so the first tile still rests at the same shared
+       inset every other section's content uses, matching the anchor —
+       but because this is padding on the scroll container itself (not a
+       margin on the wrap above), it scrolls away with the content. That
+       lets tiles slide left past the anchor as you scroll and only
+       disappear once they cross the section's true left edge, instead of
+       vanishing early right at the anchor line. The right side keeps
+       clipping at the section's right gutter (via .bento-grid-wrap's
+       width) — a tile ending up visibly cut off there is what cues that
+       there's more to scroll. */
+    padding-left: calc(
+      var(--page-gutter-desktop) + max(0px, calc((100% - var(--content-width)) / 4))
+    );
+    /* Without this, scroll-snap treats the content box (post-padding) as
+       the snap boundary and auto-corrects scrollLeft on load to erase the
+       padding above — matching this to that padding keeps the padding (and
+       the anchor position it creates) actually visible at rest. */
+    scroll-padding-left: calc(
+      var(--page-gutter-desktop) + max(0px, calc((100% - var(--content-width)) / 4))
+    );
+
+    /* Column-flow with a fixed 2-row template and a fixed (not 1fr)
+       auto-column width, so the grid's intrinsic width is driven by its
+       content instead of being squeezed to fit the section — the same
+       fixed-width-children-plus-overflow-x technique the old flex
+       carousel used, just applied to a 2D grid. Dense packing fills tiles
+       into these 2 rows outward to the right instead of wrapping a 3rd
+       row, and content wider than the viewport scrolls horizontally
+       rather than growing downward. */
+    grid-template-columns: none;
+    grid-template-rows: repeat(2, minmax(200px, 1fr));
+    grid-auto-columns: 240px;
+    grid-auto-flow: column dense;
     gap: 16px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x proximity;
+  }
+
+  .bento-tile {
+    scroll-snap-align: start;
   }
 
   .bento-tile--1x1 {
@@ -316,6 +404,49 @@ section,
   .bento-tile--2x2 {
     grid-column: span 2;
     grid-row: span 2;
+  }
+}
+
+.bento-scroll-hint {
+  /* Decorative only — the tiles themselves remain the real interactive
+     elements, and the grid is still scrollable by wheel/touch/drag
+     without this. Each side is hidden by BentoGrid.tsx once there's
+     nothing left to scroll to in that direction, so it never points at
+     content that isn't there. */
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 72px;
+  display: flex;
+  align-items: center;
+  color: var(--accent);
+  font-size: 20px;
+  pointer-events: none;
+}
+
+.bento-scroll-hint--right {
+  right: 0;
+  justify-content: flex-end;
+  padding-right: 8px;
+  /* Fades to this section's own background (not --bg) so it blends with
+     the space around the tiles rather than the tiles themselves. */
+  background: linear-gradient(to right, transparent, var(--section-alt-bg) 65%);
+}
+
+.bento-scroll-hint--left {
+  /* No chevron on this side (see BentoGrid.tsx) — just the fade, so no
+     content-driven padding/justify-content needed. */
+  left: 0;
+  background: linear-gradient(to left, transparent, var(--section-alt-bg) 65%);
+}
+
+@media (min-width: 640px) {
+  .bento-scroll-hint--left {
+    /* .bento-grid-wrap doesn't move, but .bento-grid pokes out past it
+       (see .bento-grid's own margin-left above) to reach under the
+       sidebar — this hint needs to sit at that same true edge, not the
+       wrap's, or it'd fade out 64px before tiles actually disappear. */
+    left: calc(-1 * var(--page-gutter-desktop));
   }
 }
 
@@ -438,7 +569,7 @@ section,
   flex-direction: column;
   align-items: stretch;
   gap: 24px;
-  max-width: 900px;
+  max-width: var(--content-width-wide);
   width: 100%;
 }
 
@@ -521,6 +652,33 @@ section,
   gap: 24px;
   margin-top: 24px;
   font-size: 22px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 24px;
+  padding: 8px 24px;
+  border-radius: 4px;
+  border: 2px solid var(--accent);
+  background: var(--accent-bg);
+  color: var(--accent);
+  font-family: var(--heading);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1;
+  text-decoration: none;
+  transition:
+    background 0.2s,
+    color 0.2s,
+    border-color 0.2s;
+
+  &:hover {
+    background: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
+  }
 }
 
 .sidebar {

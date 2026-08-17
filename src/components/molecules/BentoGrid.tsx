@@ -1,3 +1,5 @@
+import { useEffect, useRef, useState } from 'react'
+import { FaChevronRight } from 'react-icons/fa6'
 import BentoTile from './BentoTile'
 import type { CaseStudy } from '../../content/caseStudies'
 
@@ -26,19 +28,55 @@ function gradientClassForId(id: string): string {
 }
 
 function BentoGrid({ items, onSelect }: BentoGridProps) {
+  const scrollRef = useRef<HTMLDivElement>(null)
+  const [canScrollBack, setCanScrollBack] = useState(false)
+  const [canScrollMore, setCanScrollMore] = useState(false)
+
+  useEffect(() => {
+    const grid = scrollRef.current
+    if (!grid) return
+
+    const updateScrollHints = () => {
+      setCanScrollBack(grid.scrollLeft > 1)
+      setCanScrollMore(grid.scrollWidth - grid.clientWidth - grid.scrollLeft > 1)
+    }
+
+    updateScrollHints()
+    grid.addEventListener('scroll', updateScrollHints)
+    window.addEventListener('resize', updateScrollHints)
+    return () => {
+      grid.removeEventListener('scroll', updateScrollHints)
+      window.removeEventListener('resize', updateScrollHints)
+    }
+  }, [items])
+
   return (
-    <div className="bento-grid">
-      {items.map((item) => (
-        <BentoTile
-          key={item.id}
-          size={item.size ?? '1x1'}
-          thumbnail={{ image: item.image, gradientClassName: gradientClassForId(item.id) }}
-          typeLabel={item.tags[0] ?? ''}
-          title={item.title}
-          summary={item.summary}
-          onClick={() => onSelect(item.id)}
-        />
-      ))}
+    <div className="bento-grid-wrap">
+      <div className="bento-grid" ref={scrollRef}>
+        {items.map((item) => (
+          <BentoTile
+            key={item.id}
+            size={item.size ?? '1x1'}
+            thumbnail={{ image: item.image, gradientClassName: gradientClassForId(item.id) }}
+            typeLabel={item.tags[0] ?? ''}
+            title={item.title}
+            summary={item.summary}
+            onClick={() => onSelect(item.id)}
+          />
+        ))}
+      </div>
+      {canScrollBack && (
+        // No arrow here: reaching this state already required the user to
+        // scroll, so they already know there's more off this side. The
+        // fade alone is enough — an arrow would be telling them something
+        // they just demonstrated they know.
+        <div className="bento-scroll-hint bento-scroll-hint--left" aria-hidden="true" />
+      )}
+      {canScrollMore && (
+        <div className="bento-scroll-hint bento-scroll-hint--right" aria-hidden="true">
+          <FaChevronRight />
+        </div>
+      )}
     </div>
   )
 }
