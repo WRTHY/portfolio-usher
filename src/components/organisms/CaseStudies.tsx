@@ -1,9 +1,13 @@
 import { useId, useState } from 'react'
 import Heading from '../atoms/Heading'
+import SectionWatermark from '../atoms/SectionWatermark'
+import { sections } from '../../content/navigation'
 import Badge from '../atoms/Badge'
 import BentoGrid from '../molecules/BentoGrid'
 import Modal from '../molecules/Modal'
 import { caseStudies } from '../../content/caseStudies'
+
+const watermarkText = sections.find((section) => section.id === 'case-studies')!.label
 
 function CaseStudies() {
   const [selectedId, setSelectedId] = useState<string | null>(null)
@@ -13,6 +17,7 @@ function CaseStudies() {
 
   return (
     <section id="case-studies">
+      <SectionWatermark text={watermarkText} />
       <Heading>Case Studies</Heading>
       <BentoGrid items={caseStudies} onSelect={setSelectedId} />
 
