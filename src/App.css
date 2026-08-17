@@ -189,27 +189,32 @@ section,
   }
 }
 
-.case-study-carousel {
-  display: flex;
-  gap: 16px;
+.bento-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-auto-rows: 160px;
+  gap: 12px;
   max-width: 900px;
   width: 100%;
-  overflow-x: auto;
-  scroll-snap-type: x proximity;
-  padding-bottom: 8px;
 }
 
-.case-study-card {
-  flex: 0 0 240px;
-  scroll-snap-align: start;
+.bento-tile {
+  /* Mobile-first default: every tile is a single cell. The `≥640px` block
+     below is the only place that grants the real 1x2/2x1/2x2 spans — on a
+     phone-width single column there's no second column for a 2-wide tile
+     to occupy, and turning this into a horizontally-scrolling mosaic would
+     force scrolling in two directions to discover content. A plain
+     uniform-height stacked list reads better at that size, matching every
+     other section on the page, which is also single-column on mobile. */
+  grid-column: span 1;
+  grid-row: span 1;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 8px;
   background: var(--bg);
   border: 1px solid var(--border);
   border-radius: 12px;
-  padding: 16px;
+  padding: 0;
+  overflow: hidden;
   font-family: var(--sans);
   text-align: left;
   cursor: pointer;
@@ -218,20 +223,94 @@ section,
   &:hover {
     border-color: var(--accent-border);
   }
+}
+
+.bento-tile-thumb {
+  flex: 1;
+  min-height: 64px;
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.bento-tile-body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 12px;
 
   h3 {
     font-family: var(--heading);
-    font-size: 18px;
+    font-size: 15px;
     font-weight: 700;
     color: var(--text-h);
     margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
   p {
-    font-size: 14px;
+    font-size: 13px;
     line-height: 145%;
     color: var(--text);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
+}
+
+/* Tile-size token map — the single source of truth for how each `size` on
+   a CaseStudy translates into grid placement. Adding a new size later is
+   one member on the `TileSize` union (src/content/caseStudies.ts) plus one
+   rule here — nothing else needs to change. */
+@media (min-width: 640px) {
+  .bento-grid {
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: 140px;
+    grid-auto-flow: dense;
+    gap: 16px;
+  }
+
+  .bento-tile--1x1 {
+    grid-column: span 1;
+    grid-row: span 1;
+  }
+  .bento-tile--1x2 {
+    grid-column: span 1;
+    grid-row: span 2;
+  }
+  .bento-tile--2x1 {
+    grid-column: span 2;
+    grid-row: span 1;
+  }
+  .bento-tile--2x2 {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+}
+
+/* Gradient placeholder palette, picked per-tile by hashing the case
+   study's id (see BentoGrid.tsx) — swap in `image` on the content entry
+   once a real thumbnail exists and this is bypassed automatically. */
+.bento-gradient-0 {
+  background: linear-gradient(135deg, var(--accent-bg), var(--code-bg));
+}
+.bento-gradient-1 {
+  background: linear-gradient(135deg, var(--code-bg), var(--accent-bg));
+}
+.bento-gradient-2 {
+  background: linear-gradient(135deg, var(--accent-border), var(--section-alt-bg));
+}
+.bento-gradient-3 {
+  background: linear-gradient(135deg, var(--section-alt-bg), var(--accent-bg));
 }
 
 .case-study-tags {

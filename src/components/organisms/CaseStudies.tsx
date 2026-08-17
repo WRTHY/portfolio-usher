@@ -1,7 +1,7 @@
 import { useId, useState } from 'react'
 import Heading from '../atoms/Heading'
 import Badge from '../atoms/Badge'
-import CaseStudyCard from '../molecules/CaseStudyCard'
+import BentoGrid from '../molecules/BentoGrid'
 import Modal from '../molecules/Modal'
 import { caseStudies } from '../../content/caseStudies'
 
@@ -14,15 +14,7 @@ function CaseStudies() {
   return (
     <section id="case-studies">
       <Heading>Case Studies</Heading>
-      <div className="case-study-carousel">
-        {caseStudies.map((caseStudy) => (
-          <CaseStudyCard
-            key={caseStudy.id}
-            caseStudy={caseStudy}
-            onSelect={() => setSelectedId(caseStudy.id)}
-          />
-        ))}
-      </div>
+      <BentoGrid items={caseStudies} onSelect={setSelectedId} />
 
       {selected && (
         <Modal titleId={titleId} onClose={() => setSelectedId(null)}>
