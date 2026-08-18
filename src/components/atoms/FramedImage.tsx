@@ -1,3 +1,5 @@
+import styles from './FramedImage.module.css'
+
 type FramedImageProps = {
   src: string
   alt: string
@@ -6,7 +8,7 @@ type FramedImageProps = {
 
 function FramedImage({ src, alt, className }: FramedImageProps) {
   return (
-    <div className={['framed-image', className].filter(Boolean).join(' ')}>
+    <div className={[styles.frame, className].filter(Boolean).join(' ')}>
       <img src={src} alt={alt} />
     </div>
   )

@@ -28,18 +28,11 @@
   --border: light-dark(#dccba3, #2e303a);
   --code-bg: light-dark(#efe3c8, #1f2028);
   --accent: light-dark(#6d28d9, #a78bfa);
-  --accent-bg: light-dark(rgba(109, 40, 217, 0.1), rgba(167, 139, 250, 0.15));
-  --accent-border: light-dark(rgba(109, 40, 217, 0.4), rgba(167, 139, 250, 0.5));
-  --social-bg: light-dark(rgba(239, 227, 200, 0.5), rgba(47, 48, 58, 0.5));
   --section-alt-bg: light-dark(#f1e6cc, #1c1e26);
   /* Deliberately darker/more saturated than --accent: a handful of small,
      low-opacity dots needs stronger contrast than text/UI elements do to
      stay visible against the light cream background. */
   --particle-color: light-dark(#4c1d95, #a78bfa);
-  --shadow: light-dark(
-    rgba(60, 40, 10, 0.12) 0 10px 24px -8px,
-    rgba(0, 0, 0, 0.4) 0 10px 24px -8px
-  );
 
   --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
   --heading: 'TBJ Orcherum Mini', system-ui, 'Segoe UI', Roboto, sans-serif;
@@ -68,15 +61,8 @@
   --border: light-dark(#e5e4e7, #2e303a);
   --code-bg: light-dark(#f4f3ec, #1f2028);
   --accent: light-dark(#aa3bff, #c084fc);
-  --accent-bg: light-dark(rgba(170, 59, 255, 0.1), rgba(192, 132, 252, 0.15));
-  --accent-border: light-dark(rgba(170, 59, 255, 0.5), rgba(192, 132, 252, 0.5));
-  --social-bg: light-dark(rgba(244, 243, 236, 0.5), rgba(47, 48, 58, 0.5));
   --section-alt-bg: light-dark(#f7f6f3, #1c1e26);
   --particle-color: light-dark(#7c1fd6, #c084fc);
-  --shadow: light-dark(
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px,
-    rgba(0, 0, 0, 0.4) 0 10px 15px -3px
-  );
 }
 
 /* data-mode overrides the OS-level light/dark preference (set by the sidebar
@@ -109,6 +95,56 @@ html {
 
 body {
   margin: 0;
+}
+
+/* Base layout every full-page section shares — genuinely global (identical
+   across all organisms), not any one component's concern, so it stays here
+   rather than getting duplicated across several CSS modules. */
+section {
+  min-height: 100svh;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 32px 20px;
+  text-align: left;
+  /* Own stacking context, so a section-watermark's negative z-index stays
+     scoped to just that section instead of comparing against unrelated
+     elements elsewhere on the page. */
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+
+  & > * {
+    max-width: 640px;
+    width: 100%;
+  }
+}
+
+@keyframes overscroll-bump {
+  0% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-12px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* Global on purpose: useOverscrollBump toggles this class via a plain
+   string (element.classList.add('bump')), not through a CSS module import,
+   so the class name has to stay unscoped for the hook to find it. */
+.bump {
+  animation: overscroll-bump 0.3s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bump {
+    animation: none;
+  }
 }
 
 h1,

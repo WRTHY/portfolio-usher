@@ -1,0 +1,40 @@
+.toggle {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+
+  span {
+    display: block;
+    height: 2px;
+    background: var(--text-h);
+    border-radius: 1px;
+    transition:
+      transform 0.2s,
+      opacity 0.2s;
+  }
+
+  &[aria-expanded='true'] span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+  &[aria-expanded='true'] span:nth-child(2) {
+    opacity: 0;
+  }
+  &[aria-expanded='true'] span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+}
+
+@media (min-width: 640px) {
+  .toggle {
+    display: none;
+  }
+}

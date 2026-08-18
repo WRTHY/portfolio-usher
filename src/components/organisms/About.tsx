@@ -3,13 +3,15 @@ import Heading from '../atoms/Heading'
 import useOverscrollBump from '../../hooks/useOverscrollBump'
 import { about, siteContent } from '../../content/site'
 import profilePhoto from '../../assets/profile.png'
+import styles from './About.module.css'
 
 function About() {
   const bumpRef = useOverscrollBump<HTMLElement>()
 
   return (
     <section id="about" ref={bumpRef}>
-      <MediaText imageSrc={profilePhoto} imageAlt={siteContent.name}>
+      <SectionWatermark text={watermarkText} />
+      <MediaText imageSrc={profilePhoto} imageAlt={siteContent.name} contentClassName={styles.content}>
         <Heading>{about.intro}</Heading>
         {about.paragraphs.map((paragraph, index) => (
           <p key={index}>{paragraph}</p>

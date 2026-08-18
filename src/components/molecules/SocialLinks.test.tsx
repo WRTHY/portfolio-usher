@@ -9,4 +9,11 @@ describe('SocialLinks', () => {
     expect(screen.getByRole('link', { name: 'GitHub' })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Email' })).toBeInTheDocument()
   })
+
+  it('applies an extra className when a caller needs to override the layout', () => {
+    render(<SocialLinks className="custom-layout" />)
+    expect(screen.getByRole('link', { name: 'LinkedIn' }).closest('ul')).toHaveClass(
+      'custom-layout',
+    )
+  })
 })
