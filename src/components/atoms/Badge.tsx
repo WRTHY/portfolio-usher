@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import './Badge.module.css'
 
 type BadgeProps = {
   children: ReactNode

@@ -28,6 +28,8 @@
   --border: light-dark(#dccba3, #2e303a);
   --code-bg: light-dark(#efe3c8, #1f2028);
   --accent: light-dark(#6d28d9, #a78bfa);
+  --accent-bg: light-dark(rgba(109, 40, 217, 0.1), rgba(167, 139, 250, 0.15));
+  --accent-border: light-dark(rgba(109, 40, 217, 0.4), rgba(167, 139, 250, 0.5));
   --section-alt-bg: light-dark(#f1e6cc, #1c1e26);
   /* Deliberately darker/more saturated than --accent: a handful of small,
      low-opacity dots needs stronger contrast than text/UI elements do to
@@ -75,6 +77,8 @@
   --border: light-dark(#e5e4e7, #2e303a);
   --code-bg: light-dark(#f4f3ec, #1f2028);
   --accent: light-dark(#aa3bff, #c084fc);
+  --accent-bg: light-dark(rgba(170, 59, 255, 0.1), rgba(192, 132, 252, 0.15));
+  --accent-border: light-dark(rgba(170, 59, 255, 0.5), rgba(192, 132, 252, 0.5));
   --section-alt-bg: light-dark(#f7f6f3, #1c1e26);
   --particle-color: light-dark(#7c1fd6, #c084fc);
   --shadow: light-dark(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4)) 0 10px 15px -3px;
