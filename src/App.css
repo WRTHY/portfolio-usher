@@ -217,7 +217,8 @@ section,
 
 @media (min-width: 640px) {
   #about,
-  #case-studies {
+  #case-studies,
+  #code-samples {
     /* Extra clearance so centering happens within the space actually free
        of the fixed sidebar, not the raw viewport — otherwise a centered
        block can still butt up against it at narrower desktop widths where
@@ -761,4 +762,342 @@ section,
   &:hover {
     color: var(--accent);
   }
+}
+
+/* Code Samples */
+
+.code-samples-body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  width: 100%;
+}
+
+.code-samples-main {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: var(--content-width-wide);
+  min-width: 0;
+}
+
+@media (min-width: 640px) {
+  .code-samples-body {
+    /* Cancels the shared reading-column inset from the generic
+       `section > *` rule (same trick .hero-content uses), so the row spans
+       the section's full padding edge instead of starting at the extra
+       reading-column indent. */
+    margin-left: 0;
+    max-width: none;
+    flex-direction: row;
+    /* The switcher sits flush at the section's own padding edge — out in
+       the page's margin — vertically centered against the panel beside it,
+       rather than stacked above it. */
+    align-items: center;
+    gap: 24px;
+  }
+
+  .code-samples-main {
+    /* Re-applies the same reading-column indent .code-samples-body just
+       cancelled, so the panel/language tabs still land at the standard
+       anchor point every other section's content uses. Percentages here
+       resolve against .code-samples-body's width, same as before this
+       split, so the computed offset is unchanged. */
+    margin-left: max(0px, calc((100% - var(--content-width)) / 4));
+  }
+}
+
+.code-samples-language-row {
+  /* Same horizontal-scroll-not-wrap treatment as the file tabs below and the
+     case-study bento grid: on a narrow viewport the language tabs would
+     otherwise wrap onto a second line, so they scroll sideways instead. */
+  overflow-x: auto;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.framework-switcher-list {
+  display: inline-flex;
+  flex-shrink: 0;
+  gap: 4px;
+  padding: 4px;
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+}
+
+.framework-switcher-trigger {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    color 0.2s;
+
+  &[data-state='active'] {
+    background: var(--accent);
+    color: var(--bg);
+  }
+}
+
+.language-tabs-list {
+  display: flex;
+  flex-shrink: 0;
+  gap: 20px;
+}
+
+.language-tabs-trigger {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 2px;
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: none;
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+
+  &[data-state='active'] {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+}
+
+.soon-badge {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: var(--accent-bg);
+  border-radius: 4px;
+  padding: 1px 5px;
+}
+
+.code-panel {
+  /* The one intentional exception to the page's light theme — a fixed dark
+     "editor window" palette that stays the same in both light and dark
+     mode. Values are pinned to the one-dark-pro Shiki theme used by
+     CodeBlock so the chrome (tab bar, footer) matches the code area's own
+     background exactly instead of visibly seaming against it. */
+  --code-surface-bg: #282c34;
+  --code-surface-chrome: #21252b;
+  --code-surface-border: rgba(167, 139, 250, 0.18);
+  --code-surface-text: #abb2bf;
+  --code-surface-text-dim: #5c6370;
+  --code-surface-accent: #a78bfa;
+
+  max-width: var(--content-width-wide);
+  width: 100%;
+  background: var(--code-surface-chrome);
+  border: 1px solid var(--code-surface-border);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.file-tabs-panel {
+  display: flex;
+  flex-direction: column;
+}
+
+.file-tabs-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 8px;
+  background: var(--code-surface-chrome);
+  border-bottom: 1px solid var(--code-surface-border);
+}
+
+.file-tabs-list {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  /* Only the tab list scrolls on overflow, not the whole row — the copy
+     button stays pinned and visible rather than scrolling out of reach. */
+  overflow-x: auto;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.file-tabs-trigger {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 12px;
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: none;
+  color: var(--code-surface-text-dim);
+  font-family: var(--mono);
+  font-size: 13px;
+  white-space: nowrap;
+  cursor: pointer;
+
+  &[data-state='active'] {
+    color: var(--code-surface-text);
+    border-bottom-color: var(--code-surface-accent);
+  }
+}
+
+.file-tabs-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.4;
+
+  .file-tabs-trigger[data-state='active'] & {
+    opacity: 1;
+    background: var(--code-surface-accent);
+  }
+}
+
+.copy-button {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 6px;
+  background: none;
+  color: var(--code-surface-text-dim);
+  cursor: pointer;
+  transition:
+    color 0.2s,
+    background 0.2s;
+
+  &:hover {
+    color: var(--code-surface-text);
+    background: rgba(255, 255, 255, 0.06);
+  }
+}
+
+.code-area {
+  max-height: 420px;
+  overflow-y: auto;
+}
+
+.code-block {
+  /* react-shiki renders its own <pre> inside this root div, and the
+     browser's UA stylesheet sets font-family/margin directly on `pre` —
+     those win over anything inherited from this wrapper, so the real
+     typography/spacing rules target `.code-block pre` below instead. */
+  --rs-line-numbers-foreground: var(--code-surface-text-dim);
+  --rs-line-numbers-width: 2.5ch;
+  --rs-line-numbers-padding-right: 16px;
+
+  display: block;
+
+  pre {
+    margin: 0;
+    padding: 16px;
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 155%;
+    /* Code lines scroll horizontally instead of wrapping, same philosophy
+       as the rest of the site (see .bento-grid) — wrapping would break the
+       line-number-to-source-line correspondence that makes a code sample
+       readable. */
+    overflow-x: auto;
+  }
+
+  code {
+    /* The site-wide `code` rule (index.css) sets display: inline-flex for
+       inline `<code>` snippets in prose — applied here it flexed Shiki's
+       per-line `<span class="line">` blocks into a single row instead of
+       letting them stack, which is what collapsed every line onto one
+       visual line. Reset it back to block, and the rest of that rule's
+       prose styling (padding/background/font-size), so Shiki's own theme
+       colors are the only styling in effect. */
+    display: block;
+    padding: 0;
+    background: none;
+    border-radius: 0;
+    font-size: inherit;
+    line-height: inherit;
+    color: inherit;
+  }
+}
+
+.panel-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 16px;
+  background: var(--code-surface-chrome);
+  border-top: 1px solid var(--code-surface-border);
+}
+
+.panel-footer-path {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--code-surface-text-dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.panel-footer-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.live-demo-pill {
+  font-size: 12px;
+  color: var(--code-surface-text-dim);
+  border: 1px dashed var(--code-surface-border);
+  border-radius: 999px;
+  padding: 4px 10px;
+  white-space: nowrap;
+}
+
+.run-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  background: var(--code-surface-accent);
+  color: var(--code-surface-chrome);
+  font-family: var(--heading);
+  font-size: 14px;
+  font-weight: 700;
+  opacity: 0.55;
+  cursor: not-allowed;
 }
