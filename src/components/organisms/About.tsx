@@ -1,9 +1,13 @@
 import MediaText from '../molecules/MediaText'
 import Heading from '../atoms/Heading'
+import SectionWatermark from '../atoms/SectionWatermark'
 import useOverscrollBump from '../../hooks/useOverscrollBump'
 import { about, siteContent } from '../../content/site'
+import { sections } from '../../content/navigation'
 import profilePhoto from '../../assets/profile.png'
 import styles from './About.module.css'
+
+const watermarkText = sections.find((section) => section.id === 'about')!.label
 
 function About() {
   const bumpRef = useOverscrollBump<HTMLElement>()

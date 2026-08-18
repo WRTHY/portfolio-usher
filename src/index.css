@@ -33,10 +33,24 @@
      low-opacity dots needs stronger contrast than text/UI elements do to
      stay visible against the light cream background. */
   --particle-color: light-dark(#4c1d95, #a78bfa);
+  /* light-dark() is a <color> function — it can only wrap the color
+     component of a shadow, not the whole offset/blur/color value. */
+  --shadow: light-dark(rgba(60, 40, 10, 0.12), rgba(0, 0, 0, 0.4)) 0 10px 24px -8px;
 
   --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
   --heading: 'TBJ Orcherum Mini', system-ui, 'Segoe UI', Roboto, sans-serif;
   --mono: ui-monospace, Consolas, monospace;
+
+  /* Shared page-layout tokens — the single source of truth for how far
+     section content sits from the viewport edge and how wide the standard
+     content column is. Anything that needs to line up with the rest of the
+     page's content — including elements that intentionally break out of
+     the column, like the case-study bento grid — should reference these
+     instead of hardcoding its own margin/width. */
+  --page-gutter: 20px;
+  --page-gutter-desktop: 64px; /* clears the fixed sidebar (left: 24px + its width) */
+  --content-width: 640px; /* standard single-column reading width */
+  --content-width-wide: 900px; /* wider two-column / media / gallery width */
 
   font: 18px/145% var(--sans);
   letter-spacing: 0.18px;
@@ -63,6 +77,7 @@
   --accent: light-dark(#aa3bff, #c084fc);
   --section-alt-bg: light-dark(#f7f6f3, #1c1e26);
   --particle-color: light-dark(#7c1fd6, #c084fc);
+  --shadow: light-dark(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4)) 0 10px 15px -3px;
 }
 
 /* data-mode overrides the OS-level light/dark preference (set by the sidebar
