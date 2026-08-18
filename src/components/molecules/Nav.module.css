@@ -1,0 +1,33 @@
+.nav {
+  position: relative;
+}
+
+.list {
+  list-style: none;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  margin: 0;
+  padding: 0;
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  z-index: 1;
+
+  &.open {
+    display: flex;
+  }
+}
+
+@media (min-width: 640px) {
+  .list {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    position: static;
+    inset: auto;
+    background: none;
+  }
+}

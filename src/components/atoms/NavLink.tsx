@@ -1,4 +1,5 @@
 import type { MouseEventHandler, ReactNode } from 'react'
+import styles from './NavLink.module.css'
 
 type NavLinkProps = {
   href: string
@@ -12,7 +13,7 @@ function NavLink({ href, children, onClick, isActive }: NavLinkProps) {
     <a
       href={href}
       onClick={onClick}
-      className={isActive ? 'active' : undefined}
+      className={[styles.link, isActive ? styles.active : null].filter(Boolean).join(' ')}
       aria-current={isActive ? 'page' : undefined}
     >
       {children}

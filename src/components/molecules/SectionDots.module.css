@@ -1,0 +1,26 @@
+.dots {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  a {
+    display: block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--border);
+    text-indent: -9999px;
+    overflow: hidden;
+    transition:
+      background 0.2s,
+      transform 0.2s;
+
+    &.active {
+      background: var(--accent);
+      transform: scale(1.3);
+    }
+  }
+}
