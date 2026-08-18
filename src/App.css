@@ -352,20 +352,25 @@ section,
        margin on the wrap above), it scrolls away with the content. That
        lets tiles slide left past the anchor as you scroll and only
        disappear once they cross the section's true left edge, instead of
-       vanishing early right at the anchor line. The right side keeps
-       clipping at the section's right gutter (via .bento-grid-wrap's
-       width) — a tile ending up visibly cut off there is what cues that
-       there's more to scroll. */
+       vanishing early right at the anchor line. */
     padding-left: calc(
       var(--page-gutter-desktop) + max(0px, calc((100% - var(--content-width)) / 4))
     );
+    /* Trailing space so scrolling to the end stops with the same gap from
+       the right edge (.bento-grid-wrap's, since there's no sidebar to
+       clear on this side) as the left anchor keeps from its edge — a
+       matching resting point instead of the last tile going flush or
+       ending up cut off there. */
+    padding-right: max(0px, calc((100% - var(--content-width)) / 4));
     /* Without this, scroll-snap treats the content box (post-padding) as
        the snap boundary and auto-corrects scrollLeft on load to erase the
        padding above — matching this to that padding keeps the padding (and
-       the anchor position it creates) actually visible at rest. */
+       the anchor position it creates) actually visible at rest. Same
+       reasoning on the right, for the trailing padding and the scroll end. */
     scroll-padding-left: calc(
       var(--page-gutter-desktop) + max(0px, calc((100% - var(--content-width)) / 4))
     );
+    scroll-padding-right: max(0px, calc((100% - var(--content-width)) / 4));
 
     /* Column-flow with a fixed 2-row template and a fixed (not 1fr)
        auto-column width, so the grid's intrinsic width is driven by its
