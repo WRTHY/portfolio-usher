@@ -3,15 +3,19 @@ import NavLink from '../atoms/NavLink'
 import MenuToggle from '../atoms/MenuToggle'
 import useActiveSection from '../../hooks/useActiveSection'
 import { sections } from '../../content/navigation'
+import styles from './Nav.module.css'
 
 function Nav() {
   const [isOpen, setIsOpen] = useState(false)
   const activeId = useActiveSection()
 
   return (
-    <nav>
+    <nav className={styles.nav}>
       <MenuToggle isOpen={isOpen} onClick={() => setIsOpen((open) => !open)} />
-      <ul id="site-nav-list" className={isOpen ? 'open' : undefined}>
+      <ul
+        id="site-nav-list"
+        className={[styles.list, isOpen ? styles.open : null].filter(Boolean).join(' ')}
+      >
         {sections.map((section) => (
           <li key={section.id}>
             <NavLink

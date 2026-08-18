@@ -5,6 +5,7 @@ import Badge from '../atoms/Badge'
 import BentoGrid from '../molecules/BentoGrid'
 import Modal from '../molecules/Modal'
 import { caseStudies } from '../../content/caseStudies'
+import './CaseStudies.module.css'
 
 const watermarkText = sections.find((section) => section.id === 'case-studies')!.label
 

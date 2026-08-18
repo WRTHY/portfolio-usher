@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import NavLink from './NavLink'
+import styles from './NavLink.module.css'
 
 describe('NavLink', () => {
   it('renders a link with the given label and href', () => {
@@ -13,7 +14,7 @@ describe('NavLink', () => {
   it('has no active styling by default', () => {
     render(<NavLink href="#about">About</NavLink>)
     const link = screen.getByRole('link', { name: 'About' })
-    expect(link).not.toHaveClass('active')
+    expect(link).not.toHaveClass(styles.active)
     expect(link).not.toHaveAttribute('aria-current')
   })
 
@@ -24,7 +25,7 @@ describe('NavLink', () => {
       </NavLink>,
     )
     const link = screen.getByRole('link', { name: 'About' })
-    expect(link).toHaveClass('active')
+    expect(link).toHaveClass(styles.active)
     expect(link).toHaveAttribute('aria-current', 'page')
   })
 })
