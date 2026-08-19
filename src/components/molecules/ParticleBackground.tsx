@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import { Particles, ParticlesProvider } from '@tsparticles/react'
 import { loadSlim } from '@tsparticles/slim'
 import type { Engine, ISourceOptions } from '@tsparticles/engine'
+import styles from './ParticleBackground.module.css'
 
 // Must be a stable reference across the component's lifetime — ParticlesProvider
 // throws if it receives a new `init` function identity after the first mount.
@@ -51,7 +52,7 @@ function ParticleBackground() {
 
   return (
     <ParticlesProvider init={initEngine}>
-      <Particles id="hero-particles" className="hero-particles" options={options} />
+      <Particles id="hero-particles" className={styles.particles} options={options} />
     </ParticlesProvider>
   )
 }

@@ -1,0 +1,19 @@
+:global(#case-studies) {
+  background: var(--section-alt-bg);
+}
+
+@media (min-width: 640px) {
+  :global(#case-studies) {
+    /* Same sidebar clearance as #about — see About.module.css. The bento
+       grid deliberately cancels this back out (see BentoGrid.module.css)
+       so tiles can still slide underneath the sidebar while normal content
+       (the watermark) stays clear of it. */
+    padding-left: var(--page-gutter-desktop);
+  }
+}
+
+:global(.case-study-tags) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}

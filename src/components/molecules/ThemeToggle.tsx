@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { FaMoon, FaSun } from 'react-icons/fa6'
+import styles from './ThemeToggle.module.css'
 
 type Mode = 'light' | 'dark'
 
@@ -26,7 +27,7 @@ function ThemeToggle() {
   return (
     <button
       type="button"
-      className="theme-toggle"
+      className={styles.toggle}
       onClick={toggleMode}
       aria-label={mode === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
     >

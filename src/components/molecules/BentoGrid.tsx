@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { FaChevronRight } from 'react-icons/fa6'
 import BentoTile from './BentoTile'
 import type { CaseStudy } from '../../content/caseStudies'
+import './BentoGrid.module.css'
 
 type BentoGridProps = {
   items: readonly CaseStudy[]

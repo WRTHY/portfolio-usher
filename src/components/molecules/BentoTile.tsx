@@ -1,5 +1,6 @@
 import Badge from '../atoms/Badge'
 import type { TileSize } from '../../content/caseStudies'
+import './BentoTile.module.css'
 
 type BentoTileThumbnail = {
   image?: string

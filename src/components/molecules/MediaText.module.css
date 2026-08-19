@@ -1,0 +1,48 @@
+/* Reusable image-beside-text layout (stacks on mobile). The generic
+   `section > *` rule caps direct children at 640px — .mediaText's own
+   class specificity overrides that with a wider, two-column-appropriate
+   max-width, while still being centered by the section the same as every
+   other section's content. */
+.mediaText {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 24px;
+  max-width: var(--content-width-wide);
+  width: 100%;
+}
+
+.image {
+  width: 100%;
+  /* 16/10 (very short/wide) was mathematically incompatible with a portrait
+     headshot — no crop position could avoid cutting into the head. 4/5
+     needs far less vertical crop from a ~2/3 source. */
+  aspect-ratio: 4 / 5;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+@media (min-width: 640px) {
+  .mediaText {
+    flex-direction: row;
+    /* stretch (the mobile value) would force the image to match the text
+       column's height — with a few paragraphs that's easily 700px+. Center
+       instead: the image keeps its own fixed size but sits centered against
+       the (usually taller) text column rather than pinned to its top. */
+    align-items: center;
+  }
+
+  .image {
+    width: 320px;
+    aspect-ratio: 4 / 5;
+  }
+
+  .content {
+    flex: 1;
+    justify-content: center;
+  }
+}

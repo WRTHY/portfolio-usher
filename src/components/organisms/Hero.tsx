@@ -2,6 +2,7 @@ import Button from '../atoms/Button'
 import Heading from '../atoms/Heading'
 import ParticleBackground from '../molecules/ParticleBackground'
 import SocialLinks from '../molecules/SocialLinks'
+import styles from './Hero.module.css'
 
 type HeroProps = {
   name: string
@@ -11,9 +12,9 @@ type HeroProps = {
 
 function Hero({ name, tagline, resumeUrl }: HeroProps) {
   return (
-    <section id="hero" className="hero">
+    <section id="hero" className={styles.hero}>
       <ParticleBackground />
-      <div className="hero-content">
+      <div className={styles.content}>
         <Heading level={1}>{name}</Heading>
         <p>{tagline}</p>
         <SocialLinks />

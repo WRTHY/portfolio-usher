@@ -8,7 +8,7 @@ describe('Nav', () => {
     render(<Nav />)
     expect(screen.getByRole('link', { name: 'Home' })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Case Studies' })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'Code Samples' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Automation Examples' })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'About' })).toBeInTheDocument()
   })
 
