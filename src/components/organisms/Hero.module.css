@@ -8,6 +8,10 @@
 }
 
 .content {
+  /* Hero is a centered showcase, not part of the reading-column standard
+     in index.css — cancel the shared inset so `align-items: center` on
+     .hero centers it precisely. */
+  margin-left: 0;
   position: relative;
   z-index: 1;
 }
