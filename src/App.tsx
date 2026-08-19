@@ -1,4 +1,4 @@
-import PortfolioTemplate from './components/templates/PortfolioTemplate'
+import PortfolioTemplate from './components/templates/PortfolioTemplate/PortfolioTemplate'
 
 function App() {
   return <PortfolioTemplate />
