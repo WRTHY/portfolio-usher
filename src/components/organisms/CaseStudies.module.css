@@ -8,7 +8,7 @@
        grid deliberately cancels this back out (see BentoGrid.module.css)
        so tiles can still slide underneath the sidebar while normal content
        (the watermark) stays clear of it. */
-    padding-left: 64px;
+    padding-left: var(--page-gutter-desktop);
   }
 }
 

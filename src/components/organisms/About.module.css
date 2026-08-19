@@ -8,7 +8,7 @@
        of the fixed sidebar (left: 24px + its width), not the raw viewport —
        otherwise a centered block can still butt up against it at narrower
        desktop widths where there isn't room to be both centered and clear. */
-    padding-left: 64px;
+    padding-left: var(--page-gutter-desktop);
   }
 }
 
