@@ -125,8 +125,8 @@ section {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
-  padding: 32px 20px;
+  align-items: flex-start;
+  padding: 32px var(--page-gutter);
   text-align: left;
   /* Own stacking context, so a section-watermark's negative z-index stays
      scoped to just that section instead of comparing against unrelated
@@ -136,8 +136,16 @@ section {
   overflow: hidden;
 
   & > * {
-    max-width: 640px;
+    max-width: var(--content-width);
     width: 100%;
+    /* The content-alignment standard: every section's content starts this
+       far from the section's own left edge — split the difference between
+       hugging that edge (0) and being fully centered in the space the
+       sidebar leaves free (which reads as too far right on wide screens).
+       Anything that intentionally breaks out of --content-width (wider
+       media, the bento grid) should reuse this same formula so its left
+       edge still lines up with the rest of the section's content. */
+    margin-left: max(0px, calc((100% - var(--content-width)) / 4));
   }
 }
 

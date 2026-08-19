@@ -1,0 +1,33 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 24px;
+  /* TBJ Orcherum Mini's reserved ascent is nearly all filled by ink while
+     its descent is mostly empty (measured via canvas actualBoundingBox:
+     ~14px ink above baseline vs ~1px below, against a much larger reserved
+     gap below), so an evenly split padding leaves the glyphs looking
+     pushed toward the top of the button — extra padding-top vs
+     padding-bottom compensates so the ink itself, not just its line box,
+     sits centered. */
+  padding: 10px 24px 6px;
+  border-radius: 4px;
+  border: 2px solid var(--accent);
+  background: var(--accent-bg);
+  color: var(--accent);
+  font-family: var(--heading);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1;
+  text-decoration: none;
+  transition:
+    background 0.2s,
+    color 0.2s,
+    border-color 0.2s;
+
+  &:hover {
+    background: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
+  }
+}
