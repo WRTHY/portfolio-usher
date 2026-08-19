@@ -27,21 +27,21 @@ test.describe('automation examples panel', () => {
     await expect(codeSamples.codeContaining('export async function openCaseStudy')).toBeVisible()
   })
 
-  test('Python and Java language tabs are disabled and non-interactive', async ({ portfolioPage }) => {
+  test('Python and Java language options are disabled and non-interactive', async ({ portfolioPage }) => {
     await portfolioPage.goto()
     const { codeSamples } = portfolioPage
 
-    const typescriptTab = codeSamples.languageTab('TypeScript')
-    const pythonTab = codeSamples.languageTab(/Python/)
-    const javaTab = codeSamples.languageTab(/Java/)
+    const typescriptOption = codeSamples.languageOption('TypeScript')
+    const pythonOption = codeSamples.languageOption(/Python/)
+    const javaOption = codeSamples.languageOption(/Java/)
 
-    await expect(typescriptTab).toHaveAttribute('aria-selected', 'true')
-    await expect(pythonTab).toBeDisabled()
-    await expect(javaTab).toBeDisabled()
+    await expect(typescriptOption).toHaveAttribute('aria-checked', 'true')
+    await expect(pythonOption).toBeDisabled()
+    await expect(javaOption).toBeDisabled()
 
     // toBeDisabled already confirms clicks can't land, but assert the
     // selection genuinely never moves off TypeScript as well.
-    await expect(pythonTab).toHaveAttribute('aria-selected', 'false')
-    await expect(javaTab).toHaveAttribute('aria-selected', 'false')
+    await expect(pythonOption).toHaveAttribute('aria-checked', 'false')
+    await expect(javaOption).toHaveAttribute('aria-checked', 'false')
   })
 })

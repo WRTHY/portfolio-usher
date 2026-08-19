@@ -1,4 +1,4 @@
-import * as Tabs from '@radix-ui/react-tabs'
+import * as RadioGroup from '@radix-ui/react-radio-group'
 import { SiOpenjdk, SiPython, SiTypescript } from 'react-icons/si'
 import SoonBadge from '../../atoms/SoonBadge/SoonBadge'
 import styles from './LanguageTabs.module.css'
@@ -10,9 +10,12 @@ type LanguageTabsProps = {
   onChange: (language: Language) => void
 }
 
+// A RadioGroup rather than Tabs, for the same reason as FrameworkSwitcher:
+// this picks a value, it doesn't own a tabpanel, so Radix's Tabs.Trigger
+// would emit an aria-controls pointing nowhere.
 function LanguageTabs({ value, onChange }: LanguageTabsProps) {
   return (
-    <Tabs.Root
+    <RadioGroup.Root
       value={value}
       onValueChange={(next) => onChange(next as Language)}
       className={styles.tabs}
