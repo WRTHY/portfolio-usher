@@ -1,39 +1,43 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './fixtures'
+
+const CASE_STUDY_ONE = /Placeholder case study one/
 
 test.describe('case study modal', () => {
-  test('clicking a tile opens the modal with that case study', async ({ page }) => {
-    await page.goto('/')
+  test('clicking a tile opens the modal with that case study', async ({ portfolioPage }) => {
+    await portfolioPage.goto()
+    const { caseStudies } = portfolioPage
 
-    await page.getByRole('button', { name: /Placeholder case study one/ }).click()
+    await caseStudies.open(CASE_STUDY_ONE)
 
-    const dialog = page.getByRole('dialog')
-    await expect(dialog).toBeVisible()
-    await expect(dialog.getByRole('heading', { name: 'Placeholder case study one' })).toBeVisible()
-    await expect(dialog.getByText('Placeholder', { exact: false }).first()).toBeVisible()
+    const { modal } = caseStudies
+    await expect(modal.dialog).toBeVisible()
+    await expect(modal.heading('Placeholder case study one')).toBeVisible()
+    await expect(modal.dialog.getByText('Placeholder', { exact: false }).first()).toBeVisible()
   })
 
-  test('Escape closes the modal and returns focus to the trigger', async ({ page }) => {
-    await page.goto('/')
-    const trigger = page.getByRole('button', { name: /Placeholder case study one/ })
+  test('Escape closes the modal and returns focus to the trigger', async ({ portfolioPage }) => {
+    await portfolioPage.goto()
+    const { caseStudies } = portfolioPage
+    const trigger = caseStudies.tile(CASE_STUDY_ONE)
 
-    await trigger.click()
-    await expect(page.getByRole('dialog')).toBeVisible()
+    await caseStudies.open(CASE_STUDY_ONE)
+    await expect(caseStudies.modal.dialog).toBeVisible()
 
-    await page.keyboard.press('Escape')
-    await expect(page.getByRole('dialog')).not.toBeVisible()
+    await caseStudies.modal.closeWithEscape()
+    await expect(caseStudies.modal.dialog).not.toBeVisible()
     await expect(trigger).toBeFocused()
   })
 
-  test('the close button closes the modal and returns focus to the trigger', async ({ page }) => {
-    await page.goto('/')
-    const trigger = page.getByRole('button', { name: /Placeholder case study one/ })
+  test('the close button closes the modal and returns focus to the trigger', async ({ portfolioPage }) => {
+    await portfolioPage.goto()
+    const { caseStudies } = portfolioPage
+    const trigger = caseStudies.tile(CASE_STUDY_ONE)
 
-    await trigger.click()
-    const dialog = page.getByRole('dialog')
-    await expect(dialog).toBeVisible()
+    await caseStudies.open(CASE_STUDY_ONE)
+    await expect(caseStudies.modal.dialog).toBeVisible()
 
-    await dialog.getByRole('button', { name: 'Close' }).click()
-    await expect(dialog).not.toBeVisible()
+    await caseStudies.modal.close()
+    await expect(caseStudies.modal.dialog).not.toBeVisible()
     await expect(trigger).toBeFocused()
   })
 })

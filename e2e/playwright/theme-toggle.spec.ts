@@ -1,29 +1,28 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './fixtures'
 
 test.describe('theme toggle', () => {
-  test('clicking the toggle flips the theme', async ({ page }) => {
-    await page.goto('/')
-    const html = page.locator('html')
-    const toggle = page.getByRole('button', { name: /switch to (light|dark) mode/i })
+  test('clicking the toggle flips the theme', async ({ portfolioPage }) => {
+    await portfolioPage.goto()
+    const { themeToggle } = portfolioPage
 
-    await toggle.click()
-    const modeAfterFirstClick = await html.getAttribute('data-mode')
+    await themeToggle.toggle()
+    const modeAfterFirstClick = await themeToggle.currentMode()
     expect(['light', 'dark']).toContain(modeAfterFirstClick)
 
-    await toggle.click()
-    await expect(html).toHaveAttribute('data-mode', modeAfterFirstClick === 'dark' ? 'light' : 'dark')
+    await themeToggle.toggle()
+    const modeAfterSecondClick = await themeToggle.currentMode()
+    expect(modeAfterSecondClick).toBe(modeAfterFirstClick === 'dark' ? 'light' : 'dark')
   })
 
-  test('the chosen theme persists across a reload', async ({ page }) => {
-    await page.goto('/')
-    const html = page.locator('html')
-    const toggle = page.getByRole('button', { name: /switch to (light|dark) mode/i })
+  test('the chosen theme persists across a reload', async ({ portfolioPage }) => {
+    await portfolioPage.goto()
+    const { themeToggle } = portfolioPage
 
-    await toggle.click()
-    const chosenMode = await html.getAttribute('data-mode')
+    await themeToggle.toggle()
+    const chosenMode = await themeToggle.currentMode()
 
-    await page.reload()
-    await expect(html).toHaveAttribute('data-mode', chosenMode!)
-    await expect.poll(() => page.evaluate(() => localStorage.getItem('mode'))).toBe(chosenMode)
+    await portfolioPage.page.reload()
+    await expect.poll(() => themeToggle.currentMode()).toBe(chosenMode)
+    await expect.poll(() => themeToggle.storedMode()).toBe(chosenMode)
   })
 })
