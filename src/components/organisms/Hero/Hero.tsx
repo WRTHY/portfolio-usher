@@ -1,7 +1,7 @@
-import Button from '../atoms/Button'
-import Heading from '../atoms/Heading'
-import ParticleBackground from '../molecules/ParticleBackground'
-import SocialLinks from '../molecules/SocialLinks'
+import Button from '../../atoms/Button/Button'
+import Heading from '../../atoms/Heading/Heading'
+import ParticleBackground from '../../molecules/ParticleBackground/ParticleBackground'
+import SocialLinks from '../../molecules/SocialLinks/SocialLinks'
 import styles from './Hero.module.css'
 
 type HeroProps = {
