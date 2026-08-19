@@ -2,6 +2,7 @@ import * as Tabs from '@radix-ui/react-tabs'
 import CopyButton from '../../atoms/CopyButton/CopyButton'
 import CodeBlock from '../CodeBlock/CodeBlock'
 import type { CodeFile } from '../../../content/codeExamples'
+import styles from './CodeFileTabs.module.css'
 
 type CodeFileTabsProps = {
   files: CodeFile[]
@@ -16,13 +17,13 @@ function CodeFileTabs({ files, activeIndex, onChange }: CodeFileTabsProps) {
     <Tabs.Root
       value={String(activeIndex)}
       onValueChange={(next) => onChange(Number(next))}
-      className="file-tabs-panel"
+      className={styles.panel}
     >
-      <div className="file-tabs-row">
-        <Tabs.List className="file-tabs-list" aria-label="Files in this example">
+      <div className={styles.row}>
+        <Tabs.List className={styles.list} aria-label="Files in this example">
           {files.map((file, index) => (
-            <Tabs.Trigger key={file.filename} value={String(index)} className="file-tabs-trigger">
-              <span className="file-tabs-dot" aria-hidden="true" />
+            <Tabs.Trigger key={file.filename} value={String(index)} className={styles.trigger}>
+              <span className={styles.dot} aria-hidden="true" />
               {file.filename.split('/').pop()}
             </Tabs.Trigger>
           ))}
@@ -31,7 +32,7 @@ function CodeFileTabs({ files, activeIndex, onChange }: CodeFileTabsProps) {
       </div>
 
       {files.map((file, index) => (
-        <Tabs.Content key={file.filename} value={String(index)} className="code-area">
+        <Tabs.Content key={file.filename} value={String(index)} className={styles.codeArea}>
           <CodeBlock code={file.code} language={file.language} />
         </Tabs.Content>
       ))}

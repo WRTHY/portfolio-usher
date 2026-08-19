@@ -8,6 +8,7 @@ import PanelFooter from '../../molecules/PanelFooter/PanelFooter'
 import { sections } from '../../../content/navigation'
 import { codeExamples } from '../../../content/codeExamples'
 import type { AutomationExample } from '../../../content/codeExamples'
+import styles from './CodeSamples.module.css'
 
 const watermarkText = sections.find((section) => section.id === 'code-samples')!.label
 
@@ -32,20 +33,15 @@ function CodeSamples() {
     <section id="code-samples" aria-label={watermarkText}>
       <SectionWatermark text={watermarkText} />
 
-      {/* .code-samples-body cancels the shared reading-column indent (same
-          trick .hero-content uses) so the switcher can sit flush at the
-          section's own padding edge — out in the page's margin — and,
-          on wider screens, vertically centered beside the panel rather
-          than stacked above it. */}
-      <div className="code-samples-body">
+      <div className={styles.body}>
         <FrameworkSwitcher value={framework} onChange={handleFrameworkChange} />
 
-        <div className="code-samples-main">
-          <div className="code-samples-language-row">
+        <div className={styles.main}>
+          <div className={styles.languageRow}>
             <LanguageTabs value={language} onChange={setLanguage} />
           </div>
 
-          <div className="code-panel">
+          <div className={styles.panel}>
             <CodeFileTabs
               files={example.files}
               activeIndex={activeFileIndex}

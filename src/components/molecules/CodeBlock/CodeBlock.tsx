@@ -1,4 +1,5 @@
 import ShikiHighlighter from 'react-shiki'
+import styles from './CodeBlock.module.css'
 
 type CodeBlockProps = {
   code: string
@@ -14,7 +15,7 @@ function CodeBlock({ code, language }: CodeBlockProps) {
       showLineNumbers
       showLanguage={false}
       addDefaultStyles={false}
-      className="code-block"
+      className={styles.codeBlock}
     >
       {code}
     </ShikiHighlighter>

@@ -1,6 +1,7 @@
 import * as Tabs from '@radix-ui/react-tabs'
 import { SiCypress } from 'react-icons/si'
 import type { AutomationExample } from '../../../content/codeExamples'
+import styles from './FrameworkSwitcher.module.css'
 
 type Framework = AutomationExample['framework']
 
@@ -17,18 +18,17 @@ function FrameworkSwitcher({ value, onChange }: FrameworkSwitcherProps) {
     <Tabs.Root
       value={value}
       onValueChange={(next) => onChange(next as Framework)}
-      className="framework-switcher"
+      className={styles.switcher}
+      aria-label="Automation framework"
     >
-      <Tabs.List className="framework-switcher-list" aria-label="Automation framework">
-        <Tabs.Trigger value="playwright" className="framework-switcher-trigger">
-          Playwright
-        </Tabs.Trigger>
-        <Tabs.Trigger value="cypress" className="framework-switcher-trigger">
-          <SiCypress aria-hidden="true" />
-          Cypress
-        </Tabs.Trigger>
-      </Tabs.List>
-    </Tabs.Root>
+      <RadioGroup.Item value="playwright" className={styles.trigger}>
+        Playwright
+      </RadioGroup.Item>
+      <RadioGroup.Item value="cypress" className={styles.trigger}>
+        <SiCypress aria-hidden="true" />
+        Cypress
+      </RadioGroup.Item>
+    </RadioGroup.Root>
   )
 }
 

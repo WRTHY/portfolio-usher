@@ -1,4 +1,5 @@
 import RunButton from '../../atoms/RunButton/RunButton'
+import styles from './PanelFooter.module.css'
 
 type PanelFooterProps = {
   filePath: string
@@ -6,10 +7,10 @@ type PanelFooterProps = {
 
 function PanelFooter({ filePath }: PanelFooterProps) {
   return (
-    <div className="panel-footer">
-      <span className="panel-footer-path">{filePath}</span>
-      <div className="panel-footer-actions">
-        <span className="live-demo-pill">Live demo — coming soon</span>
+    <div className={styles.footer}>
+      <span className={styles.path}>{filePath}</span>
+      <div className={styles.actions}>
+        <span className={styles.pill}>Live demo — coming soon</span>
         <RunButton />
       </div>
     </div>
