@@ -17,7 +17,7 @@ function Hero({ name, tagline, resumeUrl }: HeroProps) {
       <div className={styles.content}>
         <Heading level={1}>{name}</Heading>
         <p>{tagline}</p>
-        <SocialLinks />
+        <SocialLinks className={styles.socialLinks} />
         <Button href={resumeUrl} external>
           My Resume
         </Button>
