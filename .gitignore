@@ -26,3 +26,8 @@ dist-ssr
 
 # Licensed webfont — not for public redistribution
 public/fonts/
+
+# Playwright
+/test-results/
+/playwright-report/
+/playwright/.cache/
