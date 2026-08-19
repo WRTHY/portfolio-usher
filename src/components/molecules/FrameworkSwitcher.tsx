@@ -1,4 +1,4 @@
-import * as Tabs from '@radix-ui/react-tabs'
+import * as RadioGroup from '@radix-ui/react-radio-group'
 import { SiCypress } from 'react-icons/si'
 import type { AutomationExample } from '../../content/codeExamples'
 
@@ -12,23 +12,28 @@ type FrameworkSwitcherProps = {
 // react-icons' bundled Simple Icons set has no Playwright mark (checked
 // against the installed version) — Cypress gets its real logo, Playwright
 // stays text-only rather than fake a brand icon.
+//
+// This is a RadioGroup, not Tabs: it picks a value, it doesn't reveal an
+// associated tabpanel (the actual code panel lives in CodeFileTabs). Radix's
+// Tabs.Trigger always emits aria-controls pointing at a Tabs.Content, so
+// using Tabs here left aria-controls referencing an id that never existed —
+// an axe "aria-valid-attr-value" violation caught by the a11y test suite.
 function FrameworkSwitcher({ value, onChange }: FrameworkSwitcherProps) {
   return (
-    <Tabs.Root
+    <RadioGroup.Root
       value={value}
       onValueChange={(next) => onChange(next as Framework)}
       className="framework-switcher"
+      aria-label="Automation framework"
     >
-      <Tabs.List className="framework-switcher-list" aria-label="Automation framework">
-        <Tabs.Trigger value="playwright" className="framework-switcher-trigger">
-          Playwright
-        </Tabs.Trigger>
-        <Tabs.Trigger value="cypress" className="framework-switcher-trigger">
-          <SiCypress aria-hidden="true" />
-          Cypress
-        </Tabs.Trigger>
-      </Tabs.List>
-    </Tabs.Root>
+      <RadioGroup.Item value="playwright" className="framework-switcher-trigger">
+        Playwright
+      </RadioGroup.Item>
+      <RadioGroup.Item value="cypress" className="framework-switcher-trigger">
+        <SiCypress aria-hidden="true" />
+        Cypress
+      </RadioGroup.Item>
+    </RadioGroup.Root>
   )
 }
 
