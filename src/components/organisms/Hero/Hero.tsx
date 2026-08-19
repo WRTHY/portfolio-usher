@@ -1,0 +1,24 @@
+import Heading from '../../atoms/Heading/Heading'
+import ParticleBackground from '../../molecules/ParticleBackground/ParticleBackground'
+import SocialLinks from '../../molecules/SocialLinks/SocialLinks'
+import styles from './Hero.module.css'
+
+type HeroProps = {
+  name: string
+  tagline: string
+}
+
+function Hero({ name, tagline }: HeroProps) {
+  return (
+    <section id="hero" className={styles.hero}>
+      <ParticleBackground />
+      <div className={styles.content}>
+        <Heading level={1}>{name}</Heading>
+        <p>{tagline}</p>
+        <SocialLinks className={styles.socialLinks} />
+      </div>
+    </section>
+  )
+}
+
+export default Hero
