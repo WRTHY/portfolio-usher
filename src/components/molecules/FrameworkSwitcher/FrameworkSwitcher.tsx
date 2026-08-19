@@ -24,13 +24,6 @@ function FrameworkSwitcher({ value, onChange }: FrameworkSwitcherProps) {
     <RadioGroup.Root
       value={value}
       onValueChange={(next) => onChange(next as Framework)}
-      className="framework-switcher"
-      aria-label="Automation framework"
-    >
-      <RadioGroup.Item value="playwright" className="framework-switcher-trigger">
-        Playwright
-      </RadioGroup.Item>
-      <RadioGroup.Item value="cypress" className="framework-switcher-trigger">
       className={styles.switcher}
       aria-label="Automation framework"
     >
