@@ -9,14 +9,17 @@ export class CodeSamplesSection {
     this.panel = page.locator('#code-samples')
   }
 
-  frameworkTab(name: Framework): Locator {
-    return this.panel.getByRole('tab', { name })
+  // Framework/language pickers are a RadioGroup (role="radio"), not Tabs —
+  // they select a value rather than owning a tabpanel of their own. Only
+  // the file picker below is genuine Tabs, since it actually swaps panels.
+  frameworkOption(name: Framework): Locator {
+    return this.panel.getByRole('radio', { name })
   }
 
   // Accepts a RegExp for Python/Java: their accessible name is the
   // language plus a concatenated "soon" badge (e.g. "Pythonsoon").
-  languageTab(name: string | RegExp): Locator {
-    return this.panel.getByRole('tab', { name })
+  languageOption(name: string | RegExp): Locator {
+    return this.panel.getByRole('radio', { name })
   }
 
   fileTab(filename: string): Locator {
@@ -28,7 +31,7 @@ export class CodeSamplesSection {
   }
 
   async selectFramework(name: Framework) {
-    await this.frameworkTab(name).click()
+    await this.frameworkOption(name).click()
   }
 
   async selectFile(filename: string) {
