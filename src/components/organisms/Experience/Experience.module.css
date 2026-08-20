@@ -1,0 +1,74 @@
+:global(#experience) {
+  background: var(--section-alt-bg);
+}
+
+@media (min-width: 640px) {
+  :global(#experience) {
+    /* Same sidebar + InfoPanel clearance as the other non-hero sections —
+       see About.module.css. */
+    padding-left: var(--content-clearance-desktop);
+  }
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+
+.card {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px 24px;
+  background: var(--bg);
+}
+
+.cardHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  h2 {
+    margin: 0;
+  }
+}
+
+.company {
+  font-size: 15px;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.dates {
+  font-size: 13px;
+  color: var(--text);
+  margin-top: 4px;
+}
+
+@media (min-width: 640px) {
+  .cardHeader {
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .dates {
+    margin-top: 0;
+    white-space: nowrap;
+  }
+}
+
+.summary {
+  margin-top: 12px;
+  font-size: 15px;
+  line-height: 145%;
+}
+
+.stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+}
