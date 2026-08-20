@@ -128,9 +128,9 @@ section {
   align-items: flex-start;
   padding: 32px var(--page-gutter);
   text-align: left;
-  /* Own stacking context, so a section-watermark's negative z-index stays
-     scoped to just that section instead of comparing against unrelated
-     elements elsewhere on the page. */
+  /* Own stacking context, so any absolutely-positioned decoration inside a
+     section stays scoped to that section instead of comparing against
+     unrelated elements elsewhere on the page. */
   position: relative;
   z-index: 0;
   overflow: hidden;
