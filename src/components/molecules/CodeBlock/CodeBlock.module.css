@@ -25,17 +25,22 @@
   font-size: 13px;
   line-height: 145%;
   tab-size: 2;
+  /* --code-lines (set by CodeSamples on an ancestor) is the line count of
+     the tallest sample across every framework/file — reserving that much
+     height up front means switching snippets never resizes the panel. */
+  min-height: calc(var(--code-lines, 1) * 1.45em);
 }
 
 /* addDefaultStyles={false} (see CodeBlock.tsx) opts out of Shiki's own
    default stylesheet so our theme colors aren't fought over — but that
-   stylesheet is also what makes each token span its own row and what
-   increments the line-number counter. The counter-reset itself ships
-   unconditionally from Shiki's base CSS; these two rules are the only
-   pieces we have to restore ourselves. */
+   stylesheet is also what increments the line-number counter. The
+   counter-reset itself ships unconditionally from Shiki's base CSS; this
+   is the only piece we have to restore ourselves. Shiki's raw markup
+   already separates each `.line` span with a literal "\n" text node,
+   which (since `pre` preserves whitespace) is what puts each line on its
+   own row — `.line` must stay inline or that "\n" doubles up with a
+   block-level line break, doubling every line's vertical spacing. */
 .codeBlock :global(.line) {
-  display: block;
-  min-height: 1.45em;
   counter-increment: line-number;
 }
 

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import type { CSSProperties } from 'react'
 import FrameworkSwitcher from '../../molecules/FrameworkSwitcher/FrameworkSwitcher'
 import LanguageTabs from '../../molecules/LanguageTabs/LanguageTabs'
 import type { Language } from '../../molecules/LanguageTabs/LanguageTabs'
@@ -10,6 +11,15 @@ import type { AutomationExample } from '../../../content/codeExamples'
 import styles from './CodeSamples.module.css'
 
 const sectionLabel = sections.find((section) => section.id === 'code-samples')!.label
+
+// Reserves enough vertical room for the tallest sample across every
+// framework/file combination, so swapping between shorter and taller
+// snippets never changes the panel's height — the code block's top (and
+// everything below it on the page) stays put instead of shifting on
+// every tab click.
+const maxCodeLines = Math.max(
+  ...codeExamples.flatMap((example) => example.files.map((file) => file.code.split('\n').length)),
+)
 
 type Framework = AutomationExample['framework']
 
@@ -43,7 +53,7 @@ function CodeSamples() {
             <LanguageTabs value={language} onChange={setLanguage} />
           </div>
 
-          <div className={styles.panel}>
+          <div className={styles.panel} style={{ '--code-lines': maxCodeLines } as CSSProperties}>
             <CodeFileTabs
               files={example.files}
               activeIndex={activeFileIndex}
