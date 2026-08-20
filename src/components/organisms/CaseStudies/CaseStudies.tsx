@@ -40,6 +40,12 @@ function CaseStudies() {
           <p>{selected.approach}</p>
           <h3>Outcome</h3>
           <p>{selected.outcome}</p>
+          {selected.futureIterations && (
+            <>
+              <h3>Future Iterations</h3>
+              <p>{selected.futureIterations}</p>
+            </>
+          )}
         </Modal>
       )}
     </section>
