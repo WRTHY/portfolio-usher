@@ -5,10 +5,11 @@
 @media (min-width: 640px) {
   :global(#about) {
     /* Extra clearance so centering happens within the space actually free
-       of the fixed sidebar (left: 24px + its width), not the raw viewport —
-       otherwise a centered block can still butt up against it at narrower
-       desktop widths where there isn't room to be both centered and clear. */
-    padding-left: var(--page-gutter-desktop);
+       of the fixed sidebar and the fixed InfoPanel beside it, not the raw
+       viewport — otherwise a centered block can still butt up against them
+       at narrower desktop widths where there isn't room to be both centered
+       and clear. */
+    padding-left: var(--content-clearance-desktop);
   }
 }
 

@@ -8,6 +8,7 @@ import PanelFooter from '../../molecules/PanelFooter/PanelFooter'
 import { sections } from '../../../content/navigation'
 import { codeExamples } from '../../../content/codeExamples'
 import type { AutomationExample } from '../../../content/codeExamples'
+import './CodeSamples.module.css'
 
 const watermarkText = sections.find((section) => section.id === 'code-samples')!.label
 
