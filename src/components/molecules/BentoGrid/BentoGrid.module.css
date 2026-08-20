@@ -35,14 +35,14 @@
 
   :global(.bento-grid) {
     /* #case-studies carries extra left padding at this breakpoint so normal
-       content clears the fixed sidebar (see CaseStudies.module.css) — but
-       tiles should be able to slide underneath it. Punch the scroll
-       container's own box out past that clearance to the section's true
-       left edge; there's no equivalent punch-through on the right (no
-       sidebar to clear there), so only the left gets a margin/width
-       adjustment. */
-    margin-left: calc(-1 * var(--page-gutter-desktop));
-    width: calc(100% + var(--page-gutter-desktop));
+       content clears the fixed sidebar and the fixed InfoPanel beside it
+       (see CaseStudies.module.css) — but tiles should be able to slide
+       underneath both. Punch the scroll container's own box out past that
+       clearance to the section's true left edge; there's no equivalent
+       punch-through on the right (nothing fixed to clear there), so only
+       the left gets a margin/width adjustment. */
+    margin-left: calc(-1 * var(--content-clearance-desktop));
+    width: calc(100% + var(--content-clearance-desktop));
 
     /* Leading space so the first tile still rests at the same shared inset
        every other section's content uses, matching the anchor — but
@@ -51,10 +51,10 @@
        tiles slide left past the anchor and only disappear once they cross
        the section's true left edge. */
     padding-left: calc(
-      var(--page-gutter-desktop) + max(0px, calc((100% - var(--content-width)) / 4))
+      var(--content-clearance-desktop) + max(0px, calc((100% - var(--content-width)) / 4))
     );
     /* Trailing space so scrolling to the end stops with the same gap from
-       the right edge (.bento-grid-wrap's, since there's no sidebar to
+       the right edge (.bento-grid-wrap's, since there's nothing fixed to
        clear on this side) as the left anchor keeps from its edge. */
     padding-right: max(0px, calc((100% - var(--content-width)) / 4));
     /* Without this, scroll-snap treats the post-padding content box as the
@@ -62,7 +62,7 @@
        padding above — matching it here keeps the padding (and the anchor
        position it creates) actually visible at rest, on both sides. */
     scroll-padding-left: calc(
-      var(--page-gutter-desktop) + max(0px, calc((100% - var(--content-width)) / 4))
+      var(--content-clearance-desktop) + max(0px, calc((100% - var(--content-width)) / 4))
     );
     scroll-padding-right: max(0px, calc((100% - var(--content-width)) / 4));
 
@@ -117,9 +117,9 @@
 @media (min-width: 640px) {
   :global(.bento-scroll-hint--left) {
     /* .bento-grid pokes out past .bento-grid-wrap to reach under the
-       sidebar (see .bento-grid's own margin-left above) — this hint needs
-       to sit at that same true edge, or it'd fade out before tiles
-       actually disappear. */
-    left: calc(-1 * var(--page-gutter-desktop));
+       sidebar and InfoPanel (see .bento-grid's own margin-left above) —
+       this hint needs to sit at that same true edge, or it'd fade out
+       before tiles actually disappear. */
+    left: calc(-1 * var(--content-clearance-desktop));
   }
 }

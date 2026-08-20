@@ -1,0 +1,111 @@
+.infoPanel {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .infoPanel {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 80px;
+    left: var(--page-gutter-desktop);
+    /* Reset margin/width so this doesn't inherit the shared reading-column
+       indent that index.css applies to every direct child of a <section> —
+       harmless today (this renders at the template level, not inside a
+       section) but keeps a fixed, viewport-pinned left edge guaranteed
+       regardless of where it's ever mounted from. */
+    margin-left: 0;
+    max-width: none;
+    z-index: 8;
+    width: var(--info-panel-width);
+    height: 75svh;
+    padding: 32px;
+    /* A step grayer than --bg (and than --section-alt-bg, which some
+       sections behind this card already use), so it reads as a distinct
+       surface rather than blending into whichever section is scrolled
+       underneath it. */
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    opacity: 1;
+    transform: translateY(0);
+    transition:
+      opacity 0.35s ease,
+      transform 0.35s ease;
+  }
+
+  .infoPanel.hidden {
+    opacity: 0;
+    transform: translateY(16px);
+    pointer-events: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .infoPanel {
+    transition: none;
+  }
+}
+
+.name {
+  font-family: var(--heading);
+  color: var(--text-h);
+  font-weight: 500;
+  font-size: 22px;
+  margin: 0;
+}
+
+.tagline {
+  font-size: 16px;
+  line-height: 145%;
+  margin: 8px 0 0;
+}
+
+.section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+  /* .section is remounted (via a key on the active section's id) each time
+     the active section changes, so this plays fresh on every swap — giving
+     the label/description a soft crossfade instead of snapping to new text. */
+  animation: sectionFadeIn 0.35s ease;
+}
+
+@keyframes sectionFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .section {
+    animation: none;
+  }
+}
+
+.sectionLabel {
+  font-family: var(--heading);
+  color: var(--text-h);
+  font-weight: 600;
+  font-size: 44px;
+  line-height: 108%;
+  letter-spacing: -0.9px;
+  margin: 0;
+}
+
+.sectionDescription {
+  font-size: 23px;
+  line-height: 145%;
+  margin: 0;
+}
