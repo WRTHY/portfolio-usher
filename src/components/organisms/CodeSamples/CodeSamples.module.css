@@ -1,3 +1,7 @@
+:global(#code-samples) {
+  background: var(--section-alt-bg);
+}
+
 @media (min-width: 640px) {
   :global(#code-samples) {
     /* Same sidebar + InfoPanel clearance as #about/#case-studies — see

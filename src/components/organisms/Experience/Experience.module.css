@@ -1,0 +1,98 @@
+:global(#experience) {
+  background: var(--section-alt-bg);
+}
+
+@media (min-width: 640px) {
+  :global(#experience) {
+    /* Same sidebar + InfoPanel clearance as the other non-hero sections —
+       see About.module.css. */
+    padding-left: var(--content-clearance-desktop);
+  }
+}
+
+.list {
+  /* Cards carry a lot of text — the wide reading column (same one MediaText
+     uses) gives bullets more room to breathe than the standard 640px. */
+  max-width: var(--content-width-wide);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.card {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px 24px;
+  background: var(--bg);
+}
+
+.cardHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  h2 {
+    margin: 0;
+  }
+}
+
+.company {
+  font-size: 15px;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.dates {
+  font-size: 13px;
+  color: var(--text);
+  margin-top: 4px;
+}
+
+@media (min-width: 640px) {
+  .cardHeader {
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .dates {
+    margin-top: 0;
+    white-space: nowrap;
+  }
+}
+
+.stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.bullets {
+  margin: 12px 0 0;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  li {
+    font-size: 15px;
+    line-height: 145%;
+  }
+}
+
+.subsection {
+  margin-top: 16px;
+  padding-left: 12px;
+  border-left: 2px solid var(--accent-border);
+}
+
+.subsectionTitle {
+  font-family: var(--heading);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-h);
+  margin: 0;
+}

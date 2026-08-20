@@ -1,7 +1,3 @@
-:global(#about) {
-  background: var(--section-alt-bg);
-}
-
 @media (min-width: 640px) {
   :global(#about) {
     /* Extra clearance so centering happens within the space actually free
