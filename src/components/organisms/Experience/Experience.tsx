@@ -20,6 +20,8 @@ function Experience() {
               <p className={styles.dates}>{entry.dates}</p>
             </div>
 
+            <p className={styles.summary}>{entry.summary}</p>
+
             {entry.stack && (
               <div className={styles.stack}>
                 {entry.stack.map((tech) => (
@@ -27,23 +29,6 @@ function Experience() {
                 ))}
               </div>
             )}
-
-            <ul className={styles.bullets}>
-              {entry.bullets.map((bullet, index) => (
-                <li key={index}>{bullet}</li>
-              ))}
-            </ul>
-
-            {entry.subsections?.map((subsection) => (
-              <div key={subsection.name} className={styles.subsection}>
-                <h3 className={styles.subsectionTitle}>{subsection.name}</h3>
-                <ul className={styles.bullets}>
-                  {subsection.bullets.map((bullet, index) => (
-                    <li key={index}>{bullet}</li>
-                  ))}
-                </ul>
-              </div>
-            ))}
           </article>
         ))}
       </div>
