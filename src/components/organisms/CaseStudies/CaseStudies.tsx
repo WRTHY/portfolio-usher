@@ -189,6 +189,7 @@ function CaseStudies() {
               <p>{selected.outcome}</p>
             </div>
           </div>
+          </div>
         </Modal>
       )}
     </section>
