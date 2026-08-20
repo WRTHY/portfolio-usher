@@ -1,4 +1,4 @@
-import { act, render, screen } from '@testing-library/react'
+import { act, render, screen, within } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import InfoPanel from './InfoPanel'
 import { sections } from '../../../content/navigation'
@@ -56,41 +56,39 @@ describe('InfoPanel', () => {
     expect(screen.queryByRole('complementary')).not.toBeInTheDocument()
   })
 
-  it('shows the name, tagline, and the active section’s own label and description', () => {
+  it('shows the name, tagline, and page nav, with the active section marked', () => {
     render(<InfoPanel />)
     activateSection('case-studies')
-
-    const caseStudies = sections.find((section) => section.id === 'case-studies')!
 
     expect(screen.getByRole('complementary', { name: 'Page summary' })).toBeInTheDocument()
     expect(screen.getByText(siteContent.name)).toBeInTheDocument()
     expect(screen.getByText(siteContent.tagline)).toBeInTheDocument()
-    expect(
-      screen.getByRole('heading', { level: 2, name: caseStudies.label }),
-    ).toBeInTheDocument()
-    expect(screen.getByText(caseStudies.description)).toBeInTheDocument()
+
+    const nav = screen.getByRole('navigation', { name: 'Sections' })
+    sections.forEach((section) => {
+      expect(within(nav).getByRole('link', { name: section.label })).toBeInTheDocument()
+    })
+    expect(within(nav).getByRole('link', { name: 'Case Studies' })).toHaveAttribute(
+      'aria-current',
+      'page',
+    )
   })
 
-  it('swaps in the new section’s own content as the active section changes', () => {
+  it('marks the new section as active in the nav as the active section changes', () => {
     render(<InfoPanel />)
     activateSection('case-studies')
     activateSection('about', 1)
 
-    const about = sections.find((section) => section.id === 'about')!
-    const caseStudies = sections.find((section) => section.id === 'case-studies')!
-
-    expect(screen.getByRole('heading', { level: 2, name: about.label })).toBeInTheDocument()
-    expect(screen.queryByText(caseStudies.description)).not.toBeInTheDocument()
+    const nav = screen.getByRole('navigation', { name: 'Sections' })
+    expect(within(nav).getByRole('link', { name: 'About' })).toHaveAttribute('aria-current', 'page')
+    expect(within(nav).getByRole('link', { name: 'Case Studies' })).not.toHaveAttribute('aria-current')
   })
 
-  it('hides again when scrolling back to the hero, keeping the last section’s wording underneath', () => {
+  it('hides again when scrolling back to the hero', () => {
     render(<InfoPanel />)
     activateSection('case-studies')
     activateSection('hero', 1)
 
-    const caseStudies = sections.find((section) => section.id === 'case-studies')!
-
     expect(screen.queryByRole('complementary')).not.toBeInTheDocument()
-    expect(screen.getByText(caseStudies.description)).toBeInTheDocument()
   })
 })

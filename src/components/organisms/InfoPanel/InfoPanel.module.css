@@ -48,11 +48,26 @@
   }
 }
 
+.navWrap {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+
+.nav {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+}
+
 .name {
   font-family: var(--heading);
   color: var(--text-h);
   font-weight: 500;
-  font-size: 22px;
+  font-size: 44px;
   margin: 0;
 }
 
@@ -60,52 +75,4 @@
   font-size: 16px;
   line-height: 145%;
   margin: 8px 0 0;
-}
-
-.section {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 16px;
-  margin-top: 24px;
-  padding-top: 24px;
-  border-top: 1px solid var(--border);
-  /* .section is remounted (via a key on the active section's id) each time
-     the active section changes, so this plays fresh on every swap — giving
-     the label/description a soft crossfade instead of snapping to new text. */
-  animation: sectionFadeIn 0.35s ease;
-}
-
-@keyframes sectionFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .section {
-    animation: none;
-  }
-}
-
-.sectionLabel {
-  font-family: var(--heading);
-  color: var(--text-h);
-  font-weight: 600;
-  font-size: 44px;
-  line-height: 108%;
-  letter-spacing: -0.9px;
-  margin: 0;
-}
-
-.sectionDescription {
-  font-size: 23px;
-  line-height: 145%;
-  margin: 0;
 }
