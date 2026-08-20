@@ -1,5 +1,5 @@
 export const sections = [
-  { id: 'hero', label: 'Home', description: 'Intro and tagline.' },
+  { id: 'about', label: 'About', description: 'Background and links.' },
   {
     id: 'experience',
     label: 'Experience',
@@ -15,5 +15,4 @@ export const sections = [
     label: 'Automation Examples',
     description: 'Syntax-highlighted Playwright/Cypress snippets.',
   },
-  { id: 'about', label: 'About', description: 'Background and links.' },
 ] as const

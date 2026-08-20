@@ -10,11 +10,11 @@ test.describe('primary navigation', () => {
     await portfolioPage.nav.goTo('Automation Examples')
     await expect(portfolioPage.section('code-samples')).toBeInViewport()
 
+    await portfolioPage.nav.goTo('Experience')
+    await expect(portfolioPage.section('experience')).toBeInViewport()
+
     await portfolioPage.nav.goTo('About')
     await expect(portfolioPage.section('about')).toBeInViewport()
-
-    await portfolioPage.nav.goTo('Home')
-    await expect(portfolioPage.section('hero')).toBeInViewport()
   })
 })
 

@@ -49,8 +49,8 @@
      page's content — including elements that intentionally break out of
      the column, like the case-study bento grid — should reference these
      instead of hardcoding its own margin/width. */
-  --page-gutter: 20px;
-  --page-gutter-desktop: 64px; /* clears the fixed sidebar (left: 24px + its width) */
+  --page-gutter: 56px;
+  --page-gutter-desktop: 128px; /* clears the fixed sidebar (left: 24px + its width) */
   --content-width: 640px; /* standard single-column reading width */
   --content-width-wide: 900px; /* wider two-column / media / gallery width */
   --info-panel-width: 400px; /* InfoPanel's fixed width at desktop */

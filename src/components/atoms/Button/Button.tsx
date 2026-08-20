@@ -5,13 +5,14 @@ type ButtonProps = {
   href: string
   children: ReactNode
   external?: boolean
+  fullWidth?: boolean
 }
 
-function Button({ href, children, external }: ButtonProps) {
+function Button({ href, children, external, fullWidth }: ButtonProps) {
   return (
     <a
       href={href}
-      className={styles.button}
+      className={[styles.button, fullWidth ? styles.fullWidth : null].filter(Boolean).join(' ')}
       target={external ? '_blank' : undefined}
       rel={external ? 'noopener noreferrer' : undefined}
     >
