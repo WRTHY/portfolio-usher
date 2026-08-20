@@ -8,8 +8,6 @@ export type CaseStudy = {
   outcome: string
   /** Reflections — what I'd do differently or explore next, in hindsight. Optional. */
   futureIterations?: string;
-  /** Bento grid tile size — see the `.bento-tile--*` rules in App.css. Defaults to '1x1' when omitted. */
-  size?: TileSize;
   /** Real thumbnail image, once one exists. Falls back to a gradient placeholder. */
   image?: string;
 }

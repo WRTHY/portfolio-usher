@@ -71,8 +71,8 @@ function CaseStudies() {
               <h3>Future Iterations</h3>
               <p>{selected.futureIterations}</p>
             </>
-            </div>
           )}
+          </div>
           </div>
         </Modal>
       )}
