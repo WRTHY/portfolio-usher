@@ -8,7 +8,7 @@ export const sections = [
   {
     id: 'case-studies',
     label: 'Case Studies',
-    description: 'A bento grid of expandable write-ups (problem → approach → outcome).',
+    description: 'A card grid of expandable write-ups (problem → approach → outcome).',
   },
   {
     id: 'code-samples',
