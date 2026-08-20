@@ -4,7 +4,7 @@ import { ThemeToggleComponent } from './ThemeToggleComponent'
 import { CaseStudiesSection } from './CaseStudiesSection'
 import { CodeSamplesSection } from './CodeSamplesSection'
 
-export type SectionId = 'hero' | 'case-studies' | 'code-samples' | 'about'
+export type SectionId = 'about' | 'experience' | 'case-studies' | 'code-samples'
 
 // Composition root for the site. It's a single page with no real per-URL
 // navigation, so rather than one class per route this models one root
