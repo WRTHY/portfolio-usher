@@ -4,12 +4,11 @@
 
 @media (min-width: 640px) {
   :global(#case-studies) {
-    /* Same sidebar + InfoPanel clearance as #about — see About.module.css.
-       The bento grid deliberately cancels part of this back out (see
-       BentoGrid.module.css) so tiles can still slide underneath the fixed
-       sidebar while normal content (the watermark) stays clear of it and
-       the InfoPanel. */
-    padding-left: var(--content-clearance-desktop);
+    /* Same sidebar clearance as #about — see About.module.css. The bento
+       grid deliberately cancels this back out (see BentoGrid.module.css)
+       so tiles can still slide underneath the sidebar while normal content
+       stays clear of it. */
+    padding-left: var(--page-gutter-desktop);
   }
 }
 

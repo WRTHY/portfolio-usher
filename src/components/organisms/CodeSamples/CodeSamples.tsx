@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import SectionWatermark from '../../atoms/SectionWatermark/SectionWatermark'
 import FrameworkSwitcher from '../../molecules/FrameworkSwitcher/FrameworkSwitcher'
 import LanguageTabs from '../../molecules/LanguageTabs/LanguageTabs'
 import type { Language } from '../../molecules/LanguageTabs/LanguageTabs'
@@ -10,7 +9,7 @@ import { codeExamples } from '../../../content/codeExamples'
 import type { AutomationExample } from '../../../content/codeExamples'
 import './CodeSamples.module.css'
 
-const watermarkText = sections.find((section) => section.id === 'code-samples')!.label
+const sectionLabel = sections.find((section) => section.id === 'code-samples')!.label
 
 type Framework = AutomationExample['framework']
 
@@ -30,9 +29,7 @@ function CodeSamples() {
   }
 
   return (
-    <section id="code-samples" aria-label={watermarkText}>
-      <SectionWatermark text={watermarkText} />
-
+    <section id="code-samples" aria-label={sectionLabel}>
       {/* .code-samples-body cancels the shared reading-column indent (same
           trick .hero-content uses) so the switcher can sit flush at the
           section's own padding edge — out in the page's margin — and,

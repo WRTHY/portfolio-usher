@@ -11,12 +11,6 @@ const WCAG_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']
 export async function scanForViolations(page: Page): Promise<Result[]> {
   const results = await new AxeBuilder({ page })
     .withTags(WCAG_TAGS)
-    // Section watermarks: large, 10%-opacity background typography that's
-    // already aria-hidden and purely decorative (see SectionWatermark.tsx).
-    // This is WCAG 1.4.3's "incidental text" exception, not a contrast bug —
-    // excluded via a purpose-built marker attribute rather than a broad
-    // selector, so this can't silently widen to cover unrelated elements.
-    .exclude('[data-a11y-decorative="true"]')
     .analyze()
   return results.violations
 }
