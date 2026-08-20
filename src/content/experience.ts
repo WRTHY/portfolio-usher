@@ -2,6 +2,7 @@ export type ExperienceEntry = {
   id: string
   role: string
   company: string
+  companyUrl: string
   dates: string
   stack?: readonly string[]
   summary: string
@@ -12,6 +13,7 @@ export const experience: readonly ExperienceEntry[] = [
     id: 'eventric-qa-lead',
     role: 'QA Lead',
     company: 'Eventric Master Tour',
+    companyUrl: 'https://www.eventric.com/',
     dates: 'Jan 2025 – Aug 2026',
     stack: [
       'TypeScript/JavaScript',
@@ -41,6 +43,7 @@ export const experience: readonly ExperienceEntry[] = [
     id: 'eventric-software-automation-engineer',
     role: 'Software Automation Engineer',
     company: 'Eventric Master Tour',
+    companyUrl: 'https://www.eventric.com/',
     dates: 'Mar 2023 – Jan 2025',
     stack: [
       'TypeScript/JavaScript',
@@ -65,6 +68,7 @@ export const experience: readonly ExperienceEntry[] = [
     id: 'fubo-gaming-qa-specialist',
     role: 'QA Specialist',
     company: 'Fubo Gaming',
+    companyUrl: 'https://www.fubo.tv/welcome',
     dates: 'Jun 2022 – Nov 2022',
     stack: ['JavaScript (Node.js, React Native)', 'Selenium/Cucumber', 'Confluence', 'Jira', 'Bitbucket', 'Figma'],
     summary:
@@ -74,6 +78,7 @@ export const experience: readonly ExperienceEntry[] = [
     id: 'scientific-games-software-quality-engineer',
     role: 'Software Quality Engineer',
     company: 'Scientific Games',
+    companyUrl: 'https://www.lnw.com/',
     dates: 'Sep 2019 – Jun 2022',
     summary:
       "Owned the QA lifecycle for six video slot games through first-time GLI certification, becoming the team's subject-matter expert on jurisdictional localization testing.",
