@@ -12,6 +12,6 @@
 
 @media (min-width: 640px) {
   .header {
-    padding: 16px 20px;
+    display: none;
   }
 }
