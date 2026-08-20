@@ -1,10 +1,13 @@
 @media (min-width: 640px) {
   :global(#case-studies) {
-    /* Same sidebar clearance as #about — see About.module.css. The bento
-       grid deliberately cancels this back out (see BentoGrid.module.css)
-       so tiles can still slide underneath the sidebar while normal content
-       stays clear of it. */
-    padding-left: var(--page-gutter-desktop);
+    /* Same sidebar + InfoPanel clearance as #about/#code-samples — see
+       About.module.css. The bento grid deliberately cancels this back out
+       (see BentoGrid.module.css) so tiles can still slide underneath both
+       the sidebar and the InfoPanel while normal content — including the
+       section title — stays clear of them. This was previously set to
+       --page-gutter-desktop only, which cleared the sidebar but left the
+       title and grid anchor sitting underneath the fixed InfoPanel. */
+    padding-left: var(--content-clearance-desktop);
   }
 }
 

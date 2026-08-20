@@ -1,0 +1,188 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-20T00:00:00Z",
+  "title": "Design System: James Usher — Portfolio",
+  "extensions": {
+    "colorMeta": {
+      "deep-violet-ink": {
+        "role": "primary",
+        "displayName": "Deep Violet Ink",
+        "canonical": "light-dark(#6d28d9, #a78bfa)",
+        "tonalRamp": ["#2e1065", "#4c1d95", "#5b21b6", "#6d28d9", "#7c3aed", "#8b5cf6", "#a78bfa", "#ddd6fe"]
+      },
+      "violet-wash": {
+        "role": "primary-surface",
+        "displayName": "Violet Wash",
+        "canonical": "light-dark(rgba(109, 40, 217, 0.1), rgba(167, 139, 250, 0.15))",
+        "purpose": "10-15% alpha of Deep Violet Ink — the tinted background behind the primary Button and chips. Not an independent hue, always derived from the accent."
+      },
+      "violet-border": {
+        "role": "primary-border",
+        "displayName": "Violet Border",
+        "canonical": "light-dark(rgba(109, 40, 217, 0.4), rgba(167, 139, 250, 0.5))",
+        "purpose": "40-50% alpha of Deep Violet Ink — hover border color on BentoTiles and the active state on pill toggles."
+      },
+      "particle-violet": {
+        "role": "accent-decorative",
+        "displayName": "Particle Violet",
+        "canonical": "light-dark(#4c1d95, #a78bfa)",
+        "tonalRamp": ["#2e1065", "#3d1477", "#4c1d95", "#5b21b6", "#6d28d9", "#7c3aed", "#8b5cf6", "#a78bfa"],
+        "purpose": "Deliberately more saturated than the accent — small low-opacity hero particle dots need stronger contrast than text/UI to stay visible against the cream background."
+      },
+      "parchment-cream": {
+        "role": "neutral-bg",
+        "displayName": "Parchment Cream",
+        "canonical": "light-dark(#f8f1e1, #16171d)",
+        "tonalRamp": ["#3a2f1f", "#5c4a30", "#8a7048", "#b89968", "#dccba3", "#efe3c8", "#f8f1e1", "#fffaf0"],
+        "purpose": "Page background and the surface color for flat cards. Dark mode intentionally breaks the warm hue family and reuses a cool gray/navy neutral rather than a dark-brown version of cream — a deliberate asymmetry, not an oversight."
+      },
+      "parchment-shaded": {
+        "role": "neutral-surface",
+        "displayName": "Parchment Shaded",
+        "canonical": "light-dark(#efe3c8, #1f2028)",
+        "tonalRamp": ["#332a1c", "#544628", "#7d673c", "#a68a56", "#cbb37f", "#e4d5ab", "#efe3c8", "#f9f2e2"],
+        "purpose": "A step warmer/darker than the page — the code panel and fixed InfoPanel background, so they read as a distinct layer."
+      },
+      "section-alt": {
+        "role": "neutral-surface",
+        "displayName": "Section Alt",
+        "canonical": "light-dark(#f1e6cc, #1c1e26)",
+        "tonalRamp": ["#372c1c", "#584730", "#87703f", "#b6975a", "#dbc48c", "#ebdcb9", "#f1e6cc", "#faf4e6"],
+        "purpose": "Alternating full-section background so consecutive scroll-snap sections read as distinct pages."
+      },
+      "parchment-border": {
+        "role": "neutral-border",
+        "displayName": "Parchment Border",
+        "canonical": "light-dark(#dccba3, #2e303a)",
+        "tonalRamp": ["#4c3f28", "#6e5b3c", "#977f54", "#bda173", "#dccba3", "#e8dabb", "#f2e9d3", "#f9f3e6"],
+        "purpose": "Default 1px border on cards, tiles, dividers, and the code line-number rule."
+      },
+      "ink": {
+        "role": "neutral-text",
+        "displayName": "Ink",
+        "canonical": "light-dark(#5c5346, #9ca3af)",
+        "tonalRamp": ["#211d18", "#3a332a", "#5c5346", "#7d7160", "#9c8f7a", "#bcae96", "#d9ceb9", "#efe8db"],
+        "purpose": "Body text color. Dark mode reuses the cool gray/navy neutral family, same asymmetry as Parchment Cream."
+      },
+      "ink-deep": {
+        "role": "neutral-text-strong",
+        "displayName": "Ink Deep",
+        "canonical": "light-dark(#1f1710, #f3f4f6)",
+        "tonalRamp": ["#0d0906", "#1f1710", "#332619", "#4d3a26", "#6b5236", "#8c6f4c", "#ad8f68", "#cbb28c"],
+        "purpose": "Heading text color — h1/h2/h3, card titles, InfoPanel name block."
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Hero h1 only — the largest, boldest moment in the type system." },
+      "headline": { "displayName": "Headline", "purpose": "The InfoPanel's large section label (e.g. \"Experience\") — the one other place a heading reaches display scale." },
+      "title": { "displayName": "Title", "purpose": "h2 — section and card headings throughout the page." },
+      "body": { "displayName": "Body", "purpose": "Default running text, set globally on :root." },
+      "label": { "displayName": "Label", "purpose": "Tags, chips, dates, and other small metadata." },
+      "mono": { "displayName": "Mono", "purpose": "Code samples, inline code, file paths." }
+    },
+    "shadows": [
+      {
+        "name": "floating-surface",
+        "value": "light-dark(rgba(60, 40, 10, 0.12), rgba(0, 0, 0, 0.4)) 0 10px 24px -8px",
+        "purpose": "The system's only shadow. Used exclusively on the Modal and the fixed-position InfoPanel — the two elements genuinely floating above the page."
+      }
+    ],
+    "motion": [
+      { "name": "ease-state", "value": "0.2s ease", "purpose": "Default hover/active transition for background, text, and border-color changes — buttons, nav links, badges, pill toggles." },
+      { "name": "ease-panel", "value": "0.35s ease", "purpose": "InfoPanel show/hide (opacity + translateY) and its per-section content crossfade." },
+      { "name": "ease-bump", "value": "0.3s ease-out", "purpose": "The .bump overscroll-feedback keyframe animation." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "1024px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The one call-to-action-style control in the system — violet-tinted at rest, fully inverts to solid violet on hover.",
+      "html": "<a class=\"ds-btn-primary\" href=\"#\">Download Resume</a>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; padding: 10px 24px 6px; border-radius: 4px; border: 2px solid var(--accent); background: var(--accent-bg); color: var(--accent); font-family: var(--heading); font-size: 18px; font-weight: 700; line-height: 1; text-decoration: none; transition: background 0.2s, color 0.2s, border-color 0.2s; } .ds-btn-primary:hover { background: var(--accent); color: var(--bg); border-color: var(--accent); }"
+    },
+    {
+      "name": "Chip / Tag",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "Filled, borderless informational tag — case study tags, experience stack items.",
+      "html": "<span class=\"ds-chip\">Playwright</span>",
+      "css": ".ds-chip { display: inline-flex; font-size: 12px; color: var(--accent); background: var(--accent-bg); border-radius: 4px; padding: 2px 8px; }"
+    },
+    {
+      "name": "Pill Toggle",
+      "kind": "chip",
+      "refersTo": "pill-toggle",
+      "description": "Outlined, selectable control — framework/language switcher tabs. Active state is a border+text color shift, never a fill, distinguishing it from the filled informational Chip.",
+      "html": "<button class=\"ds-pill\" data-state=\"checked\">Playwright</button>",
+      "css": ".ds-pill { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border: 1px solid var(--border); border-radius: 999px; background: none; color: var(--text); font-family: system-ui, sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; transition: border-color 0.2s, color 0.2s; } .ds-pill:hover { border-color: var(--accent-border); } .ds-pill[data-state='checked'] { border-color: var(--accent-border); color: var(--accent); }"
+    },
+    {
+      "name": "Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Flat, bordered container shared by Experience cards, BentoTiles, and FramedImage — 12px radius, no shadow, border-color shift on hover where interactive.",
+      "html": "<div class=\"ds-card\"><h3 class=\"ds-card-title\">QA Lead</h3><p class=\"ds-card-body\">Own QA strategy and the release process across the product suite.</p></div>",
+      "css": ".ds-card { border: 1px solid var(--border); border-radius: 12px; padding: 20px 24px; background: var(--bg); transition: border-color 0.2s; } .ds-card:hover { border-color: var(--accent-border); } .ds-card-title { font-family: var(--heading); font-weight: 500; font-size: 24px; color: var(--text-h); margin: 0 0 4px; } .ds-card-body { font-size: 15px; line-height: 145%; color: var(--text); margin: 0; }"
+    },
+    {
+      "name": "Modal",
+      "kind": "custom",
+      "refersTo": "modal",
+      "description": "Centered overlay dialog — the system's one shadow token, 12px radius, dark backdrop.",
+      "html": "<div class=\"ds-modal-backdrop\"><div class=\"ds-modal\"><button class=\"ds-modal-close\" aria-label=\"Close\">×</button><h2>Case Study Title</h2><p>Problem, approach, and outcome go here.</p></div></div>",
+      "css": ".ds-modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; padding: 20px; } .ds-modal { position: relative; background: var(--bg); border-radius: 12px; box-shadow: 0 10px 24px -8px rgba(60,40,10,0.12); max-width: 560px; width: 100%; padding: 32px 24px 24px; } .ds-modal-close { position: absolute; top: 12px; right: 12px; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; border: none; background: none; color: var(--text); font-size: 20px; cursor: pointer; } .ds-modal-close:hover { color: var(--accent); }"
+    },
+    {
+      "name": "Nav Link",
+      "kind": "nav",
+      "refersTo": "nav-link",
+      "description": "Display-face navigation link — desktop inline list and the mobile full-screen overlay share this same style.",
+      "html": "<a class=\"ds-nav-link\" href=\"#experience\">Experience</a>",
+      "css": ".ds-nav-link { font-family: var(--heading); color: var(--text); text-decoration: none; font-size: 1rem; transition: color 0.2s; } .ds-nav-link:hover { color: var(--accent); } .ds-nav-link.active { color: var(--accent); font-weight: 700; }"
+    },
+    {
+      "name": "Code Block",
+      "kind": "custom",
+      "refersTo": "code-block",
+      "description": "Shiki-rendered code panel on the Parchment Shaded surface — mono type, CSS-counter line numbers with a right-border divider.",
+      "html": "<pre class=\"ds-code\"><code><span class=\"ds-code-line\"><span class=\"ds-line-no\"></span>test('logs in', async ({ page }) => {</span></code></pre>",
+      "css": ".ds-code { margin: 0; padding: 16px; background: var(--code-bg); overflow-x: auto; font-family: ui-monospace, Consolas, monospace; font-size: 13px; line-height: 145%; tab-size: 2; } .ds-code-line { counter-increment: line-number; display: inline; } .ds-line-no::before { content: counter(line-number); display: inline-block; width: 2em; margin-right: 16px; padding-right: 8px; border-right: 1px solid var(--border); text-align: right; color: var(--text); opacity: 0.5; user-select: none; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Engineer's Notebook",
+    "overview": "This is a warm cream page with violet ink on it — the visual language of a working notebook kept by someone who builds things carefully and writes down why. The parchment background and single violet accent read as handmade and personal rather than templated; the custom display face (TBJ Orcherum Mini) gives headings a distinct, slightly graphic voice while body copy stays in a plain, legible system sans, the way a notebook's marginalia is bolder than its running text. Monospace code samples sit on their own slightly-darker \"shaded page\" surface, like a pasted-in printout.\n\nThe system is deliberately restrained: one accent color, two border-radius steps plus a pill for toggles, and almost no shadow — surfaces announce interactivity by a border-color shift, not by lifting off the page. This is a quietly confident, crafted personality, explicitly not the glassy-gradient, stock-photo \"AI-generated landing page\" look, and explicitly not playful or cartoonish — the personal touches (music, sports, the balsa-wood-bridge story) live inside this same restrained type system rather than spinning up their own decorative treatment.\n\nAn alternate Mono theme exists (data-theme=\"mono\") — same structure, a cooler near-white page and a slightly brighter violet — for a visitor who wants a plainer, less warm-toned reading surface. It is a second page in the same notebook, not a different book: every rule applies to both.",
+    "keyCharacteristics": [
+      "Warm parchment-cream page, one deep-violet accent, near-zero decorative color",
+      "A custom display face reserved for headings and emphasis; body copy stays in a plain system sans",
+      "Flat, bordered surfaces; hover means a border-color shift, not elevation",
+      "Shadow appears only on the two things that actually float above the page (Modal, the fixed InfoPanel)",
+      "Full-viewport scroll-snap sections, read top to bottom like turning pages"
+    ],
+    "rules": [
+      { "name": "The One Accent Rule", "body": "Violet is the only color allowed to carry meaning. It appears exclusively on interactive and emphasis moments — never as a decorative fill, background wash on a whole section, or gradient.", "section": "colors" },
+      { "name": "The Notebook Voice Rule", "body": "TBJ Orcherum Mini is reserved for headings, nav labels, button labels, and the InfoPanel's name/title block — anywhere text is acting as a label or headline. It never appears in a paragraph of running prose.", "section": "typography" },
+      { "name": "The Flat-by-Default Rule", "body": "Cards, tiles, badges, and buttons never receive a box-shadow. Interactivity is signaled by a border-color shift to violet on hover. Shadow is reserved for things structurally floating above the content.", "section": "elevation" },
+      { "name": "The Three-Radius Rule", "body": "4px, 12px, or 999px — nothing in between. A new component reaches for one of these three, never a custom radius value.", "section": "shapes" }
+    ],
+    "dos": [
+      "Do reserve Deep Violet Ink for interactive and emphasis moments only — links, active states, CTAs, tags. Never a section background or decorative fill.",
+      "Do use TBJ Orcherum Mini only for headings, labels, and button text; keep all running prose in the plain system sans.",
+      "Do signal card/tile interactivity with a border-color shift to violet on hover — not a shadow, not a lift, not a scale transform.",
+      "Do reuse --content-width, --page-gutter, and --content-clearance-desktop for anything that must align to the shared reading column, instead of hardcoding a margin or width.",
+      "Do give every animation a prefers-reduced-motion fallback — every existing motion pattern in the system already does this."
+    ],
+    "donts": [
+      "Don't add box-shadow to cards, tiles, chips, or buttons. --shadow is reserved for the Modal and the fixed InfoPanel — the only two elements genuinely floating above the page.",
+      "Don't introduce a fourth border-radius value. 4px / 12px / 999px is the complete scale, each with one specific job.",
+      "Don't reach for a gradient hero, glossy surface, or stock photography — the palette is flat parchment plus one violet accent, full stop.",
+      "Don't give the personal/music side of About (WRTHY, DJ sets, rec sports) its own visual treatment or color — it stays inside the existing type system as supporting texture, not a second brand."
+    ]
+  }
+}
