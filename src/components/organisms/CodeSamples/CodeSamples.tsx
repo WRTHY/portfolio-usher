@@ -7,7 +7,7 @@ import PanelFooter from '../../molecules/PanelFooter/PanelFooter'
 import { sections } from '../../../content/navigation'
 import { codeExamples } from '../../../content/codeExamples'
 import type { AutomationExample } from '../../../content/codeExamples'
-import './CodeSamples.module.css'
+import styles from './CodeSamples.module.css'
 
 const sectionLabel = sections.find((section) => section.id === 'code-samples')!.label
 
@@ -35,7 +35,7 @@ function CodeSamples() {
           section's own padding edge — out in the page's margin — and,
           on wider screens, vertically centered beside the panel rather
           than stacked above it. */}
-      <div className="code-samples-body">
+      <div className={styles.body}>
         <FrameworkSwitcher value={framework} onChange={handleFrameworkChange} />
 
         <div className={styles.main}>
