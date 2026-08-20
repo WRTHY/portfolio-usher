@@ -1,6 +1,7 @@
 import * as RadioGroup from '@radix-ui/react-radio-group'
 import { SiCypress } from 'react-icons/si'
 import type { AutomationExample } from '../../../content/codeExamples'
+import styles from './FrameworkSwitcher.module.css'
 
 type Framework = AutomationExample['framework']
 
@@ -23,13 +24,13 @@ function FrameworkSwitcher({ value, onChange }: FrameworkSwitcherProps) {
     <RadioGroup.Root
       value={value}
       onValueChange={(next) => onChange(next as Framework)}
-      className="framework-switcher"
+      className={styles.switcher}
       aria-label="Automation framework"
     >
-      <RadioGroup.Item value="playwright" className="framework-switcher-trigger">
+      <RadioGroup.Item value="playwright" className={styles.trigger}>
         Playwright
       </RadioGroup.Item>
-      <RadioGroup.Item value="cypress" className="framework-switcher-trigger">
+      <RadioGroup.Item value="cypress" className={styles.trigger}>
         <SiCypress aria-hidden="true" />
         Cypress
       </RadioGroup.Item>

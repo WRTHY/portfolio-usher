@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import type { CSSProperties } from 'react'
 import FrameworkSwitcher from '../../molecules/FrameworkSwitcher/FrameworkSwitcher'
 import LanguageTabs from '../../molecules/LanguageTabs/LanguageTabs'
 import type { Language } from '../../molecules/LanguageTabs/LanguageTabs'
@@ -7,9 +8,18 @@ import PanelFooter from '../../molecules/PanelFooter/PanelFooter'
 import { sections } from '../../../content/navigation'
 import { codeExamples } from '../../../content/codeExamples'
 import type { AutomationExample } from '../../../content/codeExamples'
-import './CodeSamples.module.css'
+import styles from './CodeSamples.module.css'
 
 const sectionLabel = sections.find((section) => section.id === 'code-samples')!.label
+
+// Reserves enough vertical room for the tallest sample across every
+// framework/file combination, so swapping between shorter and taller
+// snippets never changes the panel's height — the code block's top (and
+// everything below it on the page) stays put instead of shifting on
+// every tab click.
+const maxCodeLines = Math.max(
+  ...codeExamples.flatMap((example) => example.files.map((file) => file.code.split('\n').length)),
+)
 
 type Framework = AutomationExample['framework']
 
@@ -35,15 +45,15 @@ function CodeSamples() {
           section's own padding edge — out in the page's margin — and,
           on wider screens, vertically centered beside the panel rather
           than stacked above it. */}
-      <div className="code-samples-body">
+      <div className={styles.body}>
         <FrameworkSwitcher value={framework} onChange={handleFrameworkChange} />
 
-        <div className="code-samples-main">
-          <div className="code-samples-language-row">
+        <div className={styles.main}>
+          <div className={styles.languageRow}>
             <LanguageTabs value={language} onChange={setLanguage} />
           </div>
 
-          <div className="code-panel">
+          <div className={styles.panel} style={{ '--code-lines': maxCodeLines } as CSSProperties}>
             <CodeFileTabs
               files={example.files}
               activeIndex={activeFileIndex}
