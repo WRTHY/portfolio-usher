@@ -46,11 +46,11 @@
   /* Shared page-layout tokens — the single source of truth for how far
      section content sits from the viewport edge and how wide the standard
      content column is. Anything that needs to line up with the rest of the
-     page's content — including elements that intentionally break out of
-     the column, like the case-study bento grid — should reference these
-     instead of hardcoding its own margin/width. */
-  --page-gutter: 20px;
-  --page-gutter-desktop: 64px; /* clears the fixed sidebar (left: 24px + its width) */
+     page's content — including elements that intentionally run wider than
+     the standard column, like the code samples panel — should reference
+     these instead of hardcoding its own margin/width. */
+  --page-gutter: 56px;
+  --page-gutter-desktop: 128px; /* clears the fixed sidebar (left: 24px + its width) */
   --content-width: 640px; /* standard single-column reading width */
   --content-width-wide: 900px; /* wider two-column / media / gallery width */
   --info-panel-width: 400px; /* InfoPanel's fixed width at desktop */
@@ -147,9 +147,9 @@ section {
        far from the section's own left edge — split the difference between
        hugging that edge (0) and being fully centered in the space the
        sidebar leaves free (which reads as too far right on wide screens).
-       Anything that intentionally breaks out of --content-width (wider
-       media, the bento grid) should reuse this same formula so its left
-       edge still lines up with the rest of the section's content. */
+       Anything that intentionally runs wider than --content-width (wider
+       media, the code samples panel) should reuse this same formula so its
+       left edge still lines up with the rest of the section's content. */
     margin-left: max(0px, calc((100% - var(--content-width)) / 4));
   }
 }

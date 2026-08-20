@@ -1,10 +1,10 @@
 import { useId, useState } from 'react'
 import { sections } from '../../../content/navigation'
 import Badge from '../../atoms/Badge/Badge'
-import BentoGrid from '../../molecules/BentoGrid/BentoGrid'
+import Heading from '../../atoms/Heading/Heading'
 import Modal from '../../molecules/Modal/Modal'
 import { caseStudies } from '../../../content/caseStudies'
-import './CaseStudies.module.css'
+import styles from './CaseStudies.module.css'
 
 const sectionLabel = sections.find((section) => section.id === 'case-studies')!.label
 
@@ -16,7 +16,25 @@ function CaseStudies() {
 
   return (
     <section id="case-studies" aria-label={sectionLabel}>
-      <BentoGrid items={caseStudies} onSelect={setSelectedId} />
+      <div className={styles.list}>
+        {caseStudies.map((caseStudy) => (
+          <button
+            key={caseStudy.id}
+            type="button"
+            className={styles.card}
+            onClick={() => setSelectedId(caseStudy.id)}
+          >
+            <Heading level={2}>{caseStudy.title}</Heading>
+            <p className={styles.summary}>{caseStudy.summary}</p>
+            <div className={styles.tags}>
+              {caseStudy.tags.map((tag) => (
+                <Badge key={tag}>{tag}</Badge>
+              ))}
+            </div>
+            <span className={styles.affordance}>Read case study &rarr;</span>
+          </button>
+        ))}
+      </div>
 
       {selected && (
         <Modal titleId={titleId} onClose={() => setSelectedId(null)}>
@@ -29,23 +47,33 @@ function CaseStudies() {
             &times;
           </button>
           <h2 id={titleId}>{selected.title}</h2>
-          <div className="case-study-tags">
+          <div className={styles.tags}>
             {selected.tags.map((tag) => (
               <Badge key={tag}>{tag}</Badge>
             ))}
           </div>
-          <h3>Problem</h3>
-          <p>{selected.problem}</p>
-          <h3>Approach</h3>
-          <p>{selected.approach}</p>
-          <h3>Outcome</h3>
-          <p>{selected.outcome}</p>
-          {selected.futureIterations && (
+          <div className={styles.report}>
+            <div>
+              <h3>Problem</h3>
+              <p>{selected.problem}</p>
+            </div>
+            <div>
+              <h3>Approach</h3>
+              <p>{selected.approach}</p>
+            </div>
+            <div>
+              <h3>Outcome</h3>
+              <p>{selected.outcome}</p>
+            </div>
+            <div>
+            {selected.futureIterations && (
             <>
               <h3>Future Iterations</h3>
               <p>{selected.futureIterations}</p>
             </>
+            </div>
           )}
+          </div>
         </Modal>
       )}
     </section>

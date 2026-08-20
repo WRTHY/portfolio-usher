@@ -1,20 +1,18 @@
-export type TileSize = "1x1" | "1x2" | "2x1" | "2x2";
-
 export type CaseStudy = {
-  id: string;
-  title: string;
-  summary: string;
-  tags: readonly string[];
-  problem: string;
-  approach: string;
-  outcome: string;
+  id: string
+  title: string
+  summary: string
+  tags: readonly string[]
+  problem: string
+  approach: string
+  outcome: string
   /** Reflections — what I'd do differently or explore next, in hindsight. Optional. */
   futureIterations?: string;
   /** Bento grid tile size — see the `.bento-tile--*` rules in App.css. Defaults to '1x1' when omitted. */
   size?: TileSize;
   /** Real thumbnail image, once one exists. Falls back to a gradient placeholder. */
   image?: string;
-};
+}
 
 export const caseStudies: readonly CaseStudy[] = [
   {
@@ -30,7 +28,6 @@ export const caseStudies: readonly CaseStudy[] = [
       "Framework foundations and the highest-value test tier shipped first and became the base every later suite was built on. Zero E2E coverage to an actively growing, CI-integrated regression suite, without ever hitting the parallelization/data-collision trap. Regression testing on release candidates went from a fully manual regressionprocess to an automated process with minor spot checks on feature specific changes",
     futureIterations:
       "Communication of test results remained a major pain point of this work. In future iterations, i would have liked to explore a way to log test results immediately on the PR that the pipeline is run on. Additionally, a slack output channel could have been a useful place to notify the team of any failures or regressions immediately and without QA needing to manually check the results.",
-    size: "2x2",
   },
   {
     id: "placeholder-two",
@@ -61,7 +58,6 @@ export const caseStudies: readonly CaseStudy[] = [
       "Placeholder — what changed as a result, ideally with a number attached.",
     futureIterations:
       "Placeholder — what I'd change with hindsight, and what's next if the work continued.",
-    size: "1x2",
   },
   {
     id: "placeholder-four",
@@ -77,6 +73,5 @@ export const caseStudies: readonly CaseStudy[] = [
       "Placeholder — what changed as a result, ideally with a number attached.",
     futureIterations:
       "Placeholder — what I'd change with hindsight, and what's next if the work continued.",
-    size: "2x1",
   },
 ] as const;
