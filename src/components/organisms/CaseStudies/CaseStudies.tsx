@@ -1,5 +1,4 @@
 import { useId, useState } from 'react'
-import SectionWatermark from '../../atoms/SectionWatermark/SectionWatermark'
 import { sections } from '../../../content/navigation'
 import Badge from '../../atoms/Badge/Badge'
 import BentoGrid from '../../molecules/BentoGrid/BentoGrid'
@@ -7,7 +6,7 @@ import Modal from '../../molecules/Modal/Modal'
 import { caseStudies } from '../../../content/caseStudies'
 import './CaseStudies.module.css'
 
-const watermarkText = sections.find((section) => section.id === 'case-studies')!.label
+const sectionLabel = sections.find((section) => section.id === 'case-studies')!.label
 
 function CaseStudies() {
   const [selectedId, setSelectedId] = useState<string | null>(null)
@@ -16,11 +15,7 @@ function CaseStudies() {
   const selected = caseStudies.find((caseStudy) => caseStudy.id === selectedId) ?? null
 
   return (
-    // The watermark carries the visible title; aria-label keeps the section
-    // discoverable in the accessibility tree since the watermark itself is
-    // aria-hidden decoration.
-    <section id="case-studies" aria-label={watermarkText}>
-      <SectionWatermark text={watermarkText} />
+    <section id="case-studies" aria-label={sectionLabel}>
       <BentoGrid items={caseStudies} onSelect={setSelectedId} />
 
       {selected && (

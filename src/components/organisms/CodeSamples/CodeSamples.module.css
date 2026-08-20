@@ -1,3 +1,9 @@
+@media (min-width: 640px) {
+  :global(#code-samples) {
+    /* Same sidebar + InfoPanel clearance as #about/#case-studies — see
+       About.module.css. */
+    padding-left: var(--content-clearance-desktop);
+
 .body {
   /* Cancels the shared reading-column inset (same trick .hero-content
      uses) so the switcher can sit flush at the section's own padding
