@@ -54,6 +54,8 @@ Other scripts:
 | `npm run test:run` | Run unit tests once |
 | `npm run test:e2e` | Run the Playwright end-to-end suite |
 | `npm run test:e2e:ui` | Run the Playwright suite in UI mode |
+| `npm run test:e2e:cypress` | Run the Cypress end-to-end suite headlessly |
+| `npm run test:e2e:cypress:open` | Open the Cypress suite in interactive mode |
 
 ## Testing
 
@@ -61,23 +63,32 @@ Other scripts:
 next to the component they cover (`Component.test.tsx`), exercising rendering, props,
 and interaction behavior in isolation.
 
-**End-to-end tests** live under [`e2e/playwright/`](e2e/playwright). They're written
-against a Page Object Model (see [`e2e/playwright/pages/`](e2e/playwright/pages)) so
-specs read as user behavior rather than raw selectors, and cover navigation, the case
-study modal, the code samples panel, and theme switching. `e2e/` is deliberately scoped
-to hold sibling implementations of the same scenarios in other tools/languages later
-(Cypress, Python, Java), so Playwright specs live in their own subfolder rather than at
-the top level.
+**End-to-end tests** live under [`e2e/`](e2e), one subfolder per framework, covering the
+same scenarios — navigation, the case study modal, the code samples panel, theme
+switching, and accessibility — against a Page Object Model in each:
 
-**Accessibility** is checked as part of the same Playwright suite
-([`accessibility.spec.ts`](e2e/playwright/accessibility.spec.ts)), using
-[`@axe-core/playwright`](https://github.com/dequelabs/axe-core-npm) to scan for WCAG
-2.1 AA violations — on the default page, with the case study modal open, in dark mode,
-and on a mobile viewport with the nav menu open.
+- [`e2e/playwright/`](e2e/playwright) ([pages](e2e/playwright/pages)) — the original suite
+- [`e2e/cypress/`](e2e/cypress) ([pages](e2e/cypress/pages)) — a 1:1 Cypress port
+
+`e2e/` is deliberately scoped to hold further sibling implementations later (Python,
+Java), so each framework's specs live in their own subfolder rather than at the top
+level.
+
+**Accessibility** is checked as part of both suites
+([`accessibility.spec.ts`](e2e/playwright/accessibility.spec.ts),
+[`accessibility.cy.ts`](e2e/cypress/accessibility.cy.ts)), using
+[`@axe-core/playwright`](https://github.com/dequelabs/axe-core-npm) /
+[`cypress-axe`](https://github.com/component-driven/cypress-axe) to scan for WCAG 2.1 AA
+violations — on the default page, with the case study modal open, in dark mode, and on a
+mobile viewport with the nav menu open.
 
 Playwright is currently configured for Chromium only: Firefox's binary doesn't spawn in
 the sandboxed dev environment this was built in, and WebKit has a known focus-restoration
 bug in `Modal.tsx` that's tracked separately. See [`playwright.config.ts`](playwright.config.ts).
+Cypress runs against Electron in the same environment; verifying it required
+`--disable-gpu` on `ELECTRON_EXTRA_LAUNCH_ARGS` to avoid a GPU-process crash, and even
+then a couple of specs showed sandbox-specific rendering flakiness across sequential
+tests in one run (each passes in isolation) — see [`cypress.config.ts`](cypress.config.ts).
 
 ## Notes
 
