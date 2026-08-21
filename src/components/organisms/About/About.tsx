@@ -1,10 +1,11 @@
-import MediaText from '../../molecules/MediaText/MediaText'
 import Heading from '../../atoms/Heading/Heading'
 import TextCard from '../../molecules/TextCard/TextCard'
 import useOverscrollBump from '../../../hooks/useOverscrollBump'
-import { about, siteContent } from '../../../content/site'
-import profilePhoto from '../../../assets/profile.png'
+import { sections } from '../../../content/navigation'
+import { about } from '../../../content/site'
 import styles from './About.module.css'
+
+const sectionLabel = sections.find((section) => section.id === 'about')!.label
 
 function About() {
   const bumpRef = useOverscrollBump<HTMLElement>()

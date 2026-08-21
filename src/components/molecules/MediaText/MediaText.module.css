@@ -1,9 +1,10 @@
 /* Reusable image-beside-text layout (stacks on mobile). The generic
-   `section > *` rule caps direct children at 640px — .mediaText's own
-   class specificity overrides that with a wider, two-column-appropriate
-   max-width, while still being centered by the section the same as every
-   other section's content. */
+   `section > *` rule caps direct children at 640px and adds a quarter-column
+   left indent — .mediaText's own class specificity overrides both: a wider,
+   two-column-appropriate max-width, and margin-left: 0 so it sits flush at
+   the same left anchor as every other non-hero section's content. */
 .mediaText {
+  margin-left: 0;
   display: flex;
   flex-direction: column;
   align-items: stretch;
