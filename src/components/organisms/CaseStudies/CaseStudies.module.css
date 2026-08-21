@@ -1,18 +1,102 @@
+:global(#case-studies) {
+  /* Opposite pairing from Experience: the section stays on the base page
+     tone and the cards sit on the alternate tone, so cards read as raised
+     surfaces against the section rather than sunk into it. */
+  background: var(--bg);
+}
+
 @media (min-width: 640px) {
   :global(#case-studies) {
-    /* Same sidebar + InfoPanel clearance as #about/#code-samples — see
-       About.module.css. The bento grid deliberately cancels this back out
-       (see BentoGrid.module.css) so tiles can still slide underneath both
-       the sidebar and the InfoPanel while normal content — including the
-       section title — stays clear of them. This was previously set to
-       --page-gutter-desktop only, which cleared the sidebar but left the
-       title and grid anchor sitting underneath the fixed InfoPanel. */
+    /* Same sidebar + InfoPanel clearance as every other non-hero section —
+       see Experience.module.css. */
     padding-left: var(--content-clearance-desktop);
   }
 }
 
-:global(.case-study-tags) {
+/* Same structure as Experience's .list — a single stacked column of
+   full-width cards, not a multi-column grid. */
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  width: 100%;
+  text-align: left;
+  font-family: inherit;
+  color: inherit;
+  background: var(--section-alt-bg);
+  /* Light border at rest, like Experience's card — animates to the accent
+     color on hover/focus to signal selection. */
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px 24px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.card h2 {
+  margin: 0;
+}
+
+.card:hover,
+.card:focus-visible {
+  border-color: var(--accent-border);
+}
+
+.summary {
+  font-size: 15px;
+  line-height: 145%;
+  color: var(--text);
+  margin: 0;
+}
+
+.tags {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
+  margin-top: auto;
+  padding-top: 4px;
+}
+
+.affordance {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text);
+  opacity: 0.7;
+  transition:
+    color 0.2s,
+    opacity 0.2s;
+}
+
+.card:hover .affordance,
+.card:focus-visible .affordance {
+  color: var(--accent);
+  opacity: 1;
+}
+
+/* Problem / Approach / Outcome inside the modal — stacked by default,
+   3 columns once the wider modal has room for them side by side. */
+.report {
+  display: grid;
+  gap: 20px;
+}
+
+@media (min-width: 620px) {
+  .report {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .affordance {
+    transition: none;
+  }
 }

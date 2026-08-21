@@ -23,10 +23,25 @@
 }
 
 .card {
+  display: block;
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 20px 24px;
   background: var(--bg);
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.card:hover {
+  border-color: var(--accent-border);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    transition: none;
+  }
 }
 
 .cardHeader {

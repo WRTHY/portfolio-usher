@@ -51,18 +51,22 @@ describe('InfoPanel', () => {
     })
   })
 
-  it('is hidden from the accessibility tree while the hero section is active', () => {
+  it('is visible from the first section onward', () => {
     render(<InfoPanel />)
-    expect(screen.queryByRole('complementary')).not.toBeInTheDocument()
+    expect(screen.getByRole('complementary', { name: 'Page summary' })).toBeInTheDocument()
   })
 
-  it('shows the name, tagline, and page nav, with the active section marked', () => {
+  it('shows the name, tagline, page nav, and resume link, with the active section marked', () => {
     render(<InfoPanel />)
     activateSection('case-studies')
 
     expect(screen.getByRole('complementary', { name: 'Page summary' })).toBeInTheDocument()
     expect(screen.getByText(siteContent.name)).toBeInTheDocument()
     expect(screen.getByText(siteContent.tagline)).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'My Resume' })).toHaveAttribute(
+      'href',
+      siteContent.resumeUrl,
+    )
 
     const nav = screen.getByRole('navigation', { name: 'Sections' })
     sections.forEach((section) => {
@@ -77,18 +81,22 @@ describe('InfoPanel', () => {
   it('marks the new section as active in the nav as the active section changes', () => {
     render(<InfoPanel />)
     activateSection('case-studies')
+    activateSection('experience', 1)
+
+    const nav = screen.getByRole('navigation', { name: 'Sections' })
+    expect(within(nav).getByRole('link', { name: 'Experience' })).toHaveAttribute(
+      'aria-current',
+      'page',
+    )
+    expect(within(nav).getByRole('link', { name: 'Case Studies' })).not.toHaveAttribute('aria-current')
+  })
+
+  it('marks the first section as active again when scrolling back to it', () => {
+    render(<InfoPanel />)
+    activateSection('case-studies')
     activateSection('about', 1)
 
     const nav = screen.getByRole('navigation', { name: 'Sections' })
     expect(within(nav).getByRole('link', { name: 'About' })).toHaveAttribute('aria-current', 'page')
-    expect(within(nav).getByRole('link', { name: 'Case Studies' })).not.toHaveAttribute('aria-current')
-  })
-
-  it('hides again when scrolling back to the hero', () => {
-    render(<InfoPanel />)
-    activateSection('case-studies')
-    activateSection('hero', 1)
-
-    expect(screen.queryByRole('complementary')).not.toBeInTheDocument()
   })
 })

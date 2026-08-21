@@ -11,7 +11,13 @@ function Experience() {
     <section id="experience" aria-label={sectionLabel}>
       <div className={styles.list}>
         {experience.map((entry) => (
-          <article key={entry.id} className={styles.card}>
+          <a
+            key={entry.id}
+            className={styles.card}
+            href={entry.companyUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <div className={styles.cardHeader}>
               <div>
                 <Heading level={2}>{entry.role}</Heading>
@@ -29,7 +35,7 @@ function Experience() {
                 ))}
               </div>
             )}
-          </article>
+          </a>
         ))}
       </div>
     </section>

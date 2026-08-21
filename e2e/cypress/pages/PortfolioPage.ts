@@ -1,4 +1,3 @@
-import type { Locator, Page } from '@playwright/test'
 import { NavComponent } from './NavComponent'
 import { ThemeToggleComponent } from './ThemeToggleComponent'
 import { CaseStudiesSection } from './CaseStudiesSection'
@@ -11,25 +10,16 @@ export type SectionId = 'about' | 'experience' | 'case-studies' | 'code-samples'
 // object owning a component per section/region — the same shape the app
 // itself uses (Header/Sidebar/CaseStudies/CodeSamples as siblings).
 export class PortfolioPage {
-  readonly page: Page
-  readonly nav: NavComponent
-  readonly themeToggle: ThemeToggleComponent
-  readonly caseStudies: CaseStudiesSection
-  readonly codeSamples: CodeSamplesSection
+  readonly nav = new NavComponent()
+  readonly themeToggle = new ThemeToggleComponent()
+  readonly caseStudies = new CaseStudiesSection()
+  readonly codeSamples = new CodeSamplesSection()
 
-  constructor(page: Page) {
-    this.page = page
-    this.nav = new NavComponent(page)
-    this.themeToggle = new ThemeToggleComponent(page)
-    this.caseStudies = new CaseStudiesSection(page)
-    this.codeSamples = new CodeSamplesSection(page)
+  visit() {
+    cy.visit('/')
   }
 
-  async goto() {
-    await this.page.goto('/')
-  }
-
-  section(id: SectionId): Locator {
-    return this.page.locator(`#${id}`)
+  section(id: SectionId): Cypress.Chainable<JQuery> {
+    return cy.get(`#${id}`)
   }
 }
