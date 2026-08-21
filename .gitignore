@@ -31,3 +31,13 @@ public/fonts/
 /test-results/
 /playwright-report/
 /playwright/.cache/
+
+# Cypress
+/cypress/videos/
+/cypress/screenshots/
+/cypress/downloads/
+
+# Impeccable/Claude design docs — not ready for the public repo yet
+/PRODUCT.md
+/DESIGN.md
+.impeccable/
