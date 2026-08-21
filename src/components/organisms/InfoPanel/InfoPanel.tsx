@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react'
 import NavLink from '../../atoms/NavLink/NavLink'
 import Button from '../../atoms/Button/Button'
 import useActiveSection from '../../../hooks/useActiveSection'
@@ -15,7 +16,11 @@ function InfoPanel() {
       <p className={styles.name}>{siteContent.name}</p>
       <p className={styles.tagline}>{siteContent.tagline}</p>
       <nav aria-label="Sections" className={styles.navWrap}>
-        <ul className={styles.nav}>
+        <ul
+          className={styles.nav}
+          style={{ '--active-index': activeIndex } as CSSProperties}
+        >
+          <span className={styles.marker} aria-hidden="true" />
           {sections.map((section) => (
             <li key={section.id}>
               <NavLink href={`#${section.id}`} isActive={activeId === section.id}>
