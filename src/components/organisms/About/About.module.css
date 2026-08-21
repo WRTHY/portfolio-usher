@@ -10,6 +10,14 @@
 }
 
 .content {
+  /* Now a direct section child (MediaText's image column is gone for now)
+     — cancel the shared reading-column inset so it stays flush at the same
+     anchor as Experience/Case Studies/Automation Examples, same trick those
+     use. Width matches them too, pending the broader pattern decision. */
+  margin-left: 0;
+  max-width: var(--content-width-wide);
+  width: 100%;
+
   h2 {
     font-weight: 700;
     font-size: 28px;
