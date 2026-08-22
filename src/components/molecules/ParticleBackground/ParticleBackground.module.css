@@ -3,5 +3,9 @@
   inset: 0;
   width: 100%;
   max-width: none;
+  /* Overrides the shared `section > *` content-indent rule (index.css) —
+     this layer must fill the section edge-to-edge, not sit in the reading
+     column like the actual content. */
+  margin-left: 0;
   z-index: 0;
 }
