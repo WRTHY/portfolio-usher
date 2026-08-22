@@ -11,10 +11,20 @@
 }
 
 .list {
+  /* Cancels the shared reading-column inset and matches the wider flush
+     anchor every other non-hero section uses (see SectionHeader.module.css)
+     — previously the only section left on the narrower 640px column. */
+  margin-left: 0;
+  max-width: var(--content-width-wide);
   display: flex;
   flex-direction: column;
   gap: 20px;
   width: 100%;
+  /* Without this, the cards sit unpositioned and paint *before* the
+     absolutely-positioned particle layer in CSS's stacking order — behind
+     it — no matter that they come later in the DOM. */
+  position: relative;
+  z-index: 1;
 }
 
 .card {

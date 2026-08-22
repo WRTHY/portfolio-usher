@@ -14,12 +14,22 @@
 }
 
 /* Same structure as Experience's .list — a single stacked column of
-   full-width cards, not a multi-column grid. */
+   full-width cards, not a multi-column grid. Same width override too:
+   cancel the shared reading-column inset so cards line up with
+   Experience/About at the wider flush anchor instead of the narrower
+   default 640px column. */
 .list {
+  margin-left: 0;
+  max-width: var(--content-width-wide);
   display: flex;
   flex-direction: column;
   gap: 20px;
   width: 100%;
+  /* Without this, the cards sit unpositioned and paint *before* the
+     absolutely-positioned particle layer in CSS's stacking order — behind
+     it — no matter that they come later in the DOM. */
+  position: relative;
+  z-index: 1;
 }
 
 .card {
@@ -81,22 +91,154 @@
   opacity: 1;
 }
 
-/* Problem / Approach / Outcome inside the modal — stacked by default,
-   3 columns once the wider modal has room for them side by side. */
-.report {
-  display: grid;
-  gap: 20px;
+/* The "Reading Rail" modal layout: a left rail (tags, title, section-jump
+   nav) beside a right content pane (Problem/Approach/Outcome). Mobile-first
+   — the rail stacks above the content by default, matching how the sidebar
+   InfoPanel is hidden below 640px everywhere else on the site — and becomes
+   a fixed-width side rail at the same 640px breakpoint. */
+.rail {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: var(--section-alt-bg);
+  border-bottom: 1px solid var(--border);
+  padding: 32px 24px 20px;
 }
 
-@media (min-width: 620px) {
-  .report {
-    grid-template-columns: repeat(3, 1fr);
+.rail h2 {
+  margin: 0;
+}
+
+/* .tags is shared with the card list, where margin-top: auto pins the tag
+   row to the bottom of the card. Inside the rail that same auto margin
+   would eat all the flex column's free space and push the tags — and
+   everything after them — toward the bottom instead of the top. */
+.rail .tags {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+.railDivider {
+  width: 100%;
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 2px 0 0;
+}
+
+/* Mobile: a horizontal, scrollable pill row instead of a vertical list —
+   the same "collapse the rail" convention used for InfoPanel's own nav. */
+.railNav {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+}
+
+.navItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--text);
+  background: none;
+  border: none;
+  padding: 4px 2px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.2s;
+}
+
+.navItem:hover {
+  color: var(--accent);
+}
+
+.navItemActive {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  background: transparent;
+  flex-shrink: 0;
+  transition:
+    background-color 0.2s,
+    border-color 0.2s;
+}
+
+.navItemActive .dot {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 30px 24px 28px;
+}
+
+.section h3 {
+  font-family: var(--heading);
+  font-size: 16px;
+  color: var(--text-h);
+  margin: 0 0 6px;
+}
+
+.section p {
+  font-size: 15px;
+  line-height: 145%;
+}
+
+/* A deliberate aside, not a bug: the optional 4th field gets its own
+   surface — the same accent tint Badge pills use — so it doesn't read as
+   equal-weight to Problem/Approach/Outcome. */
+.futureIterations {
+  background: var(--accent-bg);
+  border-radius: 12px;
+  padding: 16px 18px;
+}
+
+.futureIterations h3 {
+  color: var(--accent);
+}
+
+@media (min-width: 640px) {
+  .rail {
+    width: 260px;
+    flex-shrink: 0;
+    border-bottom: none;
+    border-right: 1px solid var(--border);
+    padding: 32px 24px;
+    overflow-y: hidden;
+  }
+
+  .railNav {
+    flex-direction: column;
+    overflow-x: visible;
+  }
+
+  .navItem {
+    padding: 2px 0;
+  }
+
+  .content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 30px 40px 30px 36px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .card,
-  .affordance {
+  .affordance,
+  .navItem,
+  .dot {
     transition: none;
   }
 }

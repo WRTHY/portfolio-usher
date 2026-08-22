@@ -27,7 +27,22 @@ dist-ssr
 # Licensed webfont — not for public redistribution
 public/fonts/
 
+# Impeccable/Claude design docs — not ready for the public repo yet
+/PRODUCT.md
+/DESIGN.md
+.impeccable/
+
 # Playwright
 /test-results/
 /playwright-report/
 /playwright/.cache/
+
+# Cypress
+/cypress/videos/
+/cypress/screenshots/
+/cypress/downloads/
+
+# Impeccable/Claude design docs — not ready for the public repo yet
+/PRODUCT.md
+/DESIGN.md
+.impeccable/

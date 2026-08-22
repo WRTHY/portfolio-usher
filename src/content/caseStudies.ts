@@ -5,6 +5,7 @@ export type CaseStudy = {
   tags: readonly string[]
   problem: string
   approach: string
+  futureIterations?: string
   outcome: string
   /** Reflections — what I'd do differently or explore next, in hindsight. Optional. */
   futureIterations?: string;

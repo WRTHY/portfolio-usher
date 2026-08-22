@@ -10,17 +10,16 @@
 }
 
 .content {
-  h2 {
-    font-weight: 700;
-    font-size: 28px;
-  }
-
-  p {
-    font-size: 15px;
-    line-height: 145%;
-  }
-
-  p + p {
-    margin-top: 12px;
-  }
+  /* Now a direct section child (MediaText's image column is gone for now)
+     — cancel the shared reading-column inset so it stays flush at the same
+     anchor as Experience/Case Studies/Automation Examples, same trick those
+     use. Width matches them too, pending the broader pattern decision. */
+  margin-left: 0;
+  max-width: var(--content-width-wide);
+  width: 100%;
+  /* Without this, the card sits unpositioned and paints *before* the
+     absolutely-positioned particle layer in CSS's stacking order — behind
+     it — no matter that it comes later in the DOM. Matches Hero's .content. */
+  position: relative;
+  z-index: 1;
 }

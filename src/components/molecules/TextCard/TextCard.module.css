@@ -1,0 +1,25 @@
+/* Same card recipe as Experience/CaseStudies (border, radius, padding) but
+   static rather than interactive — no cursor/hover treatment, since this
+   card isn't a link or button. Sits on --section-alt-bg so it reads as a
+   raised surface against a section left on the base --bg, same pairing
+   CaseStudies uses against #case-studies. */
+.card {
+  background: var(--section-alt-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px 24px;
+}
+
+.card h2 {
+  margin: 0 0 12px;
+}
+
+.card p {
+  font-size: 15px;
+  line-height: 145%;
+  margin: 0;
+}
+
+.card p + p {
+  margin-top: 12px;
+}
