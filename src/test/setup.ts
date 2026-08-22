@@ -1,10 +1,20 @@
-import { afterEach } from 'vitest'
+import type { ReactNode } from 'react'
+import { afterEach, vi } from 'vitest'
 import { cleanup } from '@testing-library/react'
 import '@testing-library/jest-dom/vitest'
 
 afterEach(() => {
   cleanup()
 })
+
+// jsdom's canvas has no transferControlToOffscreen, so the real engine throws
+// (as an unhandled rejection, since Particles doesn't await its load call)
+// the moment ParticleBackground mounts. Every section renders one now, so
+// stub the engine boundary globally rather than repeating this per test file.
+vi.mock('@tsparticles/react', () => ({
+  ParticlesProvider: ({ children }: { children: ReactNode }) => children,
+  Particles: () => null,
+}))
 
 // jsdom doesn't implement matchMedia at all. Default to "no preference matched"
 // so components that check media queries don't crash in tests that aren't
