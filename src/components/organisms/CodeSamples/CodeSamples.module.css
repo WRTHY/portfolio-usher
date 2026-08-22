@@ -21,6 +21,11 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+  /* Without this, the panel sits unpositioned and paints *before* the
+     absolutely-positioned particle layer in CSS's stacking order — behind
+     it — no matter that it comes later in the DOM. */
+  position: relative;
+  z-index: 1;
 }
 
 .main {
