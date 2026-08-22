@@ -1,5 +1,6 @@
 import Heading from '../../atoms/Heading/Heading'
 import TextCard from '../../molecules/TextCard/TextCard'
+import ParticleBackground from '../../molecules/ParticleBackground/ParticleBackground'
 import useOverscrollBump from '../../../hooks/useOverscrollBump'
 import { sections } from '../../../content/navigation'
 import { about } from '../../../content/site'
@@ -12,6 +13,7 @@ function About() {
 
   return (
     <section id="about" aria-label={sectionLabel} ref={bumpRef}>
+      <ParticleBackground variant="about" />
       <div className={styles.content}>
         <TextCard>
           <Heading>{about.intro}</Heading>

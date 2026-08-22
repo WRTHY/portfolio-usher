@@ -13,7 +13,7 @@ type HeroProps = {
 function Hero({ name, tagline, resumeUrl }: HeroProps) {
   return (
     <section id="hero" className={styles.hero}>
-      <ParticleBackground />
+      <ParticleBackground variant="hero" />
       <div className={styles.content}>
         <Heading level={1}>{name}</Heading>
         <p>{tagline}</p>

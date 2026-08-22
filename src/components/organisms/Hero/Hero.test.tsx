@@ -1,17 +1,9 @@
-import type { ReactNode } from 'react'
 import { render, screen } from '@testing-library/react'
-import { describe, expect, it, vi } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import Hero from './Hero'
 
-// jsdom's canvas has no transferControlToOffscreen, so the real engine throws
-// (as an unhandled rejection, since Particles doesn't await its load call)
-// the moment ParticleBackground mounts. Hero's own tests don't assert
-// anything about the particle effect, so stub the engine boundary instead of
-// letting jsdom attempt real canvas/WebGL work it can't support.
-vi.mock('@tsparticles/react', () => ({
-  ParticlesProvider: ({ children }: { children: ReactNode }) => children,
-  Particles: () => null,
-}))
+// @tsparticles/react is stubbed globally in src/test/setup.ts — Hero's own
+// tests don't assert anything about the particle effect.
 
 describe('Hero', () => {
   it('renders the given name and tagline', () => {

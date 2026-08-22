@@ -17,4 +17,9 @@
   margin-left: 0;
   max-width: var(--content-width-wide);
   width: 100%;
+  /* Without this, the card sits unpositioned and paints *before* the
+     absolutely-positioned particle layer in CSS's stacking order — behind
+     it — no matter that it comes later in the DOM. Matches Hero's .content. */
+  position: relative;
+  z-index: 1;
 }

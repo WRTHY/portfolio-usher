@@ -15,7 +15,7 @@ describe('ParticleBackground', () => {
       removeEventListener: () => {},
     }))
 
-    const { container } = render(<ParticleBackground />)
+    const { container } = render(<ParticleBackground variant="about" />)
 
     expect(container).toBeEmptyDOMElement()
   })

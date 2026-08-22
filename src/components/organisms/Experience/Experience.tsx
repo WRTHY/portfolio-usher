@@ -2,6 +2,7 @@ import { sections } from '../../../content/navigation'
 import { experience } from '../../../content/experience'
 import Heading from '../../atoms/Heading/Heading'
 import Badge from '../../atoms/Badge/Badge'
+import ParticleBackground from '../../molecules/ParticleBackground/ParticleBackground'
 import styles from './Experience.module.css'
 
 const sectionLabel = sections.find((section) => section.id === 'experience')!.label
@@ -9,6 +10,7 @@ const sectionLabel = sections.find((section) => section.id === 'experience')!.la
 function Experience() {
   return (
     <section id="experience" aria-label={sectionLabel}>
+      <ParticleBackground variant="experience" />
       <div className={styles.list}>
         {experience.map((entry) => (
           <a
