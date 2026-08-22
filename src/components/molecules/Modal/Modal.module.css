@@ -16,24 +16,23 @@
   box-shadow: var(--shadow);
   max-width: 760px;
   width: 100%;
+  /* Mobile: the whole modal is one scrolling column, same as before the
+     Reading Rail layout existed. Above 640px this is overridden into a
+     fixed-height flex row where the rail and content pane scroll (or
+     don't) independently instead — see the media query below. */
   max-height: 85vh;
   overflow-y: auto;
-  padding: 32px 32px 28px;
+}
 
-  h2 {
-    margin: 0 0 12px;
-  }
-
-  h3 {
-    font-family: var(--heading);
-    font-size: 16px;
-    color: var(--text-h);
-    margin: 16px 0 4px;
-  }
-
-  p {
-    font-size: 15px;
-    line-height: 145%;
+@media (min-width: 640px) {
+  :global(.modal) {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    /* A hard cap, not just a ceiling on an ever-growing column — the rail
+       and content pane below handle their own overflow within this. */
+    max-height: min(680px, 82vh);
+    overflow: hidden;
   }
 }
 
