@@ -30,7 +30,7 @@ src/
   components/
     atoms/       # Button, Badge, NavLink, ...
     molecules/   # Nav, Modal, BentoTile, ThemeToggle, ...
-    organisms/   # Header, Hero, CaseStudies, CodeSamples, About, Sidebar
+    organisms/   # Header, CaseStudies, CodeSamples, About, Sidebar, InfoPanel
     templates/   # PortfolioTemplate — assembles the page
   content/       # Site copy and data (case studies, code samples, nav, themes)
   hooks/         # useActiveSection, useOverscrollBump
