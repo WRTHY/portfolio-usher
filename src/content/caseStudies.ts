@@ -5,6 +5,7 @@ export type CaseStudy = {
   tags: readonly string[]
   problem: string
   approach: string
+  futureIterations?: string
   outcome: string
 }
 
@@ -17,6 +18,8 @@ export const caseStudies: readonly CaseStudy[] = [
     problem: 'Placeholder — what was broken, missing, or needed, and why it mattered.',
     approach:
       'Placeholder — what was actually built or decided, and the trade-offs weighed along the way.',
+    futureIterations:
+      'Placeholder — what a follow-up pass would tackle next, if the scope were extended.',
     outcome: 'Placeholder — what changed as a result, ideally with a number attached.',
   },
   {
