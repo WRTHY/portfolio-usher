@@ -3,6 +3,7 @@ import { sections } from '../../../content/navigation'
 import Badge from '../../atoms/Badge/Badge'
 import Heading from '../../atoms/Heading/Heading'
 import Modal from '../../molecules/Modal/Modal'
+import ParticleBackground from '../../molecules/ParticleBackground/ParticleBackground'
 import { caseStudies } from '../../../content/caseStudies'
 import styles from './CaseStudies.module.css'
 
@@ -16,6 +17,7 @@ function CaseStudies() {
 
   return (
     <section id="case-studies" aria-label={sectionLabel}>
+      <ParticleBackground variant="case-studies" />
       <div className={styles.list}>
         {caseStudies.map((caseStudy) => (
           <button
