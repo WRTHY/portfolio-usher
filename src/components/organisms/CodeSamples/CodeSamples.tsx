@@ -4,6 +4,7 @@ import { frameworkOptionsByTestingType } from '../../molecules/FrameworkSwitcher
 import type { SelectableTestingType } from '../../molecules/FrameworkSwitcher/frameworkOptions'
 import SegmentedControl from '../../molecules/SegmentedControl/SegmentedControl'
 import type { SegmentedControlOption } from '../../molecules/SegmentedControl/SegmentedControl'
+import { ComponentTestIcon, EndToEndIcon, PerformanceIcon } from '../../atoms/icons/TestingTypeIcons'
 import CodeFileTabs from '../../molecules/CodeFileTabs/CodeFileTabs'
 import PanelFooter from '../../molecules/PanelFooter/PanelFooter'
 import ParticleBackground from '../../molecules/ParticleBackground/ParticleBackground'
@@ -15,9 +16,14 @@ import styles from './CodeSamples.module.css'
 const sectionLabel = sections.find((section) => section.id === 'code-samples')!.label
 
 const testingTypeOptions: SegmentedControlOption<TestingType>[] = [
-  { value: 'component', label: 'Component' },
-  { value: 'e2e', label: 'End-to-End' },
-  { value: 'performance', label: 'Performance', disabled: true },
+  { value: 'component', label: 'Component', icon: <ComponentTestIcon aria-hidden="true" /> },
+  { value: 'e2e', label: 'End-to-End', icon: <EndToEndIcon aria-hidden="true" /> },
+  {
+    value: 'performance',
+    label: 'Performance',
+    icon: <PerformanceIcon aria-hidden="true" />,
+    disabled: true,
+  },
 ]
 
 function CodeSamples() {
