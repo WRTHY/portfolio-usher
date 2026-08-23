@@ -188,15 +188,6 @@ function CaseStudies() {
               <h3>Outcome</h3>
               <p>{selected.outcome}</p>
             </div>
-            <div>
-            {selected.futureIterations && (
-            <>
-              <h3>Future Iterations</h3>
-              <p>{selected.futureIterations}</p>
-            </>
-          )}
-          </div>
-          </div>
           </div>
         </Modal>
       )}
