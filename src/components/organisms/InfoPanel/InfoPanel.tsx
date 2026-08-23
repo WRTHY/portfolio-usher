@@ -10,9 +10,19 @@ function InfoPanel() {
   const activeId = useActiveSection()
   // Drives the sliding marker in .nav (see InfoPanel.module.css).
   const activeIndex = sections.findIndex((section) => section.id === activeId)
+  // Opposite of the active section's own background (see navigation.ts), so
+  // the panel reads as a distinct surface against whichever section is
+  // scrolled underneath it, fading between tones as the page scrolls rather
+  // than sitting on a fixed color.
+  const activeTone = sections[activeIndex]?.tone ?? 'base'
+  const panelBg = activeTone === 'alt' ? 'var(--bg)' : 'var(--section-alt-bg)'
 
   return (
-    <aside className={styles.infoPanel} aria-label="Page summary">
+    <aside
+      className={styles.infoPanel}
+      aria-label="Page summary"
+      style={{ '--panel-bg': panelBg } as CSSProperties}
+    >
       <p className={styles.name}>{siteContent.name}</p>
       <p className={styles.tagline}>{siteContent.tagline}</p>
       <nav aria-label="Sections" className={styles.navWrap}>

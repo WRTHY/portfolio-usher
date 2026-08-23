@@ -50,6 +50,9 @@ describe('CaseStudies', () => {
     expect(screen.getByText(first.problem)).toBeInTheDocument()
     expect(screen.getByText(first.approach)).toBeInTheDocument()
     expect(screen.getByText(first.outcome)).toBeInTheDocument()
+    if (first.futureIterations) {
+      expect(screen.getByText(first.futureIterations)).toBeInTheDocument()
+    }
   })
 
   it('closes the modal when the close button is clicked', async () => {
