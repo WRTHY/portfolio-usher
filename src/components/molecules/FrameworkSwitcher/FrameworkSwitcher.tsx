@@ -1,40 +1,22 @@
-import * as RadioGroup from '@radix-ui/react-radio-group'
-import { SiCypress } from 'react-icons/si'
-import type { AutomationExample } from '../../../content/codeExamples'
-import styles from './FrameworkSwitcher.module.css'
-
-type Framework = AutomationExample['framework']
+import SegmentedControl from '../SegmentedControl/SegmentedControl'
+import { frameworkOptionsByTestingType } from './frameworkOptions'
+import type { SelectableTestingType } from './frameworkOptions'
+import type { Framework } from '../../../content/codeExamples'
 
 type FrameworkSwitcherProps = {
+  testingType: SelectableTestingType
   value: Framework
   onChange: (framework: Framework) => void
 }
 
-// react-icons' bundled Simple Icons set has no Playwright mark (checked
-// against the installed version) — Cypress gets its real logo, Playwright
-// stays text-only rather than fake a brand icon.
-//
-// This is a RadioGroup, not Tabs: it picks a value, it doesn't reveal an
-// associated tabpanel (the actual code panel lives in CodeFileTabs). Radix's
-// Tabs.Trigger always emits aria-controls pointing at a Tabs.Content, so
-// using Tabs here left aria-controls referencing an id that never existed —
-// an axe "aria-valid-attr-value" violation caught by the a11y test suite.
-function FrameworkSwitcher({ value, onChange }: FrameworkSwitcherProps) {
+function FrameworkSwitcher({ testingType, value, onChange }: FrameworkSwitcherProps) {
   return (
-    <RadioGroup.Root
+    <SegmentedControl
       value={value}
-      onValueChange={(next) => onChange(next as Framework)}
-      className={styles.switcher}
-      aria-label="Automation framework"
-    >
-      <RadioGroup.Item value="playwright" className={styles.trigger}>
-        Playwright
-      </RadioGroup.Item>
-      <RadioGroup.Item value="cypress" className={styles.trigger}>
-        <SiCypress aria-hidden="true" />
-        Cypress
-      </RadioGroup.Item>
-    </RadioGroup.Root>
+      onChange={onChange}
+      options={frameworkOptionsByTestingType[testingType]}
+      ariaLabel="Automation framework"
+    />
   )
 }
 
