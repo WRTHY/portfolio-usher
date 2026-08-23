@@ -1,5 +1,14 @@
 :global(#code-samples) {
   background: var(--section-alt-bg);
+  /* index.css's shared `section` rule vertically centers every section's
+     content (justify-content: center) — fine for every other section,
+     whose content height never changes at runtime, but this section's
+     code panel legitimately resizes per file/testing-type/framework (see
+     CodeBlock.tsx). Centering meant that resize visibly dragged the
+     explainer card up and down the screen instead of staying put under
+     the scroll-snap-align: start anchor at the section's top edge. Top-
+     aligning here keeps the anchor and the card's position in sync. */
+  justify-content: flex-start;
 }
 
 @media (min-width: 640px) {
@@ -12,15 +21,14 @@
 
 .body {
   /* Cancels the shared reading-column inset (same trick .hero-content
-     uses) so the switcher can sit flush at the section's own padding
-     edge — out in the page's margin — and, on wider screens, vertically
-     centered beside the panel rather than stacked above it. */
+     uses) so the section's content stays flush at the same anchor as
+     Experience/CaseStudies, same trick those use. */
   margin-left: 0;
   max-width: var(--content-width-wide);
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
   /* Without this, the panel sits unpositioned and paints *before* the
      absolutely-positioned particle layer in CSS's stacking order — behind
      it — no matter that it comes later in the DOM. */
@@ -28,16 +36,37 @@
   z-index: 1;
 }
 
-.main {
+/* Same card recipe as Experience/CaseStudies/TextCard (border, radius,
+   padding) but on --bg rather than --section-alt-bg, since #code-samples
+   itself sits on --section-alt-bg — the same opposite-pairing every other
+   section already uses (see Experience.module.css). */
+.explainer {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  min-width: 0;
-  width: 100%;
+  gap: 8px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px 24px;
+  background: var(--bg);
 }
 
-.languageRow {
-  display: flex;
+.explainer p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 145%;
+}
+
+.kicker {
+  align-self: flex-start;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--accent);
+  background: var(--accent-bg);
+  border: 1px solid var(--accent-border);
+  border-radius: 4px;
+  padding: 3px 8px;
 }
 
 .panel {
@@ -47,16 +76,4 @@
   border-radius: 12px;
   overflow: hidden;
   background: var(--bg);
-}
-
-@media (min-width: 640px) {
-  .body {
-    flex-direction: row;
-    align-items: center;
-    gap: 24px;
-  }
-
-  .main {
-    flex: 1;
-  }
 }

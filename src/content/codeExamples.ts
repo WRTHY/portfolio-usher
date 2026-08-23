@@ -5,6 +5,10 @@
 // rendered code *and* a live playback demo against the page — that
 // generator/player is out of scope here.
 
+export type TestingType = 'component' | 'e2e' | 'performance'
+
+export type Framework = 'playwright' | 'cypress' | 'playwright-ct' | 'cypress-ct'
+
 export type CodeFile = {
   filename: string
   language: 'typescript'
@@ -13,13 +17,15 @@ export type CodeFile = {
 
 export type AutomationExample = {
   id: string
-  framework: 'playwright' | 'cypress'
+  testingType: TestingType
+  framework: Framework
   files: CodeFile[]
 }
 
 export const codeExamples: readonly AutomationExample[] = [
   {
     id: 'playwright-case-study-modal',
+    testingType: 'e2e',
     framework: 'playwright',
     files: [
       {
@@ -73,6 +79,7 @@ export async function openCaseStudy(page: Page, title: string): Promise<Locator>
   },
   {
     id: 'cypress-case-study-modal',
+    testingType: 'e2e',
     framework: 'cypress',
     files: [
       {
@@ -99,6 +106,52 @@ export async function openCaseStudy(page: Page, title: string): Promise<Locator>
     cy.contains('a', 'Automation Examples').click();
 
     cy.get('#code-samples').should('be.inViewport');
+  });
+});
+`,
+      },
+    ],
+  },
+  {
+    id: 'cypress-ct-copy-button',
+    testingType: 'component',
+    framework: 'cypress-ct',
+    files: [
+      {
+        filename: 'cypress/component/CopyButton.cy.tsx',
+        language: 'typescript',
+        code: `import CopyButton from '../../src/components/atoms/CopyButton/CopyButton';
+
+// Preview: component testing is a newer tier than the End-to-End suite
+// above, and this spec file doesn't exist in the repo yet — these are the
+// assertions a real one would make once it lands, run here against the
+// actual CopyButton component.
+describe('CopyButton (component)', () => {
+  beforeEach(() => {
+    cy.window().then((win) => {
+      cy.stub(win.navigator.clipboard, 'writeText').resolves();
+    });
+  });
+
+  it('mounts and copies its text to the clipboard on click', () => {
+    cy.mount(<CopyButton text="npx playwright test" />);
+
+    cy.findByRole('button', { name: 'Copy code' }).click();
+
+    cy.window()
+      .its('navigator.clipboard.writeText')
+      .should('have.been.calledWith', 'npx playwright test');
+  });
+
+  it('flips its label to "Copied" and back after ~1.5s', () => {
+    cy.clock();
+    cy.mount(<CopyButton text="npx playwright test" />);
+
+    cy.findByRole('button', { name: 'Copy code' }).click();
+    cy.findByRole('button', { name: 'Copied' }).should('exist');
+
+    cy.tick(1500);
+    cy.findByRole('button', { name: 'Copy code' }).should('exist');
   });
 });
 `,

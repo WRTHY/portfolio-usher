@@ -2,6 +2,10 @@
   display: flex;
   flex-direction: column;
   min-width: 0;
+  /* Anchors the absolutely-positioned inactive .codeArea below (see the
+     comment there) so it's contained here rather than against whatever
+     ancestor happens to be positioned further up the tree. */
+  position: relative;
 }
 
 .row {
@@ -12,6 +16,41 @@
   padding: 8px 12px;
   background: var(--code-bg);
   border-bottom: 1px solid var(--border);
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.languageBadge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  padding: 3px 8px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 11px;
+  white-space: nowrap;
+
+  svg {
+    width: 12px;
+    height: 12px;
+  }
+}
+
+.divider {
+  width: 1px;
+  height: 16px;
+  background: var(--border);
+  flex-shrink: 0;
 }
 
 .list {
@@ -62,4 +101,21 @@
 
 .codeArea {
   min-width: 0;
+}
+
+/* Every file panel is force-mounted (see CodeFileTabs.tsx) so switching
+   back to an already-visited file is a plain visibility toggle rather than
+   an unmount/remount that re-runs Shiki's async highlight — but Radix's
+   Presence (which forceMount sits on top of) treats `display: none` as
+   "this finished exiting," and unmounts the children anyway regardless of
+   forceMount (see node_modules/@radix-ui/react-presence, the `styles?.
+   display === 'none'` check). visibility + position keeps it truly mounted
+   while still taking it out of the layout so it can't affect panel height. */
+.codeArea[data-state='inactive'] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  visibility: hidden;
+  pointer-events: none;
 }

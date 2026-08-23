@@ -1,5 +1,19 @@
 .codeBlock {
   display: block;
+  /* react-shiki renders nothing at all — not even a <pre> — until its async
+     highlight() call resolves, so this wrapper (always present, unlike
+     pre.shiki below) is what has to carry the height reservation. Without
+     it the panel collapses to 0 for that gap and then snaps open once
+     highlighting finishes, a visible resize on every first-time mount.
+     --code-lines is set inline per instance (see CodeBlock.tsx) from that
+     file's own line count — not a shared value from a sibling file — so a
+     short file never gets padded out to match a longer one from the same
+     example, which left a large blank gap (the code theme's background
+     showing through as a gray bar) under whichever file was shortest.
+     font-size is repeated here (matching pre.shiki's) purely so the `em` in
+     min-height resolves to the same value regardless of inherited context. */
+  font-size: 13px;
+  min-height: calc(var(--code-lines, 1) * 1.45em + 32px);
 }
 
 /* index.css defines a global `code {}` rule for short inline snippets in
@@ -25,9 +39,8 @@
   font-size: 13px;
   line-height: 145%;
   tab-size: 2;
-  /* --code-lines (set by CodeSamples on an ancestor) is the line count of
-     the tallest sample across every framework/file — reserving that much
-     height up front means switching snippets never resizes the panel. */
+  /* --code-lines is set inline on the wrapper above (see CodeBlock.tsx) —
+     inherits down to this pre once it mounts. */
   min-height: calc(var(--code-lines, 1) * 1.45em);
 }
 
