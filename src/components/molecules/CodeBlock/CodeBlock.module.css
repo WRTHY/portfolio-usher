@@ -1,5 +1,14 @@
 .codeBlock {
   display: block;
+  /* react-shiki renders nothing at all — not even a <pre> — until its async
+     highlight() call resolves, so this wrapper (always present, unlike
+     pre.shiki below) is what has to carry the height reservation. Without
+     it the panel collapses to 0 for that gap and then snaps open once
+     highlighting finishes, a visible resize on every first-time mount.
+     font-size is repeated here (matching pre.shiki's) purely so the `em` in
+     min-height resolves to the same value regardless of inherited context. */
+  font-size: 13px;
+  min-height: calc(var(--code-lines, 1) * 1.45em + 32px);
 }
 
 /* index.css defines a global `code {}` rule for short inline snippets in

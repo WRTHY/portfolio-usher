@@ -14,6 +14,41 @@
   border-bottom: 1px solid var(--border);
 }
 
+.left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.languageBadge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  padding: 3px 8px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 11px;
+  white-space: nowrap;
+
+  svg {
+    width: 12px;
+    height: 12px;
+  }
+}
+
+.divider {
+  width: 1px;
+  height: 16px;
+  background: var(--border);
+  flex-shrink: 0;
+}
+
 .list {
   display: flex;
   gap: 4px;
@@ -62,4 +97,11 @@
 
 .codeArea {
   min-width: 0;
+}
+
+/* Every file panel is force-mounted (see CodeFileTabs.tsx) so switching
+   back to an already-visited file is a plain visibility toggle rather than
+   an unmount/remount that re-runs Shiki's async highlight. */
+.codeArea[data-state='inactive'] {
+  display: none;
 }
