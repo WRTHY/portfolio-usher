@@ -5,7 +5,6 @@ export type CaseStudy = {
   tags: readonly string[]
   problem: string
   approach: string
-  futureIterations?: string
   outcome: string
 }
 

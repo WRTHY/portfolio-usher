@@ -20,14 +20,22 @@
     width: var(--info-panel-width);
     height: 75svh;
     padding: 32px;
-    /* A step grayer than --bg (and than --section-alt-bg, which some
-       sections behind this card already use), so it reads as a distinct
-       surface rather than blending into whichever section is scrolled
-       underneath it. */
-    background: var(--code-bg);
+    /* Tracks whichever section is active (--panel-bg is set inline from
+       useActiveSection — see InfoPanel.tsx), crossfading between the
+       --bg/--section-alt-bg tones as the page scrolls, always opposite the
+       active section's own tone so the panel reads as a distinct surface
+       rather than blending into whatever's scrolled underneath it. */
+    background: var(--panel-bg, var(--code-bg));
+    transition: background-color 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     border: 1px solid var(--border);
     border-radius: 12px;
     box-shadow: var(--shadow);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .infoPanel {
+    transition: none;
   }
 }
 
