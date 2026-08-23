@@ -16,8 +16,8 @@ import styles from './CodeSamples.module.css'
 const sectionLabel = sections.find((section) => section.id === 'code-samples')!.label
 
 const testingTypeOptions: SegmentedControlOption<TestingType>[] = [
-  { value: 'component', label: 'Component', icon: <ComponentTestIcon aria-hidden="true" /> },
   { value: 'e2e', label: 'End-to-End', icon: <EndToEndIcon aria-hidden="true" /> },
+  { value: 'component', label: 'Component', icon: <ComponentTestIcon aria-hidden="true" /> },
   {
     value: 'performance',
     label: 'Performance',
