@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import type { CSSProperties } from 'react'
 import FrameworkSwitcher from '../../molecules/FrameworkSwitcher/FrameworkSwitcher'
 import { frameworkOptionsByTestingType } from '../../molecules/FrameworkSwitcher/frameworkOptions'
 import type { SelectableTestingType } from '../../molecules/FrameworkSwitcher/frameworkOptions'
@@ -30,13 +29,6 @@ function CodeSamples() {
     (item) => item.testingType === testingType && item.framework === framework,
   )!
   const activeFile = example.files[activeFileIndex]
-  // Reserves enough vertical room for the tallest file *within the current
-  // example*, so swapping between its own files never resizes the panel.
-  // Scoped to the example rather than every example site-wide — the
-  // Component tier's spec is much longer than the E2E ones, and reserving
-  // for that globally left short examples with a large blank gap at the
-  // bottom of the code panel.
-  const maxCodeLines = Math.max(...example.files.map((file) => file.code.split('\n').length))
 
   const handleTestingTypeChange = (next: TestingType) => {
     // Performance is disabled/soon — Radix never fires a change for a
@@ -87,7 +79,7 @@ function CodeSamples() {
 
         <FrameworkSwitcher testingType={testingType} value={framework} onChange={handleFrameworkChange} />
 
-        <div className={styles.panel} style={{ '--code-lines': maxCodeLines } as CSSProperties}>
+        <div className={styles.panel}>
           <CodeFileTabs
             files={example.files}
             activeIndex={activeFileIndex}

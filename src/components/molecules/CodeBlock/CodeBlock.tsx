@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react'
 import ShikiHighlighter from 'react-shiki'
 import styles from './CodeBlock.module.css'
 
@@ -34,6 +35,15 @@ const LIGHT_THEME_CONTRAST_FIXES: Record<string, string> = {
 }
 
 function CodeBlock({ code, language }: CodeBlockProps) {
+  // Reserves vertical room for this file's own line count (rather than a
+  // shared value from some other file) so the loading gap before Shiki's
+  // async highlight() resolves never collapses this block to 0 height —
+  // without leaving every *shorter* file in the same example padded out
+  // to match its tallest sibling, which is what was producing a large
+  // blank gap (and the code theme's background showing through as a gray
+  // bar) under whichever file happened to be shortest.
+  const lines = code.split('\n').length
+
   return (
     <ShikiHighlighter
       language={language}
@@ -45,6 +55,7 @@ function CodeBlock({ code, language }: CodeBlockProps) {
       showLanguage={false}
       addDefaultStyles={false}
       className={styles.codeBlock}
+      style={{ '--code-lines': lines } as CSSProperties}
     >
       {code}
     </ShikiHighlighter>

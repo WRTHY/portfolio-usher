@@ -1,5 +1,14 @@
 :global(#code-samples) {
   background: var(--section-alt-bg);
+  /* index.css's shared `section` rule vertically centers every section's
+     content (justify-content: center) — fine for every other section,
+     whose content height never changes at runtime, but this section's
+     code panel legitimately resizes per file/testing-type/framework (see
+     CodeBlock.tsx). Centering meant that resize visibly dragged the
+     explainer card up and down the screen instead of staying put under
+     the scroll-snap-align: start anchor at the section's top edge. Top-
+     aligning here keeps the anchor and the card's position in sync. */
+  justify-content: flex-start;
 }
 
 @media (min-width: 640px) {
