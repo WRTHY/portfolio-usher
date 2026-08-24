@@ -4,6 +4,6 @@ on: [push]
 jobs:
   Run-Component-Testing:
     runs-on: ubuntu-latest
-      steps:
-        - run: echo "This step should just run the component testing that we have created"
+    steps:
+      - run: echo "This step should just run the component testing that we have created"
 
