@@ -11,18 +11,37 @@ import styles from './CaseStudies.module.css'
 const sectionLabel = sections.find((section) => section.id === 'case-studies')!.label
 
 type ReportSection = {
-  key: 'problem' | 'approach' | 'futureIterations' | 'outcome'
+  key: 'problem' | 'approach' | 'outcome'| 'futureIterations' 
   label: string
+}
+
+// Content fields are plain strings with blank-line-separated paragraphs
+// (see futureIterations in caseStudies.ts). A single <p> collapses those
+// newlines like any other HTML whitespace, so split on them explicitly
+// and render one <p> per paragraph instead.
+function Paragraphs({ text }: { text: string }) {
+  return (
+    <>
+      {text
+        .split(/\n\s*\n+/)
+        .map((paragraph) => paragraph.trim())
+        .filter(Boolean)
+        .map((paragraph, index) => (
+          // eslint-disable-next-line react/no-array-index-key
+          <p key={index}>{paragraph}</p>
+        ))}
+    </>
+  )
 }
 
 function reportSectionsFor(caseStudy: CaseStudy): ReportSection[] {
   return [
     { key: 'problem', label: 'Problem' },
     { key: 'approach', label: 'Approach' },
+    { key: 'outcome', label: 'Outcome' },
     ...(caseStudy.futureIterations
       ? [{ key: 'futureIterations' as const, label: 'Future iterations' }]
       : []),
-    { key: 'outcome', label: 'Outcome' },
   ]
 }
 
@@ -67,10 +86,17 @@ function useReadingRail(reportSections: ReportSection[], resetKey: string | null
       { root, threshold: [0, 0.25, 0.5, 0.75, 1] },
     )
 
-    reportSections.forEach(({ key }) => {
-      const el = sectionRefs.current.get(key)
-      if (el) observer.observe(el)
-    })
+    // Future iterations is excluded from tracking: its rail highlight never
+    // reliably lands (it's usually a short trailing section that never
+    // dominates the intersection ratio), so rather than leave a highlight
+    // that silently never fires, we don't track it at all — the nav item
+    // stays clickable (scrollToSection still works) but never highlights.
+    reportSections
+      .filter(({ key }) => key !== 'futureIterations')
+      .forEach(({ key }) => {
+        const el = sectionRefs.current.get(key)
+        if (el) observer.observe(el)
+      })
 
     return () => observer.disconnect()
     // reportSections is derived fresh from `selected` each render; keying
@@ -115,6 +141,7 @@ function CaseStudies() {
             key={caseStudy.id}
             type="button"
             className={styles.card}
+            data-testid={`case-study-card-${caseStudy.id}`}
             onClick={() => setSelectedId(caseStudy.id)}
           >
             <Heading level={2}>{caseStudy.title}</Heading>
@@ -140,13 +167,24 @@ function CaseStudies() {
             &times;
           </button>
           <div className={styles.rail}>
+            <h2 id={titleId}>{selected.title}</h2>
             <div className={styles.tags}>
               {selected.tags.map((tag) => (
                 <Badge key={tag}>{tag}</Badge>
               ))}
             </div>
-            <h2 id={titleId}>{selected.title}</h2>
             <hr className={styles.railDivider} />
+            {selected.highlights && selected.highlights.length > 0 && (
+              <div className={styles.highlights}>
+                {selected.highlights.map(({ value, label }) => (
+                  <div className={styles.highlight} key={label}>
+                    <span className={styles.highlightValue}>{value}</span>
+                    <span className={styles.highlightLabel}>{label}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+            <hr className={`${styles.railDivider} ${styles.railDividerBottom}`} />
             <nav className={styles.railNav} aria-label="Case study sections">
               {reportSections.map(({ key, label }) => (
                 <button
@@ -166,28 +204,44 @@ function CaseStudies() {
             </nav>
           </div>
           <div className={styles.content} ref={contentRef}>
-            <div className={styles.section} ref={registerSection('problem')} data-section-key="problem">
+            <div
+              className={styles.section}
+              ref={registerSection('problem')}
+              data-section-key="problem"
+              data-testid="case-study-section-problem"
+            >
               <h3>Problem</h3>
-              <p>{selected.problem}</p>
+              <Paragraphs text={selected.problem} />
             </div>
-            <div className={styles.section} ref={registerSection('approach')} data-section-key="approach">
+            <div
+              className={styles.section}
+              ref={registerSection('approach')}
+              data-section-key="approach"
+              data-testid="case-study-section-approach"
+            >
               <h3>Approach</h3>
-              <p>{selected.approach}</p>
+              <Paragraphs text={selected.approach} />
+            </div>
+            <div
+              className={styles.section}
+              ref={registerSection('outcome')}
+              data-section-key="outcome"
+              data-testid="case-study-section-outcome"
+            >
+              <h3>Outcome</h3>
+              <Paragraphs text={selected.outcome} />
             </div>
             {selected.futureIterations && (
               <div
                 className={`${styles.section} ${styles.futureIterations}`}
                 ref={registerSection('futureIterations')}
                 data-section-key="futureIterations"
+                data-testid="case-study-section-futureIterations"
               >
                 <h3>Future iterations</h3>
-                <p>{selected.futureIterations}</p>
+                <Paragraphs text={selected.futureIterations} />
               </div>
             )}
-            <div className={styles.section} ref={registerSection('outcome')} data-section-key="outcome">
-              <h3>Outcome</h3>
-              <p>{selected.outcome}</p>
-            </div>
           </div>
         </Modal>
       )}

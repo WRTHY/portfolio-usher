@@ -17,10 +17,16 @@
    full-width cards, not a multi-column grid. Same width override too:
    cancel the shared reading-column inset so cards line up with
    Experience/About at the wider flush anchor instead of the narrower
-   default 640px column. */
+   default 640px column. No max-width cap: the list fills the section's
+   content box exactly, so its right edge stays pinned to the fixed
+   page-gutter distance instead of stalling at an arbitrary width and
+   leaving a growing, unpinned gap on wide screens. */
 .list {
   margin-left: 0;
-  max-width: var(--content-width-wide);
+  /* Cancels the global `section > *` rule's 640px cap (see index.css) —
+     without this, removing our own max-width override just falls through
+     to that default instead of actually going uncapped. */
+  max-width: none;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -125,6 +131,51 @@
   margin: 2px 0 0;
 }
 
+/* The second rail divider, immediately above the nav. Pins itself — and
+   the nav that follows it — to the bottom of the rail's flex column,
+   regardless of how much space the tags/highlights above take up. */
+.railDividerBottom {
+  margin-top: auto;
+}
+
+/* A grid of small stat callouts (e.g. "4 hrs -> 10 min"), illustrating the
+   case study's value at a glance. Wraps to as many rows as needed so any
+   number of highlights can be added per case study. */
+.highlights {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 8px;
+}
+
+/* Rectangular like the resume Button, but with the same quiet 1px border
+   the Experience/CaseStudies cards use rather than the Button's bold 2px
+   accent border — a stat callout should read as a card, not a CTA. */
+.highlight {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--accent-bg);
+  padding: 8px 10px;
+}
+
+.highlightValue {
+  font-family: var(--heading);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--accent);
+}
+
+.highlightLabel {
+  font-family: var(--sans);
+  font-size: 11px;
+  line-height: 130%;
+  color: var(--text);
+  opacity: 0.75;
+}
+
 /* Mobile: a horizontal, scrollable pill row instead of a vertical list —
    the same "collapse the rail" convention used for InfoPanel's own nav. */
 .railNav {
@@ -193,6 +244,14 @@
 .section p {
   font-size: 15px;
   line-height: 145%;
+}
+
+/* Blank-line breaks in a field split into separate <p> tags (see the
+   Paragraphs component in CaseStudies.tsx) — space them apart so an
+   intentional paragraph break still reads as one once rendered, since the
+   global `p { margin: 0 }` reset otherwise runs them straight together. */
+.section p + p {
+  margin-top: 1em;
 }
 
 /* A deliberate aside, not a bug: the optional 4th field gets its own

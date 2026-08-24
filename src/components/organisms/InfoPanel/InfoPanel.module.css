@@ -104,3 +104,18 @@
   line-height: 145%;
   margin: 8px 0 0;
 }
+
+/* Same band where index.css shrinks --info-panel-width — the smaller panel
+   still needs smaller padding and a smaller name to avoid the name
+   wrapping awkwardly or the fixed-height nav overflowing the fixed 75svh
+   panel height. Declared last so it wins over the base .infoPanel/.name
+   rules above at equal specificity. */
+@media (min-width: 640px) and (max-width: 1023px) {
+  .infoPanel {
+    padding: 24px;
+  }
+
+  .name {
+    font-size: 30px;
+  }
+}

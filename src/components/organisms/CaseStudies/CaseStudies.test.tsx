@@ -30,11 +30,28 @@ class ObserverStub implements IntersectionObserver {
   }
 }
 
+// DRY note: content fields can be multi-paragraph template literals with
+// embedded indentation/newlines that the browser collapses visually but
+// that don't match a testing-library element's normalized textContent
+// verbatim. Normalizing both sides the same way keeps assertions robust
+// to how a field happens to be formatted in caseStudies.ts.
+//
+// Blank-line-separated paragraphs render as separate <p> elements (see
+// the Paragraphs component in CaseStudies.tsx), and jsdom's textContent
+// concatenates adjacent elements with no separator — so paragraph breaks
+// collapse to nothing here rather than to a space, matching the DOM.
+const normalizeWhitespace = (text: string) =>
+  text
+    .split(/\n\s*\n+/)
+    .map((paragraph) => paragraph.replace(/\s+/g, ' ').trim())
+    .filter(Boolean)
+    .join('')
+
 describe('CaseStudies', () => {
   it('renders a card for every case study', () => {
     render(<CaseStudies />)
     caseStudies.forEach((caseStudy) => {
-      expect(screen.getByRole('heading', { name: caseStudy.title })).toBeInTheDocument()
+      expect(screen.getByTestId(`case-study-card-${caseStudy.id}`)).toBeInTheDocument()
     })
   })
 
@@ -43,15 +60,23 @@ describe('CaseStudies', () => {
     render(<CaseStudies />)
 
     const first = caseStudies[0]
-    await user.click(screen.getByRole('button', { name: new RegExp(first.title) }))
+    await user.click(screen.getByTestId(`case-study-card-${first.id}`))
 
     const dialog = screen.getByRole('dialog')
     expect(dialog).toBeInTheDocument()
-    expect(screen.getByText(first.problem)).toBeInTheDocument()
-    expect(screen.getByText(first.approach)).toBeInTheDocument()
-    expect(screen.getByText(first.outcome)).toBeInTheDocument()
+    expect(screen.getByTestId('case-study-section-problem')).toHaveTextContent(
+      normalizeWhitespace(first.problem),
+    )
+    expect(screen.getByTestId('case-study-section-approach')).toHaveTextContent(
+      normalizeWhitespace(first.approach),
+    )
+    expect(screen.getByTestId('case-study-section-outcome')).toHaveTextContent(
+      normalizeWhitespace(first.outcome),
+    )
     if (first.futureIterations) {
-      expect(screen.getByText(first.futureIterations)).toBeInTheDocument()
+      expect(screen.getByTestId('case-study-section-futureIterations')).toHaveTextContent(
+        normalizeWhitespace(first.futureIterations),
+      )
     }
   })
 
@@ -60,7 +85,7 @@ describe('CaseStudies', () => {
     render(<CaseStudies />)
 
     const first = caseStudies[0]
-    await user.click(screen.getByRole('button', { name: new RegExp(first.title) }))
+    await user.click(screen.getByTestId(`case-study-card-${first.id}`))
     await user.click(screen.getByRole('button', { name: 'Close' }))
 
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
@@ -74,9 +99,11 @@ describe('CaseStudies', () => {
     const withoutFuture = caseStudies.find((caseStudy) => !caseStudy.futureIterations)
     expect(withFuture).toBeDefined()
 
-    await user.click(screen.getByRole('button', { name: new RegExp(withFuture!.title) }))
+    await user.click(screen.getByTestId(`case-study-card-${withFuture!.id}`))
     expect(screen.getByRole('heading', { name: 'Future iterations' })).toBeInTheDocument()
-    expect(screen.getByText(withFuture!.futureIterations!)).toBeInTheDocument()
+    expect(screen.getByTestId('case-study-section-futureIterations')).toHaveTextContent(
+      normalizeWhitespace(withFuture!.futureIterations!),
+    )
     expect(screen.getByRole('button', { name: 'Future iterations' })).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Close' }))
 
@@ -85,8 +112,9 @@ describe('CaseStudies', () => {
     // right now. Once real case studies replace the placeholders this guard
     // will start exercising the negative path again without any test change.
     if (withoutFuture) {
-      await user.click(screen.getByRole('button', { name: new RegExp(withoutFuture.title) }))
+      await user.click(screen.getByTestId(`case-study-card-${withoutFuture.id}`))
       expect(screen.queryByRole('heading', { name: 'Future iterations' })).not.toBeInTheDocument()
+      expect(screen.queryByTestId('case-study-section-futureIterations')).not.toBeInTheDocument()
       expect(screen.queryByRole('button', { name: 'Future iterations' })).not.toBeInTheDocument()
     }
   })
@@ -106,7 +134,7 @@ describe('CaseStudies', () => {
       render(<CaseStudies />)
 
       const first = caseStudies[0]
-      await user.click(screen.getByRole('button', { name: new RegExp(first.title) }))
+      await user.click(screen.getByTestId(`case-study-card-${first.id}`))
 
       const approachNavItem = screen.getByRole('button', { name: 'Approach' })
       expect(approachNavItem).not.toHaveClass(styles.navItemActive)
@@ -129,7 +157,7 @@ describe('CaseStudies', () => {
       render(<CaseStudies />)
 
       const first = caseStudies[0]
-      await user.click(screen.getByRole('button', { name: new RegExp(first.title) }))
+      await user.click(screen.getByTestId(`case-study-card-${first.id}`))
 
       expect(screen.getByRole('button', { name: 'Problem' })).toHaveClass(styles.navItemActive)
       expect(screen.getByRole('button', { name: 'Approach' })).not.toHaveClass(

@@ -22,9 +22,15 @@
 .body {
   /* Cancels the shared reading-column inset (same trick .hero-content
      uses) so the section's content stays flush at the same anchor as
-     Experience/CaseStudies, same trick those use. */
+     Experience/CaseStudies, same trick those use. No max-width cap: fills
+     the section's content box exactly so the right edge stays pinned to
+     the fixed page-gutter distance instead of stalling early and leaving
+     a growing gap on wide screens. */
   margin-left: 0;
-  max-width: var(--content-width-wide);
+  /* Cancels the global `section > *` rule's 640px cap (see index.css) —
+     without this, removing our own max-width override just falls through
+     to that default instead of actually going uncapped. */
+  max-width: none;
   width: 100%;
   display: flex;
   flex-direction: column;
