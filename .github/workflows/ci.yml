@@ -1,10 +1,12 @@
 name: Run Testing on Push
 run-name: ${{ github.actor }} triggered a test run with ${{ github.event_name }}
-on: 
+on:
   push:
-    - master
+    branches:
+      - master
   pull_request:
-    - opened
+    types:
+      - opened
 jobs:
   Run-Component-Testing:
     runs-on: ubuntu-latest
