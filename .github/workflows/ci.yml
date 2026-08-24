@@ -1,0 +1,9 @@
+name: Run Testing on Push
+run-name: ${{ github.actor }} triggered a test run with ${{ github.event_name }}
+on: [push]
+jobs:
+  Run-Component-Testing:
+    runs-on: ubuntu-latest
+      steps:
+        - run: echo "This step should just run the component testing that we have created"
+
