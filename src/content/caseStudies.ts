@@ -41,19 +41,23 @@ export const caseStudies: readonly CaseStudy[] = [
     ],
   },
   {
-    id: "placeholder-two",
-    title: "Placeholder case study two",
+    id: "CS 2",
+    title: "Improve Bug to Automation Test Case Pipeline by Leveraging AI Tooling",
     summary:
-      "A one-line summary of the problem and outcome, shown on the card.",
-    tags: ["Placeholder", "Tag"],
+      "As we matured our quality function at Eventric and built out large scale test frameworks, it became abundantly clear that a piece of the developer → quality pipeline was missing. As bugs were getting fixed, there was no trackable way to ensure that automated test cases were created to prevent future regression.",
+    tags: ["Automation", "Process", "AI"],
     problem:
-      "Placeholder — what was broken, missing, or needed, and why it mattered.",
+      "Asking our client team to log out follow up stories to create automation cases for the bugs they fix was a frail system with too many points of failure and an unreasonable drain on developer time. This process needed to be repeatable and faster.",
     approach:
-      "Placeholder — what was actually built or decided, and the trade-offs weighed along the way.",
+      "I designed this as two gates that run before a bugfix PR even opens, meaning the check happens inside the developer's existing workflow instead of becoming a separate step someone has to remember later. First, the developer has Claude compare the changed files against the app's existing test coverage and flag whether the fix genuinely needs a new unit test - distinguishing a real logic gap from something like a UI-only prop change with nothing testable behind it. When that call is inconclusive, the default is to write the test anyway: I'd rather over-cover an ambiguous fix than let it slip through silently. Second, the developer has Claude draft the follow-up QA coverage as a Jira story with instructions for validating the original fix. The story deliberately leaves out the acceptance criteria from the original ticket to avoid introducing bias to whichever Quality Engineer eventually picks it up. It gets logged into a holding epic scoped to gaps from recent bugfixes; I was deliberate about calling that epic an intake queue, not a backlog, since stories in it are expected to get scheduled within the current or next sprint - an epic without that expectation just becomes the same kind of gap this process exists to close. The PR itself links back to the story, so QA can trace coverage to the fix that created it. I rolled this out across Mobile, Desktop, and Venues at once rather than piloting on one product, since the underlying gap was identical across all three.",
     outcome:
-      "Placeholder — what changed as a result, ideally with a number attached.",
+      "This closed the structural gap directly: every bugfix now gets an explicit, traceable checkpoint for both unit coverage and QA follow-up, instead of relying on someone remembering to create one. Over its first three months live, the process generated 20+ automation cases across 10+ fixed bugs - all without a developer having to remember to ask.",
     futureIterations:
-      "Placeholder — what I'd change with hindsight, and what's next if the work continued.",
+      "The natural next step is pushing this further. Prompting Claude for the follow-up story is a good starting point but it's not strictly necessary, a script could scrape the PR description and testing notes straight into the Jira story format without any engineer input at all.",
+    highlights: [
+      { value: "20+", label: "Automation cases generated in 3 months" },
+      { value: "Manual → Automated", label: "Follow-up QA test case creation" },
+    ],
   },
   {
     id: "placeholder-three",
