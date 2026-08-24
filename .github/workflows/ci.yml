@@ -1,6 +1,6 @@
 name: Run Testing on Push
 run-name: ${{ github.actor }} triggered a test run with ${{ github.event_name }}
-on: [push]
+on: [push, pull_request]
 jobs:
   Run-Component-Testing:
     runs-on: ubuntu-latest
