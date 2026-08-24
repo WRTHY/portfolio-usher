@@ -13,9 +13,15 @@
 .list {
   /* Cancels the shared reading-column inset and matches the wider flush
      anchor every other non-hero section uses (see SectionHeader.module.css)
-     — previously the only section left on the narrower 640px column. */
+     — previously the only section left on the narrower 640px column. No
+     max-width cap: fills the section's content box exactly so the right
+     edge stays pinned to the fixed page-gutter distance instead of
+     stalling early and leaving a growing gap on wide screens. */
   margin-left: 0;
-  max-width: var(--content-width-wide);
+  /* Cancels the global `section > *` rule's 640px cap (see index.css) —
+     without this, removing our own max-width override just falls through
+     to that default instead of actually going uncapped. */
+  max-width: none;
   display: flex;
   flex-direction: column;
   gap: 20px;

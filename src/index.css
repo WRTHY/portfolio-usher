@@ -73,6 +73,21 @@
   }
 }
 
+/* Below this, the InfoPanel's full 400px width plus its clearance leaves
+   section content squeezed into a sliver (or negative space) between it and
+   the page's right gutter. Re-declaring the token here — rather than adding
+   a third breakpoint band inside InfoPanel/content-clearance-desktop's own
+   math — means every consumer of --info-panel-width and
+   --content-clearance-desktop picks up the smaller value for free. A plain
+   width swap at a fixed breakpoint (no transition) rather than a fluid
+   vw-based shrink, since a panel that resizes continuously while dragging
+   the window would be a much bigger distraction than one that snaps once. */
+@media (min-width: 640px) and (max-width: 1023px) {
+  :root {
+    --info-panel-width: 240px;
+  }
+}
+
 /* The original grayscale palette, kept around as a selectable alternate
    (data-theme="mono") rather than deleted, since more themes are coming. */
 :root[data-theme='mono'] {

@@ -17,10 +17,16 @@
    full-width cards, not a multi-column grid. Same width override too:
    cancel the shared reading-column inset so cards line up with
    Experience/About at the wider flush anchor instead of the narrower
-   default 640px column. */
+   default 640px column. No max-width cap: the list fills the section's
+   content box exactly, so its right edge stays pinned to the fixed
+   page-gutter distance instead of stalling at an arbitrary width and
+   leaving a growing, unpinned gap on wide screens. */
 .list {
   margin-left: 0;
-  max-width: var(--content-width-wide);
+  /* Cancels the global `section > *` rule's 640px cap (see index.css) —
+     without this, removing our own max-width override just falls through
+     to that default instead of actually going uncapped. */
+  max-width: none;
   display: flex;
   flex-direction: column;
   gap: 20px;
