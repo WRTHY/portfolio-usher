@@ -1,4 +1,4 @@
-import { PortfolioPage } from './pages/PortfolioPage'
+import { PortfolioPage } from './pages/PortfolioPage.page'
 
 describe('theme toggle', () => {
   const portfolioPage = new PortfolioPage()

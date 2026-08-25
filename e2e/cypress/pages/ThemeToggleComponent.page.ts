@@ -1,6 +1,6 @@
 export class ThemeToggleComponent {
   get button(): Cypress.Chainable<JQuery> {
-    return cy.findByTestId('theme-toggle')
+    return cy.findByRole('button', { name: /switch to (light|dark) mode/i })
   }
 
   toggle() {

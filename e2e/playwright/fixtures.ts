@@ -1,5 +1,5 @@
 import { test as base, expect } from '@playwright/test'
-import { PortfolioPage } from './pages/PortfolioPage'
+import { PortfolioPage } from './pages/PortfolioPage.page'
 
 type Fixtures = {
   portfolioPage: PortfolioPage

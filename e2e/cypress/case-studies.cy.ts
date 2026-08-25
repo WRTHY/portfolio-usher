@@ -1,4 +1,4 @@
-import { PortfolioPage } from './pages/PortfolioPage'
+import { PortfolioPage } from './pages/PortfolioPage.page'
 
 const CASE_STUDY_ID = 'CS 1'
 const CASE_STUDY_TITLE = `Building E2E Test Automation From Zero for Eventric's Flagship Desktop App`

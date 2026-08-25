@@ -1,4 +1,4 @@
-import { PortfolioPage } from './pages/PortfolioPage'
+import { PortfolioPage } from './pages/PortfolioPage.page'
 import { scanForViolations, formatViolations } from './support/axe'
 
 describe('accessibility', () => {
