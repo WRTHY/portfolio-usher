@@ -60,19 +60,20 @@ export const caseStudies: readonly CaseStudy[] = [
     ],
   },
   {
-    id: "placeholder-three",
-    title: "Placeholder case study three",
+    id: "CS 3",
+    title: "Cutting QA's Support Load From ~10 Hours a Week to ~2",
     summary:
-      "A one-line summary of the problem and outcome, shown on the card.",
-    tags: ["Placeholder", "Tag"],
+      "The Support team at Eventric were non-technical but being asked to handle technical support. Beacuse of this, QA was asked to dive in and provide tier 2/3 support on customer reported issues. This resulted in support tickets were quietly eating close to a third of QA's week in ad hoc Slack pings and one-off investigations. I built a structured office-hours process to contain it, then measured and iterated until it actually worked.",
+    tags: ["Process", "Leadership", "Cross-functional"],
     problem:
-      "Placeholder — what was broken, missing, or needed, and why it mattered.",
+      "As QA Lead, I noticed the team was constantly being pulled into Support requests outside of any planned process - reproducing customer-reported bugs, answering ad hoc questions in Slack, investigating one-offs. When I actually measured it, it came out to roughly 10 hours a week of QA time, unplanned and unscheduled, cutting directly into time we had for actual coverage work.",
     approach:
-      "Placeholder — what was actually built or decided, and the trade-offs weighed along the way.",
+      "Rather than just telling Support to route requests differently, I set up dedicated office hours - a standing, scheduled block where Support could bring anything, instead of interrupting QA ad hoc throughout the day. I started at twice a week because I didn't trust a single weekly slot to absorb the backlog immediately, then measured the actual time cost again after a few weeks. Once the numbers showed it was working, I stepped it down to once a week rather than leaving a heavier cadence in place out of caution - the goal was containing the time cost, not maximizing meeting time. I treated the format itself as something to iterate on, not a one-time fix, adjusting it based on what kept coming up unscheduled anyway.",
     outcome:
-      "Placeholder — what changed as a result, ideally with a number attached.",
-    futureIterations:
-      "Placeholder — what I'd change with hindsight, and what's next if the work continued.",
+      "QA time lost to unplanned Support interruptions dropped from about 10 hours a week to about 2 - freeing up roughly 8 hours a week of QA capacity that went back into planned coverage work, without Support losing a reliable way to get QA's attention. This meeting also gave customer support a place to raise high priority items, resulting in 2 critical bugs being raised to engineering directly, rather than through a slower triage process",
+    highlights: [
+      { value: "10 hrs → 2 hrs", label: "QA time lost to unplanned Support interruptions, per week" },
+    ],
   },
   {
     id: "placeholder-four",

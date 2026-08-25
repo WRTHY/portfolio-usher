@@ -69,34 +69,49 @@ function useReadingRail(reportSections: ReportSection[], resetKey: string | null
     const root = contentRef.current
     if (!root) return
 
-    const ratios = new Map<string, number>()
+    // Scored by how much of the *pane* each section fills (visible px /
+    // pane height), not IntersectionObserver's own entry.intersectionRatio
+    // (visible px / the section's own height). The latter lets a short
+    // section reach a false "fully visible" 1.0 the instant it fits on
+    // screen, even while a much taller neighbor is still filling 90%+ of
+    // the pane — and worse, once two short sections are simultaneously
+    // fully visible (common near the bottom, where the pane is nearly as
+    // tall as the remaining content), they tie at 1.0 and the tie always
+    // went to whichever sits first in the DOM. That's what silently locked
+    // the last section (Future Iterations) out of ever highlighting.
+    const scores = new Map<string, number>()
 
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           const key = entry.target.getAttribute('data-section-key')
-          if (key) ratios.set(key, entry.intersectionRatio)
+          if (key) scores.set(key, entry.intersectionRect.height / root.clientHeight)
         })
 
-        const best = [...ratios.entries()].sort((a, b) => b[1] - a[1])[0]
-        if (best && best[1] > 0) {
-          setActiveKey(best[0] as ReportSection['key'])
+        // Walk sections in document order and require a strictly-better (or
+        // equal) score to take the lead, so a genuine tie hands the win to
+        // the later section instead of the earlier one.
+        let bestKey: ReportSection['key'] | null = null
+        let bestScore = 0
+        reportSections.forEach(({ key }) => {
+          const score = scores.get(key) ?? 0
+          if (score >= bestScore) {
+            bestScore = score
+            bestKey = key as ReportSection['key']
+          }
+        })
+
+        if (bestKey && bestScore > 0) {
+          setActiveKey(bestKey)
         }
       },
-      { root, threshold: [0, 0.25, 0.5, 0.75, 1] },
+      { root, threshold: Array.from({ length: 21 }, (_, i) => i / 20) },
     )
 
-    // Future iterations is excluded from tracking: its rail highlight never
-    // reliably lands (it's usually a short trailing section that never
-    // dominates the intersection ratio), so rather than leave a highlight
-    // that silently never fires, we don't track it at all — the nav item
-    // stays clickable (scrollToSection still works) but never highlights.
-    reportSections
-      .filter(({ key }) => key !== 'futureIterations')
-      .forEach(({ key }) => {
-        const el = sectionRefs.current.get(key)
-        if (el) observer.observe(el)
-      })
+    reportSections.forEach(({ key }) => {
+      const el = sectionRefs.current.get(key)
+      if (el) observer.observe(el)
+    })
 
     return () => observer.disconnect()
     // reportSections is derived fresh from `selected` each render; keying

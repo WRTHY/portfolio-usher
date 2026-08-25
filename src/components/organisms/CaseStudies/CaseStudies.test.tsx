@@ -5,7 +5,7 @@ import CaseStudies from './CaseStudies'
 import { caseStudies } from '../../../content/caseStudies'
 import styles from './CaseStudies.module.css'
 
-type IntersectionEntry = { target: Element; intersectionRatio: number }
+type IntersectionEntry = { target: Element; intersectionRect: { height: number } }
 
 // Mirrors the stub in useActiveSection.test.tsx: captures the callback the
 // component registers so a test can simulate a section entering view,
@@ -136,6 +136,13 @@ describe('CaseStudies', () => {
       const first = caseStudies[0]
       await user.click(screen.getByTestId(`case-study-card-${first.id}`))
 
+      // The active section is now scored by how much of the content pane it
+      // fills (visible px / pane height), not by how much of itself is
+      // visible — so the stub needs a pane height to score against. jsdom
+      // never lays anything out, so clientHeight is stubbed directly.
+      const contentPane = document.querySelector(`.${styles.content}`)!
+      Object.defineProperty(contentPane, 'clientHeight', { value: 500, configurable: true })
+
       const approachNavItem = screen.getByRole('button', { name: 'Approach' })
       expect(approachNavItem).not.toHaveClass(styles.navItemActive)
 
@@ -146,10 +153,45 @@ describe('CaseStudies', () => {
         .getByRole('heading', { name: 'Approach' })
         .closest(`.${styles.section}`)!
       act(() => {
-        ObserverStub.capturedCallback?.([{ target: approachSection, intersectionRatio: 0.9 }])
+        ObserverStub.capturedCallback?.([{ target: approachSection, intersectionRect: { height: 450 } }])
       })
 
       expect(approachNavItem).toHaveClass(styles.navItemActive)
+    })
+
+    it('marks the last section active once it fills more of the pane than its neighbor', async () => {
+      ObserverStub.capturedCallback = null
+      vi.stubGlobal('IntersectionObserver', ObserverStub)
+      Element.prototype.scrollIntoView = vi.fn()
+
+      const user = userEvent.setup()
+      render(<CaseStudies />)
+
+      const withFuture = caseStudies.find((caseStudy) => caseStudy.futureIterations)!
+      await user.click(screen.getByTestId(`case-study-card-${withFuture.id}`))
+
+      const contentPane = document.querySelector(`.${styles.content}`)!
+      Object.defineProperty(contentPane, 'clientHeight', { value: 500, configurable: true })
+
+      const outcomeSection = screen
+        .getByRole('heading', { name: 'Outcome' })
+        .closest(`.${styles.section}`)!
+      const futureSection = screen
+        .getByTestId('case-study-section-futureIterations')
+
+      // Both fully visible in the pane at once (the scenario that used to
+      // leave Future Iterations permanently locked out): a genuine tie
+      // should hand the win to the later section, not the earlier one.
+      act(() => {
+        ObserverStub.capturedCallback?.([
+          { target: outcomeSection, intersectionRect: { height: 500 } },
+          { target: futureSection, intersectionRect: { height: 500 } },
+        ])
+      })
+
+      expect(screen.getByRole('button', { name: 'Future iterations' })).toHaveClass(
+        styles.navItemActive,
+      )
     })
 
     it('is active on Problem when the modal first opens', async () => {
