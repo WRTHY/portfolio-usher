@@ -50,12 +50,13 @@ Other scripts:
 | `npm run build` | Type-check and build for production |
 | `npm run preview` | Preview the production build locally |
 | `npm run lint` | Run ESLint |
-| `npm test` | Run unit tests in watch mode |
-| `npm run test:run` | Run unit tests once |
-| `npm run test:e2e` | Run the Playwright end-to-end suite |
-| `npm run test:e2e:ui` | Run the Playwright suite in UI mode |
-| `npm run test:e2e:cypress` | Run the Cypress end-to-end suite headlessly |
-| `npm run test:e2e:cypress:open` | Open the Cypress suite in interactive mode |
+| `npm test` | Run the full suite: unit tests, then Playwright, then Cypress |
+| `npm run test:unit` | Run unit tests once |
+| `npm run test:unit:watch` | Run unit tests in watch mode |
+| `npm run test:e2e:playwright` | Run the Playwright end-to-end suite headlessly |
+| `npm run test:e2e:playwright:ui` | Open the Playwright suite in interactive UI mode |
+| `npm run test:e2e:cypress` | Run the Cypress end-to-end suite headlessly (starts the dev server itself) |
+| `npm run test:e2e:cypress:ui` | Open the Cypress suite in interactive UI mode (starts the dev server itself) |
 
 ## Testing
 

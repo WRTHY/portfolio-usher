@@ -8,12 +8,13 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "test": "vitest",
-    "test:run": "vitest run",
-    "test:e2e": "playwright test",
-    "test:e2e:ui": "playwright test --ui",
-    "test:e2e:cypress": "cypress run",
-    "test:e2e:cypress:open": "cypress open"
+    "test": "npm run test:unit && npm run test:e2e:playwright && npm run test:e2e:cypress",
+    "test:unit": "vitest run",
+    "test:unit:watch": "vitest",
+    "test:e2e:playwright": "playwright test",
+    "test:e2e:playwright:ui": "playwright test --ui",
+    "test:e2e:cypress": "start-server-and-test dev http://localhost:5173 \"cypress run\"",
+    "test:e2e:cypress:ui": "start-server-and-test dev http://localhost:5173 \"cypress open\""
   },
   "dependencies": {
     "@radix-ui/react-radio-group": "^1.4.7",
