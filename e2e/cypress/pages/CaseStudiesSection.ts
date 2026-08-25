@@ -7,13 +7,11 @@ export class CaseStudiesSection {
     return cy.get('#case-studies')
   }
 
-  // Tile buttons have no aria-label — their accessible name is the badge +
-  // title + summary text concatenated — so callers match on the title alone.
-  tile(title: string | RegExp): Cypress.Chainable<JQuery> {
-    return cy.findByRole('button', { name: title })
+  tile(caseStudyId: string): Cypress.Chainable<JQuery> {
+    return cy.findByTestId(`case-study-card-${caseStudyId}`)
   }
 
-  open(title: string | RegExp) {
-    this.tile(title).click()
+  open(caseStudyId: string) {
+    this.tile(caseStudyId).click()
   }
 }
