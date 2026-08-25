@@ -33,7 +33,11 @@ function InfoPanel() {
           <span className={styles.marker} aria-hidden="true" />
           {sections.map((section) => (
             <li key={section.id}>
-              <NavLink href={`#${section.id}`} isActive={activeId === section.id}>
+              <NavLink
+                href={`#${section.id}`}
+                isActive={activeId === section.id}
+                testId={`nav-link-desktop-${section.id}`}
+              >
                 {section.label}
               </NavLink>
             </li>

@@ -8,7 +8,9 @@ type PanelFooterProps = {
 function PanelFooter({ filePath }: PanelFooterProps) {
   return (
     <div className={styles.footer}>
-      <span className={styles.path}>{filePath}</span>
+      <span className={styles.path} data-testid="active-file-path">
+        {filePath}
+      </span>
       <div className={styles.actions}>
         <span className={styles.pill}>Live demo — coming soon</span>
         <RunButton />
