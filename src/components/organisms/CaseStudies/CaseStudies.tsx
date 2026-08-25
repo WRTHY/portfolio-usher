@@ -228,6 +228,21 @@ function CaseStudies() {
             role="region"
             aria-labelledby={titleId}
           >
+            {selected.phases && selected.phases.length > 0 && (
+              <div className={styles.phaseStripSection} data-testid="case-study-phase-strip">
+                <span className={styles.phaseStripLabel}>The framework, phase by phase</span>
+                <div className={styles.phaseStrip}>
+                  {selected.phases.map((phase, index) => (
+                    // eslint-disable-next-line react/no-array-index-key
+                    <div className={styles.phase} key={index}>
+                      <span className={styles.phaseNumber}>{index}</span>
+                      <span className={styles.phaseName}>{phase.name}</span>
+                      <span className={styles.phaseTimeframe}>{phase.timeframe}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
             <div
               className={styles.section}
               ref={registerSection('problem')}

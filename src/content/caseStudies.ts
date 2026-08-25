@@ -3,6 +3,11 @@ export type Highlight = {
   label: string
 }
 
+export type Phase = {
+  name: string
+  timeframe: string
+}
+
 export type CaseStudy = {
   id: string
   title: string
@@ -17,6 +22,10 @@ export type CaseStudy = {
   image?: string;
   /** Small stat callouts shown in the modal's left rail. Optional, any number. */
   highlights?: readonly Highlight[];
+  /** Compact, ordered timeline strip for a case study built around a multi-phase
+   *  framework rather than a single project narrative. Renders at the top of the
+   *  content pane. Optional — most case studies won't have one. */
+  phases?: readonly Phase[];
 }
 
 export const caseStudies: readonly CaseStudy[] = [

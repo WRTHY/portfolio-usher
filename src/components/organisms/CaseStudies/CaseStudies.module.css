@@ -235,6 +235,68 @@
   padding: 30px 24px 28px;
 }
 
+/* A compact, ordered timeline for a case study built around a multi-phase
+   framework rather than a single project narrative (see CS4's `phases`
+   field) — most case studies won't have one. Sits first in the content
+   pane so the whole shape of the framework reads before any prose does.
+   A horizontal-scrolling row, not a wrapping grid: phase order is the
+   point, so a left-to-right read has to survive any viewport width
+   instead of reflowing into a grid where order gets harder to track. */
+.phaseStripSection {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.phaseStripLabel {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text);
+}
+
+.phaseStrip {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+}
+
+/* --section-alt-bg rather than .highlight's --accent-bg on purpose: this
+   is a structural map of the framework, not a stat callout, and reusing
+   the highlight's accent tint would read as "these are the results"
+   instead of "this is the shape of the thing." */
+.phase {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex-shrink: 0;
+  min-width: 116px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--section-alt-bg);
+  padding: 8px 10px;
+}
+
+.phaseNumber {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--accent);
+}
+
+.phaseName {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 128%;
+  color: var(--text-h);
+}
+
+.phaseTimeframe {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text);
+}
+
 .section h3 {
   font-family: var(--heading);
   font-size: 16px;
