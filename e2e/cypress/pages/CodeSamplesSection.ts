@@ -1,39 +1,41 @@
-export type Framework = 'Playwright' | 'Cypress'
+export type TestingType = 'e2e' | 'component' | 'performance'
+export type Framework = 'playwright' | 'cypress' | 'playwright-ct' | 'cypress-ct'
 
 export class CodeSamplesSection {
   get panel(): Cypress.Chainable<JQuery> {
     return cy.get('#code-samples')
   }
 
-  // Framework/language pickers are a RadioGroup (role="radio"), not Tabs —
-  // they select a value rather than owning a tabpanel of their own. Only
-  // the file picker below is genuine Tabs, since it actually swaps panels.
-  frameworkOption(name: Framework): Cypress.Chainable<JQuery> {
-    return this.panel.findByRole('radio', { name })
+  testingTypeOption(value: TestingType): Cypress.Chainable<JQuery> {
+    return this.panel.findByTestId(`testing-type-${value}`)
   }
 
-  // Accepts a RegExp for Python/Java: their accessible name is the
-  // language plus a concatenated "soon" badge (e.g. "Pythonsoon").
-  languageOption(name: string | RegExp): Cypress.Chainable<JQuery> {
-    return this.panel.findByRole('radio', { name })
+  frameworkOption(value: Framework): Cypress.Chainable<JQuery> {
+    return this.panel.findByTestId(`automation-framework-${value}`)
   }
 
   fileTab(filename: string): Cypress.Chainable<JQuery> {
-    return this.panel.findByRole('tab', { name: filename })
+    return this.panel.findByTestId(`file-tab-${filename}`)
   }
 
-  // Syntax highlighting splits each line into many per-token <span>s, so
-  // the target substring is rarely any single element's own text.
-  // testing-library's findByText only matches an element's direct text
-  // nodes (not descendant text), so it can't see across those tokens —
-  // cy.contains() matches on full rendered text like Playwright's
-  // getByText does, which is what's needed here.
-  codeContaining(text: string): Cypress.Chainable<JQuery> {
-    return this.panel.contains(text)
+  // Every file panel is force-mounted at once (see CodeFileTabs.tsx), so
+  // this testid is only ever applied to whichever one is currently active —
+  // it's the one stable way to grab "the visible code" without also
+  // matching hidden panels for other files.
+  get activeCodePanel(): Cypress.Chainable<JQuery> {
+    return this.panel.findByTestId('active-code-panel')
   }
 
-  selectFramework(name: Framework) {
-    this.frameworkOption(name).click()
+  get activeFilePath(): Cypress.Chainable<JQuery> {
+    return this.panel.findByTestId('active-file-path')
+  }
+
+  selectTestingType(value: TestingType) {
+    this.testingTypeOption(value).click()
+  }
+
+  selectFramework(value: Framework) {
+    this.frameworkOption(value).click()
   }
 
   selectFile(filename: string) {

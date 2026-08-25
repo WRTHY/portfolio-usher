@@ -1,6 +1,7 @@
 import type { Locator, Page } from '@playwright/test'
 
-export type Framework = 'Playwright' | 'Cypress'
+export type TestingType = 'e2e' | 'component' | 'performance'
+export type Framework = 'playwright' | 'cypress' | 'playwright-ct' | 'cypress-ct'
 
 export class CodeSamplesSection {
   readonly panel: Locator
@@ -9,29 +10,36 @@ export class CodeSamplesSection {
     this.panel = page.locator('#code-samples')
   }
 
-  // Framework/language pickers are a RadioGroup (role="radio"), not Tabs —
-  // they select a value rather than owning a tabpanel of their own. Only
-  // the file picker below is genuine Tabs, since it actually swaps panels.
-  frameworkOption(name: Framework): Locator {
-    return this.panel.getByRole('radio', { name })
+  testingTypeOption(value: TestingType): Locator {
+    return this.panel.getByTestId(`testing-type-${value}`)
   }
 
-  // Accepts a RegExp for Python/Java: their accessible name is the
-  // language plus a concatenated "soon" badge (e.g. "Pythonsoon").
-  languageOption(name: string | RegExp): Locator {
-    return this.panel.getByRole('radio', { name })
+  frameworkOption(value: Framework): Locator {
+    return this.panel.getByTestId(`automation-framework-${value}`)
   }
 
   fileTab(filename: string): Locator {
-    return this.panel.getByRole('tab', { name: filename })
+    return this.panel.getByTestId(`file-tab-${filename}`)
   }
 
-  codeContaining(text: string): Locator {
-    return this.panel.getByText(text)
+  // Every file panel is force-mounted at once (see CodeFileTabs.tsx), so
+  // this testid is only ever applied to whichever one is currently active —
+  // it's the one stable way to grab "the visible code" without also
+  // matching hidden panels for other files.
+  get activeCodePanel(): Locator {
+    return this.panel.getByTestId('active-code-panel')
   }
 
-  async selectFramework(name: Framework) {
-    await this.frameworkOption(name).click()
+  get activeFilePath(): Locator {
+    return this.panel.getByTestId('active-file-path')
+  }
+
+  async selectTestingType(value: TestingType) {
+    await this.testingTypeOption(value).click()
+  }
+
+  async selectFramework(value: Framework) {
+    await this.frameworkOption(value).click()
   }
 
   async selectFile(filename: string) {

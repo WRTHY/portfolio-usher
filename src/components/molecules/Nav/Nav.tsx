@@ -22,6 +22,7 @@ function Nav() {
               href={`#${section.id}`}
               onClick={() => setIsOpen(false)}
               isActive={activeId === section.id}
+              testId={`nav-link-mobile-${section.id}`}
             >
               {section.label}
             </NavLink>

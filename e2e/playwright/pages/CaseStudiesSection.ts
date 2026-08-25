@@ -12,13 +12,11 @@ export class CaseStudiesSection {
     this.modal = new CaseStudyModal(page)
   }
 
-  // Tile buttons have no aria-label — their accessible name is the badge +
-  // title + summary text concatenated — so callers match on the title alone.
-  tile(title: string | RegExp): Locator {
-    return this.page.getByRole('button', { name: title })
+  tile(caseStudyId: string): Locator {
+    return this.page.getByTestId(`case-study-card-${caseStudyId}`)
   }
 
-  async open(title: string | RegExp) {
-    await this.tile(title).click()
+  async open(caseStudyId: string) {
+    await this.tile(caseStudyId).click()
   }
 }

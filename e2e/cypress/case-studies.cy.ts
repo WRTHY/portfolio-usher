@@ -1,6 +1,7 @@
 import { PortfolioPage } from './pages/PortfolioPage'
 
-const CASE_STUDY_ONE = /Placeholder case study one/
+const CASE_STUDY_ID = 'CS 1'
+const CASE_STUDY_TITLE = `Building E2E Test Automation From Zero for Eventric's Flagship Desktop App`
 
 describe('case study modal', () => {
   const portfolioPage = new PortfolioPage()
@@ -12,19 +13,18 @@ describe('case study modal', () => {
   it('clicking a tile opens the modal with that case study', () => {
     const { caseStudies } = portfolioPage
 
-    caseStudies.open(CASE_STUDY_ONE)
+    caseStudies.open(CASE_STUDY_ID)
 
     const { modal } = caseStudies
     modal.dialog.should('be.visible')
-    modal.heading('Placeholder case study one').should('be.visible')
-    modal.dialog.contains('Placeholder').should('be.visible')
+    modal.title.should('have.text', CASE_STUDY_TITLE)
   })
 
   it('Escape closes the modal and returns focus to the trigger', () => {
     const { caseStudies } = portfolioPage
-    const trigger = caseStudies.tile(CASE_STUDY_ONE)
+    const trigger = caseStudies.tile(CASE_STUDY_ID)
 
-    caseStudies.open(CASE_STUDY_ONE)
+    caseStudies.open(CASE_STUDY_ID)
     caseStudies.modal.dialog.should('be.visible')
 
     caseStudies.modal.closeWithEscape()
@@ -34,9 +34,9 @@ describe('case study modal', () => {
 
   it('the close button closes the modal and returns focus to the trigger', () => {
     const { caseStudies } = portfolioPage
-    const trigger = caseStudies.tile(CASE_STUDY_ONE)
+    const trigger = caseStudies.tile(CASE_STUDY_ID)
 
-    caseStudies.open(CASE_STUDY_ONE)
+    caseStudies.open(CASE_STUDY_ID)
     caseStudies.modal.dialog.should('be.visible')
 
     caseStudies.modal.close()

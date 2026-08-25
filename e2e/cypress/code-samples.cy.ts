@@ -11,40 +11,34 @@ describe('automation examples panel', () => {
     const { codeSamples } = portfolioPage
 
     codeSamples.fileTab('case-study-modal.spec.ts').should('be.visible')
-    codeSamples.codeContaining("from '@playwright/test'").should('be.visible')
+    codeSamples.activeCodePanel.should('include.text', "from '@playwright/test'")
 
-    codeSamples.selectFramework('Cypress')
+    codeSamples.selectFramework('cypress')
 
     codeSamples.fileTab('case-study-modal.cy.ts').should('be.visible')
     codeSamples.fileTab('case-study-modal.spec.ts').should('not.exist')
-    codeSamples.codeContaining("describe('Portfolio").should('be.visible')
+    codeSamples.activeCodePanel.should('include.text', "describe('Portfolio")
   })
 
   it('switching file tabs changes the visible code and file path', () => {
     const { codeSamples } = portfolioPage
 
-    codeSamples.codeContaining('playwright/case-study-modal.spec.ts').should('be.visible')
+    codeSamples.activeFilePath.should('have.text', 'playwright/case-study-modal.spec.ts')
 
     codeSamples.selectFile('fixtures.ts')
 
-    codeSamples.codeContaining('playwright/fixtures.ts').should('be.visible')
-    codeSamples.codeContaining('export async function openCaseStudy').should('be.visible')
+    codeSamples.activeFilePath.should('have.text', 'playwright/fixtures.ts')
+    codeSamples.activeCodePanel.should('include.text', 'export async function openCaseStudy')
   })
 
-  it('Python and Java language options are disabled and non-interactive', () => {
+  it('the Performance testing type is disabled and non-interactive', () => {
     const { codeSamples } = portfolioPage
 
-    const typescriptOption = codeSamples.languageOption('TypeScript')
-    const pythonOption = codeSamples.languageOption(/Python/)
-    const javaOption = codeSamples.languageOption(/Java/)
-
-    typescriptOption.should('have.attr', 'aria-checked', 'true')
-    pythonOption.should('be.disabled')
-    javaOption.should('be.disabled')
+    codeSamples.testingTypeOption('e2e').should('have.attr', 'data-state', 'checked')
+    codeSamples.testingTypeOption('performance').should('be.disabled')
 
     // be.disabled already confirms clicks can't land, but assert the
-    // selection genuinely never moves off TypeScript as well.
-    pythonOption.should('have.attr', 'aria-checked', 'false')
-    javaOption.should('have.attr', 'aria-checked', 'false')
+    // selection genuinely never moves off e2e as well.
+    codeSamples.testingTypeOption('performance').should('have.attr', 'data-state', 'unchecked')
   })
 })

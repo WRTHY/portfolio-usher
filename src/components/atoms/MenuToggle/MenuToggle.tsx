@@ -14,6 +14,7 @@ function MenuToggle({ isOpen, onClick }: MenuToggleProps) {
       aria-expanded={isOpen}
       aria-controls="site-nav-list"
       onClick={onClick}
+      data-testid="menu-toggle"
     >
       <span />
       <span />

@@ -38,6 +38,11 @@ function SegmentedControl<T extends string>({
     options.findIndex((option) => option.value === value),
   )
 
+  // Slugified from ariaLabel so every SegmentedControl instance (testing
+  // type, framework, any future picker) gets unique, collision-free ids
+  // without callers having to pass one in per option.
+  const testIdPrefix = ariaLabel.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+
   return (
     <RadioGroup.Root
       value={value}
@@ -57,6 +62,7 @@ function SegmentedControl<T extends string>({
           value={option.value}
           className={styles.segment}
           disabled={option.disabled}
+          data-testid={`${testIdPrefix}-${option.value}`}
         >
           {option.icon}
           {option.label}

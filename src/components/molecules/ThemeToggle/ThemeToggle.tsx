@@ -30,6 +30,7 @@ function ThemeToggle() {
       className={styles.toggle}
       onClick={toggleMode}
       aria-label={mode === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+      data-testid="theme-toggle"
     >
       {mode === 'dark' ? <FaSun aria-hidden="true" /> : <FaMoon aria-hidden="true" />}
     </button>

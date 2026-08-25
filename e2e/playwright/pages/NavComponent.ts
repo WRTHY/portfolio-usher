@@ -1,40 +1,46 @@
 import type { Locator, Page } from '@playwright/test'
 
-const NAV_LABELS = ['Home', 'Case Studies', 'Automation Examples', 'About'] as const
-export type NavLabel = (typeof NAV_LABELS)[number]
+export type SectionId = 'about' | 'experience' | 'case-studies' | 'code-samples'
 
-// Wraps the header <nav>. The sidebar's dot navigation exposes the same
-// accessible names (aria-label per section) as these links, so every
-// locator here is scoped to the <nav> landmark to stay unambiguous.
+// The app renders two separate nav UIs that are never both visible at once
+// (Header.module.css / InfoPanel.module.css split display:none on opposite
+// sides of the 640px breakpoint): a hamburger menu for mobile, and the
+// sidebar "Sections" list for desktop. A role query naturally picked
+// whichever one the accessibility tree currently exposed, but a testid
+// query has no such filtering — so each gets its own testid rather than
+// sharing one, and callers pick the variant that matches their viewport.
 export class NavComponent {
   private readonly page: Page
-  private readonly nav: Locator
 
   constructor(page: Page) {
     this.page = page
-    this.nav = page.getByRole('navigation')
   }
 
-  link(label: NavLabel): Locator {
-    return this.nav.getByRole('link', { name: label })
+  link(sectionId: SectionId): Locator {
+    return this.page.getByTestId(`nav-link-desktop-${sectionId}`)
   }
 
-  async goTo(label: NavLabel) {
-    await this.link(label).click()
+  async goTo(sectionId: SectionId) {
+    await this.link(sectionId).click()
   }
 
-  // The toggle's accessible name flips between "Open menu" and "Close
-  // menu" depending on state, so it's exposed as one dynamic locator
-  // rather than two static ones.
+  mobileLink(sectionId: SectionId): Locator {
+    return this.page.getByTestId(`nav-link-mobile-${sectionId}`)
+  }
+
+  async mobileGoTo(sectionId: SectionId) {
+    await this.mobileLink(sectionId).click()
+  }
+
   get menuToggle(): Locator {
-    return this.page.getByRole('button', { name: /(open|close) menu/i })
+    return this.page.getByTestId('menu-toggle')
   }
 
   async openMenu() {
-    await this.page.getByRole('button', { name: 'Open menu' }).click()
+    await this.menuToggle.click()
   }
 
   async closeMenu() {
-    await this.page.getByRole('button', { name: 'Close menu' }).click()
+    await this.menuToggle.click()
   }
 }

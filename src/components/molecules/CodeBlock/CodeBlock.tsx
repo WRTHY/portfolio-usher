@@ -34,6 +34,13 @@ const LIGHT_THEME_CONTRAST_FIXES: Record<string, string> = {
   '#c18401': '#845a01',
 }
 
+// Same idea as the light-theme map above, for one-dark-pro: only its coral
+// token color (used for tags/attributes) falls just short of 4.5:1 against
+// --code-bg's dark value (4.38:1) — a small brighten of the same hue clears it.
+const DARK_THEME_CONTRAST_FIXES: Record<string, string> = {
+  '#e06c75': '#e37179',
+}
+
 function CodeBlock({ code, language }: CodeBlockProps) {
   // Reserves vertical room for this file's own line count (rather than a
   // shared value from some other file) so the loading gap before Shiki's
@@ -49,7 +56,10 @@ function CodeBlock({ code, language }: CodeBlockProps) {
       language={language}
       theme={{ light: 'one-light', dark: 'one-dark-pro' }}
       defaultColor="light-dark()"
-      colorReplacements={{ 'one-light': LIGHT_THEME_CONTRAST_FIXES }}
+      colorReplacements={{
+        'one-light': LIGHT_THEME_CONTRAST_FIXES,
+        'one-dark-pro': DARK_THEME_CONTRAST_FIXES,
+      }}
       engine="javascript"
       showLineNumbers
       showLanguage={false}

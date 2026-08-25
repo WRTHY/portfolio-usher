@@ -8,7 +8,7 @@ export class ThemeToggleComponent {
   constructor(page: Page) {
     this.page = page
     this.html = page.locator('html')
-    this.button = page.getByRole('button', { name: /switch to (light|dark) mode/i })
+    this.button = page.getByTestId('theme-toggle')
   }
 
   async toggle() {
