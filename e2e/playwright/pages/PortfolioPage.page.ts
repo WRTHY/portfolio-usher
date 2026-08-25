@@ -1,11 +1,11 @@
 import type { Locator, Page } from '@playwright/test'
-import { NavComponent } from './NavComponent'
-import type { SectionId } from './NavComponent'
-import { ThemeToggleComponent } from './ThemeToggleComponent'
-import { CaseStudiesSection } from './CaseStudiesSection'
-import { CodeSamplesSection } from './CodeSamplesSection'
+import { NavComponent } from './NavComponent.page'
+import type { SectionId } from './NavComponent.page'
+import { ThemeToggleComponent } from './ThemeToggleComponent.page'
+import { CaseStudiesSection } from './CaseStudiesSection.page'
+import { CodeSamplesSection } from './CodeSamplesSection.page'
 
-export type { SectionId }
+export type SectionId = 'about' | 'experience' | 'case-studies' | 'code-samples'
 
 // Composition root for the site. It's a single page with no real per-URL
 // navigation, so rather than one class per route this models one root
