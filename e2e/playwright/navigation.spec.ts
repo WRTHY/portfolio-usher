@@ -4,16 +4,16 @@ test.describe('primary navigation', () => {
   test('each nav link scrolls its section into view', async ({ portfolioPage }) => {
     await portfolioPage.goto()
 
-    await portfolioPage.nav.goTo('Case Studies')
+    await portfolioPage.nav.goTo('case-studies')
     await expect(portfolioPage.section('case-studies')).toBeInViewport()
 
-    await portfolioPage.nav.goTo('Automation Examples')
+    await portfolioPage.nav.goTo('code-samples')
     await expect(portfolioPage.section('code-samples')).toBeInViewport()
 
-    await portfolioPage.nav.goTo('Experience')
+    await portfolioPage.nav.goTo('experience')
     await expect(portfolioPage.section('experience')).toBeInViewport()
 
-    await portfolioPage.nav.goTo('About')
+    await portfolioPage.nav.goTo('about')
     await expect(portfolioPage.section('about')).toBeInViewport()
   })
 })
@@ -25,15 +25,15 @@ test.describe('mobile navigation', () => {
     await portfolioPage.goto()
     const { nav } = portfolioPage
 
-    await expect(nav.link('About')).not.toBeVisible()
+    await expect(nav.mobileLink('about')).not.toBeVisible()
 
     await nav.openMenu()
     await expect(nav.menuToggle).toHaveAccessibleName('Close menu')
-    await expect(nav.link('About')).toBeVisible()
+    await expect(nav.mobileLink('about')).toBeVisible()
 
     await nav.closeMenu()
     await expect(nav.menuToggle).toHaveAccessibleName('Open menu')
-    await expect(nav.link('About')).not.toBeVisible()
+    await expect(nav.mobileLink('about')).not.toBeVisible()
   })
 
   test('choosing a link closes the menu and scrolls to the section', async ({ portfolioPage }) => {
@@ -41,7 +41,7 @@ test.describe('mobile navigation', () => {
     const { nav } = portfolioPage
 
     await nav.openMenu()
-    await nav.goTo('About')
+    await nav.mobileGoTo('about')
 
     await expect(portfolioPage.section('about')).toBeInViewport()
     await expect(nav.menuToggle).toHaveAccessibleName('Open menu')
