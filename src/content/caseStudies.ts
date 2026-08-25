@@ -74,7 +74,7 @@ export const caseStudies: readonly CaseStudy[] = [
     ],
   },
   {
-    id: "CS 2",
+    id: "CS 3",
     title: "Improve Bug to Automation Test Case Pipeline by Leveraging AI Tooling",
     summary:
       "As we matured our quality function at Eventric and built out large scale test frameworks, it became abundantly clear that a piece of the developer → quality pipeline was missing. As bugs were getting fixed, there was no trackable way to ensure that automated test cases were created to prevent future regression.",
@@ -93,7 +93,7 @@ export const caseStudies: readonly CaseStudy[] = [
     ],
   },
   {
-    id: "CS 3",
+    id: "CS 4",
     title: "Cutting QA's Support Load From ~10 Hours a Week to ~2",
     summary:
       "Support tickets were quietly eating close to a third of QA's week in ad hoc Slack pings and one-off investigations. I built a structured office-hours process to contain it, then measured and iterated until it actually worked.",
@@ -110,20 +110,5 @@ export const caseStudies: readonly CaseStudy[] = [
       { value: "10 hrs → 2 hrs", label: "QA time lost to unplanned Support interruptions, per week" },
       { value: "2x/wk → 1x/wk", label: "Office hours cadence, stepped down once it worked" },
     ],
-  },
-  {
-    id: "placeholder-four",
-    title: "Placeholder case study four",
-    summary:
-      "A one-line summary of the problem and outcome, shown on the card.",
-    tags: ["Placeholder", "Tag"],
-    problem:
-      "Placeholder — what was broken, missing, or needed, and why it mattered.",
-    approach:
-      "Placeholder — what was actually built or decided, and the trade-offs weighed along the way.",
-    outcome:
-      "Placeholder — what changed as a result, ideally with a number attached.",
-    futureIterations:
-      "Placeholder — what I'd change with hindsight, and what's next if the work continued.",
   },
 ] as const;
