@@ -1,4 +1,4 @@
-import { PortfolioPage } from './pages/PortfolioPage'
+import { PortfolioPage } from './pages/PortfolioPage.page'
 
 describe('automation examples panel', () => {
   const portfolioPage = new PortfolioPage()
