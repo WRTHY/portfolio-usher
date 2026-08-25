@@ -8,9 +8,12 @@ export type SelectableTestingType = Exclude<TestingType, 'performance'>
 // against the installed version) — Cypress gets its real logo, Playwright
 // stays text-only rather than fake a brand icon.
 //
-// Playwright CT has no matching example in codeExamples.ts yet, so it's
-// disabled/soon rather than faked — same honesty rule as the testing-type
-// tier's Performance option.
+// Component testing has two real frameworks in this repo, same as e2e:
+// Vitest + React Testing Library (jsdom) and Cypress component testing
+// (real-browser mount). Both run the same assertions against the same
+// components — see the sibling *.cy.tsx/*.test.tsx pairs under src/ — so
+// switching frameworks here is an honest choice, not a fake one. Playwright
+// has no component-test runner configured in this repo, so it isn't listed.
 export const frameworkOptionsByTestingType: Record<
   SelectableTestingType,
   SegmentedControlOption<Framework>[]
@@ -20,7 +23,7 @@ export const frameworkOptionsByTestingType: Record<
     { value: 'cypress', label: 'Cypress', icon: <SiCypress aria-hidden="true" /> },
   ],
   component: [
-    { value: 'cypress-ct', label: 'Cypress CT', icon: <SiCypress aria-hidden="true" /> },
-    { value: 'playwright-ct', label: 'Playwright CT', disabled: true },
+    { value: 'vitest', label: 'Vitest + React Testing Library' },
+    { value: 'cypress', label: 'Cypress CT', icon: <SiCypress aria-hidden="true" /> },
   ],
 }

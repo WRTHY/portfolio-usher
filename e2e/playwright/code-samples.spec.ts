@@ -5,26 +5,25 @@ test.describe('automation examples panel', () => {
     await portfolioPage.goto()
     const { codeSamples } = portfolioPage
 
-    await expect(codeSamples.fileTab('case-study-modal.spec.ts')).toBeVisible()
-    await expect(codeSamples.activeCodePanel).toContainText("from '@playwright/test'")
+    await expect(codeSamples.fileTab('case-studies.spec.ts')).toBeVisible()
+    await expect(codeSamples.activeCodePanel).toContainText("from './fixtures'")
 
     await codeSamples.selectFramework('cypress')
 
-    await expect(codeSamples.fileTab('case-study-modal.cy.ts')).toBeVisible()
-    await expect(codeSamples.fileTab('case-study-modal.spec.ts')).not.toBeVisible()
-    await expect(codeSamples.activeCodePanel).toContainText("describe('Portfolio")
+    await expect(codeSamples.fileTab('case-studies.cy.ts')).toBeVisible()
+    await expect(codeSamples.activeCodePanel).toContainText('new PortfolioPage()')
   })
 
   test('switching file tabs changes the visible code and file path', async ({ portfolioPage }) => {
     await portfolioPage.goto()
     const { codeSamples } = portfolioPage
 
-    await expect(codeSamples.activeFilePath).toHaveText('playwright/case-study-modal.spec.ts')
+    await expect(codeSamples.activeFilePath).toHaveText('playwright/case-studies.spec.ts')
 
-    await codeSamples.selectFile('fixtures.ts')
+    await codeSamples.selectFile('playwright.config.ts')
 
-    await expect(codeSamples.activeFilePath).toHaveText('playwright/fixtures.ts')
-    await expect(codeSamples.activeCodePanel).toContainText('export async function openCaseStudy')
+    await expect(codeSamples.activeFilePath).toHaveText('playwright.config.ts')
+    await expect(codeSamples.activeCodePanel).toContainText('defineConfig')
   })
 
   test('the Performance testing type is disabled and non-interactive', async ({ portfolioPage }) => {

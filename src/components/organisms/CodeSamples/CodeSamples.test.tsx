@@ -15,7 +15,9 @@ describe('CodeSamples', () => {
       'data-state',
       'checked',
     )
-    expect(screen.getByRole('tab', { name: /case-study-modal\.spec\.ts/ })).toBeInTheDocument()
+    expect(screen.getByTestId('active-file-path')).toHaveTextContent(
+      'playwright/case-studies.spec.ts',
+    )
   })
 
   it('disables the Performance testing type', () => {
@@ -23,35 +25,33 @@ describe('CodeSamples', () => {
     expect(screen.getByRole('radio', { name: /Performance/ })).toBeDisabled()
   })
 
-  it('switching testing type resets the framework and file to the new tier\'s first option', async () => {
+  it('switching to the Component tier defaults to Vitest and offers a real Cypress CT alternative', async () => {
     const user = userEvent.setup()
     render(<CodeSamples />)
 
     await user.click(screen.getByRole('radio', { name: 'Component' }))
 
-    expect(screen.getByRole('radio', { name: /Cypress CT/ })).toHaveAttribute(
+    expect(screen.getByRole('radio', { name: 'Vitest + React Testing Library' })).toHaveAttribute(
       'data-state',
       'checked',
     )
+    expect(screen.getByRole('tab', { name: /CopyButton\.test\.tsx/ })).toBeInTheDocument()
+
+    await user.click(screen.getByRole('radio', { name: 'Cypress CT' }))
+
     expect(screen.getByRole('tab', { name: /CopyButton\.cy\.tsx/ })).toBeInTheDocument()
-  })
-
-  it('disables Playwright CT under the Component tier (no honest example yet)', async () => {
-    const user = userEvent.setup()
-    render(<CodeSamples />)
-
-    await user.click(screen.getByRole('radio', { name: 'Component' }))
-
-    expect(screen.getByRole('radio', { name: /Playwright CT/ })).toBeDisabled()
   })
 
   it('switching framework within a tier resets back to the first file', async () => {
     const user = userEvent.setup()
     render(<CodeSamples />)
 
+    await user.click(screen.getByRole('tab', { name: /playwright\.config\.ts/ }))
     await user.click(screen.getByRole('radio', { name: 'Cypress' }))
 
-    expect(screen.getByRole('tab', { name: /case-study-modal\.cy\.ts/ })).toBeInTheDocument()
+    expect(screen.getByTestId('active-file-path')).toHaveTextContent(
+      'cypress/case-studies.cy.ts',
+    )
   })
 
   it('shows a static TypeScript badge instead of a language selector', () => {
