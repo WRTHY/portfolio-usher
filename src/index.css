@@ -169,6 +169,19 @@ section {
   }
 }
 
+/* At desktop widths (where the fixed InfoPanel is visible), section content
+   starts level with the top of the InfoPanel (see InfoPanel.module.css's
+   `top: 80px`) instead of vertically centering — otherwise the content's
+   start point jumps up and down against the fixed panel as you scroll
+   between sections with different amounts of content. About keeps the
+   centered hero layout instead (see About.module.css). */
+@media (min-width: 640px) {
+  section {
+    justify-content: flex-start;
+    padding-top: 80px;
+  }
+}
+
 @keyframes overscroll-bump {
   0% {
     transform: translateY(0);

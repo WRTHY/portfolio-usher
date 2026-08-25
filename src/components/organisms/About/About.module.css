@@ -6,6 +6,12 @@
        at narrower desktop widths where there isn't room to be both centered
        and clear. */
     padding-left: var(--content-clearance-desktop);
+    /* About is the hero section — keep it vertically centered rather than
+       adopting the top-aligned-with-InfoPanel layout every other section
+       uses (see index.css), and restore the default top padding that rule
+       overrides so the centering stays symmetric. */
+    justify-content: center;
+    padding-top: 32px;
   }
 }
 
