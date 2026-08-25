@@ -21,7 +21,7 @@ export default defineConfig([
     },
   },
   {
-    files: ['e2e/cypress/**/*.ts', 'cypress.config.ts'],
+    files: ['e2e/cypress/**/*.ts', 'cypress/**/*.ts', 'src/**/*.cy.tsx', 'cypress.config.ts'],
     extends: [cypress.configs.recommended],
   },
 ])

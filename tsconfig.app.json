@@ -22,5 +22,10 @@
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"]
+  "include": ["src"],
+  // *.cy.tsx specs are co-located next to the components they mount (see
+  // cypress.config.ts) but type-check against cypress/tsconfig.json instead,
+  // which has the `cy`/`Cypress` ambient types this project's build config
+  // doesn't carry.
+  "exclude": ["src/**/*.cy.tsx"]
 }
