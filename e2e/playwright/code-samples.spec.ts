@@ -6,42 +6,39 @@ test.describe('automation examples panel', () => {
     const { codeSamples } = portfolioPage
 
     await expect(codeSamples.fileTab('case-study-modal.spec.ts')).toBeVisible()
-    await expect(codeSamples.codeContaining("from '@playwright/test'")).toBeVisible()
+    await expect(codeSamples.activeCodePanel).toContainText("from '@playwright/test'")
 
-    await codeSamples.selectFramework('Cypress')
+    await codeSamples.selectFramework('cypress')
 
     await expect(codeSamples.fileTab('case-study-modal.cy.ts')).toBeVisible()
     await expect(codeSamples.fileTab('case-study-modal.spec.ts')).not.toBeVisible()
-    await expect(codeSamples.codeContaining("describe('Portfolio")).toBeVisible()
+    await expect(codeSamples.activeCodePanel).toContainText("describe('Portfolio")
   })
 
   test('switching file tabs changes the visible code and file path', async ({ portfolioPage }) => {
     await portfolioPage.goto()
     const { codeSamples } = portfolioPage
 
-    await expect(codeSamples.codeContaining('playwright/case-study-modal.spec.ts')).toBeVisible()
+    await expect(codeSamples.activeFilePath).toHaveText('playwright/case-study-modal.spec.ts')
 
     await codeSamples.selectFile('fixtures.ts')
 
-    await expect(codeSamples.codeContaining('playwright/fixtures.ts')).toBeVisible()
-    await expect(codeSamples.codeContaining('export async function openCaseStudy')).toBeVisible()
+    await expect(codeSamples.activeFilePath).toHaveText('playwright/fixtures.ts')
+    await expect(codeSamples.activeCodePanel).toContainText('export async function openCaseStudy')
   })
 
-  test('Python and Java language options are disabled and non-interactive', async ({ portfolioPage }) => {
+  test('the Performance testing type is disabled and non-interactive', async ({ portfolioPage }) => {
     await portfolioPage.goto()
     const { codeSamples } = portfolioPage
 
-    const typescriptOption = codeSamples.languageOption('TypeScript')
-    const pythonOption = codeSamples.languageOption(/Python/)
-    const javaOption = codeSamples.languageOption(/Java/)
-
-    await expect(typescriptOption).toHaveAttribute('aria-checked', 'true')
-    await expect(pythonOption).toBeDisabled()
-    await expect(javaOption).toBeDisabled()
+    await expect(codeSamples.testingTypeOption('e2e')).toHaveAttribute('data-state', 'checked')
+    await expect(codeSamples.testingTypeOption('performance')).toBeDisabled()
 
     // toBeDisabled already confirms clicks can't land, but assert the
-    // selection genuinely never moves off TypeScript as well.
-    await expect(pythonOption).toHaveAttribute('aria-checked', 'false')
-    await expect(javaOption).toHaveAttribute('aria-checked', 'false')
+    // selection genuinely never moves off e2e as well.
+    await expect(codeSamples.testingTypeOption('performance')).toHaveAttribute(
+      'data-state',
+      'unchecked',
+    )
   })
 })

@@ -7,9 +7,10 @@ type ModalProps = {
   titleId: string
   onClose: () => void
   children: ReactNode
+  testId?: string
 }
 
-function Modal({ titleId, onClose, children }: ModalProps) {
+function Modal({ titleId, onClose, children, testId }: ModalProps) {
   const dialogRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -63,6 +64,7 @@ function Modal({ titleId, onClose, children }: ModalProps) {
         aria-labelledby={titleId}
         tabIndex={-1}
         onClick={(event) => event.stopPropagation()}
+        data-testid={testId}
       >
         {children}
       </div>

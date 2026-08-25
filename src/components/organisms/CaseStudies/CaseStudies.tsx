@@ -157,17 +157,20 @@ function CaseStudies() {
       </div>
 
       {selected && (
-        <Modal titleId={titleId} onClose={() => setSelectedId(null)}>
+        <Modal titleId={titleId} onClose={() => setSelectedId(null)} testId="case-study-modal">
           <button
             type="button"
             className="modal-close"
             onClick={() => setSelectedId(null)}
             aria-label="Close"
+            data-testid="case-study-modal-close"
           >
             &times;
           </button>
           <div className={styles.rail}>
-            <h2 id={titleId}>{selected.title}</h2>
+            <h2 id={titleId} data-testid="case-study-modal-title">
+              {selected.title}
+            </h2>
             <div className={styles.tags}>
               {selected.tags.map((tag) => (
                 <Badge key={tag}>{tag}</Badge>
@@ -203,7 +206,13 @@ function CaseStudies() {
               ))}
             </nav>
           </div>
-          <div className={styles.content} ref={contentRef}>
+          <div
+            className={styles.content}
+            ref={contentRef}
+            tabIndex={0}
+            role="region"
+            aria-labelledby={titleId}
+          >
             <div
               className={styles.section}
               ref={registerSection('problem')}

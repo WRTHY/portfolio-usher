@@ -32,12 +32,20 @@ function CodeFileTabs({ files, activeIndex, onChange }: CodeFileTabsProps) {
           </span>
           <span className={styles.divider} aria-hidden="true" />
           <Tabs.List className={styles.list} aria-label="Files in this example">
-            {files.map((file, index) => (
-              <Tabs.Trigger key={file.filename} value={String(index)} className={styles.trigger}>
-                <span className={styles.dot} aria-hidden="true" />
-                {file.filename.split('/').pop()}
-              </Tabs.Trigger>
-            ))}
+            {files.map((file, index) => {
+              const baseName = file.filename.split('/').pop()
+              return (
+                <Tabs.Trigger
+                  key={file.filename}
+                  value={String(index)}
+                  className={styles.trigger}
+                  data-testid={`file-tab-${baseName}`}
+                >
+                  <span className={styles.dot} aria-hidden="true" />
+                  {baseName}
+                </Tabs.Trigger>
+              )
+            })}
           </Tabs.List>
         </div>
         <CopyButton text={activeFile.code} />
@@ -54,6 +62,11 @@ function CodeFileTabs({ files, activeIndex, onChange }: CodeFileTabsProps) {
           value={String(index)}
           forceMount
           className={styles.codeArea}
+          // Only the active panel gets the testid — every file is
+          // force-mounted simultaneously (see comment above), so this is
+          // what lets e2e tests find "the visible code" unambiguously
+          // instead of matching every mounted-but-hidden panel too.
+          data-testid={index === activeIndex ? 'active-code-panel' : undefined}
         >
           <CodeBlock code={file.code} language={file.language} />
         </Tabs.Content>

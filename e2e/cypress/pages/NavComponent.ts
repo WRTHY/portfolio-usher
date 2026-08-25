@@ -1,43 +1,38 @@
-const NAV_LABELS = ['Experience', 'Case Studies', 'Automation Examples', 'About'] as const
-export type NavLabel = (typeof NAV_LABELS)[number]
+export type SectionId = 'about' | 'experience' | 'case-studies' | 'code-samples'
 
-// Wraps the header <nav>. The sidebar's dot navigation exposes the same
-// accessible names (aria-label per section) as these links, so every
-// locator here is scoped to the <nav> landmark to stay unambiguous.
+// The app renders two separate nav UIs that are never both visible at once
+// (Header.module.css / InfoPanel.module.css split display:none on opposite
+// sides of the 640px breakpoint): a hamburger menu for mobile, and the
+// sidebar "Sections" list for desktop. A role query naturally picked
+// whichever one the accessibility tree currently exposed, but a testid
+// query has no such filtering — so each gets its own testid rather than
+// sharing one, and callers pick the variant that matches their viewport.
 export class NavComponent {
-  private get nav(): Cypress.Chainable<JQuery> {
-    return cy.findByRole('navigation')
+  link(sectionId: SectionId): Cypress.Chainable<JQuery> {
+    return cy.findByTestId(`nav-link-desktop-${sectionId}`)
   }
 
-  link(label: NavLabel): Cypress.Chainable<JQuery> {
-    return this.nav.findByRole('link', { name: label })
+  goTo(sectionId: SectionId) {
+    this.link(sectionId).click()
   }
 
-  // The mobile menu hides its list with display:none when closed, which
-  // drops it from the accessibility tree — findByRole can't locate it
-  // there, so visibility checks that span the open/closed toggle use this
-  // text-based lookup instead, which finds the element regardless of its
-  // current CSS visibility.
-  linkElement(label: NavLabel): Cypress.Chainable<JQuery<HTMLAnchorElement>> {
-    return this.nav.contains('a', label)
+  mobileLink(sectionId: SectionId): Cypress.Chainable<JQuery> {
+    return cy.findByTestId(`nav-link-mobile-${sectionId}`)
   }
 
-  goTo(label: NavLabel) {
-    this.link(label).click()
+  mobileGoTo(sectionId: SectionId) {
+    this.mobileLink(sectionId).click()
   }
 
-  // The toggle's accessible name flips between "Open menu" and "Close
-  // menu" depending on state, so it's exposed as one dynamic locator
-  // rather than two static ones.
   get menuToggle(): Cypress.Chainable<JQuery> {
-    return cy.findByRole('button', { name: /(open|close) menu/i })
+    return cy.findByTestId('menu-toggle')
   }
 
   openMenu() {
-    cy.findByRole('button', { name: 'Open menu' }).click()
+    this.menuToggle.click()
   }
 
   closeMenu() {
-    cy.findByRole('button', { name: 'Close menu' }).click()
+    this.menuToggle.click()
   }
 }

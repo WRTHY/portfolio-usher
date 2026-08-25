@@ -84,17 +84,17 @@
 .affordance {
   font-family: var(--mono);
   font-size: 12px;
+  /* Plain --text, no opacity dimming — opacity blended against
+     --section-alt-bg dropped this below the 4.5:1 WCAG AA minimum for
+     normal text (axe color-contrast). --text alone still reads as
+     secondary next to the heading/summary above it. */
   color: var(--text);
-  opacity: 0.7;
-  transition:
-    color 0.2s,
-    opacity 0.2s;
+  transition: color 0.2s;
 }
 
 .card:hover .affordance,
 .card:focus-visible .affordance {
   color: var(--accent);
-  opacity: 1;
 }
 
 /* The "Reading Rail" modal layout: a left rail (tags, title, section-jump
@@ -172,8 +172,9 @@
   font-family: var(--sans);
   font-size: 11px;
   line-height: 130%;
+  /* Plain --text, no opacity dimming — same WCAG AA contrast fix as
+     .affordance above. */
   color: var(--text);
-  opacity: 0.75;
 }
 
 /* Mobile: a horizontal, scrollable pill row instead of a vertical list —
