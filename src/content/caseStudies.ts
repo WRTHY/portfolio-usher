@@ -3,6 +3,11 @@ export type Highlight = {
   label: string
 }
 
+export type Phase = {
+  name: string
+  timeframe: string
+}
+
 export type CaseStudy = {
   id: string
   title: string
@@ -17,11 +22,39 @@ export type CaseStudy = {
   image?: string;
   /** Small stat callouts shown in the modal's left rail. Optional, any number. */
   highlights?: readonly Highlight[];
+  /** Compact, ordered timeline strip for a case study built around a multi-phase
+   *  framework rather than a single project narrative. Renders at the top of the
+   *  content pane. Optional — most case studies won't have one. */
+  phases?: readonly Phase[];
 }
 
 export const caseStudies: readonly CaseStudy[] = [
   {
     id: "CS 1",
+    title: "Taking the Quality Function on a Product From Zero to One",
+    summary:
+      "A repeatable framework for standing up a product's entire quality function from nothing - the order of operations I'd follow on any product, regardless of team size or timeline, built from actually doing it at Eventric.",
+    tags: ["Quality Strategy", "Leadership", "Process"],
+    problem:
+      "Most QA advice assumes a team and some coverage already exist. When I joined Eventric as the first dedicated QA hire, there was no process to build on and no playbook for the order to build it in - just a stack of things that all felt urgent at once. I needed an actual sequence, not a wish list.",
+    approach:
+      "I start with assessment, not action: mapping the current release process, identifying the highest-risk surfaces - what breaks most, what would hurt most, what's changing fastest - and taking stock of the tech stack per platform. Nothing gets built until I know what I'm building for.\n\nFrom there the order is deliberate: manual gates before automation, foundations before features, critical path before edge cases. Manual review tiers scaled to risk and basic bug triage go in first, because a safety net doesn't need to be automated to count. Framework foundations - fixtures, navigation helpers, a page-object layer scaffolded for every major section, a CI skeleton - go in early and overlap that window, so nothing gets rebuilt once real tests land on top of it. Automation starts with the highest-value workflows, not the easiest ones, wired into CI on every PR while lower-priority tiers stay manual until their turn. From there it's expansion outward by risk tier, with coverage tracked continuously instead of celebrated once, and CI gates maturing from tests existing to tests actually blocking a bad release.\n\nThe honest caveat: the timeline is the part I'd hold loosest. I went from solo to a two-person team partway through my own build, and team size changes the calendar more than anything else. The sequencing - foundations before features, manual gates from day one, critical path before edge cases - is the real signal, not the week counts.",
+    outcome:
+      "This isn't theoretical - it's the order I actually followed building Eventric's quality function from nothing, and the MT3 desktop automation case study is phases 2 and 3 of this framework in practice: the same fixtures, page-object layer, and critical-path-first sequencing described here. I've now run the early phases solo and the later ones with a second QA engineer, and the sequencing held up under both - team size changed the pace, not the order.",
+    futureIterations:
+      "The phase I've tested least is late-stage maturity - where tests actually block releases and coverage becomes an ongoing operating model rather than a project with an end date. I got Eventric through the early-to-mid phases in full and partway into that maturity stretch, but I haven't run this at a company big enough to see how the later phases hold up under real pressure to ship automation results faster than the sequencing recommends.",
+    phases: [
+      { name: "Assessment", timeframe: "Wks 1–2" },
+      { name: "Manual Gates & Quick Wins", timeframe: "Wks 2–6" },
+      { name: "Framework Foundations", timeframe: "Wks 4–10" },
+      { name: "Critical Path Automation", timeframe: "Mo 2–4" },
+      { name: "Expand by Risk Tier", timeframe: "Mo 4–8" },
+      { name: "CI/CD Gate Maturity", timeframe: "Ongoing" },
+      { name: "Full Coverage & Continuous Maturity", timeframe: "Mo 8–12+" },
+    ],
+  },
+  {
+    id: "CS 2",
     title: `Building E2E Test Automation From Zero for Eventric's Flagship Desktop App`,
     summary:
       "Master Tour Desktop is an Electron desktop app backed by a local SQLite database that had no existing E2E coverage. As QA Lead, I owned building that test coverage from the ground up.",
@@ -41,7 +74,7 @@ export const caseStudies: readonly CaseStudy[] = [
     ],
   },
   {
-    id: "CS 2",
+    id: "CS 3",
     title: "Improve Bug to Automation Test Case Pipeline by Leveraging AI Tooling",
     summary:
       "As we matured our quality function at Eventric and built out large scale test frameworks, it became abundantly clear that a piece of the developer → quality pipeline was missing. As bugs were getting fixed, there was no trackable way to ensure that automated test cases were created to prevent future regression.",
@@ -60,7 +93,7 @@ export const caseStudies: readonly CaseStudy[] = [
     ],
   },
   {
-    id: "CS 3",
+    id: "CS 4",
     title: "Cutting QA's Support Load From ~10 Hours a Week to ~2",
     summary:
       "The Support team at Eventric were non-technical but being asked to handle technical support. Beacuse of this, QA was asked to dive in and provide tier 2/3 support on customer reported issues. This resulted in support tickets were quietly eating close to a third of QA's week in ad hoc Slack pings and one-off investigations. I built a structured office-hours process to contain it, then measured and iterated until it actually worked.",
@@ -74,20 +107,5 @@ export const caseStudies: readonly CaseStudy[] = [
     highlights: [
       { value: "10 hrs → 2 hrs", label: "QA time lost to unplanned Support interruptions, per week" },
     ],
-  },
-  {
-    id: "placeholder-four",
-    title: "Placeholder case study four",
-    summary:
-      "A one-line summary of the problem and outcome, shown on the card.",
-    tags: ["Placeholder", "Tag"],
-    problem:
-      "Placeholder — what was broken, missing, or needed, and why it mattered.",
-    approach:
-      "Placeholder — what was actually built or decided, and the trade-offs weighed along the way.",
-    outcome:
-      "Placeholder — what changed as a result, ideally with a number attached.",
-    futureIterations:
-      "Placeholder — what I'd change with hindsight, and what's next if the work continued.",
   },
 ] as const;
