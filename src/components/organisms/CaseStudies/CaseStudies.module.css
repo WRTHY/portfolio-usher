@@ -13,6 +13,27 @@
   }
 }
 
+.close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: none;
+  color: var(--text);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+
+  &:hover {
+    color: var(--accent);
+  }
+}
+
 /* Same structure as Experience's .list — a single stacked column of
    full-width cards, not a multi-column grid. Same width override too:
    cancel the shared reading-column inset so cards line up with
