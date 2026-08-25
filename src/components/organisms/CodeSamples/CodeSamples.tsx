@@ -43,10 +43,10 @@ function CodeSamples() {
     if (next === 'performance') return
 
     setTestingType(next)
-    // Cypress CT/Playwright CT and Playwright/Cypress are disjoint option
-    // sets per tier — landing on the previous tier's framework would pick
-    // an example that doesn't exist for the new one, so always reset to
-    // the new tier's first (non-disabled) framework.
+    // Component and e2e have disjoint framework sets — landing on the
+    // previous tier's framework would pick an example that doesn't exist
+    // for the new one, so always reset to the new tier's first (non-
+    // disabled) framework.
     const firstFramework = frameworkOptionsByTestingType[next].find((option) => !option.disabled)!
     setFramework(firstFramework.value)
     setActiveFileIndex(0)
@@ -69,10 +69,11 @@ function CodeSamples() {
         <div className={styles.explainer}>
           <span className={styles.kicker}>How to read this</span>
           <p>
-            Pick a testing type, then a framework — the panel below swaps to a real example for
-            each pairing. End-to-End specs mirror ones that exist in this repo today; Component
-            previews a newer tier, testing the copy button on this page directly, ahead of a
-            matching spec file landing in the suite. Performance is still on the roadmap.
+            Pick a testing type, then a framework — the panel below shows real files straight from
+            this repo. End-to-End is ordered spec → page object → config to mirror how the suite
+            actually gets written; Component runs the same assertions against the same components
+            through both Vitest and Cypress, so the framework choice is a real one there too.
+            Performance is still on the roadmap.
           </p>
         </div>
 

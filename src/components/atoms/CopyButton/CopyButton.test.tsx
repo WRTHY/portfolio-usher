@@ -2,10 +2,10 @@ import { act, fireEvent, render, screen } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import CopyButton from './CopyButton'
 
-// Backs the "Component testing" preview example in codeExamples.ts, which
-// claims CopyButton mounts, copies its text on click, and flips its
-// aria-label 'Copy code' -> 'Copied' -> back after ~1500ms. This test proves
-// those claims are true of the real component.
+// Featured verbatim as the Component/Vitest example in codeExamples.ts — the
+// portfolio's "Automation Examples" panel renders this exact file, not a
+// hypothetical one, so keep this file's content and this file's copy in
+// codeExamples.ts in sync if either changes.
 let writeText: ReturnType<typeof vi.fn>
 
 describe('CopyButton', () => {
