@@ -15,6 +15,15 @@
   }
 }
 
+.link {
+  color: var(--accent);
+  text-decoration-line: none;
+}
+
+.link:hover {
+  color: var(--text-h);
+}
+
 .content {
   /* Now a direct section child (MediaText's image column is gone for now)
      — cancel the shared reading-column inset so it stays flush at the same
