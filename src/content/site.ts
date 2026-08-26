@@ -1,3 +1,5 @@
+import { links } from './links'
+
 export const siteContent = {
   name: 'James Usher',
   tagline:
@@ -8,9 +10,9 @@ export const siteContent = {
 } as const
 
 export const socialLinks = [
-  { id: 'linkedin', label: 'LinkedIn', href: 'https://www.linkedin.com/in/james-usher-b6a859a8/' },
-  { id: 'github', label: 'GitHub', href: 'https://github.com/WRTHY' },
-  { id: 'email', label: 'Email', href: 'mailto:jamesusher1633@gmail.com' },
+  { id: 'linkedin', label: 'LinkedIn', href: links.linkedin },
+  { id: 'github', label: 'GitHub', href: links.github },
+  { id: 'email', label: 'Email', href: `mailto:${links.email}` },
 ] as const
 
 export type AboutSegment = string | { text: string; href: string }
