@@ -67,13 +67,12 @@ function CodeSamples() {
           section's own padding edge, matching Experience/CaseStudies. */}
       <div className={styles.body}>
         <div className={styles.explainer}>
-          <span className={styles.kicker}>How to read this</span>
+          <span className={styles.kicker}>All testing below is written directly against this portfolio/repo</span>
           <p>
-            Pick a testing type, then a framework — the panel below shows real files straight from
-            this repo. End-to-End is ordered spec → page object → config to mirror how the suite
-            actually gets written; Component runs the same assertions against the same components
-            through both Vitest and Cypress, so the framework choice is a real one there too.
-            Performance is still on the roadmap.
+            Pick a testing type, then a framework in the selector below to see sample test automation. 
+            End-to-End is ordered spec → page object → config to mirror my mental model from broad to narrow. Component runs the same assertions against the same components
+            through both Vitest and Cypress.
+            Performance testing is still on my roadmap.
           </p>
         </div>
 
