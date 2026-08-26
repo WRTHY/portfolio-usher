@@ -1,19 +1,19 @@
-# James Usher — Portfolio
+# James Usher - Portfolio
 
 My personal portfolio site: a single-page React app introducing me, walking through my
 work history and a few case studies, and showing off some hands-on test automation
 examples. Built as much to *demonstrate* how I approach frontend quality as it is to be
-a portfolio — it's covered by unit tests, component tests, end-to-end tests, and
+a portfolio - it's covered by unit tests, component tests, end-to-end tests, and
 automated accessibility checks.
 
 Live sections (see [`src/content/navigation.ts`](src/content/navigation.ts)):
 
-- **About** — background and links
-- **Experience** — a card per role, with stack and impact
-- **Case Studies** — a card grid of expandable write-ups (problem → approach → outcome)
-- **Automation Examples** — a live browser of this repo's own test suite: pick a testing
+- **About** - background and links
+- **Experience** - a card per role, with stack and impact
+- **Case Studies** - a card grid of expandable write-ups detailing engineering decisions I have made and implemented (problem → approach → outcome)
+- **Automation Examples** - a live browser of this repo's own test suite: pick a testing
   type (End-to-End / Component) and a framework (Playwright or Cypress for E2E, Vitest +
-  RTL or Cypress Component Testing for Component) and read the real files
+  RTL or Cypress Component Testing for Component) and read the real files. Performance testing coming soon
 
 ## Tech stack
 
@@ -37,7 +37,7 @@ src/
                  # PanelFooter, ParticleBackground, SectionDots, SegmentedControl,
                  # SocialLinks, TextCard, ThemeToggle
     organisms/   # About, Experience, CaseStudies, CodeSamples, Header, Sidebar, InfoPanel
-    templates/   # PortfolioTemplate — assembles the page
+    templates/   # PortfolioTemplate - assembles the page
   content/       # Site copy and data (about copy, experience, case studies, code
                  # examples, nav, themes)
   hooks/         # useActiveSection, useOverscrollBump
@@ -77,16 +77,16 @@ and interaction behavior in isolation.
 (`Component.cy.tsx`, e.g. [`CopyButton.cy.tsx`](src/components/atoms/CopyButton/CopyButton.cy.tsx),
 [`SegmentedControl.cy.tsx`](src/components/molecules/SegmentedControl/SegmentedControl.cy.tsx)),
 mounting the same components in a real browser and asserting the same behavior as their
-Vitest counterparts — deliberately redundant coverage, so the Automation Examples panel
+Vitest counterparts - deliberately redundant coverage, so the Automation Examples panel
 can offer a genuine framework choice (Vitest vs. Cypress) at the component tier, the same
 way it does at the E2E tier. See [`cypress.config.ts`](cypress.config.ts).
 
 **End-to-end tests** live under [`e2e/`](e2e), one subfolder per framework, covering the
-same scenarios — navigation, the case study modal, the automation-examples panel, theme
-switching, and accessibility — against a Page Object Model in each:
+same scenarios - navigation, the case study modal, the automation-examples panel, theme
+switching, and accessibility - against a Page Object Model in each:
 
-- [`e2e/playwright/`](e2e/playwright) ([pages](e2e/playwright/pages)) — the original suite
-- [`e2e/cypress/`](e2e/cypress) ([pages](e2e/cypress/pages)) — a 1:1 Cypress port
+- [`e2e/playwright/`](e2e/playwright) ([pages](e2e/playwright/pages)) - the original suite
+- [`e2e/cypress/`](e2e/cypress) ([pages](e2e/cypress/pages)) - a 1:1 Cypress port
 
 `e2e/` is deliberately scoped to hold further sibling implementations later (Python,
 Java), so each framework's specs live in their own subfolder rather than at the top
@@ -97,7 +97,7 @@ level.
 [`accessibility.cy.ts`](e2e/cypress/accessibility.cy.ts)), using
 [`@axe-core/playwright`](https://github.com/dequelabs/axe-core-npm) /
 [`cypress-axe`](https://github.com/component-driven/cypress-axe) to scan for WCAG 2.1 AA
-violations — on the default page, with the case study modal open, in dark mode, and on a
+violations - on the default page, with the case study modal open, in dark mode, and on a
 mobile viewport with the nav menu open.
 
 Playwright is currently configured for Chromium only: Firefox's binary doesn't spawn in
@@ -106,7 +106,7 @@ bug in `Modal.tsx` that's tracked separately. See [`playwright.config.ts`](playw
 Cypress runs against Electron in the same environment; verifying it required
 `--disable-gpu` on `ELECTRON_EXTRA_LAUNCH_ARGS` to avoid a GPU-process crash, and even
 then a couple of specs showed sandbox-specific rendering flakiness across sequential
-tests in one run (each passes in isolation) — see [`cypress.config.ts`](cypress.config.ts).
+tests in one run (each passes in isolation) - see [`cypress.config.ts`](cypress.config.ts).
 
 ## Notes
 
