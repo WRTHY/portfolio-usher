@@ -175,7 +175,7 @@ function CaseStudies() {
         <Modal titleId={titleId} onClose={() => setSelectedId(null)} testId="case-study-modal">
           <button
             type="button"
-            className="modal-close"
+            className={styles.close}
             onClick={() => setSelectedId(null)}
             aria-label="Close"
             data-testid="case-study-modal-close"

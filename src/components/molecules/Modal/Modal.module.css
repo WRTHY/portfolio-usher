@@ -1,4 +1,11 @@
-:global(.modal-backdrop) {
+/* Plain local CSS Module classes, not :global() — a module file made up
+   entirely of :global() selectors has no locally-scoped class names, and
+   Vite's production build drops such CSS chunks from the bundle entirely
+   (verified: dev serves it fine, but `npm run build` output has zero
+   "modal" rules). That silently broke the modal, which fell back to
+   static positioning and got shoved to the bottom of the page. Routing
+   through the styles object keeps the CSS module a real, used export. */
+.backdrop {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.6);
@@ -9,7 +16,7 @@
   padding: 20px;
 }
 
-:global(.modal) {
+.dialog {
   position: relative;
   background: var(--bg);
   border-radius: 12px;
@@ -25,7 +32,7 @@
 }
 
 @media (min-width: 640px) {
-  :global(.modal) {
+  .dialog {
     display: flex;
     flex-direction: row;
     align-items: stretch;
@@ -41,28 +48,7 @@
 }
 
 @media (min-width: 1200px) {
-  :global(.modal) {
+  .dialog {
     max-width: min(1160px, 80vw);
-  }
-}
-
-:global(.modal-close) {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  width: 28px;
-  height: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  background: none;
-  color: var(--text);
-  font-size: 20px;
-  line-height: 1;
-  cursor: pointer;
-
-  &:hover {
-    color: var(--accent);
   }
 }

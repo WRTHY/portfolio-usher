@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import type { ReactNode } from 'react'
 import { createPortal } from 'react-dom'
-import './Modal.module.css'
+import styles from './Modal.module.css'
 
 type ModalProps = {
   titleId: string
@@ -55,10 +55,10 @@ function Modal({ titleId, onClose, children, testId }: ModalProps) {
   }, [onClose])
 
   return createPortal(
-    <div className="modal-backdrop" onClick={onClose}>
+    <div className={styles.backdrop} onClick={onClose}>
       <div
         ref={dialogRef}
-        className="modal"
+        className={styles.dialog}
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
