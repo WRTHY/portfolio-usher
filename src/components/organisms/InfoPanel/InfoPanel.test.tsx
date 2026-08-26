@@ -56,13 +56,14 @@ describe('InfoPanel', () => {
     expect(screen.getByRole('complementary', { name: 'Page summary' })).toBeInTheDocument()
   })
 
-  it('shows the name, tagline, page nav, and resume link, with the active section marked', () => {
+  it('shows the name, tagline, quick summary. page nav, and resume link, with the active section marked', () => {
     render(<InfoPanel />)
     activateSection('case-studies')
 
     expect(screen.getByRole('complementary', { name: 'Page summary' })).toBeInTheDocument()
     expect(screen.getByText(siteContent.name)).toBeInTheDocument()
     expect(screen.getByText(siteContent.tagline)).toBeInTheDocument()
+    expect(screen.getByText(siteContent.quickSummary)).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'My Resume' })).toHaveAttribute(
       'href',
       siteContent.resumeUrl,
