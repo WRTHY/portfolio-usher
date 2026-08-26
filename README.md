@@ -6,6 +6,8 @@ examples. Built as much to *demonstrate* how I approach frontend quality as it i
 a portfolio - it's covered by unit tests, component tests, end-to-end tests, and
 automated accessibility checks.
 
+A production version of the app is live [here](https://jamesusher.vercel.app/)
+
 Live sections (see [`src/content/navigation.ts`](src/content/navigation.ts)):
 
 - **About** - background and links
