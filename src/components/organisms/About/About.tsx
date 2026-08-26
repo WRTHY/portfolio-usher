@@ -1,4 +1,3 @@
-import Heading from '../../atoms/Heading/Heading'
 import TextCard from '../../molecules/TextCard/TextCard'
 import ParticleBackground from '../../molecules/ParticleBackground/ParticleBackground'
 import useOverscrollBump from '../../../hooks/useOverscrollBump'
@@ -16,9 +15,24 @@ function About() {
       <ParticleBackground variant="about" />
       <div className={styles.content}>
         <TextCard>
-          <Heading>{about.intro}</Heading>
           {about.paragraphs.map((paragraph, index) => (
-            <p key={index}>{paragraph}</p>
+            <p key={index}>
+              {paragraph.map((segment, segmentIndex) =>
+                typeof segment === 'string' ? (
+                  segment
+                ) : (
+                  <a
+                    key={segmentIndex}
+                    className={styles.link}
+                    href={segment.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {segment.text}
+                  </a>
+                ),
+              )}
+            </p>
           ))}
         </TextCard>
       </div>
