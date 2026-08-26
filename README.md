@@ -1,16 +1,19 @@
 # James Usher — Portfolio
 
-My personal portfolio site: a single-page React app introducing me, walking through a
-few case studies, and showing off some hands-on test automation examples. Built as
-much to *demonstrate* how I approach frontend quality as it is to be a portfolio —
-it's covered by unit tests, end-to-end tests, and automated accessibility checks.
+My personal portfolio site: a single-page React app introducing me, walking through my
+work history and a few case studies, and showing off some hands-on test automation
+examples. Built as much to *demonstrate* how I approach frontend quality as it is to be
+a portfolio — it's covered by unit tests, component tests, end-to-end tests, and
+automated accessibility checks.
 
 Live sections (see [`src/content/navigation.ts`](src/content/navigation.ts)):
 
-- **Home** — intro and tagline
-- **Case Studies** — a bento grid of expandable write-ups (problem → approach → outcome)
-- **Automation Examples** — syntax-highlighted Playwright/Cypress snippets
 - **About** — background and links
+- **Experience** — a card per role, with stack and impact
+- **Case Studies** — a card grid of expandable write-ups (problem → approach → outcome)
+- **Automation Examples** — a live browser of this repo's own test suite: pick a testing
+  type (End-to-End / Component) and a framework (Playwright or Cypress for E2E, Vitest +
+  RTL or Cypress Component Testing for Component) and read the real files
 
 ## Tech stack
 
@@ -28,11 +31,15 @@ Components follow atomic design, colocated with their styles and tests:
 ```
 src/
   components/
-    atoms/       # Button, Badge, NavLink, ...
-    molecules/   # Nav, Modal, BentoTile, ThemeToggle, ...
-    organisms/   # Header, CaseStudies, CodeSamples, About, Sidebar, InfoPanel
+    atoms/       # Badge, Button, CopyButton, FramedImage, Heading, MenuToggle,
+                 # NavLink, RunButton, SocialIcon, SoonBadge, icons/ ...
+    molecules/   # CodeBlock, CodeFileTabs, FrameworkSwitcher, MediaText, Modal, Nav,
+                 # PanelFooter, ParticleBackground, SectionDots, SegmentedControl,
+                 # SocialLinks, TextCard, ThemeToggle
+    organisms/   # About, Experience, CaseStudies, CodeSamples, Header, Sidebar, InfoPanel
     templates/   # PortfolioTemplate — assembles the page
-  content/       # Site copy and data (case studies, code samples, nav, themes)
+  content/       # Site copy and data (about copy, experience, case studies, code
+                 # examples, nav, themes)
   hooks/         # useActiveSection, useOverscrollBump
 ```
 
@@ -50,13 +57,15 @@ Other scripts:
 | `npm run build` | Type-check and build for production |
 | `npm run preview` | Preview the production build locally |
 | `npm run lint` | Run ESLint |
-| `npm test` | Run the full suite: unit tests, then Playwright, then Cypress |
+| `npm test` | Run the full suite: unit tests, Cypress component tests, then Playwright, then Cypress e2e |
 | `npm run test:unit` | Run unit tests once |
 | `npm run test:unit:watch` | Run unit tests in watch mode |
+| `npm run test:component:cypress` | Run the Cypress component-test suite headlessly |
+| `npm run test:component:cypress:ui` | Open the Cypress component-test suite in interactive UI mode |
 | `npm run test:e2e:playwright` | Run the Playwright end-to-end suite headlessly |
 | `npm run test:e2e:playwright:ui` | Open the Playwright suite in interactive UI mode |
 | `npm run test:e2e:cypress` | Run the Cypress end-to-end suite headlessly (starts the dev server itself) |
-| `npm run test:e2e:cypress:ui` | Open the Cypress suite in interactive UI mode (starts the dev server itself) |
+| `npm run test:e2e:cypress:ui` | Open the Cypress end-to-end suite in interactive UI mode (starts the dev server itself) |
 
 ## Testing
 
@@ -64,8 +73,16 @@ Other scripts:
 next to the component they cover (`Component.test.tsx`), exercising rendering, props,
 and interaction behavior in isolation.
 
+**Component tests** also exist as a parallel Cypress Component Testing suite
+(`Component.cy.tsx`, e.g. [`CopyButton.cy.tsx`](src/components/atoms/CopyButton/CopyButton.cy.tsx),
+[`SegmentedControl.cy.tsx`](src/components/molecules/SegmentedControl/SegmentedControl.cy.tsx)),
+mounting the same components in a real browser and asserting the same behavior as their
+Vitest counterparts — deliberately redundant coverage, so the Automation Examples panel
+can offer a genuine framework choice (Vitest vs. Cypress) at the component tier, the same
+way it does at the E2E tier. See [`cypress.config.ts`](cypress.config.ts).
+
 **End-to-end tests** live under [`e2e/`](e2e), one subfolder per framework, covering the
-same scenarios — navigation, the case study modal, the code samples panel, theme
+same scenarios — navigation, the case study modal, the automation-examples panel, theme
 switching, and accessibility — against a Page Object Model in each:
 
 - [`e2e/playwright/`](e2e/playwright) ([pages](e2e/playwright/pages)) — the original suite
@@ -75,7 +92,7 @@ switching, and accessibility — against a Page Object Model in each:
 Java), so each framework's specs live in their own subfolder rather than at the top
 level.
 
-**Accessibility** is checked as part of both suites
+**Accessibility** is checked as part of both E2E suites
 ([`accessibility.spec.ts`](e2e/playwright/accessibility.spec.ts),
 [`accessibility.cy.ts`](e2e/cypress/accessibility.cy.ts)), using
 [`@axe-core/playwright`](https://github.com/dequelabs/axe-core-npm) /
