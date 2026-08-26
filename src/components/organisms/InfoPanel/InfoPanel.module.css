@@ -95,11 +95,19 @@
   font-family: var(--heading);
   color: var(--text-h);
   font-weight: 500;
-  font-size: 44px;
+  font-size: 56px;
   margin: 0;
 }
 
 .tagline {
+  font-family: var(--heading);
+  color: var(--accent);
+  font-weight: 250;
+  font-size: 28px;
+  margin: 16px 0 0;
+}
+
+.quickSummary {
   font-size: 16px;
   line-height: 145%;
   margin: 8px 0 0;

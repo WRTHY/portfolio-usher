@@ -25,6 +25,7 @@ function InfoPanel() {
     >
       <p className={styles.name}>{siteContent.name}</p>
       <p className={styles.tagline}>{siteContent.tagline}</p>
+      <p className={styles.quickSummary}>{siteContent.quickSummary}</p>
       <nav aria-label="Sections" className={styles.navWrap}>
         <ul
           className={styles.nav}
