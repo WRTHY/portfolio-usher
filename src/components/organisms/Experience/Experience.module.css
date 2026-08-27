@@ -45,6 +45,15 @@
   transition: border-color 0.2s;
 }
 
+/* Same phone-width narrowing as the section gutter (see index.css) — the
+   card's own horizontal padding was compounding the fixed gutter's squeeze
+   on top of it. */
+@media (max-width: 479px) {
+  .card {
+    padding: 16px 18px;
+  }
+}
+
 .card:hover {
   border-color: var(--accent-border);
 }

@@ -2,32 +2,78 @@
   position: relative;
 }
 
-.list {
-  list-style: none;
+/* The full-screen mobile overlay. Position/background/z-index live directly
+   on this base rule (not nested under &.open) so the >=640px override below
+   can re-declare them at equal specificity regardless of open state — same
+   trick this file already relied on before the panel/list split. */
+.panel {
   display: none;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 32px;
-  margin: 0;
-  padding: 0;
+  gap: 40px;
   position: fixed;
   inset: 0;
+  padding: 32px 24px;
   background: var(--bg);
   z-index: 1;
+  overflow-y: auto;
 
   &.open {
     display: flex;
   }
 }
 
+.list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+  margin: 0;
+  padding: 0;
+
+  a {
+    font-size: 18px;
+  }
+}
+
+/* ThemeToggle sits alone at the top of the panel — see the comment in
+   Nav.tsx for why it's duplicated here rather than shared with Sidebar. */
+.themeToggleWrap {
+  align-self: center;
+}
+
+/* SocialLinks/Resume — see the comment in Nav.tsx for why these are
+   duplicated here rather than shared with Sidebar/InfoPanel. */
+.footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  max-width: 280px;
+}
+
+/* Beats SocialLinks.module.css's own .list (flex-direction: column) via the
+   extra ancestor class rather than relying on stylesheet import order. */
+.footer .socialLinks {
+  flex-direction: row;
+  gap: 16px;
+}
+
 @media (min-width: 640px) {
+  .panel {
+    display: contents;
+  }
+
   .list {
-    display: flex;
     flex-direction: row;
     gap: 20px;
-    position: static;
-    inset: auto;
-    background: none;
+  }
+
+  .themeToggleWrap,
+  .footer {
+    display: none;
   }
 }

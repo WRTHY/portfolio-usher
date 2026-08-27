@@ -11,9 +11,15 @@
   }
 }
 
+/* Underlined rather than color-only: these sit inline inside body-copy
+   paragraphs (see about.paragraphs in content/site.ts), and axe's
+   link-in-text-block rule (WCAG 1.4.1) flags a same-size, non-underlined
+   link in running text as indistinguishable for anyone who can't perceive
+   the color difference. */
 .link {
   color: var(--accent);
-  text-decoration-line: none;
+  text-decoration-line: underline;
+  text-underline-offset: 2px;
 }
 
 .link:hover {
