@@ -23,7 +23,11 @@ describe('accessibility', () => {
   })
 
   it('dark mode has no additional contrast violations', () => {
-    portfolioPage.visit()
+    // Forces a known starting mode before the app's own init code runs, so
+    // the single toggle() below reliably lands on dark regardless of the
+    // host machine's OS-level color-scheme preference (getInitialMode()
+    // falls back to that preference whenever localStorage is empty).
+    cy.visit('/', { onBeforeLoad: (win) => win.localStorage.setItem('mode', 'light') })
     portfolioPage.themeToggle.toggle()
     // InfoPanel's background-color transition runs 0.6s (see
     // InfoPanel.module.css) — scanning before it settles catches axe

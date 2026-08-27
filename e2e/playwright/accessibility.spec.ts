@@ -19,6 +19,11 @@ test.describe('accessibility', () => {
   })
 
   test('dark mode has no additional contrast violations', async ({ portfolioPage }) => {
+    // Forces a known starting mode before the app's own init code runs, so
+    // the single toggle() below reliably lands on dark regardless of the
+    // host machine's OS-level color-scheme preference (getInitialMode()
+    // falls back to that preference whenever localStorage is empty).
+    await portfolioPage.page.addInitScript(() => window.localStorage.setItem('mode', 'light'))
     await portfolioPage.goto()
     await portfolioPage.themeToggle.toggle()
     // InfoPanel's background-color transition runs 0.6s (see
