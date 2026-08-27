@@ -19,6 +19,7 @@
     "test:e2e:cypress:ui": "start-server-and-test dev http://localhost:5173 \"cypress open\""
   },
   "dependencies": {
+    "@iconify/react": "^6.0.2",
     "@radix-ui/react-radio-group": "^1.4.7",
     "@radix-ui/react-tabs": "^1.1.21",
     "@tsparticles/react": "^4.3.2",
