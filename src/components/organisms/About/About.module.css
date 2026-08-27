@@ -1,17 +1,13 @@
 @media (min-width: 640px) {
   :global(#about) {
-    /* Extra clearance so centering happens within the space actually free
-       of the fixed sidebar and the fixed InfoPanel beside it, not the raw
-       viewport — otherwise a centered block can still butt up against them
-       at narrower desktop widths where there isn't room to be both centered
-       and clear. */
+    /* Clears the fixed sidebar and the fixed InfoPanel beside it, same as
+       every other non-hero section — see Experience.module.css. Previously
+       About stayed vertically centered instead (a deliberate hero-style
+       exception), but the Skills & Tools card now makes this section tall
+       enough that top-aligning it with the InfoPanel — the layout every
+       other section already uses (see index.css) — reads better than
+       centering a block this size. */
     padding-left: var(--content-clearance-desktop);
-    /* About is the hero section — keep it vertically centered rather than
-       adopting the top-aligned-with-InfoPanel layout every other section
-       uses (see index.css), and restore the default top padding that rule
-       overrides so the centering stays symmetric. */
-    justify-content: center;
-    padding-top: 32px;
   }
 }
 
@@ -35,6 +31,11 @@
      to that default instead of actually going uncapped. */
   max-width: none;
   width: 100%;
+  /* Two stacked cards now (intro + Skills & Tools) — same gap Experience
+     uses between its own stacked cards (see Experience.module.css). */
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
   /* Without this, the card sits unpositioned and paints *before* the
      absolutely-positioned particle layer in CSS's stacking order — behind
      it — no matter that it comes later in the DOM. Matches Hero's .content. */

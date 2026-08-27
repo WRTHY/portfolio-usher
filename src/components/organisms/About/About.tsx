@@ -1,4 +1,5 @@
 import TextCard from '../../molecules/TextCard/TextCard'
+import SkillsAndTools from '../../molecules/SkillsAndTools/SkillsAndTools'
 import ParticleBackground from '../../molecules/ParticleBackground/ParticleBackground'
 import useOverscrollBump from '../../../hooks/useOverscrollBump'
 import { sections } from '../../../content/navigation'
@@ -34,6 +35,9 @@ function About() {
               )}
             </p>
           ))}
+        </TextCard>
+        <TextCard>
+          <SkillsAndTools />
         </TextCard>
       </div>
     </section>
