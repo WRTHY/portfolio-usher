@@ -88,6 +88,25 @@
   }
 }
 
+/* Below 640px the sidebar/InfoPanel are hidden entirely (see Sidebar and
+   InfoPanel module CSS) and every section runs edge-to-edge, so the fixed
+   56px gutter meant for clearing those fixed elements is just wasted width
+   on a phone — it was leaving section content at ~70% of the viewport and
+   card text well under half. Two narrowing steps rather than one: 480px
+   roughly separates "phone" from "small tablet/large phone" widths where
+   32px still reads as a deliberate margin instead of cramped. */
+@media (max-width: 639px) {
+  :root {
+    --page-gutter: 32px;
+  }
+}
+
+@media (max-width: 479px) {
+  :root {
+    --page-gutter: 20px;
+  }
+}
+
 /* The original grayscale palette, kept around as a selectable alternate
    (data-theme="mono") rather than deleted, since more themes are coming. */
 :root[data-theme='mono'] {

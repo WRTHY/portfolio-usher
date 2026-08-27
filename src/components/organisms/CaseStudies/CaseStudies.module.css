@@ -78,6 +78,15 @@
   transition: border-color 0.2s;
 }
 
+/* Same phone-width narrowing as the section gutter (see index.css) — the
+   card's own horizontal padding was compounding the fixed gutter's squeeze
+   on top of it. */
+@media (max-width: 479px) {
+  .card {
+    padding: 16px 18px;
+  }
+}
+
 .card h2 {
   margin: 0;
 }
@@ -130,6 +139,12 @@
   background: var(--section-alt-bg);
   border-bottom: 1px solid var(--border);
   padding: 32px 24px 20px;
+}
+
+@media (max-width: 479px) {
+  .rail {
+    padding: 24px 18px 16px;
+  }
 }
 
 .rail h2 {
@@ -254,6 +269,12 @@
   flex-direction: column;
   gap: 24px;
   padding: 30px 24px 28px;
+}
+
+@media (max-width: 479px) {
+  .content {
+    padding: 22px 18px 24px;
+  }
 }
 
 /* A compact, ordered timeline for a case study built around a multi-phase

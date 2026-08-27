@@ -1,3 +1,9 @@
+/* A floating card rather than bare bars — without its own surface this sat
+   directly on top of whatever card/text happened to be scrolled underneath
+   it, with nothing to visually separate the two. Same border/radius/shadow
+   recipe as the site's other raised surfaces (12px radius, see e.g.
+   TextCard.module.css / --shadow in index.css), sized to the 44px minimum
+   recommended touch target rather than the previous 32px. */
 .toggle {
   position: relative;
   z-index: 2;
@@ -5,12 +11,15 @@
   flex-direction: column;
   justify-content: center;
   gap: 5px;
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  border: none;
-  background: none;
+  width: 44px;
+  height: 44px;
+  padding: 0 13px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg);
+  box-shadow: var(--shadow);
   cursor: pointer;
+  transition: border-color 0.2s;
 
   span {
     display: block;
@@ -22,6 +31,10 @@
       opacity 0.2s;
   }
 
+  &:hover {
+    border-color: var(--accent-border);
+  }
+
   &[aria-expanded='true'] span:nth-child(1) {
     transform: translateY(7px) rotate(45deg);
   }
@@ -30,6 +43,12 @@
   }
   &[aria-expanded='true'] span:nth-child(3) {
     transform: translateY(-7px) rotate(-45deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toggle {
+    transition: none;
   }
 }
 

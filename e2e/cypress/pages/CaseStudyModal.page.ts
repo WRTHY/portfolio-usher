@@ -10,6 +10,10 @@ export class CaseStudyModal {
     return this.dialog.findByRole('heading', { name: title })
   }
 
+  get title(): Cypress.Chainable<JQuery> {
+    return this.dialog.findByTestId('case-study-modal-title')
+  }
+
   get closeButton(): Cypress.Chainable<JQuery> {
     return this.dialog.findByRole('button', { name: 'Close' })
   }

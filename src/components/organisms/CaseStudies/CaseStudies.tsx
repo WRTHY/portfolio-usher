@@ -230,8 +230,19 @@ function CaseStudies() {
           >
             {selected.phases && selected.phases.length > 0 && (
               <div className={styles.phaseStripSection} data-testid="case-study-phase-strip">
-                <span className={styles.phaseStripLabel}>The framework, phase by phase</span>
-                <div className={styles.phaseStrip}>
+                <span className={styles.phaseStripLabel} id={`${titleId}-phase-strip-label`}>
+                  The framework, phase by phase
+                </span>
+                {/* tabIndex + aria makes this reachable/nameable via keyboard
+                    (axe's scrollable-region-focusable) — unlike .railNav
+                    above, these phase cards are plain divs with no focusable
+                    descendant of their own to satisfy that rule instead. */}
+                <div
+                  className={styles.phaseStrip}
+                  tabIndex={0}
+                  role="group"
+                  aria-labelledby={`${titleId}-phase-strip-label`}
+                >
                   {selected.phases.map((phase, index) => (
                     // eslint-disable-next-line react/no-array-index-key
                     <div className={styles.phase} key={index}>

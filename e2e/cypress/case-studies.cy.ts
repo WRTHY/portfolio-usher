@@ -22,25 +22,29 @@ describe('case study modal', () => {
 
   it('Escape closes the modal and returns focus to the trigger', () => {
     const { caseStudies } = portfolioPage
-    const trigger = caseStudies.tile(CASE_STUDY_ID)
 
     caseStudies.open(CASE_STUDY_ID)
     caseStudies.modal.dialog.should('be.visible')
 
     caseStudies.modal.closeWithEscape()
     caseStudies.modal.dialog.should('not.exist')
-    trigger.should('have.focus')
+    // Re-queried fresh here rather than reusing a `trigger` captured before
+    // the modal opened — @testing-library/cypress's findBy* queries don't
+    // re-resolve against the live DOM on a later, separately-chained
+    // .should() the way a plain cy.get() does, so a captured-and-reused
+    // reference stays pinned to its very first (pre-open) lookup.
+    caseStudies.tile(CASE_STUDY_ID).should('have.focus')
   })
 
   it('the close button closes the modal and returns focus to the trigger', () => {
     const { caseStudies } = portfolioPage
-    const trigger = caseStudies.tile(CASE_STUDY_ID)
 
     caseStudies.open(CASE_STUDY_ID)
     caseStudies.modal.dialog.should('be.visible')
 
     caseStudies.modal.close()
     caseStudies.modal.dialog.should('not.exist')
-    trigger.should('have.focus')
+    // See the comment in the Escape test above.
+    caseStudies.tile(CASE_STUDY_ID).should('have.focus')
   })
 })
