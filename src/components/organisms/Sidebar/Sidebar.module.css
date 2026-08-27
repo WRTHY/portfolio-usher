@@ -25,6 +25,21 @@
   gap: 20px;
 }
 
+/* Same floating-card treatment as MenuToggle on mobile (see
+   MenuToggle.module.css) — bare dots sat directly on top of whatever card
+   was scrolled underneath, with nothing to separate the two. Desktop keeps
+   the plain, unboxed dots; they already sit in the page's own gutter there
+   instead of floating over content. */
+@media (max-width: 639px) {
+  .progressDots {
+    padding: 14px 10px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--bg);
+    box-shadow: var(--shadow);
+  }
+}
+
 /* ThemeToggle/SocialLinks: desktop-only here — their mobile counterparts
    live in the hamburger menu instead (see Nav.tsx/Sidebar.tsx). */
 .desktopOnly {
