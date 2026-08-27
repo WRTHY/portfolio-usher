@@ -16,6 +16,10 @@ export class CaseStudyModal {
     return this.dialog.getByRole('heading', { name: title })
   }
 
+  get title(): Locator {
+    return this.dialog.getByTestId('case-study-modal-title')
+  }
+
   get closeButton(): Locator {
     return this.dialog.getByRole('button', { name: 'Close' })
   }
