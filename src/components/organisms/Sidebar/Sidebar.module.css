@@ -1,24 +1,20 @@
+/* Renders at every width now — SectionDots (inside .progressDots) is the
+   page's always-on scroll indicator, pinned to the left margin on mobile
+   instead of disappearing along with ThemeToggle/SocialLinks below. */
 .sidebar {
-  display: none;
-}
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  left: 10px;
+  top: 0;
+  bottom: 0;
+  z-index: 5;
+  pointer-events: none;
 
-@media (min-width: 640px) {
-  .sidebar {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    position: fixed;
-    left: 24px;
-    top: 0;
-    bottom: 0;
-    padding: 80px 0 32px;
-    z-index: 5;
-    pointer-events: none;
-
-    > * {
-      pointer-events: auto;
-    }
+  > * {
+    pointer-events: auto;
   }
 }
 
@@ -27,4 +23,22 @@
   flex-direction: column;
   align-items: center;
   gap: 20px;
+}
+
+/* ThemeToggle/SocialLinks: desktop-only here — their mobile counterparts
+   live in the hamburger menu instead (see Nav.tsx/Sidebar.tsx). */
+.desktopOnly {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .sidebar {
+    left: 24px;
+    justify-content: space-between;
+    padding: 80px 0 32px;
+  }
+
+  .desktopOnly {
+    display: block;
+  }
 }
