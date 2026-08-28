@@ -53,6 +53,10 @@
   background: rgba(152, 195, 121, 0.32);
 }
 
+.devops {
+  background: rgba(229, 192, 123, 0.32);
+}
+
 .iconWrap {
   display: flex;
   color: var(--text-h);
