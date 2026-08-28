@@ -31,7 +31,7 @@ export type Tool = {
 export type ToolCategory = {
   id: string
   ariaLabel: string
-  colorway: 'languages' | 'testing' | 'tools'
+  colorway: 'languages' | 'testing' | 'tools' | 'devops'
   tools: Tool[]
 }
 
@@ -63,6 +63,11 @@ export const toolCategories: ToolCategory[] = [
       // same speed-dial glyph used for "Performance" in CodeSamples reads as
       // the concept directly rather than a new bespoke glyph.
       { name: 'Reassure', icon: <PerformanceIcon aria-hidden="true" /> },
+      // Simple Icons added a Qase mark after this component's earlier design
+      // pass assumed there wasn't one — use the real logo instead of a
+      // lettered fallback badge.
+      { name: 'Qase', icon: <SiQase aria-hidden="true" /> },
+      { name: 'Postman', icon: <SiPostman aria-hidden="true" /> },
     ],
   },
   {
@@ -89,15 +94,17 @@ export const toolCategories: ToolCategory[] = [
     tools: [
       { name: 'Jira', icon: <SiJira aria-hidden="true" /> },
       { name: 'Confluence', icon: <SiConfluence aria-hidden="true" /> },
-      { name: 'Bitbucket', icon: <SiBitbucket aria-hidden="true" /> },
-      // Simple Icons added a Qase mark after this component's earlier design
-      // pass assumed there wasn't one — use the real logo instead of a
-      // lettered fallback badge.
-      { name: 'Qase', icon: <SiQase aria-hidden="true" /> },
-      { name: 'Postman', icon: <SiPostman aria-hidden="true" /> },
       { name: 'Figma', icon: <SiFigma aria-hidden="true" /> },
       { name: 'Slack', icon: <SlackIcon aria-hidden="true" /> },
+    ],
+  },
+  {
+    id: 'devops',
+    ariaLabel: 'DevOps',
+    colorway: 'devops',
+    tools: [
       { name: 'GitHub', icon: <SiGithub aria-hidden="true" /> },
+      { name: 'Bitbucket', icon: <SiBitbucket aria-hidden="true" /> },
       // This site's own host — see the "live at jamesusher.vercel.app" link
       // in README.md.
       { name: 'Vercel', icon: <SiVercel aria-hidden="true" /> },
