@@ -11,19 +11,20 @@
   }
 }
 
-/* Underlined rather than color-only: these sit inline inside body-copy
-   paragraphs (see about.paragraphs in content/site.ts), and axe's
-   link-in-text-block rule (WCAG 1.4.1) flags a same-size, non-underlined
-   link in running text as indistinguishable for anyone who can't perceive
-   the color difference. */
+/* Not underlined: --text-h reads as a bright/white highlight against the
+   muted --text body copy around it (see about.paragraphs in
+   content/site.ts). Bold is the non-color indicator that keeps this
+   compliant with axe's link-in-text-block rule (WCAG 1.4.1) — same size and
+   position as the surrounding text would otherwise make the link
+   indistinguishable without perceiving the color difference. */
 .link {
-  color: var(--accent);
-  text-decoration-line: underline;
-  text-underline-offset: 2px;
+  color: var(--text-h);
+  text-decoration-line: none;
+  font-weight: 700;
 }
 
 .link:hover {
-  color: var(--text-h);
+  color: var(--accent);
 }
 
 .content {
