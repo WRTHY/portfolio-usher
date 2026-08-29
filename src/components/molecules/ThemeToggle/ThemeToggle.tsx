@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { FaMoon, FaSun } from 'react-icons/fa6'
-import styles from './ThemeToggle.module.css'
+import IconButton from '../../atoms/IconButton/IconButton'
 
 type Mode = 'light' | 'dark'
 
@@ -25,15 +25,13 @@ function ThemeToggle() {
   }
 
   return (
-    <button
-      type="button"
-      className={styles.toggle}
+    <IconButton
       onClick={toggleMode}
-      aria-label={mode === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-      data-testid="theme-toggle"
+      ariaLabel={mode === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+      testId="theme-toggle"
     >
       {mode === 'dark' ? <FaSun aria-hidden="true" /> : <FaMoon aria-hidden="true" />}
-    </button>
+    </IconButton>
   )
 }
 
