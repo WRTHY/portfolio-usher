@@ -201,6 +201,30 @@ section {
   }
 }
 
+/* Below 640px, MobileInfoCard (see its own module CSS) floats fixed at the
+   top of the viewport over whichever section is scrolled underneath it —
+   reserve room for it on every section so it never overlaps that section's
+   own heading, instead of only mattering for whichever section happens to
+   load first. Sections keep centering their content otherwise (unlike the
+   desktop top-align above); the taller top padding just shifts that center
+   down a bit. */
+@media (max-width: 639px) {
+  section {
+    padding-top: 190px;
+  }
+}
+
+/* Below ~340px the active-section label no longer fits beside the name
+   (see .row in MobileInfoCard.module.css) and wraps onto its own line,
+   making the card taller — bump clearance to match on those narrower
+   phones specifically, rather than reserving that much room everywhere
+   and leaving an oversized gap on the more common 360px+ widths. */
+@media (max-width: 359px) {
+  section {
+    padding-top: 210px;
+  }
+}
+
 @keyframes overscroll-bump {
   0% {
     transform: translateY(0);
