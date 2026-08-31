@@ -2,68 +2,8 @@
   background: var(--section-alt-bg);
 }
 
-@media (min-width: 640px) {
-  :global(#experience) {
-    /* Same sidebar + InfoPanel clearance as the other non-hero sections —
-       see About.module.css. */
-    padding-left: var(--content-clearance-desktop);
-  }
-}
-
-.list {
-  /* Cancels the shared reading-column inset and matches the wider flush
-     anchor every other non-hero section uses (see SectionHeader.module.css)
-     — previously the only section left on the narrower 640px column. No
-     max-width cap: fills the section's content box exactly so the right
-     edge stays pinned to the fixed page-gutter distance instead of
-     stalling early and leaving a growing gap on wide screens. */
-  margin-left: 0;
-  /* Cancels the global `section > *` rule's 640px cap (see index.css) —
-     without this, removing our own max-width override just falls through
-     to that default instead of actually going uncapped. */
-  max-width: none;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  width: 100%;
-  /* Without this, the cards sit unpositioned and paint *before* the
-     absolutely-positioned particle layer in CSS's stacking order — behind
-     it — no matter that they come later in the DOM. */
-  position: relative;
-  z-index: 1;
-}
-
-.card {
-  display: block;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 20px 24px;
-  background: var(--bg);
-  color: inherit;
-  text-decoration: none;
-  cursor: pointer;
-  transition: border-color 0.2s;
-}
-
-/* Same phone-width narrowing as the section gutter (see index.css) — the
-   card's own horizontal padding was compounding the fixed gutter's squeeze
-   on top of it. */
-@media (max-width: 479px) {
-  .card {
-    padding: 16px 18px;
-  }
-}
-
-.card:hover {
-  border-color: var(--accent-border);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .card {
-    transition: none;
-  }
-}
-
+/* Border/radius/padding/hover recipe now lives in the shared Card atom —
+   see Card.module.css. This file only styles the card's own content. */
 .cardHeader {
   display: flex;
   flex-direction: column;

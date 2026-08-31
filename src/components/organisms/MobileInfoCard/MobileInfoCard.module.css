@@ -5,6 +5,7 @@
    than before, now that the hamburger has moved to a floating bottom-right
    button (see Header.module.css) and this no longer needs to leave it room. */
 .card {
+  composes: raised from '../../../styles/shared.module.css';
   position: fixed;
   top: 12px;
   left: var(--page-gutter);
@@ -14,9 +15,6 @@
   flex-direction: column;
   padding: 14px 18px;
   background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  box-shadow: var(--shadow);
   /* Decorative identity chrome, not interactive — never steal taps meant
      for whatever section content is scrolled underneath it. */
   pointer-events: none;

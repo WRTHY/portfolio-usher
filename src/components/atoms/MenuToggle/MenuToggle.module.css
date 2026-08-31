@@ -1,10 +1,10 @@
 /* A floating card rather than bare bars — without its own surface this sat
    directly on top of whatever card/text happened to be scrolled underneath
-   it, with nothing to visually separate the two. Same border/radius/shadow
-   recipe as the site's other raised surfaces (12px radius, see e.g.
-   TextCard.module.css / --shadow in index.css), sized to the 44px minimum
-   recommended touch target rather than the previous 32px. */
+   it, with nothing to visually separate the two. Border/radius/shadow come
+   from the shared .raised surface (see styles/shared.module.css); sized to
+   the 44px minimum recommended touch target rather than the previous 32px. */
 .toggle {
+  composes: raised from '../../../styles/shared.module.css';
   position: relative;
   z-index: 2;
   display: flex;
@@ -14,10 +14,7 @@
   width: 44px;
   height: 44px;
   padding: 0 13px;
-  border: 1px solid var(--border);
-  border-radius: 12px;
   background: var(--bg);
-  box-shadow: var(--shadow);
   cursor: pointer;
   transition: border-color 0.2s;
 
