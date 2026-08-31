@@ -1,0 +1,15 @@
+.body {
+  /* Cancels the global `section > *` rule's 640px cap (see index.css) —
+     without this, going uncapped just falls through to that default
+     instead of actually filling the section's content box. */
+  margin-left: 0;
+  max-width: none;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  /* Without this, content sits unpositioned and paints *before* the
+     absolutely-positioned particle layer in CSS's stacking order — behind
+     it — no matter that it comes later in the DOM. */
+  position: relative;
+  z-index: 1;
+}
