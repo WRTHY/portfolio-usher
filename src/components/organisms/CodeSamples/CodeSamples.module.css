@@ -11,58 +11,14 @@
   justify-content: flex-start;
 }
 
-@media (min-width: 640px) {
-  :global(#code-samples) {
-    /* Same sidebar + InfoPanel clearance as #about/#case-studies — see
-       About.module.css. */
-    padding-left: var(--content-clearance-desktop);
-  }
-}
-
-.body {
-  /* Cancels the shared reading-column inset (same trick .hero-content
-     uses) so the section's content stays flush at the same anchor as
-     Experience/CaseStudies, same trick those use. No max-width cap: fills
-     the section's content box exactly so the right edge stays pinned to
-     the fixed page-gutter distance instead of stalling early and leaving
-     a growing gap on wide screens. */
-  margin-left: 0;
-  /* Cancels the global `section > *` rule's 640px cap (see index.css) —
-     without this, removing our own max-width override just falls through
-     to that default instead of actually going uncapped. */
-  max-width: none;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  /* Without this, the panel sits unpositioned and paints *before* the
-     absolutely-positioned particle layer in CSS's stacking order — behind
-     it — no matter that it comes later in the DOM. */
-  position: relative;
-  z-index: 1;
-}
-
-/* Same card recipe as Experience/CaseStudies/TextCard (border, radius,
-   padding) but on --bg rather than --section-alt-bg, since #code-samples
-   itself sits on --section-alt-bg — the same opposite-pairing every other
-   section already uses (see Experience.module.css). */
+/* Border/radius/padding recipe now lives in the shared Card atom (tone
+   defaults to --bg, the opposite-pairing every section uses against its own
+   background — see Experience.module.css) — this file only styles layout
+   and content. */
 .explainer {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 20px 24px;
-  background: var(--bg);
-}
-
-/* Same phone-width narrowing as the section gutter (see index.css) — the
-   card's own horizontal padding was compounding the fixed gutter's squeeze
-   on top of it. */
-@media (max-width: 479px) {
-  .explainer {
-    padding: 16px 18px;
-  }
 }
 
 .explainer p {
@@ -71,24 +27,11 @@
   line-height: 145%;
 }
 
-.kicker {
-  align-self: flex-start;
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: var(--accent);
-  background: var(--accent-bg);
-  border: 1px solid var(--accent-border);
-  border-radius: 4px;
-  padding: 3px 8px;
-}
-
 .panel {
   display: flex;
   flex-direction: column;
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   overflow: hidden;
   background: var(--bg);
 }

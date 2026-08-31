@@ -2,6 +2,7 @@ import useMobileCardVisibility from '../../../hooks/useMobileCardVisibility'
 import useActiveSection from '../../../hooks/useActiveSection'
 import { sections } from '../../../content/navigation'
 import { siteContent } from '../../../content/site'
+import { cx } from '../../../utils/classNames'
 import styles from './MobileInfoCard.module.css'
 
 // Mobile counterpart to InfoPanel's desktop aside — see InfoPanel.tsx. Kept
@@ -20,9 +21,7 @@ function MobileInfoCard() {
 
   return (
     <aside
-      className={[styles.card, visible ? null : styles.cardHidden, eased ? styles.cardEased : null]
-        .filter(Boolean)
-        .join(' ')}
+      className={cx(styles.card, !visible && styles.cardHidden, eased && styles.cardEased)}
       aria-label="Page summary"
       aria-hidden={!visible}
       data-testid="mobile-info-card"

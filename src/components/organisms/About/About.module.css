@@ -1,16 +1,3 @@
-@media (min-width: 640px) {
-  :global(#about) {
-    /* Clears the fixed sidebar and the fixed InfoPanel beside it, same as
-       every other non-hero section — see Experience.module.css. Previously
-       About stayed vertically centered instead (a deliberate hero-style
-       exception), but the Skills & Tools card now makes this section tall
-       enough that top-aligning it with the InfoPanel — the layout every
-       other section already uses (see index.css) — reads better than
-       centering a block this size. */
-    padding-left: var(--content-clearance-desktop);
-  }
-}
-
 /* Not underlined: --text-h reads as a bright/white highlight against the
    muted --text body copy around it (see about.paragraphs in
    content/site.ts). Bold is the non-color indicator that keeps this
@@ -25,27 +12,4 @@
 
 .link:hover {
   color: var(--accent);
-}
-
-.content {
-  /* Now a direct section child (MediaText's image column is gone for now)
-     — cancel the shared reading-column inset so it stays flush at the same
-     anchor as Experience/Case Studies/Automation Examples, same trick those
-     use. Width matches them too, pending the broader pattern decision. */
-  margin-left: 0;
-  /* Cancels the global `section > *` rule's 640px cap (see index.css) —
-     without this, removing our own max-width override just falls through
-     to that default instead of actually going uncapped. */
-  max-width: none;
-  width: 100%;
-  /* Two stacked cards now (intro + Skills & Tools) — same gap Experience
-     uses between its own stacked cards (see Experience.module.css). */
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  /* Without this, the card sits unpositioned and paints *before* the
-     absolutely-positioned particle layer in CSS's stacking order — behind
-     it — no matter that it comes later in the DOM. Matches Hero's .content. */
-  position: relative;
-  z-index: 1;
 }

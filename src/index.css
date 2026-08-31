@@ -43,6 +43,11 @@
   --heading: 'TBJ Orcherum Mini', system-ui, 'Segoe UI', Roboto, sans-serif;
   --mono: ui-monospace, Consolas, monospace;
 
+  /* The site's one rounded-corner radius, used by every card/panel/modal/
+     floating-surface recipe — a single token instead of the literal 12px
+     repeated across each of their CSS modules. */
+  --radius-lg: 12px;
+
   /* Shared page-layout tokens — the single source of truth for how far
      section content sits from the viewport edge and how wide the standard
      content column is. Anything that needs to line up with the rest of the
@@ -242,6 +247,17 @@ section {
    so the class name has to stay unscoped for the hook to find it. */
 .bump {
   animation: overscroll-bump 0.3s ease-out;
+}
+
+/* Opt-in for every non-hero section: clears the fixed sidebar + InfoPanel
+   via left padding instead of centering. Previously repeated per-organism
+   as an identical media query keyed to that section's own #id selector
+   (see About/Experience/CaseStudies/CodeSamples) — global here since the
+   rule itself never varies, only which sections opt in. */
+@media (min-width: 640px) {
+  .flush-section {
+    padding-left: var(--content-clearance-desktop);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

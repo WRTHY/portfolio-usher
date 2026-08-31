@@ -1,0 +1,10 @@
+/* A floating card-like surface — border, rounded corners, drop shadow —
+   for small UI chrome that sits on top of whatever's scrolled underneath it
+   (MenuToggle, the mobile Sidebar dots, MobileInfoCard). Each consumer still
+   sets its own `background`, since InfoPanel needs a dynamic value and
+   Modal has no border at all — those two aren't composed from this. */
+.raised {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+}

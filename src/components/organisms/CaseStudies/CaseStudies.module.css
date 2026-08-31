@@ -5,60 +5,14 @@
   background: var(--bg);
 }
 
-@media (min-width: 640px) {
-  :global(#case-studies) {
-    /* Same sidebar + InfoPanel clearance as every other non-hero section —
-       see Experience.module.css. */
-    padding-left: var(--content-clearance-desktop);
-  }
-}
-
 .close {
   position: absolute;
   top: 12px;
   right: 12px;
-  width: 28px;
-  height: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  background: none;
-  color: var(--text);
-  font-size: 20px;
-  line-height: 1;
-  cursor: pointer;
-
-  &:hover {
-    color: var(--accent);
-  }
 }
 
-/* Same structure as Experience's .list — a single stacked column of
-   full-width cards, not a multi-column grid. Same width override too:
-   cancel the shared reading-column inset so cards line up with
-   Experience/About at the wider flush anchor instead of the narrower
-   default 640px column. No max-width cap: the list fills the section's
-   content box exactly, so its right edge stays pinned to the fixed
-   page-gutter distance instead of stalling at an arbitrary width and
-   leaving a growing, unpinned gap on wide screens. */
-.list {
-  margin-left: 0;
-  /* Cancels the global `section > *` rule's 640px cap (see index.css) —
-     without this, removing our own max-width override just falls through
-     to that default instead of actually going uncapped. */
-  max-width: none;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  width: 100%;
-  /* Without this, the cards sit unpositioned and paint *before* the
-     absolutely-positioned particle layer in CSS's stacking order — behind
-     it — no matter that they come later in the DOM. */
-  position: relative;
-  z-index: 1;
-}
-
+/* Border/radius/padding/hover recipe now lives in the shared Card atom —
+   see Card.module.css. This file only styles this card's own layout. */
 .card {
   display: flex;
   flex-direction: column;
@@ -67,33 +21,10 @@
   width: 100%;
   text-align: left;
   font-family: inherit;
-  color: inherit;
-  background: var(--section-alt-bg);
-  /* Light border at rest, like Experience's card — animates to the accent
-     color on hover/focus to signal selection. */
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 20px 24px;
-  cursor: pointer;
-  transition: border-color 0.2s;
-}
-
-/* Same phone-width narrowing as the section gutter (see index.css) — the
-   card's own horizontal padding was compounding the fixed gutter's squeeze
-   on top of it. */
-@media (max-width: 479px) {
-  .card {
-    padding: 16px 18px;
-  }
 }
 
 .card h2 {
   margin: 0;
-}
-
-.card:hover,
-.card:focus-visible {
-  border-color: var(--accent-border);
 }
 
 .summary {
@@ -364,7 +295,7 @@
    equal-weight to Problem/Approach/Outcome. */
 .futureIterations {
   background: var(--accent-bg);
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   padding: 16px 18px;
 }
 
@@ -399,7 +330,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .card,
   .affordance,
   .navItem,
   .dot {

@@ -1,20 +1,21 @@
 import TextCard from '../../molecules/TextCard/TextCard'
 import SkillsAndTools from '../../molecules/SkillsAndTools/SkillsAndTools'
 import ParticleBackground from '../../molecules/ParticleBackground/ParticleBackground'
+import SectionBody from '../../molecules/SectionBody/SectionBody'
 import useOverscrollBump from '../../../hooks/useOverscrollBump'
-import { sections } from '../../../content/navigation'
+import { getSectionLabel } from '../../../content/navigation'
 import { about } from '../../../content/site'
 import styles from './About.module.css'
 
-const sectionLabel = sections.find((section) => section.id === 'about')!.label
+const sectionLabel = getSectionLabel('about')
 
 function About() {
   const bumpRef = useOverscrollBump<HTMLElement>()
 
   return (
-    <section id="about" aria-label={sectionLabel} ref={bumpRef}>
+    <section id="about" className="flush-section" aria-label={sectionLabel} ref={bumpRef}>
       <ParticleBackground variant="about" />
-      <div className={styles.content}>
+      <SectionBody>
         <TextCard>
           {about.paragraphs.map((paragraph, index) => (
             <p key={index}>
@@ -39,7 +40,7 @@ function About() {
         <TextCard>
           <SkillsAndTools />
         </TextCard>
-      </div>
+      </SectionBody>
     </section>
   )
 }

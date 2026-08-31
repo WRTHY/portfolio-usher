@@ -23,3 +23,7 @@ export const sections = [
     tone: 'alt',
   },
 ] as const
+
+export function getSectionLabel(id: (typeof sections)[number]['id']): string {
+  return sections.find((section) => section.id === id)!.label
+}

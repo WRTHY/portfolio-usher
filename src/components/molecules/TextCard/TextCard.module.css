@@ -1,24 +1,6 @@
-/* Same card recipe as Experience/CaseStudies (border, radius, padding) but
-   static rather than interactive — no cursor/hover treatment, since this
-   card isn't a link or button. Sits on --section-alt-bg so it reads as a
-   raised surface against a section left on the base --bg, same pairing
-   CaseStudies uses against #case-studies. */
-.card {
-  background: var(--section-alt-bg);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 20px 24px;
-}
-
-/* Same phone-width narrowing as the section gutter (see index.css) — the
-   card's own horizontal padding was compounding the fixed gutter's squeeze
-   on top of it. */
-@media (max-width: 479px) {
-  .card {
-    padding: 16px 18px;
-  }
-}
-
+/* Box recipe (border/radius/padding/background) now lives in the shared
+   Card atom — see Card.module.css. This file only styles TextCard's own
+   child elements. */
 .card h2 {
   margin: 0 0 12px;
 }

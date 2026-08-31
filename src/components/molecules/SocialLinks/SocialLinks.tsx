@@ -2,6 +2,7 @@ import type { IconType } from 'react-icons'
 import { FaEnvelope, FaGithub, FaLinkedin } from 'react-icons/fa6'
 import SocialIcon from '../../atoms/SocialIcon/SocialIcon'
 import { socialLinks } from '../../../content/site'
+import { cx } from '../../../utils/classNames'
 import styles from './SocialLinks.module.css'
 
 const icons: Record<string, IconType> = {
@@ -16,7 +17,7 @@ type SocialLinksProps = {
 
 function SocialLinks({ className }: SocialLinksProps) {
   return (
-    <ul className={[styles.list, className].filter(Boolean).join(' ')}>
+    <ul className={cx(styles.list, className)}>
       {socialLinks.map((link) => (
         <li key={link.id}>
           <SocialIcon href={link.href} label={link.label} icon={icons[link.id]} />

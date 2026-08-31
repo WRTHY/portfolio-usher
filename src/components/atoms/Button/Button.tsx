@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { cx } from '../../../utils/classNames'
 import styles from './Button.module.css'
 
 type ButtonProps = {
@@ -12,7 +13,7 @@ function Button({ href, children, external, fullWidth }: ButtonProps) {
   return (
     <a
       href={href}
-      className={[styles.button, fullWidth ? styles.fullWidth : null].filter(Boolean).join(' ')}
+      className={cx(styles.button, fullWidth && styles.fullWidth)}
       target={external ? '_blank' : undefined}
       rel={external ? 'noopener noreferrer' : undefined}
     >

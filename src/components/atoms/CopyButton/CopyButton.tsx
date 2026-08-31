@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { FaCheck, FaRegCopy } from 'react-icons/fa6'
-import styles from './CopyButton.module.css'
+import IconButton from '../IconButton/IconButton'
 
 type CopyButtonProps = {
   text: string
@@ -16,14 +16,9 @@ function CopyButton({ text }: CopyButtonProps) {
   }
 
   return (
-    <button
-      type="button"
-      className={styles.button}
-      onClick={handleClick}
-      aria-label={copied ? 'Copied' : 'Copy code'}
-    >
+    <IconButton onClick={handleClick} ariaLabel={copied ? 'Copied' : 'Copy code'} size={14}>
       {copied ? <FaCheck /> : <FaRegCopy />}
-    </button>
+    </IconButton>
   )
 }
 

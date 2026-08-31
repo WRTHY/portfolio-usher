@@ -28,7 +28,7 @@
     background: var(--panel-bg, var(--code-bg));
     transition: background-color 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
     box-shadow: var(--shadow);
   }
 }

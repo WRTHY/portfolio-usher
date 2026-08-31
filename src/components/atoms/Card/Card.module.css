@@ -1,0 +1,38 @@
+.card {
+  display: block;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px 24px;
+  background: var(--bg);
+  color: inherit;
+  text-decoration: none;
+}
+
+.toneAlt {
+  background: var(--section-alt-bg);
+}
+
+/* Same phone-width narrowing as the section gutter (see index.css) — the
+   card's own horizontal padding was compounding the fixed gutter's squeeze
+   on top of it. */
+@media (max-width: 479px) {
+  .card {
+    padding: 16px 18px;
+  }
+}
+
+.interactive {
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.interactive:hover,
+.interactive:focus-visible {
+  border-color: var(--accent-border);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .interactive {
+    transition: none;
+  }
+}

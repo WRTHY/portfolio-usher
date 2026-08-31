@@ -1,14 +1,18 @@
 import { useEffect, useId, useRef, useState } from 'react'
-import { sections } from '../../../content/navigation'
+import { getSectionLabel } from '../../../content/navigation'
 import Badge from '../../atoms/Badge/Badge'
+import Card from '../../atoms/Card/Card'
 import Heading from '../../atoms/Heading/Heading'
+import IconButton from '../../atoms/IconButton/IconButton'
 import Modal from '../../molecules/Modal/Modal'
 import ParticleBackground from '../../molecules/ParticleBackground/ParticleBackground'
+import SectionBody from '../../molecules/SectionBody/SectionBody'
 import { caseStudies } from '../../../content/caseStudies'
 import type { CaseStudy } from '../../../content/caseStudies'
+import usePrefersReducedMotion from '../../../hooks/usePrefersReducedMotion'
 import styles from './CaseStudies.module.css'
 
-const sectionLabel = sections.find((section) => section.id === 'case-studies')!.label
+const sectionLabel = getSectionLabel('case-studies')
 
 type ReportSection = {
   key: 'problem' | 'approach' | 'outcome'| 'futureIterations'
@@ -54,6 +58,7 @@ function useReadingRail(reportSections: ReportSection[], resetKey: string | null
   const contentRef = useRef<HTMLDivElement>(null)
   const sectionRefs = useRef(new Map<string, HTMLElement>())
   const [activeKey, setActiveKey] = useState<ReportSection['key']>('problem')
+  const prefersReducedMotion = usePrefersReducedMotion()
 
   // Resets the active section back to Problem whenever a different case
   // study opens. Adjusting state during render (rather than in an effect)
@@ -135,7 +140,6 @@ function useReadingRail(reportSections: ReportSection[], resetKey: string | null
     const boundary = getSectionBoundaries(pane).get(key)
     if (boundary === undefined) return
 
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     // Scrolls to this section's own rescaled boundary rather than using
     // scrollIntoView to align its top to the pane's top — for a section
     // too close to the end to ever reach that alignment, scrollIntoView
@@ -165,13 +169,16 @@ function CaseStudies() {
   )
 
   return (
-    <section id="case-studies" aria-label={sectionLabel}>
+    <section id="case-studies" className="flush-section" aria-label={sectionLabel}>
       <ParticleBackground variant="case-studies" />
-      <div className={styles.list}>
+      <SectionBody>
         {caseStudies.map((caseStudy) => (
-          <button
+          <Card
             key={caseStudy.id}
+            as="button"
             type="button"
+            tone="alt"
+            interactive
             className={styles.card}
             data-testid={`case-study-card-${caseStudy.id}`}
             onClick={() => setSelectedId(caseStudy.id)}
@@ -184,21 +191,21 @@ function CaseStudies() {
               ))}
             </div>
             <span className={styles.affordance}>Read case study &rarr;</span>
-          </button>
+          </Card>
         ))}
-      </div>
+      </SectionBody>
 
       {selected && (
         <Modal titleId={titleId} onClose={() => setSelectedId(null)} testId="case-study-modal">
-          <button
-            type="button"
-            className={styles.close}
+          <IconButton
             onClick={() => setSelectedId(null)}
-            aria-label="Close"
-            data-testid="case-study-modal-close"
+            ariaLabel="Close"
+            size={20}
+            className={styles.close}
+            testId="case-study-modal-close"
           >
             &times;
-          </button>
+          </IconButton>
           <div className={styles.rail}>
             <h2 id={titleId} data-testid="case-study-modal-title">
               {selected.title}
