@@ -28,13 +28,27 @@ type Visibility = {
 // (real movement), never by a timer — an earlier version cleared it on a
 // fixed timeout, which raced against exactly that trailing momentum and
 // produced the same blink.
+//
+// Direction itself needs the same snap-correction tolerance: landing on a
+// tall section (e.g. Code Samples) via an upward scroll, scroll-snap's own
+// settle can end with a final trailing event that's a few px *down* (the
+// snap correcting into place) even though the user's actual gesture was
+// up. Comparing only against the immediately-previous event took that
+// correction at face value, flipped scrollingUp to false, and left the
+// card hidden with no reveal ever firing for a section it had already
+// settled on before (revealedIdRef skips the settle-reveal in that case).
+// `snapCorrectionPx` ignores any single-event delta smaller than that,
+// keeping whatever direction was already established through the actual
+// scroll gesture instead of trusting the last, possibly-corrective, pixel.
 function useMobileCardVisibility(
   activeId: string,
   nearTopThreshold: number,
   settleDebounceMs = 150,
+  snapCorrectionPx = 6,
 ): Visibility {
   const [state, setState] = useState<Visibility>({ visible: true, eased: false })
   const lastY = useRef(0)
+  const scrollingUpRef = useRef(false)
   const activeIdRef = useRef(activeId)
   const revealedIdRef = useRef(activeId)
   activeIdRef.current = activeId
@@ -45,7 +59,11 @@ function useMobileCardVisibility(
 
     const handleScroll = () => {
       const y = window.scrollY
-      const scrollingUp = y < lastY.current
+      const delta = y - lastY.current
+      if (Math.abs(delta) > snapCorrectionPx) {
+        scrollingUpRef.current = delta < 0
+      }
+      const scrollingUp = scrollingUpRef.current
       lastY.current = y
 
       clearTimeout(settleTimer)
