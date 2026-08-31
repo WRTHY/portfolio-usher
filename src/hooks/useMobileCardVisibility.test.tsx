@@ -129,6 +129,20 @@ describe('useMobileCardVisibility', () => {
     expect(screen.getByTestId('target')).toHaveTextContent('visible/instant')
   })
 
+  it('stays revealed through a small downward snap-correction after an upward scroll', () => {
+    scrollTo(400)
+    render(<TestTarget activeId="experience" threshold={120} />)
+
+    scrollTo(300)
+    expect(screen.getByTestId('target')).toHaveTextContent('visible/eased')
+
+    // Scroll-snap settling into place can fire one last trailing event a
+    // few px in the opposite direction of the actual gesture — that alone
+    // shouldn't flip the card back to hidden.
+    scrollTo(304)
+    expect(screen.getByTestId('target')).toHaveTextContent('visible/eased')
+  })
+
   it('does not re-reveal on further scrolling within the same (already-revealed) section', () => {
     scrollTo(0)
     const { rerender } = render(<TestTarget activeId="about" threshold={120} />)
