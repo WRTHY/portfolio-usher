@@ -1,9 +1,9 @@
-import styles from './SoonBadge.module.css'
+import Badge from '../Badge/Badge'
 
 function SoonBadge() {
   return (
-    <span className={styles.badge} aria-hidden="true">
-      soon
+    <span aria-hidden="true">
+      <Badge variant="muted">soon</Badge>
     </span>
   )
 }
