@@ -1,3 +1,4 @@
+import { cx } from '../../../utils/classNames'
 import styles from './FramedImage.module.css'
 
 type FramedImageProps = {
@@ -8,7 +9,7 @@ type FramedImageProps = {
 
 function FramedImage({ src, alt, className }: FramedImageProps) {
   return (
-    <div className={[styles.frame, className].filter(Boolean).join(' ')}>
+    <div className={cx(styles.frame, className)}>
       <img src={src} alt={alt} />
     </div>
   )

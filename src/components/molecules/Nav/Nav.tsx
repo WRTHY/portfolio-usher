@@ -7,6 +7,7 @@ import Button from '../../atoms/Button/Button'
 import useActiveSection from '../../../hooks/useActiveSection'
 import { sections } from '../../../content/navigation'
 import { siteContent } from '../../../content/site'
+import { cx } from '../../../utils/classNames'
 import styles from './Nav.module.css'
 
 // Below 640px, Sidebar (ThemeToggle/SocialLinks) and InfoPanel (the resume
@@ -21,9 +22,7 @@ function Nav() {
   return (
     <nav className={styles.nav}>
       <MenuToggle isOpen={isOpen} onClick={() => setIsOpen((open) => !open)} />
-      <div
-        className={[styles.panel, isOpen ? styles.open : null].filter(Boolean).join(' ')}
-      >
+      <div className={cx(styles.panel, isOpen && styles.open)}>
         <div className={styles.themeToggleWrap}>
           <ThemeToggle />
         </div>

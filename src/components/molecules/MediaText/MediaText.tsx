@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import FramedImage from '../../atoms/FramedImage/FramedImage'
+import { cx } from '../../../utils/classNames'
 import styles from './MediaText.module.css'
 
 type MediaTextProps = {
@@ -13,7 +14,7 @@ function MediaText({ imageSrc, imageAlt, contentClassName, children }: MediaText
   return (
     <div className={styles.mediaText}>
       <FramedImage className={styles.image} src={imageSrc} alt={imageAlt} />
-      <div className={[styles.content, contentClassName].filter(Boolean).join(' ')}>
+      <div className={cx(styles.content, contentClassName)}>
         {children}
       </div>
     </div>

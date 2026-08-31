@@ -1,4 +1,5 @@
 import type { MouseEventHandler, ReactNode } from 'react'
+import { cx } from '../../../utils/classNames'
 import styles from './NavLink.module.css'
 
 type NavLinkProps = {
@@ -14,7 +15,7 @@ function NavLink({ href, children, onClick, isActive, testId }: NavLinkProps) {
     <a
       href={href}
       onClick={onClick}
-      className={[styles.link, isActive ? styles.active : null].filter(Boolean).join(' ')}
+      className={cx(styles.link, isActive && styles.active)}
       aria-current={isActive ? 'page' : undefined}
       data-testid={testId}
     >

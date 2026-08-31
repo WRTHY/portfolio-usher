@@ -1,4 +1,5 @@
 import type { CSSProperties, ReactNode } from 'react'
+import { cx } from '../../../utils/classNames'
 import styles from './IconButton.module.css'
 
 type IconButtonProps = {
@@ -6,14 +7,15 @@ type IconButtonProps = {
   onClick: () => void
   ariaLabel: string
   size?: number
+  className?: string
   testId?: string
 }
 
-function IconButton({ children, onClick, ariaLabel, size, testId }: IconButtonProps) {
+function IconButton({ children, onClick, ariaLabel, size, className, testId }: IconButtonProps) {
   return (
     <button
       type="button"
-      className={styles.button}
+      className={cx(styles.button, className)}
       onClick={onClick}
       aria-label={ariaLabel}
       style={size ? ({ fontSize: size } as CSSProperties) : undefined}
