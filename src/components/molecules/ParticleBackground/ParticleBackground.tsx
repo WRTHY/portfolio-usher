@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import { Particles, ParticlesProvider } from '@tsparticles/react'
 import { loadSlim } from '@tsparticles/slim'
 import type { Engine, ISourceOptions } from '@tsparticles/engine'
+import usePrefersReducedMotion from '../../../hooks/usePrefersReducedMotion'
 import styles from './ParticleBackground.module.css'
 
 // Must be a stable reference across the component's lifetime — ParticlesProvider
@@ -44,9 +45,7 @@ type ParticleBackgroundProps = {
 }
 
 function ParticleBackground({ variant }: ParticleBackgroundProps) {
-  const prefersReducedMotion = window.matchMedia(
-    '(prefers-reduced-motion: reduce)',
-  ).matches
+  const prefersReducedMotion = usePrefersReducedMotion()
 
   const options: ISourceOptions = useMemo(() => {
     const particleColor = resolveCssColor('--particle-color') || '#7c1fd6'
