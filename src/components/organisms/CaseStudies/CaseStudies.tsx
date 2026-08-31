@@ -136,8 +136,9 @@ function useReadingRail(reportSections: ReportSection[], resetKey: string | null
 
   const scrollToSection = (key: ReportSection['key']) => {
     const pane = contentRef.current
-    const boundary = pane && getSectionBoundaries(pane).get(key)
-    if (!pane || boundary === undefined) return
+    if (!pane) return
+    const boundary = getSectionBoundaries(pane).get(key)
+    if (boundary === undefined) return
 
     // Scrolls to this section's own rescaled boundary rather than using
     // scrollIntoView to align its top to the pane's top — for a section
