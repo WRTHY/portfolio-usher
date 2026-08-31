@@ -1,0 +1,112 @@
+/* Mirrors Header.module.css's mobile-first split: this IS the mobile
+   layout by default, then hides entirely at desktop widths where InfoPanel
+   (the full-size version) takes over. Floating card again (rounded, bordered
+   surface inset from the edges) rather than an edge-to-edge bar — just wider
+   than before, now that the hamburger has moved to a floating bottom-right
+   button (see Header.module.css) and this no longer needs to leave it room. */
+.card {
+  position: fixed;
+  top: 12px;
+  left: var(--page-gutter);
+  right: var(--page-gutter);
+  z-index: 9; /* just under Header's 10, so its full-screen mobile nav still paints over this */
+  display: flex;
+  flex-direction: column;
+  padding: 14px 18px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  /* Decorative identity chrome, not interactive — never steal taps meant
+     for whatever section content is scrolled underneath it. */
+  pointer-events: none;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* No transition by default — landing on a new section (or scrolling down
+   past it) snaps the card in/out instantly rather than fading, so there's
+   no beat where it's mid-fade and misaligned against the section that just
+   arrived. .cardEased opts back into a transition for the one case that
+   should animate: scrolling back up mid-section (see MobileInfoCard.tsx). */
+.cardHidden {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+
+.cardEased {
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+}
+
+@media (min-width: 640px) {
+  .card {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cardEased {
+    transition: none;
+  }
+}
+
+/* Name and the active section label share a row, label pushed to the right
+   via its own margin-left: auto (see .section) rather than
+   justify-content on .row, since auto margins keep it right-justified even
+   once it wraps onto its own line below the name. */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 12px;
+}
+
+.section {
+  font-family: var(--heading);
+  color: var(--accent);
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 1.3;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  text-align: right;
+  margin: 0 0 0 auto;
+}
+
+/* Name/tagline/quickSummary sizes keep the same ratio InfoPanel uses at
+   desktop (56px/28px/16px, see InfoPanel.module.css) relative to
+   quickSummary, rather than the flatter scale this card started with —
+   name and tagline should read as clearly bigger than the summary line,
+   same as they do on desktop, just at a scale that fits a mobile card.
+   Both set an explicit line-height rather than trusting the heading
+   font's own "normal" metrics: that font's default line box comes out far
+   shorter than its actual glyph height (~0.44x font-size, vs the ~1.2x a
+   normal font gives you), so at these larger sizes the ascenders were
+   overflowing above their own line box and getting visually clipped by
+   the card's top edge. */
+.name {
+  font-family: var(--heading);
+  color: var(--text-h);
+  font-weight: 500;
+  font-size: 53px;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.tagline {
+  font-family: var(--heading);
+  color: var(--accent);
+  font-weight: 500;
+  font-size: 26px;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.quickSummary {
+  color: var(--text);
+  font-size: 12px;
+  line-height: 135%;
+  margin: 6px 0 0;
+}

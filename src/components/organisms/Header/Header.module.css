@@ -1,6 +1,11 @@
+/* Bottom rather than top: MobileInfoCard now owns the top of the mobile
+   viewport (see its module CSS), so the hamburger floats at the opposite
+   corner instead of competing with it for the same space — consistent with
+   MobileInfoCard's own floating-card treatment (see Sidebar.module.css's
+   .progressDots for the same pattern on the left edge). */
 .header {
   position: fixed;
-  top: 0;
+  bottom: 0;
   left: 0;
   right: 0;
   z-index: 10;
