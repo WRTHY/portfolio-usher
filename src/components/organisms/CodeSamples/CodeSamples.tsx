@@ -5,15 +5,18 @@ import type { SelectableTestingType } from '../../molecules/FrameworkSwitcher/fr
 import SegmentedControl from '../../molecules/SegmentedControl/SegmentedControl'
 import type { SegmentedControlOption } from '../../molecules/SegmentedControl/SegmentedControl'
 import { ComponentTestIcon, EndToEndIcon, PerformanceIcon } from '../../atoms/icons/TestingTypeIcons'
+import Badge from '../../atoms/Badge/Badge'
+import Card from '../../atoms/Card/Card'
 import CodeFileTabs from '../../molecules/CodeFileTabs/CodeFileTabs'
 import PanelFooter from '../../molecules/PanelFooter/PanelFooter'
 import ParticleBackground from '../../molecules/ParticleBackground/ParticleBackground'
-import { sections } from '../../../content/navigation'
+import SectionBody from '../../molecules/SectionBody/SectionBody'
+import { getSectionLabel } from '../../../content/navigation'
 import { codeExamples } from '../../../content/codeExamples'
 import type { Framework, TestingType } from '../../../content/codeExamples'
 import styles from './CodeSamples.module.css'
 
-const sectionLabel = sections.find((section) => section.id === 'code-samples')!.label
+const sectionLabel = getSectionLabel('code-samples')
 
 const testingTypeOptions: SegmentedControlOption<TestingType>[] = [
   { value: 'e2e', label: 'End-to-End', icon: <EndToEndIcon aria-hidden="true" /> },
@@ -60,21 +63,18 @@ function CodeSamples() {
   }
 
   return (
-    <section id="code-samples" aria-label={sectionLabel}>
+    <section id="code-samples" className="flush-section" aria-label={sectionLabel}>
       <ParticleBackground variant="code-samples" />
-      {/* .body cancels the shared reading-column indent (same trick
-          .hero-content uses) so the section's content sits flush at the
-          section's own padding edge, matching Experience/CaseStudies. */}
-      <div className={styles.body}>
-        <div className={styles.explainer}>
-          <span className={styles.kicker}>All testing below is written directly against this portfolio/repo</span>
+      <SectionBody gap={16}>
+        <Card className={styles.explainer}>
+          <Badge variant="outline-accent">All testing below is written directly against this portfolio/repo</Badge>
           <p>
-            Pick a testing type, then a framework in the selector below to see sample test automation. 
+            Pick a testing type, then a framework in the selector below to see sample test automation.
             End-to-End is ordered spec → page object → config to mirror my mental model from broad to narrow. Component runs the same assertions against the same components
             through both Vitest and Cypress.
             Performance testing is still on my roadmap.
           </p>
-        </div>
+        </Card>
 
         <SegmentedControl
           value={testingType}
@@ -93,7 +93,7 @@ function CodeSamples() {
           />
           <PanelFooter filePath={activeFile.filename} />
         </div>
-      </div>
+      </SectionBody>
     </section>
   )
 }

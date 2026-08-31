@@ -1,21 +1,24 @@
-import { sections } from '../../../content/navigation'
+import { getSectionLabel } from '../../../content/navigation'
 import { experience } from '../../../content/experience'
 import Heading from '../../atoms/Heading/Heading'
 import Badge from '../../atoms/Badge/Badge'
+import Card from '../../atoms/Card/Card'
 import ParticleBackground from '../../molecules/ParticleBackground/ParticleBackground'
+import SectionBody from '../../molecules/SectionBody/SectionBody'
 import styles from './Experience.module.css'
 
-const sectionLabel = sections.find((section) => section.id === 'experience')!.label
+const sectionLabel = getSectionLabel('experience')
 
 function Experience() {
   return (
-    <section id="experience" aria-label={sectionLabel}>
+    <section id="experience" className="flush-section" aria-label={sectionLabel}>
       <ParticleBackground variant="experience" />
-      <div className={styles.list}>
+      <SectionBody>
         {experience.map((entry) => (
-          <a
+          <Card
             key={entry.id}
-            className={styles.card}
+            as="a"
+            interactive
             href={entry.companyUrl}
             target="_blank"
             rel="noopener noreferrer"
@@ -37,9 +40,9 @@ function Experience() {
                 ))}
               </div>
             )}
-          </a>
+          </Card>
         ))}
-      </div>
+      </SectionBody>
     </section>
   )
 }
