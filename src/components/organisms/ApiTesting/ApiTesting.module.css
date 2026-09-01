@@ -1,0 +1,91 @@
+:global(#api-testing) {
+  background: var(--bg);
+}
+
+/* Border/radius/padding recipe lives in the shared Card atom — see
+   Card.module.css. This file only styles layout and content. */
+.explainer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.explainer p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 145%;
+}
+
+.repoLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  align-self: flex-start;
+  margin-top: 4px;
+  color: var(--accent);
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.exampleCard {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.exampleHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  h2 {
+    margin: 0;
+  }
+}
+
+.description {
+  margin: 0;
+  font-size: 15px;
+  line-height: 145%;
+  color: var(--text);
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--bg);
+}
+
+.panelRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 12px;
+  background: var(--code-bg);
+  border-bottom: 1px solid var(--border);
+}
+
+.filename {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}

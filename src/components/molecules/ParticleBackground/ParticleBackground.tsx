@@ -36,6 +36,7 @@ const variants = {
   experience: { number: 34, speed: 0.5, linkDistance: 104, size: { min: 2, max: 3.6 } },
   'case-studies': { number: 46, speed: 0.7, linkDistance: 132, size: { min: 2, max: 4.4 } },
   'code-samples': { number: 37, speed: 0.55, linkDistance: 112, size: { min: 1.8, max: 3.8 } },
+  'api-testing': { number: 34, speed: 0.5, linkDistance: 108, size: { min: 1.8, max: 3.6 } },
 } as const satisfies Record<string, { number: number; speed: number; linkDistance: number; size: { min: number; max: number } }>
 
 export type ParticleVariant = keyof typeof variants

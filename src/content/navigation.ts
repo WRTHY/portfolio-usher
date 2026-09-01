@@ -22,6 +22,12 @@ export const sections = [
     description: 'Syntax-highlighted Playwright/Cypress snippets.',
     tone: 'alt',
   },
+  {
+    id: 'api-testing',
+    label: 'API Testing',
+    description: 'Static REST API test examples against reqres.in.',
+    tone: 'base',
+  },
 ] as const
 
 export function getSectionLabel(id: (typeof sections)[number]['id']): string {
