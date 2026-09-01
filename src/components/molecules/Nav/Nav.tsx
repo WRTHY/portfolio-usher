@@ -26,6 +26,7 @@ function Nav() {
         <div className={styles.themeToggleWrap}>
           <ThemeToggle />
         </div>
+        <p className={styles.title}>{siteContent.tagline}</p>
         <ul id="site-nav-list" className={styles.list}>
           {sections.map((section) => (
             <li key={section.id}>
@@ -41,6 +42,7 @@ function Nav() {
           ))}
         </ul>
         <div className={styles.footer}>
+          <p className={styles.summary}>{siteContent.quickSummary}</p>
           <SocialLinks className={styles.socialLinks} />
           <Button href={siteContent.resumeUrl} external fullWidth>
             My Resume

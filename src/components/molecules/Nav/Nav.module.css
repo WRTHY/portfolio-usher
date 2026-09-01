@@ -44,8 +44,25 @@
   align-self: center;
 }
 
+/* The role/title ("SDET | QE Lead") — moved here from MobileInfoCard (the
+   fixed card at the top of the page), which shows the active section's
+   label in this same slot instead now. Same size/color/weight that field
+   had on the card, just centered for the menu instead of left-aligned. */
+.title {
+  font-family: var(--heading);
+  color: var(--accent);
+  font-weight: 500;
+  font-size: 26px;
+  line-height: 1.2;
+  margin: 0;
+  text-align: center;
+}
+
 /* SocialLinks/Resume — see the comment in Nav.tsx for why these are
-   duplicated here rather than shared with Sidebar/InfoPanel. */
+   duplicated here rather than shared with Sidebar/InfoPanel. quickSummary
+   lives here too now — MobileInfoCard (the fixed card at the top of the
+   page) dropped it to stay uncluttered, and the menu is the other place
+   mobile users see this kind of "about me" copy. */
 .footer {
   display: flex;
   flex-direction: column;
@@ -53,6 +70,14 @@
   gap: 20px;
   width: 100%;
   max-width: 280px;
+}
+
+.summary {
+  font-size: 14px;
+  line-height: 145%;
+  color: var(--text);
+  text-align: center;
+  margin: 0;
 }
 
 /* Beats SocialLinks.module.css's own .list (flex-direction: column) via the
