@@ -13,7 +13,7 @@ export type ExperienceEntry = {
 export const experience: readonly ExperienceEntry[] = [
   {
     id: 'eventric-qa-lead',
-    role: 'QA Lead/SDET',
+    role: 'QA Lead / Senior SDET',
     company: 'Eventric Master Tour',
     companyUrl: links.companies.eventric,
     dates: 'Jan 2025 – Aug 2026',
@@ -42,8 +42,8 @@ export const experience: readonly ExperienceEntry[] = [
       "Owned QA strategy and the release process across Eventric's entire 8 product suite. Led engineering-wide release review meetings, built out automated coverage across the mobile, desktop, and web apps, and established engineering-wide quality standards. Grew the quality team by hiring Eventric's second quality engineer. Interfaced with clients, customer support, and in-house product team to ensure the overall quality of the project not just from a code standard, but from a client standard",
   },
   {
-    id: 'eventric-software-automation-engineer',
-    role: 'Software Automation Engineer',
+    id: 'eventric-sdet',
+    role: 'Software Development Engineer in Test',
     company: 'Eventric Master Tour',
     companyUrl: links.companies.eventric,
     dates: 'Mar 2023 – Jan 2025',
@@ -62,7 +62,7 @@ export const experience: readonly ExperienceEntry[] = [
       'Slack',
     ],
     summary:
-      "Manually tested Eventric's entire 8 product suite. Built repeatable testing standards from scratch across five products, standing up Eventric's first E2E and component-testing framework for its web Venue product while leading backlog and documentation initiatives. Started Eventric's first ever standing backlog grooming session, reducing the average age of the backlog by 150+ days",
+      "Built repeatable testing standards from scratch across five products, standing up Eventric's first E2E and component-testing framework for its web Venue product while leading backlog and documentation initiatives. Started Eventric's first ever standing backlog grooming session, reducing the average age of the backlog by 150+ days",
   },
   {
     id: 'fubo-gaming-qa-specialist',
