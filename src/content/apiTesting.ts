@@ -3,15 +3,16 @@
 // a separate repo (see links.apiTestingRepo) that exercises reqres.in, a
 // free hosted fake REST API, with Playwright's `request` fixture.
 //
-// `apiTestingExamples` below are placeholders only — swap each `code` field
-// (and title/description/filename) for real snippets pulled verbatim from
-// that repo once its test suite is written, the same way codeExamples.ts
-// copies its files verbatim from this one.
+// `apiTestingExamples` itself is generated, not hand-written — see
+// apiTesting.generated.ts. To add, remove, or retitle an example, edit
+// apiTestingManifest.json and run `npm run fetch:api-testing`, which pulls
+// the real file straight from that repo rather than trusting a hand-copied
+// paste to stay in sync.
 
 export const apiTestingIntro = {
   paragraphs: [
-    `reqres.in is a free, hosted fake REST API that returns realistic (if canned) JSON for common resources like users — built for exactly this: practicing API testing against something real without needing a backend of your own.`,
-    `This repo runs the same test cases two ways: manually in Postman first to explore the API, then automated with Playwright's request fixture for CI. Coverage follows a fixed checklist per endpoint — happy paths, status codes, response schema, negative/edge cases, auth, idempotency, headers, data persistence, and a rough performance baseline.`,
+    `reqres.in is a free, hosted fake REST API that returns realistic (if canned) JSON for common resources like users built for practicing API testing against something real without needing a backend of your own.`,
+    `This repo is meant to run the same test cases two ways: manually in Postman first to explore the API, then automated with Playwright's request fixture for CI. Coverage follows a fixed checklist per endpoint - happy paths, status codes, response schema, negative/edge cases, auth, idempotency, headers, data persistence, and a rough performance baseline.`,
   ],
 } as const
 
