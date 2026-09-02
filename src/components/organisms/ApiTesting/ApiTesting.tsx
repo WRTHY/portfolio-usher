@@ -19,7 +19,7 @@ function ApiTesting() {
       <ParticleBackground variant="api-testing" />
       <SectionBody gap={16}>
         <Card className={styles.explainer}>
-          <Badge variant="outline-accent">Static preview — full suite lives in its own repo</Badge>
+          <Badge variant="outline-accent">Static preview - full suite lives in its own repo</Badge>
           {apiTestingIntro.paragraphs.map((paragraph, index) => (
             // eslint-disable-next-line react/no-array-index-key
             <p key={index}>{paragraph}</p>
@@ -38,7 +38,7 @@ function ApiTesting() {
         {apiTestingExamples.map((example) => (
           <Card key={example.id} className={styles.exampleCard}>
             <div className={styles.exampleHeader}>
-              <Badge>{example.method}</Badge>
+              <Badge>{example.tag}</Badge>
               <Heading level={2}>{example.title}</Heading>
             </div>
             <p className={styles.description}>{example.description}</p>
