@@ -67,7 +67,7 @@ describe('MobileInfoCard', () => {
     vi.useRealTimers()
   })
 
-  it('shows the name, role, tagline, and current section near the top of the page', () => {
+  it('shows the name and current section near the top of the page', () => {
     scrollTo(0)
     render(<MobileInfoCard />)
 
@@ -76,8 +76,16 @@ describe('MobileInfoCard', () => {
     expect(card).toHaveAttribute('aria-hidden', 'false')
     expect(screen.getByText(sections[0].label)).toBeInTheDocument()
     expect(screen.getByText(siteContent.name)).toBeInTheDocument()
-    expect(screen.getByText(siteContent.tagline)).toBeInTheDocument()
-    expect(screen.getByText(siteContent.quickSummary)).toBeInTheDocument()
+  })
+
+  // role (tagline) and quickSummary both moved to the hamburger menu (see
+  // Nav.tsx) to keep this card to just identity + "which section" —
+  // regression-proof that neither creeps back in here.
+  it('does not show the role or quickSummary — those live in the hamburger menu instead', () => {
+    scrollTo(0)
+    render(<MobileInfoCard />)
+    expect(screen.queryByText(siteContent.tagline)).not.toBeInTheDocument()
+    expect(screen.queryByText(siteContent.quickSummary)).not.toBeInTheDocument()
   })
 
   it('hides while actively scrolling down, away from the top', () => {
