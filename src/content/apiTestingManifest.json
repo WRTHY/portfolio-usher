@@ -1,0 +1,18 @@
+[
+  {
+    "id": "auth",
+    "tag": "Auth",
+    "title": "Login — negative case (missing password)",
+    "description": "One test from the auth suite: confirms the API fails loudly and correctly on a malformed request, without locking the assertion to reqres.in's exact error copy.",
+    "repoPath": "tests/auth.spec.ts",
+    "testTitle": "login - missing password - returns 400 with error message (negative case)"
+  },
+  {
+    "id": "users",
+    "tag": "Users",
+    "title": "List users — boundary case (page far beyond total)",
+    "description": "One test from the users suite: what the API does when asked for a page number past the last real one — an easy case to skip by hand and a good automation candidate.",
+    "repoPath": "tests/users.spec.ts",
+    "testTitle": "list users - page far beyond total_pages - returns 200 with empty data (boundary case)"
+  }
+]

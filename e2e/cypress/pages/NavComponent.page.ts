@@ -1,4 +1,4 @@
-export type SectionId = 'about' | 'experience' | 'case-studies' | 'code-samples'
+export type SectionId = 'about' | 'experience' | 'case-studies' | 'code-samples' | 'api-testing'
 
 // Two independent navs render the same section ids: InfoPanel's desktop nav
 // (visible at >=640px, when Header/the mobile nav is display:none) and this
