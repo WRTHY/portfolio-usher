@@ -1,4 +1,8 @@
 :global(#api-testing) {
+  /* Same opposite pairing as CaseStudies: the section stays on the base
+     page tone, and its cards use tone="alt" (see ApiTesting.tsx) so they
+     read as raised surfaces instead of sinking into an identical
+     background. */
   background: var(--bg);
 }
 
@@ -88,4 +92,20 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   min-width: 0;
+}
+
+/* PlaywrightIcon (see toolOptions in ApiTesting.tsx) renders as a <span>
+   sized via an inline style, which beats any width/height set from here —
+   so instead of sizing the icon directly, this sizes the *font* it inherits
+   its 1em from. Mirrors SegmentedControl.module.css's own svg sizing
+   (16px, 14px under the same 479px breakpoint) so both toggle icons match. */
+.toolIcon {
+  display: flex;
+  font-size: 16px;
+}
+
+@media (max-width: 479px) {
+  .toolIcon {
+    font-size: 14px;
+  }
 }
