@@ -1,18 +1,38 @@
 [
   {
-    "id": "auth",
-    "tag": "Auth",
-    "title": "Login — negative case (missing password)",
-    "description": "One test from the auth suite: confirms the API fails loudly and correctly on a malformed request, without locking the assertion to reqres.in's exact error copy.",
-    "repoPath": "tests/auth.spec.ts",
-    "testTitle": "login - missing password - returns 400 with error message (negative case)"
+    "id": "single-resource-positive",
+    "tag": "Resources",
+    "title": "Get single resource — positive case (existing id)",
+    "description": "The happy path for reqres's actual \"single resource\" endpoint: fetch a resource that exists and confirm the full response — status, schema, and content — not just a status code. Toggle between the manual Postman check and its automated Playwright equivalent.",
+    "playwright": {
+      "repoPath": "tests/resources.spec.ts",
+      "testTitle": "lookup with existing id - returns 200 with specified resource information"
+    },
+    "postman": {
+      "inline": {
+        "method": "GET",
+        "url": "{{baseUrl}}/unknown/2",
+        "note": "Pending: not yet in postman/reqres-api-collection.json — pushed here verbatim from James's own Postman run until it's added to the repo and this can go back to a fetched `path` like every other example.",
+        "code": "pm.test(\"Status code is 200\", function () {\n    pm.response.to.have.status(200)\n})\n\npm.test(\"Response includes proper schema\", function() {\n    const response = pm.response.json().data;\n    pm.expect(response).to.have.all.keys('id', 'name', 'year', 'color', 'pantone_value')\n})\n\npm.test(\"Color 2 is fuchsia rose\", function () {\n    const response = pm.response.json()\n    pm.expect(response.data.name).to.eql('fuchsia rose')\n    pm.expect(response.data.color).to.eql('#C74375')\n})\n\npm.test(\"Response is recieved within 500 ms\", function (){\n    pm.expect(pm.response.responseTime).to.be.below(500)\n})\n"
+      }
+    }
   },
   {
-    "id": "users",
-    "tag": "Users",
-    "title": "List users — boundary case (page far beyond total)",
-    "description": "One test from the users suite: what the API does when asked for a page number past the last real one — an easy case to skip by hand and a good automation candidate.",
-    "repoPath": "tests/users.spec.ts",
-    "testTitle": "list users - page far beyond total_pages - returns 200 with empty data (boundary case)"
+    "id": "single-resource-negative",
+    "tag": "Resources",
+    "title": "Get single resource — negative case (nonexistent id)",
+    "description": "The other half of the pair: request a resource id that doesn't exist and confirm the API fails correctly with a 404 and an empty body, not a 500 or a silently-wrong 200.",
+    "playwright": {
+      "repoPath": "tests/resources.spec.ts",
+      "testTitle": "lookup with incorrect id - returns 404 with an empty body"
+    },
+    "postman": {
+      "inline": {
+        "method": "GET",
+        "url": "{{baseUrl}}/unknown/23",
+        "note": "Pending, same as the positive case above — this one is Claude's draft mirroring the negative Playwright test's assertions (404, empty body, <500ms) in the same pm.test style, not yet reviewed/pushed by James. Swap for the real script once it exists in the repo.",
+        "code": "pm.test(\"Status code is 404\", function () {\n    pm.response.to.have.status(404)\n})\n\npm.test(\"Response body is empty\", function () {\n    pm.expect(pm.response.json()).to.eql({})\n})\n\npm.test(\"Response is received within 500 ms\", function (){\n    pm.expect(pm.response.responseTime).to.be.below(500)\n})\n"
+      }
+    }
   }
 ]
