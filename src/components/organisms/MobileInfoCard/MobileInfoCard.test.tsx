@@ -79,9 +79,9 @@ describe('MobileInfoCard', () => {
   })
 
   // role (tagline) and quickSummary both moved to the hamburger menu (see
-  // Nav.tsx) to keep this card to just identity + "which section" —
+  // Nav.tsx) to keep this card to just identity + "which section" -
   // regression-proof that neither creeps back in here.
-  it('does not show the role or quickSummary — those live in the hamburger menu instead', () => {
+  it('does not show the role or quickSummary - those live in the hamburger menu instead', () => {
     scrollTo(0)
     render(<MobileInfoCard />)
     expect(screen.queryByText(siteContent.tagline)).not.toBeInTheDocument()
@@ -117,7 +117,7 @@ describe('MobileInfoCard', () => {
     expect(screen.getByTestId('mobile-info-card')).toHaveAttribute('aria-hidden', 'true')
 
     // IntersectionObserver can report the new section before scroll-snap's
-    // own glide into place — and any snap-correction after it — has
+    // own glide into place - and any snap-correction after it - has
     // actually finished. The card should stay hidden through that, not
     // pop in ahead of the section's blank space and then blink back out
     // once trailing scroll events resume.

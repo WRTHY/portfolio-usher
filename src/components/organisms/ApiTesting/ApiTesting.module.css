@@ -6,7 +6,7 @@
   background: var(--bg);
 }
 
-/* Border/radius/padding recipe lives in the shared Card atom — see
+/* Border/radius/padding recipe lives in the shared Card atom - see
    Card.module.css. This file only styles layout and content. */
 .explainer {
   display: flex;
@@ -95,7 +95,7 @@
 }
 
 /* PlaywrightIcon (see toolOptions in ApiTesting.tsx) renders as a <span>
-   sized via an inline style, which beats any width/height set from here —
+   sized via an inline style, which beats any width/height set from here -
    so instead of sizing the icon directly, this sizes the *font* it inherits
    its 1em from. Mirrors SegmentedControl.module.css's own svg sizing
    (16px, 14px under the same 479px breakpoint) so both toggle icons match. */

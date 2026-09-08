@@ -1,4 +1,4 @@
-/* A floating card rather than bare bars — without its own surface this sat
+/* A floating card rather than bare bars - without its own surface this sat
    directly on top of whatever card/text happened to be scrolled underneath
    it, with nothing to visually separate the two. Border/radius/shadow come
    from the shared .raised surface (see styles/shared.module.css); sized to

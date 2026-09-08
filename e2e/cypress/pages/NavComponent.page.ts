@@ -4,7 +4,7 @@ export type SectionId = 'about' | 'experience' | 'case-studies' | 'code-samples'
 // (visible at >=640px, when Header/the mobile nav is display:none) and this
 // hamburger's own mobile nav (visible below 640px). Both tag their links with
 // matching data-testids (see InfoPanel.tsx / Nav.tsx) keyed by SectionId, so
-// this looks those up directly rather than by accessible name — the ids
+// this looks those up directly rather than by accessible name - the ids
 // callers pass in ('case-studies') don't match the rendered label text
 // ('Case Studies').
 export class NavComponent {
@@ -17,7 +17,7 @@ export class NavComponent {
   }
 
   // The mobile nav's links live inside a panel that's display:none when
-  // closed, which drops them from the accessibility tree — findByTestId
+  // closed, which drops them from the accessibility tree - findByTestId
   // queries the raw DOM instead, so visibility checks spanning the
   // open/closed toggle still find a real (if hidden) element.
   mobileLink(id: SectionId): Cypress.Chainable<JQuery> {

@@ -40,13 +40,13 @@ function CodeSamples() {
   const activeFile = example.files[activeFileIndex]
 
   const handleTestingTypeChange = (next: TestingType) => {
-    // Performance is disabled/soon — Radix never fires a change for a
+    // Performance is disabled/soon - Radix never fires a change for a
     // disabled radio item, but the type still has to account for it since
     // it's a real option in testingTypeOptions.
     if (next === 'performance') return
 
     setTestingType(next)
-    // Component and e2e have disjoint framework sets — landing on the
+    // Component and e2e have disjoint framework sets - landing on the
     // previous tier's framework would pick an example that doesn't exist
     // for the new one, so always reset to the new tier's first (non-
     // disabled) framework.
@@ -57,7 +57,7 @@ function CodeSamples() {
 
   const handleFrameworkChange = (next: Framework) => {
     setFramework(next)
-    // A different example can have fewer files than the current selection —
+    // A different example can have fewer files than the current selection -
     // always land back on its first file rather than an out-of-range index.
     setActiveFileIndex(0)
   }

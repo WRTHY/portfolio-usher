@@ -1,5 +1,5 @@
 /* Box recipe (border/radius/padding/background) now lives in the shared
-   Card atom — see Card.module.css. This file only styles TextCard's own
+   Card atom - see Card.module.css. This file only styles TextCard's own
    child elements. */
 .card h2 {
   margin: 0 0 12px;

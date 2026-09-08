@@ -30,7 +30,7 @@ describe('accessibility', () => {
     cy.visit('/', { onBeforeLoad: (win) => win.localStorage.setItem('mode', 'light') })
     portfolioPage.themeToggle.toggle()
     // InfoPanel's background-color transition runs 0.6s (see
-    // InfoPanel.module.css) — scanning before it settles catches axe
+    // InfoPanel.module.css) - scanning before it settles catches axe
     // mid-crossfade and flags transitional colors that never render.
     cy.wait(700)
 

@@ -11,7 +11,7 @@
   right: 12px;
 }
 
-/* Border/radius/padding/hover recipe now lives in the shared Card atom —
+/* Border/radius/padding/hover recipe now lives in the shared Card atom -
    see Card.module.css. This file only styles this card's own layout. */
 .card {
   display: flex;
@@ -45,7 +45,7 @@
 .affordance {
   font-family: var(--mono);
   font-size: 12px;
-  /* Plain --text, no opacity dimming — opacity blended against
+  /* Plain --text, no opacity dimming - opacity blended against
      --section-alt-bg dropped this below the 4.5:1 WCAG AA minimum for
      normal text (axe color-contrast). --text alone still reads as
      secondary next to the heading/summary above it. */
@@ -60,8 +60,8 @@
 
 /* The "Reading Rail" modal layout: a left rail (tags, title, section-jump
    nav) beside a right content pane (Problem/Approach/Outcome). Mobile-first
-   — the rail stacks above the content by default, matching how the sidebar
-   InfoPanel is hidden below 640px everywhere else on the site — and becomes
+   - the rail stacks above the content by default, matching how the sidebar
+   InfoPanel is hidden below 640px everywhere else on the site - and becomes
    a fixed-width side rail at the same 640px breakpoint. */
 .rail {
   display: flex;
@@ -84,8 +84,8 @@
 
 /* .tags is shared with the card list, where margin-top: auto pins the tag
    row to the bottom of the card. Inside the rail that same auto margin
-   would eat all the flex column's free space and push the tags — and
-   everything after them — toward the bottom instead of the top. */
+   would eat all the flex column's free space and push the tags - and
+   everything after them - toward the bottom instead of the top. */
 .rail .tags {
   margin-top: 0;
   padding-top: 0;
@@ -98,8 +98,8 @@
   margin: 2px 0 0;
 }
 
-/* The second rail divider, immediately above the nav. Pins itself — and
-   the nav that follows it — to the bottom of the rail's flex column,
+/* The second rail divider, immediately above the nav. Pins itself - and
+   the nav that follows it - to the bottom of the rail's flex column,
    regardless of how much space the tags/highlights above take up. */
 .railDividerBottom {
   margin-top: auto;
@@ -116,7 +116,7 @@
 
 /* Rectangular like the resume Button, but with the same quiet 1px border
    the Experience/CaseStudies cards use rather than the Button's bold 2px
-   accent border — a stat callout should read as a card, not a CTA. */
+   accent border - a stat callout should read as a card, not a CTA. */
 .highlight {
   display: flex;
   flex-direction: column;
@@ -139,12 +139,12 @@
   font-family: var(--sans);
   font-size: 11px;
   line-height: 130%;
-  /* Plain --text, no opacity dimming — same WCAG AA contrast fix as
+  /* Plain --text, no opacity dimming - same WCAG AA contrast fix as
      .affordance above. */
   color: var(--text);
 }
 
-/* Mobile: a horizontal, scrollable pill row instead of a vertical list —
+/* Mobile: a horizontal, scrollable pill row instead of a vertical list -
    the same "collapse the rail" convention used for InfoPanel's own nav. */
 .railNav {
   display: flex;
@@ -210,7 +210,7 @@
 
 /* A compact, ordered timeline for a case study built around a multi-phase
    framework rather than a single project narrative (see CS4's `phases`
-   field) — most case studies won't have one. Sits first in the content
+   field) - most case studies won't have one. Sits first in the content
    pane so the whole shape of the framework reads before any prose does.
    A horizontal-scrolling row, not a wrapping grid: phase order is the
    point, so a left-to-right read has to survive any viewport width
@@ -283,7 +283,7 @@
 }
 
 /* Blank-line breaks in a field split into separate <p> tags (see the
-   Paragraphs component in CaseStudies.tsx) — space them apart so an
+   Paragraphs component in CaseStudies.tsx) - space them apart so an
    intentional paragraph break still reads as one once rendered, since the
    global `p { margin: 0 }` reset otherwise runs them straight together. */
 .section p + p {
@@ -291,7 +291,7 @@
 }
 
 /* A deliberate aside, not a bug: the optional 4th field gets its own
-   surface — the same accent tint Badge pills use — so it doesn't read as
+   surface - the same accent tint Badge pills use - so it doesn't read as
    equal-weight to Problem/Approach/Outcome. */
 .futureIterations {
   background: var(--accent-bg);

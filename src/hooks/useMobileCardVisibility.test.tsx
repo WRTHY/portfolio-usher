@@ -72,7 +72,7 @@ describe('useMobileCardVisibility', () => {
     expect(screen.getByTestId('target')).toHaveTextContent('hidden/instant')
 
     // The section changes mid-scroll (IntersectionObserver can report it
-    // before scroll-snap's own glide has actually finished) — should stay
+    // before scroll-snap's own glide has actually finished) - should stay
     // hidden until things actually settle.
     rerender(<TestTarget activeId="experience" threshold={120} />)
     expect(screen.getByTestId('target')).toHaveTextContent('hidden/instant')
@@ -91,7 +91,7 @@ describe('useMobileCardVisibility', () => {
     rerender(<TestTarget activeId="experience" threshold={120} />)
 
     // Simulates scroll-snap's snap-correction continuing to fire 'scroll'
-    // events after the section already changed — each one should push the
+    // events after the section already changed - each one should push the
     // settle check back rather than letting a stale timer reveal (and then
     // immediately re-hide) the card while movement is still ongoing.
     act(() => {
@@ -109,7 +109,7 @@ describe('useMobileCardVisibility', () => {
     expect(screen.getByTestId('target')).toHaveTextContent('visible/instant')
   })
 
-  it('stays revealed after settling on a new section — it is not hidden again by a timeout', () => {
+  it('stays revealed after settling on a new section - it is not hidden again by a timeout', () => {
     scrollTo(0)
     const { rerender } = render(<TestTarget activeId="about" threshold={120} />)
 
@@ -120,7 +120,7 @@ describe('useMobileCardVisibility', () => {
     })
     expect(screen.getByTestId('target')).toHaveTextContent('visible/instant')
 
-    // No further scrolling — a fixed auto-hide timer previously cleared
+    // No further scrolling - a fixed auto-hide timer previously cleared
     // the reveal here regardless, causing a blink back out with no user
     // input at all.
     act(() => {
@@ -137,7 +137,7 @@ describe('useMobileCardVisibility', () => {
     expect(screen.getByTestId('target')).toHaveTextContent('visible/eased')
 
     // Scroll-snap settling into place can fire one last trailing event a
-    // few px in the opposite direction of the actual gesture — that alone
+    // few px in the opposite direction of the actual gesture - that alone
     // shouldn't flip the card back to hidden.
     scrollTo(304)
     expect(screen.getByTestId('target')).toHaveTextContent('visible/eased')
@@ -155,7 +155,7 @@ describe('useMobileCardVisibility', () => {
     expect(screen.getByTestId('target')).toHaveTextContent('visible/instant')
 
     // Continuing to scroll down within the same section should hide it
-    // again like normal — the settle-reveal shouldn't keep forcing it
+    // again like normal - the settle-reveal shouldn't keep forcing it
     // back open.
     scrollTo(600)
     expect(screen.getByTestId('target')).toHaveTextContent('hidden/instant')

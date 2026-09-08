@@ -13,7 +13,7 @@ describe('Modal', () => {
 
     const dialog = screen.getByRole('dialog')
     expect(dialog).toBeInTheDocument()
-    // The dialog's direct parent is the backdrop div — it's the backdrop
+    // The dialog's direct parent is the backdrop div - it's the backdrop
     // that's portaled straight onto <body>, not the dialog itself.
     expect(dialog.parentElement?.parentElement).toBe(document.body)
     expect(dialog).toHaveAttribute('aria-labelledby', 'title')

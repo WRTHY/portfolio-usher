@@ -6,11 +6,11 @@ import { caseStudies } from '../../../content/caseStudies'
 import styles from './CaseStudies.module.css'
 
 // jsdom never lays anything out, so a section's real offsetTop/offsetHeight
-// and the pane's real scrollHeight/clientHeight are all 0 by default — stub
+// and the pane's real scrollHeight/clientHeight are all 0 by default - stub
 // a synthetic layout so useReadingRail's boundary math (see CaseStudies.tsx)
 // has real geometry to scale against. Chosen to mirror the shape of the bug
 // being guarded against: Approach is much taller than Outcome, and Outcome
-// plus Future Iterations together are shorter than one pane height — so a
+// plus Future Iterations together are shorter than one pane height - so a
 // naive "scroll this section's top to a fixed line near the pane's top"
 // approach could never bring Outcome's own top near that line before the
 // pane ran out of room to scroll, permanently skipping it.
@@ -40,7 +40,7 @@ function stubReadingRailLayout(contentPane: Element) {
 //
 // Blank-line-separated paragraphs render as separate <p> elements (see
 // the Paragraphs component in CaseStudies.tsx), and jsdom's textContent
-// concatenates adjacent elements with no separator — so paragraph breaks
+// concatenates adjacent elements with no separator - so paragraph breaks
 // collapse to nothing here rather than to a space, matching the DOM.
 const normalizeWhitespace = (text: string) =>
   text
@@ -173,7 +173,7 @@ describe('CaseStudies', () => {
       stubReadingRailLayout(contentPane)
 
       // Outcome's boundary (≈283) sits well short of maxScroll (350) even
-      // though Outcome itself is far shorter than Approach — this is the
+      // though Outcome itself is far shorter than Approach - this is the
       // exact case that used to leave Outcome permanently skipped, since a
       // fixed reading-line offset could never bring its own short top this
       // close to the pane's top before the pane ran out of room to scroll.

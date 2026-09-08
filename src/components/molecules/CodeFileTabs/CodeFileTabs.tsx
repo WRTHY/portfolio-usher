@@ -23,7 +23,7 @@ function CodeFileTabs({ files, activeIndex, onChange }: CodeFileTabsProps) {
       <div className={styles.row}>
         <div className={styles.left}>
           {/* Only one language exists today, so this is a static badge, not
-              a selector — LanguageTabs was removed for the same reason.
+              a selector - LanguageTabs was removed for the same reason.
               Promote it back into a real selector when a second language
               ships. */}
           <span className={styles.languageBadge}>
@@ -62,7 +62,7 @@ function CodeFileTabs({ files, activeIndex, onChange }: CodeFileTabsProps) {
           value={String(index)}
           forceMount
           className={styles.codeArea}
-          // Only the active panel gets the testid — every file is
+          // Only the active panel gets the testid - every file is
           // force-mounted simultaneously (see comment above), so this is
           // what lets e2e tests find "the visible code" unambiguously
           // instead of matching every mounted-but-hidden panel too.

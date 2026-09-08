@@ -1,4 +1,4 @@
-/* Plain local CSS Module classes, not :global() — a module file made up
+/* Plain local CSS Module classes, not :global() - a module file made up
    entirely of :global() selectors has no locally-scoped class names, and
    Vite's production build drops such CSS chunks from the bundle entirely
    (verified: dev serves it fine, but `npm run build` output has zero
@@ -26,7 +26,7 @@
   /* Mobile: the whole modal is one scrolling column, same as before the
      Reading Rail layout existed. Above 640px this is overridden into a
      fixed-height flex row where the rail and content pane scroll (or
-     don't) independently instead — see the media query below. */
+     don't) independently instead - see the media query below. */
   max-height: 85vh;
   overflow-y: auto;
 }
@@ -38,9 +38,9 @@
     align-items: stretch;
     /* Grows with the viewport instead of sticking at the mobile 760px cap,
        but leaves breathing room on either side rather than filling the
-       screen — same "ceiling, not a fixed size" idea as max-height below. */
+       screen - same "ceiling, not a fixed size" idea as max-height below. */
     max-width: min(1040px, 92vw);
-    /* A hard cap, not just a ceiling on an ever-growing column — the rail
+    /* A hard cap, not just a ceiling on an ever-growing column - the rail
        and content pane below handle their own overflow within this. */
     max-height: min(680px, 82vh);
     overflow: hidden;

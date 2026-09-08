@@ -9,7 +9,7 @@ type ActiveSectionInfo = {
   activeSection: Section | undefined
 }
 
-// Centralizes "which section object (not just id) is currently active" —
+// Centralizes "which section object (not just id) is currently active" -
 // InfoPanel (desktop) and MobileInfoCard (mobile) both need this, and each
 // used to derive it independently via its own sections.find/findIndex call.
 // That duplication is exactly how a new section (e.g. API Testing) could

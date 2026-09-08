@@ -1,14 +1,11 @@
-// Content for the "API Testing" section — a deliberately static counterpart
-// to codeExamples.ts (no live playback, just a toggle between two frozen
-// snippets). It points at a separate repo (see links.apiTestingRepo) that
-// exercises reqres.in, a free hosted fake REST API, with both Postman (manual)
-// and Playwright's `request` fixture (automated).
+// Content for the "API Testing" section: a static counterpart to
+// codeExamples.ts (no live playback, just a toggle between two frozen
+// snippets), pointing at a separate repo (see links.apiTestingRepo) that
+// exercises reqres.in with both Postman and Playwright's `request` fixture.
 //
-// `apiTestingExamples` itself is generated, not hand-written — see
+// `apiTestingExamples` is generated, not hand-written; see
 // apiTesting.generated.ts. To add, remove, or retitle an example, edit
-// apiTestingManifest.json and run `npm run fetch:api-testing`, which pulls
-// the real Playwright test and Postman request straight from that repo
-// rather than trusting a hand-copied paste to stay in sync.
+// apiTestingManifest.json and run `npm run fetch:api-testing`.
 
 export const apiTestingIntro = {
   paragraphs: [

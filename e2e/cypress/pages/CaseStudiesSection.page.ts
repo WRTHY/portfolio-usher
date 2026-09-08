@@ -7,9 +7,9 @@ export class CaseStudiesSection {
     return cy.get('#case-studies')
   }
 
-  // Tile buttons have no aria-label — their accessible name is the badge +
+  // Tile buttons have no aria-label - their accessible name is the badge +
   // title + summary text concatenated, not the case study id callers pass
-  // in (e.g. 'CS 2') — so this looks up the card's data-testid instead
+  // in (e.g. 'CS 2') - so this looks up the card's data-testid instead
   // (see CaseStudies.tsx: `case-study-card-${caseStudy.id}`).
   tile(id: string): Cypress.Chainable<JQuery> {
     return cy.findByTestId(`case-study-card-${id}`)

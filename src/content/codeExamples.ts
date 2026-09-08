@@ -27,7 +27,7 @@ export const codeExamples: readonly AutomationExample[] = [
   // e2e/playwright/case-studies.spec.ts, e2e/playwright/pages/CaseStudiesSection.page.ts,
   // e2e/playwright/fixtures.ts and playwright.config.ts, verbatim. Ordered
   // spec -> page object -> config: that's the mental flow of writing the
-  // suite — start from the scenario/assertions, follow a locator into the
+  // suite - start from the scenario/assertions, follow a locator into the
   // page object that models it, then the fixture wiring and runner config
   // that make the spec runnable at all.
   {
@@ -164,7 +164,7 @@ export default defineConfig({
   // e2e/cypress/pages/PortfolioPage.page.ts and cypress.config.ts, verbatim.
   // Same spec -> page object -> config flow as the Playwright example above
   // (and the same underlying scenario, so switching frameworks mid-read is
-  // apples-to-apples) — including the real difference between them: Cypress
+  // apples-to-apples) - including the real difference between them: Cypress
   // has no fixture-injection story, so PortfolioPage is instantiated
   // directly in the spec instead of handed in by a fixture.
   {
@@ -258,7 +258,7 @@ export type { SectionId }
 
 // Composition root for the site. It's a single page with no real per-URL
 // navigation, so rather than one class per route this models one root
-// object owning a component per section/region — the same shape the app
+// object owning a component per section/region - the same shape the app
 // itself uses (Header/Sidebar/CaseStudies/CodeSamples as siblings).
 export class PortfolioPage {
   readonly nav = new NavComponent()
@@ -302,10 +302,10 @@ export default defineConfig({
   // src/test/setup.ts, verbatim. Vitest + React Testing Library runs these
   // against jsdom; the Cypress CT example right after this one runs the
   // same two components through the same assertions in a real browser
-  // instead — see that example's comment for how they compare. CopyButton
+  // instead - see that example's comment for how they compare. CopyButton
   // covers interaction/mocked-clipboard/fake timers; SegmentedControl
   // covers the accessibility semantics (ARIA role, disabled state); setup.ts
-  // is the shared jsdom config both rely on — Component's answer to the
+  // is the shared jsdom config both rely on - Component's answer to the
   // config file that closes out each e2e example above.
   {
     id: 'vitest-component-tests',
@@ -319,7 +319,7 @@ export default defineConfig({
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import CopyButton from './CopyButton'
 
-// Featured verbatim as the Component/Vitest example in codeExamples.ts — the
+// Featured verbatim as the Component/Vitest example in codeExamples.ts - the
 // portfolio's "Automation Examples" panel renders this exact file, not a
 // hypothetical one, so keep this file's content and this file's copy in
 // codeExamples.ts in sync if either changes.
@@ -329,7 +329,7 @@ describe('CopyButton', () => {
   beforeEach(() => {
     // jsdom 30's navigator.clipboard is a live getter that hands back a
     // fresh instance on every access, so mutating the object it returns
-    // doesn't stick — own the getter instead so every read resolves to the
+    // doesn't stick - own the getter instead so every read resolves to the
     // same mock. userEvent.setup() installs its own clipboard stub that
     // would clobber this, so these tests click via fireEvent instead.
     writeText = vi.fn().mockResolvedValue(undefined)
@@ -512,7 +512,7 @@ if (!window.IntersectionObserver) {
   // src/components/atoms/CopyButton/CopyButton.cy.tsx,
   // src/components/molecules/SegmentedControl/SegmentedControl.cy.tsx and
   // cypress/support/component.ts, verbatim. Same two components, same three
-  // behaviors each, as the Vitest example above — deliberately redundant
+  // behaviors each, as the Vitest example above - deliberately redundant
   // coverage, mounted through Cypress's real Chrome instead of jsdom. It
   // exists so the Component tier can offer a genuine framework choice the
   // same way the E2E tier does, not because jsdom was ever insufficient.
@@ -530,16 +530,16 @@ if (!window.IntersectionObserver) {
 
 // Deliberately redundant with CopyButton.test.tsx (Vitest + React Testing
 // Library): same component, same three behaviors, run through Cypress's
-// real-browser mount instead of jsdom. That's the point — the Component
+// real-browser mount instead of jsdom. That's the point - the Component
 // tier of the portfolio's "Automation Examples" panel offers a Vitest vs.
 // Cypress choice the same way the E2E tier offers Playwright vs. Cypress.
-// Featured verbatim as the Component/Cypress example in codeExamples.ts —
+// Featured verbatim as the Component/Cypress example in codeExamples.ts -
 // keep this file's content and that copy in sync if either changes.
 describe('CopyButton', () => {
   beforeEach(() => {
     // Real Chrome's navigator.clipboard needs OS-level permission (and a
     // secure context) to actually write, neither of which the component
-    // test runner grants — stub it the same way the Vitest test stubs
+    // test runner grants - stub it the same way the Vitest test stubs
     // jsdom's copy.
     cy.window().then((win) => {
       const writeText = cy.stub().as('writeText').resolves()
@@ -585,7 +585,7 @@ describe('CopyButton', () => {
 // Deliberately redundant with SegmentedControl.test.tsx (Vitest + React
 // Testing Library): same component, same three behaviors, run through
 // Cypress's real-browser mount instead of jsdom. Featured verbatim as the
-// Component/Cypress example in codeExamples.ts — keep this file's content
+// Component/Cypress example in codeExamples.ts - keep this file's content
 // and that copy in sync if either changes.
 describe('SegmentedControl', () => {
   it('renders every option and marks the active one checked', () => {

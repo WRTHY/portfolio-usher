@@ -16,7 +16,7 @@ export type CaseStudy = {
   problem: string
   approach: string
   outcome: string
-  /** Reflections — what I'd do differently or explore next, in hindsight. Optional. */
+  /** Reflections - what I'd do differently or explore next, in hindsight. Optional. */
   futureIterations?: string;
   /** Real thumbnail image, once one exists. Falls back to a gradient placeholder. */
   image?: string;
@@ -24,7 +24,7 @@ export type CaseStudy = {
   highlights?: readonly Highlight[];
   /** Compact, ordered timeline strip for a case study built around a multi-phase
    *  framework rather than a single project narrative. Renders at the top of the
-   *  content pane. Optional — most case studies won't have one. */
+   *  content pane. Optional - most case studies won't have one. */
   phases?: readonly Phase[];
 }
 

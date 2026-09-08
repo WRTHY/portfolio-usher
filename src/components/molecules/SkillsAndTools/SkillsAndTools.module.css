@@ -1,4 +1,4 @@
-/* No per-category wrapper card — all three categories' chips share this one
+/* No per-category wrapper card - all three categories' chips share this one
    grid (see SkillsAndTools.tsx: each category's <ul> is display: contents,
    so its <li>s become direct items here) and waterfall across the card's
    full width together. auto-fill with a fixed-width track (matching .chip's
@@ -15,7 +15,7 @@
 }
 
 /* display: contents keeps the <ul> (and its aria-label grouping) out of
-   the visual grid entirely — its <li> children lay out as if they were
+   the visual grid entirely - its <li> children lay out as if they were
    .grid's direct children, which is what lets chips from different
    categories share rows instead of being boxed apart. */
 .categoryList {
@@ -36,10 +36,10 @@
   overflow: hidden;
 }
 
-/* Tints echo this site's Shiki code-highlighting palette (one-dark-pro —
+/* Tints echo this site's Shiki code-highlighting palette (one-dark-pro -
    see CodeBlock.tsx) as a deliberate callback; see DESIGN.md's "Skills &
    Tools accent exception" note by the One Accent Rule. Carried on the chip
-   itself now — with no wrapping card underneath, this is the only color
+   itself now - with no wrapping card underneath, this is the only color
    surface left to mark which category a tool belongs to. */
 .languages {
   background: rgba(97, 175, 239, 0.3);
@@ -66,7 +66,7 @@
 
 /* react-icons' svgs and Iconify's mask-mode spans both size themselves via
    an explicit width/height="1em" attribute, which resolves against
-   .iconWrap's font-size above — but the hand-authored icons (Maestro,
+   .iconWrap's font-size above - but the hand-authored icons (Maestro,
    Reassure's shared PerformanceIcon) only set a viewBox, with no intrinsic
    size at all, so as bare flex children they were rendering at 0×0.
    Targets any plain <svg> specifically so it doesn't touch the Iconify
@@ -85,7 +85,7 @@
   font-size: 13px;
   font-weight: 400;
   /* line-height: 1 clipped descenders (g/y/p) against this element's own
-     overflow: hidden — the line box was exactly 1em tall, shorter than most
+     overflow: hidden - the line box was exactly 1em tall, shorter than most
      fonts' actual ascent+descent. 1.3 gives descenders room without
      visibly shifting the label (bottom stays anchored at 8px from the
      chip's own bottom edge; the extra height grows upward). */
@@ -117,7 +117,7 @@
   }
 }
 
-/* Standard visually-hidden pattern — no shared utility for this existed yet
+/* Standard visually-hidden pattern - no shared utility for this existed yet
    in the codebase, so it's scoped to this component rather than added
    globally. Carries each tool's name at all times, independent of the
    hover-only .hoverLabel, since hover never fires on touch devices. */
