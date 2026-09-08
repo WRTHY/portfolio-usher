@@ -19,10 +19,9 @@ type ReportSection = {
   label: string
 }
 
-// Content fields are plain strings with blank-line-separated paragraphs
-// (see futureIterations in caseStudies.ts). A single <p> collapses those
-// newlines like any other HTML whitespace, so split on them explicitly
-// and render one <p> per paragraph instead.
+// Content fields are plain strings with blank-line-separated paragraphs.
+// A single <p> collapses those newlines like any other HTML whitespace, so
+// split on them explicitly and render one <p> per paragraph instead.
 function Paragraphs({ text }: { text: string }) {
   return (
     <>
@@ -49,50 +48,38 @@ function reportSectionsFor(caseStudy: CaseStudy): ReportSection[] {
   ]
 }
 
-// The Reading Rail's section-jump nav: scrolls the clicked section into
-// view within the content pane, and tracks which section is currently in
-// view to highlight the matching rail item — scoped to the content pane's
-// own scroll position, not the window, since the pane (not the page) is
-// what scrolls.
+// The Reading Rail's section-jump nav: scrolls the clicked section into view
+// and tracks which section is in view to highlight the matching rail item,
+// scoped to the content pane's own scroll position, since the pane scrolls.
 function useReadingRail(reportSections: ReportSection[], resetKey: string | null) {
   const contentRef = useRef<HTMLDivElement>(null)
   const sectionRefs = useRef(new Map<string, HTMLElement>())
   const [activeKey, setActiveKey] = useState<ReportSection['key']>('problem')
   const prefersReducedMotion = usePrefersReducedMotion()
 
-  // Resets the active section back to Problem whenever a different case
-  // study opens. Adjusting state during render (rather than in an effect)
-  // is the React-recommended way to reset state in response to a changed
-  // value without an extra render: https://react.dev/learn/you-might-not-need-an-effect
+  // Resets to Problem when a different case study opens. Adjusting state
+  // during render avoids an extra render vs. doing this in an effect:
+  // https://react.dev/learn/you-might-not-need-an-effect
   const [trackedResetKey, setTrackedResetKey] = useState(resetKey)
   if (resetKey !== trackedResetKey) {
     setTrackedResetKey(resetKey)
     setActiveKey('problem')
   }
 
-  // Maps each section's own document position onto a scrollTop that's
-  // guaranteed reachable, by rescaling the sections' natural spacing to fit
-  // exactly inside the pane's actual scrollable range (0 to maxScroll).
-  // Plain "scroll until this section's top reaches a reading line near the
-  // pane's top" can't work in the general case: a short trailing section
-  // (e.g. Outcome, sitting between a long Approach and Future Iterations)
-  // can need more room to reach that line than the pane has left to scroll,
-  // so its top would never cross the line at all — the rail would jump
-  // straight from Approach to Future Iterations and skip it entirely, no
-  // matter how small the reading-line offset was tuned to be. Rescaling
-  // guarantees every section gets a proportional, non-empty share of
-  // whatever scroll range actually exists, including the last one, which
-  // always lands exactly on maxScroll.
+  // Rescales each section's document position onto the pane's actual
+  // scrollable range (0 to maxScroll), rather than checking whether its top
+  // reached a fixed reading line - a short trailing section can need more
+  // room to reach that line than the pane has left to scroll, which would
+  // skip it entirely. Rescaling guarantees every section gets a
+  // proportional share of whatever range exists.
   const getSectionBoundaries = (pane: HTMLDivElement) => {
     const maxScroll = pane.scrollHeight - pane.clientHeight
     const firstEl = sectionRefs.current.get(reportSections[0]?.key)
     const lastEl = sectionRefs.current.get(reportSections[reportSections.length - 1]?.key)
     const boundaries = new Map<string, number>()
-    // pane.scrollHeight is 0 only before the pane has ever been laid out
-    // (e.g. the very first effect run right after mount) — as opposed to
-    // maxScroll being 0 because real, laid-out content simply fits without
-    // scrolling. Treating those the same would jump straight to the last
-    // section on open instead of leaving the reset-to-Problem in place.
+    // scrollHeight is 0 only before the pane has been laid out, not when
+    // laid-out content simply fits without scrolling - distinguish the two
+    // so this doesn't jump to the last section before layout settles.
     if (!firstEl || !lastEl || pane.scrollHeight === 0) return boundaries
 
     const span = lastEl.offsetTop - firstEl.offsetTop
@@ -140,12 +127,9 @@ function useReadingRail(reportSections: ReportSection[], resetKey: string | null
     const boundary = getSectionBoundaries(pane).get(key)
     if (boundary === undefined) return
 
-    // Scrolls to this section's own rescaled boundary rather than using
-    // scrollIntoView to align its top to the pane's top — for a section
-    // too close to the end to ever reach that alignment, scrollIntoView
-    // would just clamp to the pane's max scroll, landing on the same
-    // position a later section's nav item would, and the highlight would
-    // disagree with the item just clicked.
+    // Uses this section's rescaled boundary rather than scrollIntoView,
+    // which would clamp a near-the-end section to the pane's max scroll -
+    // the same position a later section's nav item lands on.
     pane.scrollTo({ top: boundary, behavior: prefersReducedMotion ? 'auto' : 'smooth' })
   }
 
@@ -258,7 +242,7 @@ function CaseStudies() {
                   The framework, phase by phase
                 </span>
                 {/* tabIndex + aria makes this reachable/nameable via keyboard
-                    (axe's scrollable-region-focusable) — unlike .railNav
+                    (axe's scrollable-region-focusable) - unlike .railNav
                     above, these phase cards are plain divs with no focusable
                     descendant of their own to satisfy that rule instead. */}
                 <div

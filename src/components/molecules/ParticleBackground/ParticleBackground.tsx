@@ -5,17 +5,16 @@ import type { Engine, ISourceOptions } from '@tsparticles/engine'
 import usePrefersReducedMotion from '../../../hooks/usePrefersReducedMotion'
 import styles from './ParticleBackground.module.css'
 
-// Must be a stable reference across the component's lifetime — ParticlesProvider
-// throws if it receives a new `init` function identity after the first mount.
+// Must be a stable reference: ParticlesProvider throws on a new `init`
+// function identity after the first mount.
 const initEngine = async (engine: Engine) => {
   await loadSlim(engine)
 }
 
-// getComputedStyle().getPropertyValue('--accent') would return the raw,
-// unresolved token text (e.g. "light-dark(#6d28d9, #a78bfa)") since custom
-// properties aren't resolved until substituted into a real CSS property.
-// Setting `color` on a throwaway element and reading it back forces that
-// resolution, giving the actual currently-active color.
+// getComputedStyle().getPropertyValue('--accent') returns the raw token text
+// (e.g. "light-dark(#6d28d9, #a78bfa)") since custom properties aren't
+// resolved until used in a real CSS property. Setting it on a throwaway
+// element and reading back `color` forces that resolution.
 function resolveCssColor(customProperty: string): string {
   const probe = document.createElement('div')
   probe.style.color = `var(${customProperty})`
@@ -25,11 +24,8 @@ function resolveCssColor(customProperty: string): string {
   return resolved
 }
 
-// Each section gets its own small tuning of the same effect — close enough
-// to read as one consistent visual language, different enough that moving
-// between sections registers subconsciously without calling attention to
-// itself. Only density/speed/spacing/size vary; color still comes from the
-// shared --particle-color token so the palette never shifts per section.
+// Each section gets a small tuning of the same effect - only density/speed/
+// spacing/size vary; color always comes from --particle-color.
 const variants = {
   hero: { number: 40, speed: 0.6, linkDistance: 120, size: { min: 2, max: 4 } },
   about: { number: 40, speed: 0.6, linkDistance: 120, size: { min: 2, max: 4 } },

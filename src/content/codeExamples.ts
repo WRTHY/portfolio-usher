@@ -1,10 +1,6 @@
-// Literal-string content model, intentionally simple for now: each file's
-// `code` is copied verbatim from the real file it names (see the comment on
-// each example below for exactly which one), so this panel never drifts
-// into showing invented code. A future pass may move this to a step-based
-// schema (a list of `{ action, target, label }` steps) so the same source
-// can drive both the rendered code *and* a live playback demo against the
-// page — that generator/player is out of scope here.
+// Each file's `code` is copied verbatim from the real file it names (see the
+// comment on each example below), so this panel never drifts into showing
+// invented code.
 
 export type TestingType = 'component' | 'e2e' | 'performance'
 

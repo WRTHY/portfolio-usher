@@ -1,16 +1,11 @@
-// Pulls one illustrative Playwright `test(...)` block AND its matching
-// Postman request (+ Tests script) per manifest entry from the public
-// API-testing-sample repo and bakes them into apiTesting.generated.ts, so
-// the portfolio's "API Testing" section shows real, current snippets
-// instead of a hand-copied (and easily stale) paste — trimmed to a single
-// case per entry rather than the whole spec/collection, to keep the
-// section scannable.
+// Pulls one illustrative Playwright test() block and its matching Postman
+// request from the public API-testing-sample repo into
+// apiTesting.generated.ts, trimmed to a single case per entry so the
+// section stays scannable.
 //
-// Run manually (npm run fetch:api-testing) whenever that repo changes, and
-// opportunistically as part of `npm run build`. Non-fatal on any failure —
-// mirrors fetch-fonts.mjs's fallback behavior — so a network hiccup, a
-// renamed file/test/request, or a retitled entry never breaks the build; it
-// just leaves the previously committed generated file in place.
+// Run manually (npm run fetch:api-testing) or as part of `npm run build`.
+// Non-fatal on failure, like fetch-fonts.mjs: a network hiccup or a renamed
+// file/test just leaves the previously committed generated file in place.
 import { readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';

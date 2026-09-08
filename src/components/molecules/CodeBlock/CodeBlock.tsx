@@ -7,23 +7,11 @@ type CodeBlockProps = {
   language: string
 }
 
-// Paired light/dark themes plus defaultColor="light-dark()" make Shiki emit
-// CSS light-dark() values per token instead of one hardcoded color — so
-// syntax colors track the site's own color-scheme (driven by ThemeToggle's
-// data-mode attribute) the same way every custom property in index.css
-// does. A single dark-only theme here previously failed color-contrast
-// against the light-mode code background.
-//
-// one-light's own de-emphasis colors (comments/punctuation, e.g. #A0A1A7)
-// are still too light to hit 4.5:1 against any workable light background —
-// syntax themes are designed for aesthetics, not WCAG, and this is common
-// across most bundled light themes, not a one-light-specific issue (checked
-// several). Rather than invent a bespoke palette, this darkens just the
-// handful of one-light tokens that actually fail against --code-bg,
-// keeping each color's original hue — same theme, same background, minimum
-// change needed to clear AA.
-// Shiki lowercases each token's color before looking it up in this map, so
-// the keys have to be lowercase too or the replacement silently no-ops.
+// Paired light/dark themes + defaultColor="light-dark()" make Shiki emit
+// light-dark() CSS per token so syntax colors track the site's color-scheme.
+// one-light's de-emphasis colors (e.g. #A0A1A7) still fall short of 4.5:1
+// against --code-bg, so these darken just the tokens that fail, same hue.
+// Keys must be lowercase - Shiki lowercases before the lookup.
 const LIGHT_THEME_CONTRAST_FIXES: Record<string, string> = {
   '#e45649': '#bf2a1c',
   '#50a14f': '#387137',
@@ -34,21 +22,15 @@ const LIGHT_THEME_CONTRAST_FIXES: Record<string, string> = {
   '#c18401': '#845a01',
 }
 
-// Same idea as the light-theme map above, for one-dark-pro: only its coral
-// token color (used for tags/attributes) falls just short of 4.5:1 against
-// --code-bg's dark value (4.38:1) — a small brighten of the same hue clears it.
+// Same idea for one-dark-pro: only its coral token (4.38:1) falls short.
 const DARK_THEME_CONTRAST_FIXES: Record<string, string> = {
   '#e06c75': '#e37179',
 }
 
 function CodeBlock({ code, language }: CodeBlockProps) {
-  // Reserves vertical room for this file's own line count (rather than a
-  // shared value from some other file) so the loading gap before Shiki's
-  // async highlight() resolves never collapses this block to 0 height —
-  // without leaving every *shorter* file in the same example padded out
-  // to match its tallest sibling, which is what was producing a large
-  // blank gap (and the code theme's background showing through as a gray
-  // bar) under whichever file happened to be shortest.
+  // Reserves this file's own line height so the gap before Shiki's async
+  // highlight() resolves doesn't collapse to 0, without padding shorter
+  // files out to match a taller sibling.
   const lines = code.split('\n').length
 
   return (
