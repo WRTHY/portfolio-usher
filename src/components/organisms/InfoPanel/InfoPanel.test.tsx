@@ -109,7 +109,7 @@ describe('InfoPanel', () => {
     expect(panel).toHaveStyle({ '--panel-bg': 'var(--section-alt-bg)' })
 
     // Zero out the outgoing section's ratio first, as a real observer
-    // callback would report once it's scrolled out of view — otherwise a
+    // callback would report once it's scrolled out of view - otherwise a
     // tied ratio just keeps the earlier section active.
     activateSection('about', 0)
     activateSection('experience', 1)

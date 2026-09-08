@@ -37,7 +37,7 @@
   flex: 1;
   /* Flex items default to a content-based min-width (min-width: auto), which
      ignores flex-basis/flex-shrink and refuses to shrink a nowrap label below
-     its full text width — on a narrow track (see the @media block below)
+     its full text width - on a narrow track (see the @media block below)
      that pushed three segments well past the track's actual width instead
      of sharing it evenly. min-width: 0 lets flex-shrink/wrapping win instead. */
   min-width: 0;
@@ -81,7 +81,7 @@
 
 /* At phone widths (see index.css's matching --page-gutter breakpoint) a
    3-option track like the testing-type switcher doesn't have room for
-   nowrap labels at full size even after min-width: 0 above — the labels
+   nowrap labels at full size even after min-width: 0 above - the labels
    themselves are wider than an even split of the track. Rather than let
    them clip, shrink the type/icon/padding and let the label wrap onto a
    second line so every segment stays fully visible and tappable. */

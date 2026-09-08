@@ -2,7 +2,7 @@
   background: var(--section-alt-bg);
 }
 
-/* Border/radius/padding/hover recipe now lives in the shared Card atom —
+/* Border/radius/padding/hover recipe now lives in the shared Card atom -
    see Card.module.css. This file only styles the card's own content. */
 .cardHeader {
   display: flex;

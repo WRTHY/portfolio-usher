@@ -1,5 +1,5 @@
 // Pulls the licensed TBJ-Orcherum webfont into public/fonts/ before build.
-// The font can't be committed to this public repo (license restriction — see
+// The font can't be committed to this public repo (license restriction - see
 // .gitignore), so it lives in the private WRTHY/personal-assets repo instead
 // and is fetched here using a read-only token.
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
@@ -21,7 +21,7 @@ if (missing.length === 0) {
 
 if (!TOKEN) {
   console.warn(
-    `[fetch-fonts] Missing ${missing.join(', ')} and no FONT_ASSETS_TOKEN set — ` +
+    `[fetch-fonts] Missing ${missing.join(', ')} and no FONT_ASSETS_TOKEN set - ` +
       'building without the custom heading font (falls back to system-ui).'
   );
   process.exit(0);

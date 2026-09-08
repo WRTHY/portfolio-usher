@@ -12,7 +12,7 @@
   background: var(--section-alt-bg);
 }
 
-/* Same phone-width narrowing as the section gutter (see index.css) — the
+/* Same phone-width narrowing as the section gutter (see index.css) - the
    card's own horizontal padding was compounding the fixed gutter's squeeze
    on top of it. */
 @media (max-width: 479px) {

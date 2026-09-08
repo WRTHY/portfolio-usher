@@ -1,19 +1,19 @@
 import type { AriaAttributes, SVGProps } from 'react'
 import { Icon, type IconifyIcon } from '@iconify/react/offline'
 
-// mode="mask" renders as a <span>, not an <svg> — @iconify/react's own
+// mode="mask" renders as a <span>, not an <svg> - @iconify/react's own
 // props type reflects that (e.g. its onLoad has a different signature than
 // SVGProps' onLoad), so these three wrappers only forward the one prop
 // their callers actually pass (aria-hidden) rather than the full SVGProps
 // surface.
 type MaskIconProps = Pick<AriaAttributes, 'aria-hidden'>
 
-// Simple Icons (react-icons/si) has no mark at all for these three — checked
+// Simple Icons (react-icons/si) has no mark at all for these three - checked
 // against the installed version, same finding as Cypress/Playwright in
 // FrameworkSwitcher/frameworkOptions.tsx. Iconify's aggregated collections
 // (searched via api.iconify.design) cover all three instead. The icon data
 // below was extracted once from each collection's own npm package
-// (@iconify-json/devicon-plain, @iconify-json/tabler — installed only long
+// (@iconify-json/devicon-plain, @iconify-json/tabler - installed only long
 // enough to copy the `body`/`width`/`height` fields, not a runtime
 // dependency) and is rendered through the real @iconify/react component so
 // this stays backed by the actual library rather than a one-off copy of its
@@ -26,14 +26,14 @@ type MaskIconProps = Pick<AriaAttributes, 'aria-hidden'>
 // hand-flattening every path by hand. The '/offline' entry point is a
 // deliberate choice over the package's default export: it excludes
 // Iconify's API-fetch machinery entirely, so there's no runtime network
-// dependency on Iconify's CDN — everything here is embedded data.
+// dependency on Iconify's CDN - everything here is embedded data.
 //
 // Reassure has no mark anywhere and uses the shared PerformanceIcon
 // speed-dial glyph from TestingTypeIcons.tsx instead (it's a React Native
 // performance-testing tool, so that glyph already fits); see
-// toolCategories.tsx. Maestro does have a real mark — see below.
+// toolCategories.tsx. Maestro does have a real mark - see below.
 
-// devicon-plain's own single-color variant of its Playwright mark — cleaner
+// devicon-plain's own single-color variant of its Playwright mark - cleaner
 // than flattening the six-path official logo by hand.
 const playwrightIcon: IconifyIcon = {
   body: '<path d="m72.086 86.132l-.594-.144c-13.125-3.844-15.15-14.311-15.15-14.311l18.182 5.082L84.15 39.77l-.116-.031c-11.807-3.162-19.64-8.692-22.744-11.292c-4.4-3.685-6.335-6.246-8.24-2.372c-1.682 3.417-3.836 8.977-5.92 16.762c-4.516 16.857-7.892 52.429 20.027 59.914l.572.129zm-18.807-30.85s4.4-6.843 11.862-4.722c7.467 2.121 8.045 10.376 8.045 10.376zm-8.517 23.451L31.787 82.41s1.41-8.029 10.968-11.212l-7.347-27.573l-.635.193c-9.111 2.457-16.476 1.805-19.55 1.273c-4.357-.751-6.636-1.708-6.422 1.606c.186 2.923.882 7.454 2.477 13.44c3.45 12.961 14.854 37.937 36.405 32.132l.635-.199zM19.548 60.315l15.316-4.035s-.446 5.892-6.188 7.405c-5.743 1.512-9.128-3.371-9.128-3.371zm89.824-18.979c-3.981.698-13.532 1.567-25.336-1.596c-11.807-3.162-19.64-8.692-22.744-11.292c-4.4-3.685-6.335-6.246-8.24-2.372c-1.684 3.417-3.837 8.977-5.921 16.762c-4.516 16.857-7.892 52.429 20.027 59.914c27.912 7.479 42.772-25.017 47.289-41.875c2.084-7.783 2.998-13.676 3.25-17.476c.287-4.305-2.67-3.055-8.324-2.064zM53.28 55.282s4.4-6.843 11.862-4.722c7.467 2.121 8.045 10.376 8.045 10.376zm18.215 30.706c-13.125-3.845-15.15-14.311-15.15-14.311l35.259 9.858c0-.002-7.117 8.25-20.109 4.453m12.466-21.51s4.394-6.838 11.854-4.711c7.46 2.124 8.048 10.379 8.048 10.379zM51.732 83.935v-7.179l-19.945 5.656s1.474-8.563 11.876-11.514c3.155-.894 5.846-.888 8.069-.459V40.995h9.987c-1.087-3.36-2.139-5.947-3.023-7.744c-1.461-2.975-2.96-1.003-6.361 1.842c-2.396 2.001-8.45 6.271-17.561 8.726c-9.111 2.457-16.476 1.805-19.55 1.273c-4.357-.752-6.636-1.708-6.422 1.605c.186 2.923.882 7.455 2.477 13.44c3.45 12.962 14.854 37.937 36.405 32.132c5.629-1.517 9.603-4.515 12.357-8.336h-8.309Zm-32.185-23.62l15.316-4.035s-.446 5.892-6.188 7.405c-5.743 1.512-9.128-3.371-9.128-3.371z"/>',
@@ -46,7 +46,7 @@ export function PlaywrightIcon(props: MaskIconProps) {
 }
 
 // devicon-plain's own single-color variant of Slack's real four-block
-// pinwheel mark — closer to the actual brand shape than a generic
+// pinwheel mark - closer to the actual brand shape than a generic
 // redraw (checked against mdi:slack as an alternative; this one matches
 // the true logo's proportions).
 const slackIcon: IconifyIcon = {
@@ -59,7 +59,7 @@ export function SlackIcon(props: MaskIconProps) {
   return <Icon icon={slackIcon} mode="mask" {...props} />
 }
 
-// Tabler's purpose-built monochrome brand icon — no plain/monochrome React
+// Tabler's purpose-built monochrome brand icon - no plain/monochrome React
 // Native mark exists in devicon or Simple Icons, but Tabler draws its brand
 // icons as single-color from the start rather than as a flattened multi-
 // color logo, so this reads more cleanly at chip size than a squashed atom
@@ -75,7 +75,7 @@ export function ReactNativeIcon(props: MaskIconProps) {
 }
 
 // Iconify's only Maestro mark (logos:maestro) turned out to be a stale/
-// unrelated rebrand-era logo, unrecognizable once flattened — fetched
+// unrelated rebrand-era logo, unrecognizable once flattened - fetched
 // straight from maestro.dev's own favicon.svg instead (the current,
 // authoritative mark) and dropped its black rounded-square backing plate,
 // since the chip already supplies its own tinted background; only the

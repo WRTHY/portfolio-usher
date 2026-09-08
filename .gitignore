@@ -24,12 +24,13 @@ dist-ssr
 *.sln
 *.sw?
 
-# Licensed webfont — not for public redistribution
+# Licensed webfont, not for public redistribution
 public/fonts/
 
-# Impeccable/Claude design docs — not ready for the public repo yet
+# Local working docs, not ready for the public repo yet
 /PRODUCT.md
 /DESIGN.md
+/AI_TELLS_AUDIT.md
 .impeccable/
 
 # Playwright
@@ -41,8 +42,3 @@ public/fonts/
 /cypress/videos/
 /cypress/screenshots/
 /cypress/downloads/
-
-# Impeccable/Claude design docs — not ready for the public repo yet
-/PRODUCT.md
-/DESIGN.md
-.impeccable/

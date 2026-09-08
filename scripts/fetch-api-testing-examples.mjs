@@ -1,16 +1,11 @@
-// Pulls one illustrative Playwright `test(...)` block AND its matching
-// Postman request (+ Tests script) per manifest entry from the public
-// API-testing-sample repo and bakes them into apiTesting.generated.ts, so
-// the portfolio's "API Testing" section shows real, current snippets
-// instead of a hand-copied (and easily stale) paste — trimmed to a single
-// case per entry rather than the whole spec/collection, to keep the
-// section scannable.
+// Pulls one illustrative Playwright test() block and its matching Postman
+// request from the public API-testing-sample repo into
+// apiTesting.generated.ts, trimmed to a single case per entry so the
+// section stays scannable.
 //
-// Run manually (npm run fetch:api-testing) whenever that repo changes, and
-// opportunistically as part of `npm run build`. Non-fatal on any failure —
-// mirrors fetch-fonts.mjs's fallback behavior — so a network hiccup, a
-// renamed file/test/request, or a retitled entry never breaks the build; it
-// just leaves the previously committed generated file in place.
+// Run manually (npm run fetch:api-testing) or as part of `npm run build`.
+// Non-fatal on failure, like fetch-fonts.mjs: a network hiccup or a renamed
+// file/test just leaves the previously committed generated file in place.
 import { readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -23,7 +18,7 @@ const BRANCH = 'master';
 const POSTMAN_COLLECTION_PATH = 'postman/reqres-api-collection.json';
 
 function fail(message) {
-  console.warn(`[fetch-api-testing-examples] ${message} — leaving apiTesting.generated.ts as-is.`);
+  console.warn(`[fetch-api-testing-examples] ${message} - leaving apiTesting.generated.ts as-is.`);
   process.exit(0);
 }
 
@@ -48,7 +43,7 @@ async function fetchRepoFile(repoPath) {
 // including the trailing `;`). Works by locating each `test(` invocation
 // (the `\btest\(` boundary excludes `test.describe(`), reading its title as
 // a plain quoted string literal, then walking forward counting paren depth
-// to find that call's own matching close — good enough for the
+// to find that call's own matching close - good enough for the
 // consistently-formatted, single-quoted spec files this repo writes, not a
 // general JS/TS parser.
 function extractTestBlocks(source) {
@@ -84,7 +79,7 @@ function extractTestBlocks(source) {
     if (source[end] === ';') end++;
 
     // How far this call is indented in the original file (it's nested
-    // inside a test.describe block) — stripped back out below so the
+    // inside a test.describe block) - stripped back out below so the
     // extracted snippet reads as a natural, top-level statement rather
     // than starting flush-left while its body stays indented one level in.
     const lineStart = source.lastIndexOf('\n', callStart) + 1;
@@ -112,7 +107,7 @@ function extractImportLine(source) {
 }
 
 // Finds every top-level `const NAME = ...;` declaration in a spec file
-// (single-line only — good enough for this repo's own style, e.g.
+// (single-line only - good enough for this repo's own style, e.g.
 // `const endpointUnderTest = "unknown";` in resources.spec.ts) and returns
 // the ones a given extracted test block actually references by name, so a
 // test that reads a shared constant defined outside its own body doesn't
@@ -145,7 +140,7 @@ function findPostmanItem(items, path) {
 // Renders a Postman request + its Tests script as a single readable,
 // syntactically-valid-JS snippet: the request line as a comment (Postman's
 // own request bar has no "language" of its own to borrow), then a blank
-// line, then the pm.test(...) calls verbatim — i.e. exactly what the
+// line, then the pm.test(...) calls verbatim - i.e. exactly what the
 // Postman "Tests" tab shows.
 function formatPostmanSnippet(item) {
   const { request, event } = item;
@@ -166,7 +161,7 @@ function formatPostmanSnippet(item) {
 // Same request-line-as-comment + Tests-script shape as formatPostmanSnippet
 // above, for a manifest entry that gives the Postman side directly (see
 // `postman.inline` in apiTestingManifest.json) instead of a path into the
-// collection — used for content that hasn't been pushed to
+// collection - used for content that hasn't been pushed to
 // postman/reqres-api-collection.json yet. Flip the manifest entry back to
 // a `path` once it has, so this goes through the real fetch+lookup like
 // every other example instead.
@@ -178,7 +173,7 @@ const manifest = JSON.parse(readFileSync(MANIFEST_PATH, 'utf-8'));
 const specCache = new Map();
 const examples = [];
 
-// Only fetched if at least one manifest entry still uses a `path` lookup —
+// Only fetched if at least one manifest entry still uses a `path` lookup -
 // entries that are all `inline` right now (see apiTestingManifest.json)
 // shouldn't force a network call for a file nothing needs yet.
 let postmanCollection = null;
@@ -249,7 +244,7 @@ for (const entry of manifest) {
 }
 
 const generatedOn = new Date().toISOString().slice(0, 10);
-const output = `// AUTO-GENERATED by scripts/fetch-api-testing-examples.mjs — do not hand-edit.
+const output = `// AUTO-GENERATED by scripts/fetch-api-testing-examples.mjs. Do not hand-edit.
 // Each example pairs one Playwright test() with its matching Postman
 // request + Tests script, extracted verbatim from
 // https://github.com/${REPO}/tree/${BRANCH}, refreshed ${generatedOn}.

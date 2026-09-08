@@ -37,7 +37,7 @@ describe('useOverscrollBump', () => {
 
   it('removes the bump class once the CSS animation finishes', () => {
     // jsdom doesn't run real CSS animations, so animationend never fires on
-    // its own — dispatching it directly simulates what the browser does
+    // its own - dispatching it directly simulates what the browser does
     // when the animation genuinely completes.
     setScrollPosition({ scrollHeight: 1000, innerHeight: 800, scrollY: 200 })
 

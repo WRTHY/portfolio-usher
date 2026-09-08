@@ -14,14 +14,14 @@ describe('Nav', () => {
   })
 
   // quickSummary moved here from MobileInfoCard (the fixed card at the top
-  // of the page) to keep that card from getting cluttered — see its own
+  // of the page) to keep that card from getting cluttered - see its own
   // test file for the matching regression check that it's gone from there.
   it('shows the quickSummary blurb near the bottom of the menu', () => {
     render(<Nav />)
     expect(screen.getByText(siteContent.quickSummary)).toBeInTheDocument()
   })
 
-  // The role (tagline) moved here too, right under the theme toggle —
+  // The role (tagline) moved here too, right under the theme toggle -
   // MobileInfoCard shows the active section's label in that slot instead
   // now (see its own test file for the matching regression check).
   it('shows the role/title near the top of the menu', () => {

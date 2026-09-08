@@ -10,7 +10,7 @@ describe('SkillsAndTools', () => {
     render(<SkillsAndTools />)
 
     // Each name appears twice per chip (the aria-hidden .hoverLabel and the
-    // always-present .srOnly text) — asserting at least one match is enough
+    // always-present .srOnly text) - asserting at least one match is enough
     // to confirm the name reaches the DOM regardless of hover state.
     allTools.forEach((tool) => {
       expect(screen.getAllByText(tool.name).length).toBeGreaterThan(0)
@@ -21,7 +21,7 @@ describe('SkillsAndTools', () => {
     const { container } = render(<SkillsAndTools />)
 
     // Icons render as either <svg> (react-icons, the hand-drawn Reassure
-    // glyph) or <span> (the Iconify mask-mode icons in BrandIcons.tsx) — the
+    // glyph) or <span> (the Iconify mask-mode icons in BrandIcons.tsx) - the
     // wrapper itself, not the tag, is what carries aria-hidden.
     const iconWraps = container.querySelectorAll('[class*="iconWrap"]')
     expect(iconWraps.length).toBe(allTools.length)

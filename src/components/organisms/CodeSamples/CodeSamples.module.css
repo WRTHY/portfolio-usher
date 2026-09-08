@@ -1,7 +1,7 @@
 :global(#code-samples) {
   background: var(--section-alt-bg);
   /* index.css's shared `section` rule vertically centers every section's
-     content (justify-content: center) — fine for every other section,
+     content (justify-content: center) - fine for every other section,
      whose content height never changes at runtime, but this section's
      code panel legitimately resizes per file/testing-type/framework (see
      CodeBlock.tsx). Centering meant that resize visibly dragged the
@@ -13,7 +13,7 @@
 
 /* Border/radius/padding recipe now lives in the shared Card atom (tone
    defaults to --bg, the opposite-pairing every section uses against its own
-   background — see Experience.module.css) — this file only styles layout
+   background - see Experience.module.css) - this file only styles layout
    and content. */
 .explainer {
   display: flex;

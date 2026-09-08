@@ -15,7 +15,7 @@ type CardProps<T extends ElementType> = CardOwnProps<T> &
 
 // Shared box recipe for the site's "card" surfaces (border, radius, padding,
 // the phone-width padding override, and the interactive hover border-color)
-// — see Experience/CaseStudies/CodeSamples/TextCard, which previously
+// - see Experience/CaseStudies/CodeSamples/TextCard, which previously
 // hand-rolled an identical recipe each. Polymorphic via `as` since those
 // consumers render it as an <a>, a <button>, and a plain <div>.
 function Card<T extends ElementType = 'div'>({

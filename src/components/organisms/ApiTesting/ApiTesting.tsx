@@ -20,18 +20,11 @@ const sectionLabel = getSectionLabel('api-testing')
 
 type ApiTool = 'playwright' | 'postman'
 
-// react-icons' bundled Simple Icons set has no Playwright mark (same finding
-// as FrameworkSwitcher/frameworkOptions.tsx), so this reuses the same real
-// Playwright mark the Skills & Tools grid uses (BrandIcons' iconify-sourced
-// PlaywrightIcon) instead of leaving it text-only.
-//
-// That icon renders as a <span> sized via an inline style (1em, set by
-// @iconify/react) rather than an <svg>'s width/height attributes — inline
-// styles beat any external CSS class, so it can't share SegmentedControl's
-// `svg { width/height }` sizing rule the way SiPostman's react-icons svg
-// does. .toolIcon instead sets font-size to match that rule's pixel values;
-// the icon's own 1em then resolves against it, same trick SkillsAndTools
-// uses for this exact icon (see SkillsAndTools.module.css's .iconWrap).
+// react-icons has no Playwright mark, so this reuses BrandIcons'
+// iconify-sourced PlaywrightIcon (same as frameworkOptions.tsx). It renders
+// as a <span> sized via an inline 1em style, which beats SegmentedControl's
+// `svg { width/height }` rule, so .toolIcon sets font-size instead for the
+// 1em to resolve against (same trick as SkillsAndTools.module.css's .iconWrap).
 const toolOptions: SegmentedControlOption<ApiTool>[] = [
   { value: 'postman', label: 'Postman', icon: <SiPostman aria-hidden="true" /> },
   {

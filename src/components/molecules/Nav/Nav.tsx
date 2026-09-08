@@ -11,7 +11,7 @@ import { cx } from '../../../utils/classNames'
 import styles from './Nav.module.css'
 
 // Below 640px, Sidebar (ThemeToggle/SocialLinks) and InfoPanel (the resume
-// button) are both display:none — see their module CSS — so this panel is
+// button) are both display:none - see their module CSS - so this panel is
 // the only place those controls exist on mobile. It duplicates them rather
 // than reusing a shared "mobile-only" wrapper since each one still renders
 // independently at desktop widths from its own fixed-position component.

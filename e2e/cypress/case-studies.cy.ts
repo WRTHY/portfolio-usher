@@ -29,7 +29,7 @@ describe('case study modal', () => {
     caseStudies.modal.closeWithEscape()
     caseStudies.modal.dialog.should('not.exist')
     // Re-queried fresh here rather than reusing a `trigger` captured before
-    // the modal opened — @testing-library/cypress's findBy* queries don't
+    // the modal opened - @testing-library/cypress's findBy* queries don't
     // re-resolve against the live DOM on a later, separately-chained
     // .should() the way a plain cy.get() does, so a captured-and-reused
     // reference stays pinned to its very first (pre-open) lookup.

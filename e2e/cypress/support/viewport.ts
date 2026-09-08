@@ -3,7 +3,7 @@
 // the element intersects the current viewport, same default threshold
 // Playwright's matcher uses (ratio > 0, i.e. partially visible counts).
 declare global {
-  // Required by chai's ambient declaration-merging shape — there's no
+  // Required by chai's ambient declaration-merging shape - there's no
   // ES module equivalent for augmenting the global `Chai` namespace.
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Chai {

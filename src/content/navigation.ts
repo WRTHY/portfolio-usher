@@ -1,7 +1,6 @@
-// `tone` mirrors which background each section actually paints in its own
-// CSS module (see e.g. Experience.module.css / CaseStudies.module.css) —
-// kept here too so InfoPanel can match its own background to whichever
-// section is active without reaching into unrelated CSS modules.
+// `tone` mirrors which background each section paints in its own CSS module
+// (see e.g. Experience.module.css / CaseStudies.module.css), kept here too
+// so InfoPanel can match its background without reaching into other modules.
 export const sections = [
   { id: 'about', label: 'About', description: 'Background and links.', tone: 'base' },
   {

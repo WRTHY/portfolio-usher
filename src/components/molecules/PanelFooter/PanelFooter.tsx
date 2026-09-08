@@ -12,7 +12,7 @@ function PanelFooter({ filePath }: PanelFooterProps) {
         {filePath}
       </span>
       <div className={styles.actions}>
-        <span className={styles.pill}>Live demo — coming soon</span>
+        <span className={styles.pill}>Live demo - coming soon</span>
         <RunButton />
       </div>
     </div>

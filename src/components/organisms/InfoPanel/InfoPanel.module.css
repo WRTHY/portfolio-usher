@@ -10,7 +10,7 @@
     top: 80px;
     left: var(--page-gutter-desktop);
     /* Reset margin/width so this doesn't inherit the shared reading-column
-       indent that index.css applies to every direct child of a <section> —
+       indent that index.css applies to every direct child of a <section> -
        harmless today (this renders at the template level, not inside a
        section) but keeps a fixed, viewport-pinned left edge guaranteed
        regardless of where it's ever mounted from. */
@@ -21,7 +21,7 @@
     height: 75svh;
     padding: 32px;
     /* Tracks whichever section is active (--panel-bg is set inline from
-       useActiveSection — see InfoPanel.tsx), crossfading between the
+       useActiveSection - see InfoPanel.tsx), crossfading between the
        --bg/--section-alt-bg tones as the page scrolls, always opposite the
        active section's own tone so the panel reads as a distinct surface
        rather than blending into whatever's scrolled underneath it. */
@@ -113,7 +113,7 @@
   margin: 8px 0 0;
 }
 
-/* Same band where index.css shrinks --info-panel-width — the smaller panel
+/* Same band where index.css shrinks --info-panel-width - the smaller panel
    still needs smaller padding and a smaller name to avoid the name
    wrapping awkwardly or the fixed-height nav overflowing the fixed 75svh
    panel height. Declared last so it wins over the base .infoPanel/.name

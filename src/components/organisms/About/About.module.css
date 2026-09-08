@@ -1,7 +1,7 @@
 /* Not underlined: --text-h reads as a bright/white highlight against the
    muted --text body copy around it (see about.paragraphs in
    content/site.ts). Bold is the non-color indicator that keeps this
-   compliant with axe's link-in-text-block rule (WCAG 1.4.1) — same size and
+   compliant with axe's link-in-text-block rule (WCAG 1.4.1) - same size and
    position as the surrounding text would otherwise make the link
    indistinguishable without perceiving the color difference. */
 .link {

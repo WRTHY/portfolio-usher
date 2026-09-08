@@ -2,7 +2,7 @@ import { act, fireEvent, render, screen } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import CopyButton from './CopyButton'
 
-// Featured verbatim as the Component/Vitest example in codeExamples.ts — the
+// Featured verbatim as the Component/Vitest example in codeExamples.ts - the
 // portfolio's "Automation Examples" panel renders this exact file, not a
 // hypothetical one, so keep this file's content and this file's copy in
 // codeExamples.ts in sync if either changes.
@@ -12,7 +12,7 @@ describe('CopyButton', () => {
   beforeEach(() => {
     // jsdom 30's navigator.clipboard is a live getter that hands back a
     // fresh instance on every access, so mutating the object it returns
-    // doesn't stick — own the getter instead so every read resolves to the
+    // doesn't stick - own the getter instead so every read resolves to the
     // same mock. userEvent.setup() installs its own clipboard stub that
     // would clobber this, so these tests click via fireEvent instead.
     writeText = vi.fn().mockResolvedValue(undefined)

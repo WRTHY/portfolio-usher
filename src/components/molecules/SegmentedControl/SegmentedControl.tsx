@@ -17,16 +17,14 @@ type SegmentedControlProps<T extends string> = {
   ariaLabel: string
 }
 
-// A RadioGroup, not Tabs — same reason as FrameworkSwitcher/LanguageTabs
-// before it: this picks a value, it doesn't own a tabpanel, so Radix's
-// Tabs.Trigger would emit an aria-controls pointing at an id that never
+// A RadioGroup, not Tabs: this picks a value rather than owning a tabpanel,
+// so Tabs.Trigger would emit an aria-controls pointing at an id that never
 // existed (an axe "aria-valid-attr-value" violation).
 //
-// The highlight is a single absolutely-positioned sibling rather than a
-// per-item "active" background, so it can slide between segments instead of
-// popping. It's sized/positioned entirely from two CSS custom properties
-// (segment count and active index) set here, so the CSS never needs to know
-// how many options a given instance has.
+// The highlight is one absolutely-positioned sibling, not a per-item active
+// background, so it can slide between segments. It's positioned from two CSS
+// custom properties (segment count, active index) so the CSS needn't know
+// how many options exist.
 function SegmentedControl<T extends string>({
   value,
   onChange,
@@ -38,9 +36,8 @@ function SegmentedControl<T extends string>({
     options.findIndex((option) => option.value === value),
   )
 
-  // Slugified from ariaLabel so every SegmentedControl instance (testing
-  // type, framework, any future picker) gets unique, collision-free ids
-  // without callers having to pass one in per option.
+  // Slugified from ariaLabel so each instance gets unique test ids without
+  // callers passing one in.
   const testIdPrefix = ariaLabel.toLowerCase().replace(/[^a-z0-9]+/g, '-')
 
   return (

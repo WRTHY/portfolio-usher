@@ -105,7 +105,7 @@
 
 /* Every file panel is force-mounted (see CodeFileTabs.tsx) so switching
    back to an already-visited file is a plain visibility toggle rather than
-   an unmount/remount that re-runs Shiki's async highlight — but Radix's
+   an unmount/remount that re-runs Shiki's async highlight - but Radix's
    Presence (which forceMount sits on top of) treats `display: none` as
    "this finished exiting," and unmounts the children anyway regardless of
    forceMount (see node_modules/@radix-ui/react-presence, the `styles?.

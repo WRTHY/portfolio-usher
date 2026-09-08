@@ -17,11 +17,11 @@
 :root {
   color-scheme: light dark;
 
-  /* Cream & Violet — the active theme. Each token names its light value,
+  /* Cream & Violet - the active theme. Each token names its light value,
      then its dark value; the browser picks based on the computed
      color-scheme below, which defaults to following the OS preference.
      Dark mode reuses the original mono theme's gray/navy neutrals rather
-     than a warm brown — only the light side and the accent are cream/violet. */
+     than a warm brown - only the light side and the accent are cream/violet. */
   --text: light-dark(#5c5346, #9ca3af);
   --text-h: light-dark(#1f1710, #f3f4f6);
   --bg: light-dark(#f8f1e1, #16171d);
@@ -35,7 +35,7 @@
      low-opacity dots needs stronger contrast than text/UI elements do to
      stay visible against the light cream background. */
   --particle-color: light-dark(#4c1d95, #a78bfa);
-  /* light-dark() is a <color> function — it can only wrap the color
+  /* light-dark() is a <color> function - it can only wrap the color
      component of a shadow, not the whole offset/blur/color value. */
   --shadow: light-dark(rgba(60, 40, 10, 0.12), rgba(0, 0, 0, 0.4)) 0 10px 24px -8px;
 
@@ -44,15 +44,15 @@
   --mono: ui-monospace, Consolas, monospace;
 
   /* The site's one rounded-corner radius, used by every card/panel/modal/
-     floating-surface recipe — a single token instead of the literal 12px
+     floating-surface recipe - a single token instead of the literal 12px
      repeated across each of their CSS modules. */
   --radius-lg: 12px;
 
-  /* Shared page-layout tokens — the single source of truth for how far
+  /* Shared page-layout tokens - the single source of truth for how far
      section content sits from the viewport edge and how wide the standard
      content column is. Anything that needs to line up with the rest of the
-     page's content — including elements that intentionally run wider than
-     the standard column, like the code samples panel — should reference
+     page's content - including elements that intentionally run wider than
+     the standard column, like the code samples panel - should reference
      these instead of hardcoding its own margin/width. */
   --page-gutter: 56px;
   --page-gutter-desktop: 128px; /* clears the fixed sidebar (left: 24px + its width) */
@@ -60,7 +60,7 @@
   --content-width-wide: 900px; /* wider two-column / media / gallery width */
   --info-panel-width: 400px; /* InfoPanel's fixed width at desktop */
   /* Clears both the fixed sidebar and the fixed InfoPanel that sits just right
-     of it, plus breathing room — the single source of truth for how far
+     of it, plus breathing room - the single source of truth for how far
      normal section content must start so the InfoPanel never covers it. */
   --content-clearance-desktop: calc(var(--page-gutter-desktop) + var(--info-panel-width) + 40px);
 
@@ -80,9 +80,9 @@
 
 /* Below this, the InfoPanel's full 400px width plus its clearance leaves
    section content squeezed into a sliver (or negative space) between it and
-   the page's right gutter. Re-declaring the token here — rather than adding
+   the page's right gutter. Re-declaring the token here - rather than adding
    a third breakpoint band inside InfoPanel/content-clearance-desktop's own
-   math — means every consumer of --info-panel-width and
+   math - means every consumer of --info-panel-width and
    --content-clearance-desktop picks up the smaller value for free. A plain
    width swap at a fixed breakpoint (no transition) rather than a fluid
    vw-based shrink, since a panel that resizes continuously while dragging
@@ -96,7 +96,7 @@
 /* Below 640px the sidebar/InfoPanel are hidden entirely (see Sidebar and
    InfoPanel module CSS) and every section runs edge-to-edge, so the fixed
    56px gutter meant for clearing those fixed elements is just wasted width
-   on a phone — it was leaving section content at ~70% of the viewport and
+   on a phone - it was leaving section content at ~70% of the viewport and
    card text well under half. Two narrowing steps rather than one: 480px
    roughly separates "phone" from "small tablet/large phone" widths where
    32px still reads as a deliberate margin instead of cramped. */
@@ -160,7 +160,7 @@ body {
   margin: 0;
 }
 
-/* Base layout every full-page section shares — genuinely global (identical
+/* Base layout every full-page section shares - genuinely global (identical
    across all organisms), not any one component's concern, so it stays here
    rather than getting duplicated across several CSS modules. */
 section {
@@ -183,7 +183,7 @@ section {
     max-width: var(--content-width);
     width: 100%;
     /* The content-alignment standard: every section's content starts this
-       far from the section's own left edge — split the difference between
+       far from the section's own left edge - split the difference between
        hugging that edge (0) and being fully centered in the space the
        sidebar leaves free (which reads as too far right on wide screens).
        Anything that intentionally runs wider than --content-width (wider
@@ -195,7 +195,7 @@ section {
 
 /* At desktop widths (where the fixed InfoPanel is visible), section content
    starts level with the top of the InfoPanel (see InfoPanel.module.css's
-   `top: 80px`) instead of vertically centering — otherwise the content's
+   `top: 80px`) instead of vertically centering - otherwise the content's
    start point jumps up and down against the fixed panel as you scroll
    between sections with different amounts of content. About keeps the
    centered hero layout instead (see About.module.css). */
@@ -207,12 +207,12 @@ section {
 }
 
 /* Below 640px, MobileInfoCard (see its own module CSS) floats fixed at the
-   top of the viewport over whichever section is scrolled underneath it —
+   top of the viewport over whichever section is scrolled underneath it -
    reserve room for it on every section so it never overlaps that section's
    own heading, instead of only mattering for whichever section happens to
    load first. Sections keep centering their content otherwise (unlike the
    desktop top-align above); the taller top padding just shifts that center
-   down a bit. One value for every mobile width now — the card is just a
+   down a bit. One value for every mobile width now - the card is just a
    name and the active-section label, both a single line at any phone
    width the site supports, so its height (and this clearance) no longer
    varies by viewport the way it did when the label could wrap. */
@@ -244,7 +244,7 @@ section {
 /* Opt-in for every non-hero section: clears the fixed sidebar + InfoPanel
    via left padding instead of centering. Previously repeated per-organism
    as an identical media query keyed to that section's own #id selector
-   (see About/Experience/CaseStudies/CodeSamples) — global here since the
+   (see About/Experience/CaseStudies/CodeSamples) - global here since the
    rule itself never varies, only which sections opt in. */
 @media (min-width: 640px) {
   .flush-section {

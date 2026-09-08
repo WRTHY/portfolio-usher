@@ -3,7 +3,7 @@ import SegmentedControl from './SegmentedControl'
 // Deliberately redundant with SegmentedControl.test.tsx (Vitest + React
 // Testing Library): same component, same three behaviors, run through
 // Cypress's real-browser mount instead of jsdom. Featured verbatim as the
-// Component/Cypress example in codeExamples.ts — keep this file's content
+// Component/Cypress example in codeExamples.ts - keep this file's content
 // and that copy in sync if either changes.
 describe('SegmentedControl', () => {
   it('renders every option and marks the active one checked', () => {

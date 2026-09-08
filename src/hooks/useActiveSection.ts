@@ -5,7 +5,7 @@ import { sections } from '../content/navigation'
 // position in both the sidebar dots and the header nav. Keeps a running
 // map of every section's last-known visibility ratio (rather than only
 // reacting to whichever entries happen to be in the current callback
-// batch) so there's never a gap where nothing qualifies as "active" —
+// batch) so there's never a gap where nothing qualifies as "active" -
 // e.g. the instant between one section dropping below intersecting and
 // the next one crossing above it.
 function useActiveSection(): string {

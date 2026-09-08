@@ -1,6 +1,6 @@
 import type { SVGProps } from 'react'
 
-// react-icons' Simple Icons set has brand marks, not concept marks — there's
+// react-icons' Simple Icons set has brand marks, not concept marks - there's
 // no icon for a testing *type* the way SiCypress is an icon for Cypress (see
 // FrameworkSwitcher/frameworkOptions.tsx). These are small custom monochrome
 // glyphs instead of a fake brand icon.

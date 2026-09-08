@@ -1,6 +1,6 @@
 /* Reusable image-beside-text layout (stacks on mobile). The generic
    `section > *` rule caps direct children at 640px and adds a quarter-column
-   left indent — .mediaText's own class specificity overrides both: a wider,
+   left indent - .mediaText's own class specificity overrides both: a wider,
    two-column-appropriate max-width, and margin-left: 0 so it sits flush at
    the same left anchor as every other non-hero section's content. */
 .mediaText {
@@ -16,7 +16,7 @@
 .image {
   width: 100%;
   /* 16/10 (very short/wide) was mathematically incompatible with a portrait
-     headshot — no crop position could avoid cutting into the head. 4/5
+     headshot - no crop position could avoid cutting into the head. 4/5
      needs far less vertical crop from a ~2/3 source. */
   aspect-ratio: 4 / 5;
 }
@@ -31,7 +31,7 @@
   .mediaText {
     flex-direction: row;
     /* stretch (the mobile value) would force the image to match the text
-       column's height — with a few paragraphs that's easily 700px+. Center
+       column's height - with a few paragraphs that's easily 700px+. Center
        instead: the image keeps its own fixed size but sits centered against
        the (usually taller) text column rather than pinned to its top. */
     align-items: center;

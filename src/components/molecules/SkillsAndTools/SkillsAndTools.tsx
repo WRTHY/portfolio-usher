@@ -1,12 +1,12 @@
 import { toolCategories } from './toolCategories'
 import styles from './SkillsAndTools.module.css'
 
-// Icon-only by design — the tool name only appears on hover (see
+// Icon-only by design - the tool name only appears on hover (see
 // .hoverLabel), so each name is duplicated into visually-hidden text that's
 // always in the accessible tree. The icon itself is aria-hidden since it's
 // decorative once that text carries the name.
 //
-// No per-category wrapper card — each category's <ul> is display: contents
+// No per-category wrapper card - each category's <ul> is display: contents
 // (see SkillsAndTools.module.css), so its <li> chips become direct items of
 // the single shared .grid below and waterfall together across the card's
 // full width instead of being boxed into three separately-wrapped columns.
