@@ -5,6 +5,7 @@ import Badge from '../../atoms/Badge/Badge'
 import Card from '../../atoms/Card/Card'
 import ParticleBackground from '../../molecules/ParticleBackground/ParticleBackground'
 import SectionBody from '../../molecules/SectionBody/SectionBody'
+import MobileInfoCard from '../MobileInfoCard/MobileInfoCard'
 import styles from './Experience.module.css'
 
 const sectionLabel = getSectionLabel('experience')
@@ -12,6 +13,7 @@ const sectionLabel = getSectionLabel('experience')
 function Experience() {
   return (
     <section id="experience" className="flush-section" aria-label={sectionLabel}>
+      <MobileInfoCard label={sectionLabel} />
       <ParticleBackground variant="experience" />
       <SectionBody>
         {experience.map((entry) => (
