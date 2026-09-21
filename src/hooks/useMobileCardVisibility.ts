@@ -19,7 +19,10 @@ function useMobileCardVisibility(
   const scrollingUpRef = useRef(false)
   const activeIdRef = useRef(activeId)
   const revealedIdRef = useRef(activeId)
-  activeIdRef.current = activeId
+
+  useEffect(() => {
+    activeIdRef.current = activeId
+  }, [activeId])
 
   useEffect(() => {
     lastY.current = window.scrollY

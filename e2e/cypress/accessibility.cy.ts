@@ -31,7 +31,9 @@ describe('accessibility', () => {
     portfolioPage.themeToggle.toggle()
     // InfoPanel's background-color transition runs 0.6s (see
     // InfoPanel.module.css) - scanning before it settles catches axe
-    // mid-crossfade and flags transitional colors that never render.
+    // mid-crossfade and flags transitional colors that never render. No DOM
+    // signal marks the transition's end, so a fixed wait is unavoidable here.
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
     cy.wait(700)
 
     scanForViolations().then((violations) => {

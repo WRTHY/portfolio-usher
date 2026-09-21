@@ -22,9 +22,11 @@ const LIGHT_THEME_CONTRAST_FIXES: Record<string, string> = {
   '#c18401': '#845a01',
 }
 
-// Same idea for one-dark-pro: only its coral token (4.38:1) falls short.
+// Same idea for one-dark-pro: its coral token (4.38:1) and comment gray
+// (3.73:1, against the theme's own #282c34 background) fall short.
 const DARK_THEME_CONTRAST_FIXES: Record<string, string> = {
   '#e06c75': '#e37179',
+  '#7f848e': '#9198a3',
 }
 
 function CodeBlock({ code, language }: CodeBlockProps) {

@@ -30,7 +30,6 @@ function Paragraphs({ text }: { text: string }) {
         .map((paragraph) => paragraph.trim())
         .filter(Boolean)
         .map((paragraph, index) => (
-          // eslint-disable-next-line react/no-array-index-key
           <p key={index}>{paragraph}</p>
         ))}
     </>
@@ -252,7 +251,6 @@ function CaseStudies() {
                   aria-labelledby={`${titleId}-phase-strip-label`}
                 >
                   {selected.phases.map((phase, index) => (
-                    // eslint-disable-next-line react/no-array-index-key
                     <div className={styles.phase} key={index}>
                       <span className={styles.phaseNumber}>{index}</span>
                       <span className={styles.phaseName}>{phase.name}</span>

@@ -48,7 +48,6 @@ function ApiTesting() {
         <Card tone="alt" className={styles.explainer}>
           <Badge variant="outline-accent">Static preview - full suite lives in its own repo</Badge>
           {apiTestingIntro.paragraphs.map((paragraph, index) => (
-            // eslint-disable-next-line react/no-array-index-key
             <p key={index}>{paragraph}</p>
           ))}
           <a

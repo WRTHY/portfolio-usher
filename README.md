@@ -1,5 +1,10 @@
 # James Usher - Portfolio
 
+[![Lint & Build](https://github.com/WRTHY/portfolio-usher/actions/workflows/lint-and-build.yml/badge.svg)](https://github.com/WRTHY/portfolio-usher/actions/workflows/lint-and-build.yml)
+[![Unit Tests](https://github.com/WRTHY/portfolio-usher/actions/workflows/unit-tests.yml/badge.svg)](https://github.com/WRTHY/portfolio-usher/actions/workflows/unit-tests.yml)
+[![Component Tests](https://github.com/WRTHY/portfolio-usher/actions/workflows/component-tests.yml/badge.svg)](https://github.com/WRTHY/portfolio-usher/actions/workflows/component-tests.yml)
+[![E2E Tests](https://github.com/WRTHY/portfolio-usher/actions/workflows/e2e-tests.yml/badge.svg)](https://github.com/WRTHY/portfolio-usher/actions/workflows/e2e-tests.yml)
+
 My personal portfolio site: a single-page React app introducing me, walking through my
 work history and a few case studies, and showing off some hands-on test automation
 examples. Built as much to *demonstrate* how I approach frontend quality as it is to be
@@ -109,6 +114,25 @@ Cypress runs against Electron in the same environment; verifying it required
 `--disable-gpu` on `ELECTRON_EXTRA_LAUNCH_ARGS` to avoid a GPU-process crash, and even
 then a couple of specs showed sandbox-specific rendering flakiness across sequential
 tests in one run (each passes in isolation) - see [`cypress.config.ts`](cypress.config.ts).
+
+## CI/CD
+
+Every push to `master` and every pull request runs four GitHub Actions workflows in
+parallel, one per testing tier, mirroring the tiers documented above:
+
+| Workflow | Jobs | What it runs |
+| --- | --- | --- |
+| [`lint-and-build.yml`](.github/workflows/lint-and-build.yml) | `lint-and-typecheck`, `build` | ESLint + `tsc -b`, then a full production build |
+| [`unit-tests.yml`](.github/workflows/unit-tests.yml) | `unit-tests` | `npm run test:unit` (Vitest) |
+| [`component-tests.yml`](.github/workflows/component-tests.yml) | `component-tests-cypress` | `cypress run --component` |
+| [`e2e-tests.yml`](.github/workflows/e2e-tests.yml) | `e2e-tests-playwright`, `e2e-tests-cypress` | Both e2e suites, run side by side |
+
+Each e2e/component job uploads its screenshots, videos, or HTML report as a build artifact
+on failure (Playwright's report is uploaded even on success) so a failure can be diagnosed
+from the Actions run without reproducing it locally. Splitting by tier instead of one
+monolithic workflow keeps each file scoped to a single concern; the trade-off is that
+branch protection has to require each workflow's job(s) individually rather than gating on
+one combined status check.
 
 ## Notes
 
