@@ -38,6 +38,11 @@
   /* light-dark() is a <color> function - it can only wrap the color
      component of a shadow, not the whole offset/blur/color value. */
   --shadow: light-dark(rgba(60, 40, 10, 0.12), rgba(0, 0, 0, 0.4)) 0 10px 24px -8px;
+  /* A more pronounced variant of --shadow for chrome that has to read as
+     clearly separate from whatever's behind it rather than sit like an
+     ordinary card - the mobile menu toggle, floating over the particle
+     layer and whatever section is scrolled underneath. */
+  --shadow-strong: light-dark(rgba(40, 25, 5, 0.35), rgba(0, 0, 0, 0.7)) 0 6px 16px -2px;
 
   --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
   --heading: 'TBJ Orcherum Mini', system-ui, 'Segoe UI', Roboto, sans-serif;
@@ -193,32 +198,41 @@ section {
   }
 }
 
-/* At desktop widths (where the fixed InfoPanel is visible), section content
-   starts level with the top of the InfoPanel (see InfoPanel.module.css's
-   `top: 80px`) instead of vertically centering - otherwise the content's
-   start point jumps up and down against the fixed panel as you scroll
-   between sections with different amounts of content. About keeps the
-   centered hero layout instead (see About.module.css). */
-@media (min-width: 640px) {
-  section {
-    justify-content: flex-start;
-    padding-top: 80px;
-  }
+/* Keyed off [data-viewport] (see useViewportMode.ts) rather than a raw
+   width media query - a phone in landscape is frequently wider than 640px
+   but nowhere near as tall as a real desktop viewport, so a width-only
+   check here would hand it this desktop treatment (and the fixed, 75svh
+   InfoPanel it's aligning with) despite having a fraction of the vertical
+   room that assumes. Section content starts level with the top of the
+   fixed InfoPanel (see InfoPanel.module.css's `top: 80px`) instead of
+   vertically centering - otherwise the content's start point jumps up and
+   down against the fixed panel as you scroll between sections with
+   different amounts of content. About keeps the centered hero layout
+   instead (see About.module.css). */
+:root[data-viewport='desktop'] section {
+  justify-content: flex-start;
+  padding-top: 80px;
 }
 
-/* Below 640px, MobileInfoCard (see its own module CSS) floats fixed at the
-   top of the viewport over whichever section is scrolled underneath it -
-   reserve room for it on every section so it never overlaps that section's
-   own heading, instead of only mattering for whichever section happens to
-   load first. Sections keep centering their content otherwise (unlike the
-   desktop top-align above); the taller top padding just shifts that center
-   down a bit. One value for every mobile width now - the card is just a
-   name and the active-section label, both a single line at any phone
-   width the site supports, so its height (and this clearance) no longer
-   varies by viewport the way it did when the label could wrap. */
-@media (max-width: 639px) {
-  section {
-    padding-top: 150px;
+/* Every section now renders its own MobileInfoCard, pinned to this same
+   top gap instead of a viewport-fixed card floating over it (see
+   MobileInfoCard.tsx/.module.css) - reserve room for it here so it never
+   overlaps that section's own heading. Sections keep centering their
+   content otherwise (unlike the desktop top-align above); the taller top
+   padding just shifts that center down a bit. */
+:root[data-viewport='mobile'] section {
+  padding-top: 150px;
+}
+
+/* Landscape phones get the same mobile treatment above (via
+   [data-viewport], which already accounts for their short height) but
+   150px of reserved top padding eats a much bigger share of a ~375px-tall
+   viewport than it does portrait - compact the card's reserved space
+   specifically for that case rather than shrinking it everywhere mobile
+   applies. Mirrored in MobileInfoCard.module.css's own name/section sizes. */
+@media (max-height: 500px) and (orientation: landscape) {
+  :root[data-viewport='mobile'] section {
+    padding-top: 90px;
   }
 }
 
@@ -245,11 +259,12 @@ section {
    via left padding instead of centering. Previously repeated per-organism
    as an identical media query keyed to that section's own #id selector
    (see About/Experience/CaseStudies/CodeSamples) - global here since the
-   rule itself never varies, only which sections opt in. */
-@media (min-width: 640px) {
-  .flush-section {
-    padding-left: var(--content-clearance-desktop);
-  }
+   rule itself never varies, only which sections opt in. Keyed off
+   [data-viewport] rather than width for the same reason as the section
+   rule above - the sidebar/InfoPanel it's clearing don't render at all on
+   a landscape phone, so this clearance shouldn't either. */
+:root[data-viewport='desktop'] .flush-section {
+  padding-left: var(--content-clearance-desktop);
 }
 
 @media (prefers-reduced-motion: reduce) {
