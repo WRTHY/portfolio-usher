@@ -1,8 +1,9 @@
-/* Bottom rather than top: MobileInfoCard now owns the top of the mobile
-   viewport (see its module CSS), so the hamburger floats at the opposite
-   corner instead of competing with it for the same space - consistent with
-   MobileInfoCard's own floating-card treatment (see Sidebar.module.css's
-   .progressDots for the same pattern on the left edge). */
+/* Bottom rather than top: every section pins its own MobileInfoCard to the
+   top of its own gap (see MobileInfoCard's module CSS), so the hamburger
+   floats at the opposite corner instead of competing with it for the same
+   space - consistent with MobileInfoCard's own floating-card treatment
+   (see Sidebar.module.css's .progressDots for the same pattern on the left
+   edge). */
 .header {
   position: fixed;
   bottom: 0;
@@ -15,8 +16,9 @@
   align-items: center;
 }
 
-@media (min-width: 640px) {
-  .header {
-    display: none;
-  }
+/* Keyed off [data-viewport] (see useViewportMode.ts) instead of a raw width
+   media query - see index.css's matching section rule for why a landscape
+   phone needs this mobile chrome despite often being wider than 640px. */
+:root[data-viewport='desktop'] .header {
+  display: none;
 }

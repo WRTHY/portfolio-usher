@@ -17,6 +17,15 @@
   background: var(--bg);
   cursor: pointer;
   transition: border-color 0.2s;
+  /* Stronger than the shared --shadow token .raised gives every consumer -
+     this floats over the particle layer and whatever section content is
+     scrolled underneath it, and the ambient shadow alone read too faint to
+     register as a distinct, tappable surface. Layered with --shadow rather
+     than replacing it, for the same soft ambient falloff every other
+     raised surface has. */
+  box-shadow:
+    var(--shadow-strong),
+    var(--shadow);
 
   span {
     display: block;
@@ -49,8 +58,9 @@
   }
 }
 
-@media (min-width: 640px) {
-  .toggle {
-    display: none;
-  }
+/* Keyed off [data-viewport] (see useViewportMode.ts) instead of a raw width
+   media query - see index.css's matching section rule for why a landscape
+   phone needs this mobile chrome despite often being wider than 640px. */
+:root[data-viewport='desktop'] .toggle {
+  display: none;
 }

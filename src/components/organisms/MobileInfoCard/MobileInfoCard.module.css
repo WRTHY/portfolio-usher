@@ -1,53 +1,29 @@
-/* Mirrors Header.module.css's mobile-first split: this IS the mobile
-   layout by default, then hides entirely at desktop widths where InfoPanel
-   (the full-size version) takes over. Floating card again (rounded, bordered
-   surface inset from the edges) rather than an edge-to-edge bar - just wider
-   than before, now that the hamburger has moved to a floating bottom-right
-   button (see Header.module.css) and this no longer needs to leave it room. */
+/* Pinned inside its own section (each section is `position: relative` -
+   see index.css) rather than fixed to the viewport - it scrolls away with
+   that section's own content instead of floating persistently over
+   whatever's scrolled underneath it. Still the same floating-card
+   treatment (rounded, bordered surface inset from the edges) as before,
+   just no longer needing scroll-direction show/hide logic to know when to
+   appear, since each section only ever shows its own card while it's in
+   view. */
 .card {
   composes: raised from '../../../styles/shared.module.css';
-  position: fixed;
+  position: absolute;
   top: 12px;
   left: var(--page-gutter);
   right: var(--page-gutter);
-  z-index: 9; /* just under Header's 10, so its full-screen mobile nav still paints over this */
+  z-index: 1;
   display: flex;
   flex-direction: column;
   padding: 10px 18px;
   background: var(--bg);
   /* Decorative identity chrome, not interactive - never steal taps meant
-     for whatever section content is scrolled underneath it. */
+     for whatever section content sits below it. */
   pointer-events: none;
-  opacity: 1;
-  transform: translateY(0);
 }
 
-/* No transition by default - landing on a new section (or scrolling down
-   past it) snaps the card in/out instantly rather than fading, so there's
-   no beat where it's mid-fade and misaligned against the section that just
-   arrived. .cardEased opts back into a transition for the one case that
-   should animate: scrolling back up mid-section (see MobileInfoCard.tsx). */
-.cardHidden {
-  opacity: 0;
-  transform: translateY(-8px);
-}
-
-.cardEased {
-  transition:
-    opacity 0.3s ease,
-    transform 0.3s ease;
-}
-
-@media (min-width: 640px) {
-  .card {
-    display: none;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .cardEased {
-    transition: none;
-  }
+:root[data-viewport='desktop'] .card {
+  display: none;
 }
 
 /* Name size keeps the same ratio InfoPanel uses at desktop for its own
@@ -80,4 +56,18 @@
   letter-spacing: 0.6px;
   text-transform: uppercase;
   margin: 0;
+}
+
+/* Same threshold as index.css's matching section rule - a landscape phone
+   gets a smaller card to match its own more compact reserved top padding,
+   rather than the full portrait-sized card eating an outsized share of a
+   ~375px-tall viewport. */
+@media (max-height: 500px) and (orientation: landscape) {
+  .name {
+    font-size: 32px;
+  }
+
+  .section {
+    font-size: 18px;
+  }
 }
