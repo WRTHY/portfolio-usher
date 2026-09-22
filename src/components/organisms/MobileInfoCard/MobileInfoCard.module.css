@@ -11,7 +11,24 @@
   position: absolute;
   top: 12px;
   left: var(--page-gutter);
+  /* Same inset as the standard content column every other card in the
+     section uses (see index.css's `section > *` rule) - the hamburger
+     toggle floats above it (Header's z-index beats this card's) rather
+     than the card stopping short to leave it room. */
   right: var(--page-gutter);
+  /* Undoes the shared `section > *` rule (index.css) that indents every
+     direct child into the reading column and caps it at --content-width -
+     this is now a genuine direct child of its section (see
+     MobileInfoCard.tsx), and an explicit width there fights with the left
+     + right offsets above: with all three set, the explicit width wins and
+     `right` is dropped, so the card stretched well past the viewport's
+     right edge instead of stopping at it. `width: auto` instead lets
+     left/right define the box the normal way - which, at equal left/right
+     insets, ends up the same width the reading column resolves to anyway.
+     Same reset InfoPanel's own module CSS applies for the same reason. */
+  margin-left: 0;
+  max-width: none;
+  width: auto;
   z-index: 1;
   display: flex;
   flex-direction: column;

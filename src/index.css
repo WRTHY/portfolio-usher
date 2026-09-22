@@ -219,9 +219,16 @@ section {
    MobileInfoCard.tsx/.module.css) - reserve room for it here so it never
    overlaps that section's own heading. Sections keep centering their
    content otherwise (unlike the desktop top-align above); the taller top
-   padding just shifts that center down a bit. */
+   padding just shifts that center down a bit. Bottom gets the same
+   treatment for the hamburger toggle pinned to that corner (see
+   Header.module.css) - 44px button + 12px header padding + a little
+   breathing room, so the last bit of a section's content doesn't render
+   underneath it. Not split out per orientation like the top padding below:
+   the toggle's own footprint doesn't change with orientation, so one value
+   covers portrait and landscape alike. */
 :root[data-viewport='mobile'] section {
   padding-top: 150px;
+  padding-bottom: 76px;
 }
 
 /* Landscape phones get the same mobile treatment above (via
@@ -229,10 +236,14 @@ section {
    150px of reserved top padding eats a much bigger share of a ~375px-tall
    viewport than it does portrait - compact the card's reserved space
    specifically for that case rather than shrinking it everywhere mobile
-   applies. Mirrored in MobileInfoCard.module.css's own name/section sizes. */
+   applies. Mirrored in MobileInfoCard.module.css's own name/section sizes -
+   110px clears the compacted card's own measured height (12px top offset +
+   ~82px tall at its landscape font sizes = 94px) with ~16px to spare,
+   rather than the two edges landing flush (or, as 90px did, overlapping by
+   a few px with zero room for error). */
 @media (max-height: 500px) and (orientation: landscape) {
   :root[data-viewport='mobile'] section {
-    padding-top: 90px;
+    padding-top: 110px;
   }
 }
 
