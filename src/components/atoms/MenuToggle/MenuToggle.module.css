@@ -17,6 +17,20 @@
   background: var(--bg);
   cursor: pointer;
   transition: border-color 0.2s;
+  /* Overrides .raised's shadow via its --raised-shadow custom property
+     (see shared.module.css) rather than a plain box-shadow re-declaration -
+     stronger than the shared --shadow token alone since this floats over
+     the particle layer and whatever section content is scrolled
+     underneath it, and the ambient shadow alone read too faint to register
+     as a distinct, tappable surface. Layered with --shadow rather than
+     replacing it, for the same soft ambient falloff every other raised
+     surface has. The third layer is a small white glow, visible in dark
+     mode only (transparent in light, via light-dark()) - a preview of that
+     look rather than a considered final choice. */
+  --raised-shadow:
+    var(--shadow-strong),
+    var(--shadow),
+    0 0 10px light-dark(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.45));
 
   span {
     display: block;
@@ -49,8 +63,9 @@
   }
 }
 
-@media (min-width: 640px) {
-  .toggle {
-    display: none;
-  }
+/* Keyed off [data-viewport] (see useViewportMode.ts) instead of a raw width
+   media query - see index.css's matching section rule for why a landscape
+   phone needs this mobile chrome despite often being wider than 640px. */
+:root[data-viewport='desktop'] .toggle {
+  display: none;
 }

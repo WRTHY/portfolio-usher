@@ -2,6 +2,7 @@ import TextCard from '../../molecules/TextCard/TextCard'
 import SkillsAndTools from '../../molecules/SkillsAndTools/SkillsAndTools'
 import ParticleBackground from '../../molecules/ParticleBackground/ParticleBackground'
 import SectionBody from '../../molecules/SectionBody/SectionBody'
+import MobileInfoCard from '../MobileInfoCard/MobileInfoCard'
 import useOverscrollBump from '../../../hooks/useOverscrollBump'
 import { getSectionLabel } from '../../../content/navigation'
 import { about } from '../../../content/site'
@@ -14,6 +15,7 @@ function About() {
 
   return (
     <section id="about" className="flush-section" aria-label={sectionLabel} ref={bumpRef}>
+      <MobileInfoCard label={sectionLabel} />
       <ParticleBackground variant="about" />
       <SectionBody>
         <TextCard>

@@ -87,18 +87,20 @@
   gap: 16px;
 }
 
-@media (min-width: 640px) {
-  .panel {
-    display: contents;
-  }
+/* Keyed off [data-viewport] (see useViewportMode.ts) instead of a raw width
+   media query - see index.css's matching section rule for why a landscape
+   phone needs the mobile (overlay) nav despite often being wider than
+   640px. */
+:root[data-viewport='desktop'] .panel {
+  display: contents;
+}
 
-  .list {
-    flex-direction: row;
-    gap: 20px;
-  }
+:root[data-viewport='desktop'] .list {
+  flex-direction: row;
+  gap: 20px;
+}
 
-  .themeToggleWrap,
-  .footer {
-    display: none;
-  }
+:root[data-viewport='desktop'] .themeToggleWrap,
+:root[data-viewport='desktop'] .footer {
+  display: none;
 }

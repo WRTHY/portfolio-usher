@@ -9,6 +9,7 @@ import CopyButton from '../../atoms/CopyButton/CopyButton'
 import CodeBlock from '../../molecules/CodeBlock/CodeBlock'
 import ParticleBackground from '../../molecules/ParticleBackground/ParticleBackground'
 import SectionBody from '../../molecules/SectionBody/SectionBody'
+import MobileInfoCard from '../MobileInfoCard/MobileInfoCard'
 import SegmentedControl from '../../molecules/SegmentedControl/SegmentedControl'
 import type { SegmentedControlOption } from '../../molecules/SegmentedControl/SegmentedControl'
 import { getSectionLabel } from '../../../content/navigation'
@@ -43,6 +44,7 @@ function ApiTesting() {
 
   return (
     <section id="api-testing" className="flush-section" aria-label={sectionLabel}>
+      <MobileInfoCard label={sectionLabel} />
       <ParticleBackground variant="api-testing" />
       <SectionBody gap={16}>
         <Card tone="alt" className={styles.explainer}>

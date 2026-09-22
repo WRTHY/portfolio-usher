@@ -11,6 +11,7 @@ import CodeFileTabs from '../../molecules/CodeFileTabs/CodeFileTabs'
 import PanelFooter from '../../molecules/PanelFooter/PanelFooter'
 import ParticleBackground from '../../molecules/ParticleBackground/ParticleBackground'
 import SectionBody from '../../molecules/SectionBody/SectionBody'
+import MobileInfoCard from '../MobileInfoCard/MobileInfoCard'
 import { getSectionLabel } from '../../../content/navigation'
 import { codeExamples } from '../../../content/codeExamples'
 import type { Framework, TestingType } from '../../../content/codeExamples'
@@ -64,6 +65,7 @@ function CodeSamples() {
 
   return (
     <section id="code-samples" className="flush-section" aria-label={sectionLabel}>
+      <MobileInfoCard label={sectionLabel} />
       <ParticleBackground variant="code-samples" />
       <SectionBody gap={16}>
         <Card className={styles.explainer}>
