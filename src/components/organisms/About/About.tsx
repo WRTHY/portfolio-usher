@@ -20,7 +20,7 @@ function About() {
       <ParticleBackground variant="about" />
       <SectionBody>
         <TextCard>
-          <ReadMoreText>
+          <ReadMoreText toggleClassName={styles.readMoreToggle}>
             {about.paragraphs.map((paragraph, index) => (
               <p key={index}>
                 {paragraph.map((segment, segmentIndex) =>
