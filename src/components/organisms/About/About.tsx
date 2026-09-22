@@ -2,6 +2,7 @@ import TextCard from '../../molecules/TextCard/TextCard'
 import SkillsAndTools from '../../molecules/SkillsAndTools/SkillsAndTools'
 import ParticleBackground from '../../molecules/ParticleBackground/ParticleBackground'
 import SectionBody from '../../molecules/SectionBody/SectionBody'
+import ReadMoreText from '../../molecules/ReadMoreText/ReadMoreText'
 import MobileInfoCard from '../MobileInfoCard/MobileInfoCard'
 import useOverscrollBump from '../../../hooks/useOverscrollBump'
 import { getSectionLabel } from '../../../content/navigation'
@@ -19,25 +20,27 @@ function About() {
       <ParticleBackground variant="about" />
       <SectionBody>
         <TextCard>
-          {about.paragraphs.map((paragraph, index) => (
-            <p key={index}>
-              {paragraph.map((segment, segmentIndex) =>
-                typeof segment === 'string' ? (
-                  segment
-                ) : (
-                  <a
-                    key={segmentIndex}
-                    className={styles.link}
-                    href={segment.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {segment.text}
-                  </a>
-                ),
-              )}
-            </p>
-          ))}
+          <ReadMoreText>
+            {about.paragraphs.map((paragraph, index) => (
+              <p key={index}>
+                {paragraph.map((segment, segmentIndex) =>
+                  typeof segment === 'string' ? (
+                    segment
+                  ) : (
+                    <a
+                      key={segmentIndex}
+                      className={styles.link}
+                      href={segment.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {segment.text}
+                    </a>
+                  ),
+                )}
+              </p>
+            ))}
+          </ReadMoreText>
         </TextCard>
         <TextCard>
           <SkillsAndTools />

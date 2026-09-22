@@ -1,0 +1,41 @@
+.content {
+  display: block;
+}
+
+/* Only clamps on mobile (see useViewportMode.ts) and only while collapsed -
+   desktop has the column width for these paragraphs to read fine at full
+   length, so there's nothing to preview-and-expand there. */
+:root[data-viewport='mobile'] .content.collapsed {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--collapsed-lines, 5);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Same treatment as CaseStudies' "Read case study" affordance (see its own
+   module CSS) - mono, small, --text dimmed to --accent on hover/focus,
+   rather than this toggle inventing its own look. */
+.toggle {
+  display: inline-flex;
+  margin-top: 4px;
+  padding: 0;
+  border: none;
+  background: none;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text);
+  transition: color 0.2s;
+  cursor: pointer;
+}
+
+.toggle:hover,
+.toggle:focus-visible {
+  color: var(--accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toggle {
+    transition: none;
+  }
+}
