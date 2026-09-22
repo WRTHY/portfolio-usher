@@ -80,6 +80,12 @@ export const experience: readonly ExperienceEntry[] = [
     company: 'Scientific Games',
     companyUrl: links.companies.scientificGames,
     dates: 'Sep 2019 – Jun 2022',
+    stack: [
+      'Manual Testing',
+      'QA Lifecycle',
+      'Test Suite Management',
+      'Documentation',
+    ],
     summary:
       "Owned the QA lifecycle for six video slot games through first-time GLI certification. Became the team's subject-matter expert on jurisdictional localization testing, releasing 13 titles in a year and mentoring fellow engineers on the process.",
   },
