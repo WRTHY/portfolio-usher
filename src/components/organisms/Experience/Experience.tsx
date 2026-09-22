@@ -1,7 +1,8 @@
 import { getSectionLabel } from '../../../content/navigation'
 import { experience } from '../../../content/experience'
 import Heading from '../../atoms/Heading/Heading'
-import Badge from '../../atoms/Badge/Badge'
+import SkillBadge from '../../molecules/SkillBadge/SkillBadge'
+import { sortBySkillOrder } from '../../molecules/SkillsAndTools/skillColorway'
 import Card from '../../atoms/Card/Card'
 import ParticleBackground from '../../molecules/ParticleBackground/ParticleBackground'
 import SectionBody from '../../molecules/SectionBody/SectionBody'
@@ -37,8 +38,8 @@ function Experience() {
 
             {entry.stack && (
               <div className={styles.stack}>
-                {entry.stack.map((tech) => (
-                  <Badge key={tech}>{tech}</Badge>
+                {sortBySkillOrder(entry.stack).map((tech) => (
+                  <SkillBadge key={tech} label={tech} />
                 ))}
               </div>
             )}
