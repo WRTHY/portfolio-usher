@@ -6,6 +6,7 @@ import styles from './ReadMoreText.module.css'
 type ReadMoreTextProps = {
   children: ReactNode
   collapsedLines?: number
+  toggleClassName?: string
 }
 
 // Mobile-only (see the module CSS's [data-viewport='mobile'] gate) - long
@@ -17,7 +18,7 @@ type ReadMoreTextProps = {
 // something off, rather than a separate viewport check duplicating the
 // CSS's own condition: on desktop (or on mobile if the content is already
 // short enough to fit) there's nothing to detect, so it just never appears.
-function ReadMoreText({ children, collapsedLines = 5 }: ReadMoreTextProps) {
+function ReadMoreText({ children, collapsedLines = 5, toggleClassName }: ReadMoreTextProps) {
   const [expanded, setExpanded] = useState(false)
   const [truncated, setTruncated] = useState(false)
   const contentRef = useRef<HTMLDivElement>(null)
@@ -49,7 +50,7 @@ function ReadMoreText({ children, collapsedLines = 5 }: ReadMoreTextProps) {
       {truncated && (
         <button
           type="button"
-          className={styles.toggle}
+          className={cx(styles.toggle, toggleClassName)}
           onClick={() => setExpanded((value) => !value)}
           aria-expanded={expanded}
         >

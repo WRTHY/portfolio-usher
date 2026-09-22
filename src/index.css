@@ -219,16 +219,12 @@ section {
    MobileInfoCard.tsx/.module.css) - reserve room for it here so it never
    overlaps that section's own heading. Sections keep centering their
    content otherwise (unlike the desktop top-align above); the taller top
-   padding just shifts that center down a bit. Bottom gets the same
-   treatment for the hamburger toggle pinned to that corner (see
-   Header.module.css) - 44px button + 12px header padding + a little
-   breathing room, so the last bit of a section's content doesn't render
-   underneath it. Not split out per orientation like the top padding below:
-   the toggle's own footprint doesn't change with orientation, so one value
-   covers portrait and landscape alike. */
+   padding just shifts that center down a bit. The hamburger toggle at the
+   opposite corner (see Header.module.css) gets no matching reservation -
+   it's meant to float over content like any other fixed action button,
+   not carve out a permanent gap at the bottom of every section. */
 :root[data-viewport='mobile'] section {
   padding-top: 150px;
-  padding-bottom: 76px;
 }
 
 /* Landscape phones get the same mobile treatment above (via
