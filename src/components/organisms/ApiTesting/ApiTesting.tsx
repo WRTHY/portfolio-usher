@@ -9,6 +9,7 @@ import CopyButton from '../../atoms/CopyButton/CopyButton'
 import CodeBlock from '../../molecules/CodeBlock/CodeBlock'
 import ParticleBackground from '../../molecules/ParticleBackground/ParticleBackground'
 import SectionBody from '../../molecules/SectionBody/SectionBody'
+import ReadMoreText from '../../molecules/ReadMoreText/ReadMoreText'
 import MobileInfoCard from '../MobileInfoCard/MobileInfoCard'
 import SegmentedControl from '../../molecules/SegmentedControl/SegmentedControl'
 import type { SegmentedControlOption } from '../../molecules/SegmentedControl/SegmentedControl'
@@ -49,10 +50,12 @@ function ApiTesting() {
       <SectionBody gap={16}>
         <Card tone="alt" className={styles.explainer}>
           <Badge variant="outline-accent">Static preview - full suite lives in its own repo</Badge>
-          {apiTestingIntro.paragraphs.map((paragraph, index) => (
-            // eslint-disable-next-line react/no-array-index-key
-            <p key={index}>{paragraph}</p>
-          ))}
+          <ReadMoreText collapsedLines={4}>
+            {apiTestingIntro.paragraphs.map((paragraph, index) => (
+              // eslint-disable-next-line react/no-array-index-key
+              <p key={index}>{paragraph}</p>
+            ))}
+          </ReadMoreText>
           <a
             className={styles.repoLink}
             href={links.apiTestingRepo}
