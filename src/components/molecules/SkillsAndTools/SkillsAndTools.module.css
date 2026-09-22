@@ -34,27 +34,12 @@
   justify-content: center;
   border-radius: 4px;
   overflow: hidden;
-}
-
-/* Tints echo this site's Shiki code-highlighting palette (one-dark-pro -
-   see CodeBlock.tsx) as a deliberate callback; see DESIGN.md's "Skills &
-   Tools accent exception" note by the One Accent Rule. Carried on the chip
-   itself now - with no wrapping card underneath, this is the only color
-   surface left to mark which category a tool belongs to. */
-.languages {
-  background: rgba(97, 175, 239, 0.3);
-}
-
-.testing {
-  background: rgba(224, 108, 117, 0.3);
-}
-
-.tools {
-  background: rgba(152, 195, 121, 0.32);
-}
-
-.devops {
-  background: rgba(229, 192, 123, 0.32);
+  /* Category tint, set inline per chip from the shared syntax palette
+     (src/styles/syntaxPalette.ts) - one-dark-pro's hues, as a deliberate
+     callback to the code blocks; see DESIGN.md's "Skills & Tools accent
+     exception" note by the One Accent Rule. With no wrapping card
+     underneath, this is the only color surface marking a tool's category. */
+  background: var(--skill-bg);
 }
 
 .iconWrap {

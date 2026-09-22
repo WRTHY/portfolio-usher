@@ -1,3 +1,4 @@
+import { skillChipVars } from '../../../styles/syntaxPalette'
 import { toolCategories } from './toolCategories'
 import styles from './SkillsAndTools.module.css'
 
@@ -19,7 +20,7 @@ function SkillsAndTools() {
         <ul key={category.id} className={styles.categoryList} aria-label={category.ariaLabel}>
           {category.tools.map((tool) => (
             <li key={tool.name}>
-              <span className={`${styles.chip} ${styles[category.colorway]}`}>
+              <span className={styles.chip} style={skillChipVars(category.colorway)}>
                 <span className={styles.iconWrap} aria-hidden="true">
                   {tool.icon}
                 </span>
