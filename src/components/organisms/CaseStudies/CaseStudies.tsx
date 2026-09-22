@@ -1,5 +1,5 @@
 import { useEffect, useId, useRef, useState } from 'react'
-import { getSectionLabel } from '../../../content/navigation'
+import { getSectionLabel, getSectionTone } from '../../../content/navigation'
 import SkillBadge from '../../molecules/SkillBadge/SkillBadge'
 import { sortBySkillOrder } from '../../molecules/SkillsAndTools/skillColorway'
 import Card from '../../atoms/Card/Card'
@@ -15,6 +15,7 @@ import usePrefersReducedMotion from '../../../hooks/usePrefersReducedMotion'
 import styles from './CaseStudies.module.css'
 
 const sectionLabel = getSectionLabel('case-studies')
+const sectionTone = getSectionTone('case-studies')
 
 type ReportSection = {
   key: 'problem' | 'approach' | 'outcome'| 'futureIterations'
@@ -156,7 +157,7 @@ function CaseStudies() {
 
   return (
     <section id="case-studies" className="flush-section" aria-label={sectionLabel}>
-      <MobileInfoCard label={sectionLabel} />
+      <MobileInfoCard label={sectionLabel} tone={sectionTone} />
       <ParticleBackground variant="case-studies" />
       <SectionBody>
         {caseStudies.map((caseStudy) => (
