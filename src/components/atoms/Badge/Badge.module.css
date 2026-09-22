@@ -29,3 +29,12 @@
   border: 1px solid var(--accent-border);
   padding: 3px 8px;
 }
+
+/* Skill category colorways - the accent Badge's format (hue text on a
+   faint tint of the same hue) in a Skills & Tools category hue. Badge.tsx
+   sets --skill-text / --skill-bg inline from the shared syntax palette
+   (src/styles/syntaxPalette.ts). */
+.skill {
+  color: var(--skill-text);
+  background: var(--skill-bg);
+}

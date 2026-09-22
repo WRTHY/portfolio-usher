@@ -1,5 +1,6 @@
 import type { CSSProperties } from 'react'
 import ShikiHighlighter from 'react-shiki'
+import { oneDarkContrastFixes, oneLightContrastFixes } from '../../../styles/syntaxPalette'
 import styles from './CodeBlock.module.css'
 
 type CodeBlockProps = {
@@ -9,24 +10,8 @@ type CodeBlockProps = {
 
 // Paired light/dark themes + defaultColor="light-dark()" make Shiki emit
 // light-dark() CSS per token so syntax colors track the site's color-scheme.
-// one-light's de-emphasis colors (e.g. #A0A1A7) still fall short of 4.5:1
-// against --code-bg, so these darken just the tokens that fail, same hue.
-// Keys must be lowercase - Shiki lowercases before the lookup.
-const LIGHT_THEME_CONTRAST_FIXES: Record<string, string> = {
-  '#e45649': '#bf2a1c',
-  '#50a14f': '#387137',
-  '#4078f2': '#1056ef',
-  '#986801': '#845a01',
-  '#0184bc': '#016b98',
-  '#a0a1a7': '#62646a',
-  '#c18401': '#845a01',
-}
-
-// Same idea for one-dark-pro: only its coral token (4.38:1) falls short.
-const DARK_THEME_CONTRAST_FIXES: Record<string, string> = {
-  '#e06c75': '#e37179',
-}
-
+// The contrast fixes live in the shared syntax palette, which the Skills &
+// Tools category colors also derive from.
 function CodeBlock({ code, language }: CodeBlockProps) {
   // Reserves this file's own line height so the gap before Shiki's async
   // highlight() resolves doesn't collapse to 0, without padding shorter
@@ -39,8 +24,8 @@ function CodeBlock({ code, language }: CodeBlockProps) {
       theme={{ light: 'one-light', dark: 'one-dark-pro' }}
       defaultColor="light-dark()"
       colorReplacements={{
-        'one-light': LIGHT_THEME_CONTRAST_FIXES,
-        'one-dark-pro': DARK_THEME_CONTRAST_FIXES,
+        'one-light': oneLightContrastFixes,
+        'one-dark-pro': oneDarkContrastFixes,
       }}
       engine="javascript"
       showLineNumbers
