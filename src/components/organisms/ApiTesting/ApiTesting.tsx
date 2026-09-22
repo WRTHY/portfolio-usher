@@ -13,12 +13,13 @@ import ReadMoreText from '../../molecules/ReadMoreText/ReadMoreText'
 import MobileInfoCard from '../MobileInfoCard/MobileInfoCard'
 import SegmentedControl from '../../molecules/SegmentedControl/SegmentedControl'
 import type { SegmentedControlOption } from '../../molecules/SegmentedControl/SegmentedControl'
-import { getSectionLabel } from '../../../content/navigation'
+import { getSectionLabel, getSectionTone } from '../../../content/navigation'
 import { apiTestingIntro, apiTestingExamples } from '../../../content/apiTesting'
 import { links } from '../../../content/links'
 import styles from './ApiTesting.module.css'
 
 const sectionLabel = getSectionLabel('api-testing')
+const sectionTone = getSectionTone('api-testing')
 
 type ApiTool = 'playwright' | 'postman'
 
@@ -45,7 +46,7 @@ function ApiTesting() {
 
   return (
     <section id="api-testing" className="flush-section" aria-label={sectionLabel}>
-      <MobileInfoCard label={sectionLabel} />
+      <MobileInfoCard label={sectionLabel} tone={sectionTone} />
       <ParticleBackground variant="api-testing" />
       <SectionBody gap={16}>
         <Card tone="alt" className={styles.explainer}>

@@ -1,8 +1,14 @@
+import type { CSSProperties } from 'react'
+import { contrastSurface } from '../../../content/navigation'
+import type { SectionTone } from '../../../content/navigation'
 import { siteContent } from '../../../content/site'
 import styles from './MobileInfoCard.module.css'
 
 type MobileInfoCardProps = {
   label: string
+  // The hosting section's tone - the card takes the opposite surface, the
+  // same alternating rule the section's own cards and InfoPanel follow.
+  tone: SectionTone
 }
 
 // Mobile counterpart to InfoPanel's desktop aside - see InfoPanel.tsx. Each
@@ -17,9 +23,14 @@ type MobileInfoCardProps = {
 // (tagline) and quickSummary both live in the hamburger menu instead (see
 // Nav.tsx) - keeping this to just identity + label kept it from getting
 // cluttered.
-function MobileInfoCard({ label }: MobileInfoCardProps) {
+function MobileInfoCard({ label, tone }: MobileInfoCardProps) {
   return (
-    <div className={styles.card} aria-hidden="true" data-testid="mobile-info-card">
+    <div
+      className={styles.card}
+      style={{ '--card-bg': contrastSurface(tone) } as CSSProperties}
+      aria-hidden="true"
+      data-testid="mobile-info-card"
+    >
       <p className={styles.name}>{siteContent.name}</p>
       <p className={styles.section}>{label}</p>
     </div>

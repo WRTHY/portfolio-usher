@@ -32,3 +32,16 @@ export const sections = [
 export function getSectionLabel(id: (typeof sections)[number]['id']): string {
   return sections.find((section) => section.id === id)!.label
 }
+
+export type SectionTone = (typeof sections)[number]['tone']
+
+export function getSectionTone(id: (typeof sections)[number]['id']): SectionTone {
+  return sections.find((section) => section.id === id)!.tone
+}
+
+// The page's alternating-surface rule: anything sitting on a section (its
+// cards, InfoPanel, MobileInfoCard) takes the opposite background, so it
+// reads as a distinct surface on either tone.
+export function contrastSurface(tone: SectionTone): string {
+  return tone === 'alt' ? 'var(--bg)' : 'var(--section-alt-bg)'
+}
