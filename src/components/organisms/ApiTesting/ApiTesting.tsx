@@ -9,14 +9,17 @@ import CopyButton from '../../atoms/CopyButton/CopyButton'
 import CodeBlock from '../../molecules/CodeBlock/CodeBlock'
 import ParticleBackground from '../../molecules/ParticleBackground/ParticleBackground'
 import SectionBody from '../../molecules/SectionBody/SectionBody'
+import ReadMoreText from '../../molecules/ReadMoreText/ReadMoreText'
+import MobileInfoCard from '../MobileInfoCard/MobileInfoCard'
 import SegmentedControl from '../../molecules/SegmentedControl/SegmentedControl'
 import type { SegmentedControlOption } from '../../molecules/SegmentedControl/SegmentedControl'
-import { getSectionLabel } from '../../../content/navigation'
+import { getSectionLabel, getSectionTone } from '../../../content/navigation'
 import { apiTestingIntro, apiTestingExamples } from '../../../content/apiTesting'
 import { links } from '../../../content/links'
 import styles from './ApiTesting.module.css'
 
 const sectionLabel = getSectionLabel('api-testing')
+const sectionTone = getSectionTone('api-testing')
 
 type ApiTool = 'playwright' | 'postman'
 
@@ -43,13 +46,17 @@ function ApiTesting() {
 
   return (
     <section id="api-testing" className="flush-section" aria-label={sectionLabel}>
+      <MobileInfoCard label={sectionLabel} tone={sectionTone} />
       <ParticleBackground variant="api-testing" />
       <SectionBody gap={16}>
         <Card tone="alt" className={styles.explainer}>
           <Badge variant="outline-accent">Static preview - full suite lives in its own repo</Badge>
-          {apiTestingIntro.paragraphs.map((paragraph, index) => (
-            <p key={index}>{paragraph}</p>
-          ))}
+          <ReadMoreText collapsedLines={4}>
+            {apiTestingIntro.paragraphs.map((paragraph, index) => (
+              // eslint-disable-next-line react/no-array-index-key
+              <p key={index}>{paragraph}</p>
+            ))}
+          </ReadMoreText>
           <a
             className={styles.repoLink}
             href={links.apiTestingRepo}

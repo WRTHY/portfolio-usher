@@ -2,7 +2,7 @@ import type { CSSProperties } from 'react'
 import NavLink from '../../atoms/NavLink/NavLink'
 import Button from '../../atoms/Button/Button'
 import useActiveSectionInfo from '../../../hooks/useActiveSectionInfo'
-import { sections } from '../../../content/navigation'
+import { contrastSurface, sections } from '../../../content/navigation'
 import { siteContent } from '../../../content/site'
 import styles from './InfoPanel.module.css'
 
@@ -11,12 +11,11 @@ function InfoPanel() {
   // Shared with MobileInfoCard via useActiveSectionInfo rather than each
   // deriving the active section object independently - see its own comment.
   const { activeId, activeIndex, activeSection } = useActiveSectionInfo()
-  // Opposite of the active section's own background (see navigation.ts), so
-  // the panel reads as a distinct surface against whichever section is
-  // scrolled underneath it, fading between tones as the page scrolls rather
-  // than sitting on a fixed color.
-  const activeTone = activeSection?.tone ?? 'base'
-  const panelBg = activeTone === 'alt' ? 'var(--bg)' : 'var(--section-alt-bg)'
+  // Opposite of the active section's own background (see contrastSurface in
+  // navigation.ts), so the panel reads as a distinct surface against
+  // whichever section is scrolled underneath it, fading between tones as the
+  // page scrolls rather than sitting on a fixed color.
+  const panelBg = contrastSurface(activeSection?.tone ?? 'base')
 
   return (
     <aside

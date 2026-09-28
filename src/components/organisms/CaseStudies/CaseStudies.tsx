@@ -1,18 +1,21 @@
 import { useEffect, useId, useRef, useState } from 'react'
-import { getSectionLabel } from '../../../content/navigation'
-import Badge from '../../atoms/Badge/Badge'
+import { getSectionLabel, getSectionTone } from '../../../content/navigation'
+import SkillBadge from '../../molecules/SkillBadge/SkillBadge'
+import { sortBySkillOrder } from '../../molecules/SkillsAndTools/skillColorway'
 import Card from '../../atoms/Card/Card'
 import Heading from '../../atoms/Heading/Heading'
 import IconButton from '../../atoms/IconButton/IconButton'
 import Modal from '../../molecules/Modal/Modal'
 import ParticleBackground from '../../molecules/ParticleBackground/ParticleBackground'
 import SectionBody from '../../molecules/SectionBody/SectionBody'
+import MobileInfoCard from '../MobileInfoCard/MobileInfoCard'
 import { caseStudies } from '../../../content/caseStudies'
 import type { CaseStudy } from '../../../content/caseStudies'
 import usePrefersReducedMotion from '../../../hooks/usePrefersReducedMotion'
 import styles from './CaseStudies.module.css'
 
 const sectionLabel = getSectionLabel('case-studies')
+const sectionTone = getSectionTone('case-studies')
 
 type ReportSection = {
   key: 'problem' | 'approach' | 'outcome'| 'futureIterations'
@@ -153,6 +156,7 @@ function CaseStudies() {
 
   return (
     <section id="case-studies" className="flush-section" aria-label={sectionLabel}>
+      <MobileInfoCard label={sectionLabel} tone={sectionTone} />
       <ParticleBackground variant="case-studies" />
       <SectionBody>
         {caseStudies.map((caseStudy) => (
@@ -169,8 +173,8 @@ function CaseStudies() {
             <Heading level={2}>{caseStudy.title}</Heading>
             <p className={styles.summary}>{caseStudy.summary}</p>
             <div className={styles.tags}>
-              {caseStudy.tags.map((tag) => (
-                <Badge key={tag}>{tag}</Badge>
+              {sortBySkillOrder(caseStudy.tags).map((tag) => (
+                <SkillBadge key={tag} label={tag} />
               ))}
             </div>
             <span className={styles.affordance}>Read case study &rarr;</span>
@@ -194,8 +198,8 @@ function CaseStudies() {
               {selected.title}
             </h2>
             <div className={styles.tags}>
-              {selected.tags.map((tag) => (
-                <Badge key={tag}>{tag}</Badge>
+              {sortBySkillOrder(selected.tags).map((tag) => (
+                <SkillBadge key={tag} label={tag} />
               ))}
             </div>
             <hr className={styles.railDivider} />

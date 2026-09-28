@@ -29,15 +29,16 @@
    MenuToggle.module.css) - bare dots sat directly on top of whatever card
    was scrolled underneath, with nothing to separate the two. Desktop keeps
    the plain, unboxed dots; they already sit in the page's own gutter there
-   instead of floating over content. */
-@media (max-width: 639px) {
-  .progressDots {
-    padding: 14px 10px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    background: var(--bg);
-    box-shadow: var(--shadow);
-  }
+   instead of floating over content. Keyed off [data-viewport] (see
+   useViewportMode.ts) instead of a raw width media query - see index.css's
+   matching section rule for why a landscape phone needs this mobile
+   treatment despite often being wider than 640px. */
+:root[data-viewport='mobile'] .progressDots {
+  padding: 14px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg);
+  box-shadow: var(--shadow);
 }
 
 /* ThemeToggle/SocialLinks: desktop-only here - their mobile counterparts
@@ -46,14 +47,12 @@
   display: none;
 }
 
-@media (min-width: 640px) {
-  .sidebar {
-    left: 24px;
-    justify-content: space-between;
-    padding: 80px 0 32px;
-  }
+:root[data-viewport='desktop'] .sidebar {
+  left: 24px;
+  justify-content: space-between;
+  padding: 80px 0 32px;
+}
 
-  .desktopOnly {
-    display: block;
-  }
+:root[data-viewport='desktop'] .desktopOnly {
+  display: block;
 }

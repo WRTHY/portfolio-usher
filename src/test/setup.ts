@@ -53,3 +53,18 @@ if (!window.IntersectionObserver) {
 
   window.IntersectionObserver = IntersectionObserverStub
 }
+
+// jsdom doesn't implement ResizeObserver either (used by ReadMoreText to
+// detect line-clamp truncation). This stub never fires, so components
+// relying on it just keep their initial (untruncated) state during tests
+// that aren't specifically exercising that behavior - see ReadMoreText's
+// own test file for one that overrides it to simulate overflow.
+if (!window.ResizeObserver) {
+  class ResizeObserverStub implements ResizeObserver {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  }
+
+  window.ResizeObserver = ResizeObserverStub
+}

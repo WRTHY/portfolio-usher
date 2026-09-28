@@ -2,9 +2,15 @@
    for small UI chrome that sits on top of whatever's scrolled underneath it
    (MenuToggle, the mobile Sidebar dots, MobileInfoCard). Each consumer still
    sets its own `background`, since InfoPanel needs a dynamic value and
-   Modal has no border at all - those two aren't composed from this. */
+   Modal has no border at all - those two aren't composed from this. Reads
+   its shadow from a custom property rather than declaring box-shadow
+   outright, so a consumer that needs a different shadow (see MenuToggle's
+   --raised-shadow) can override just that value instead of racing this
+   rule's own box-shadow declaration for cascade priority - two same-
+   specificity class selectors on the same element otherwise come down to
+   which stylesheet Vite happens to inject last, which isn't guaranteed. */
 .raised {
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow);
+  box-shadow: var(--raised-shadow, var(--shadow));
 }

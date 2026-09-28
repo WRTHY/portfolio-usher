@@ -1,37 +1,39 @@
-import useMobileCardVisibility from '../../../hooks/useMobileCardVisibility'
-import useActiveSectionInfo from '../../../hooks/useActiveSectionInfo'
+import type { CSSProperties } from 'react'
+import { contrastSurface } from '../../../content/navigation'
+import type { SectionTone } from '../../../content/navigation'
 import { siteContent } from '../../../content/site'
-import { cx } from '../../../utils/classNames'
 import styles from './MobileInfoCard.module.css'
 
-// Mobile counterpart to InfoPanel's desktop aside - see InfoPanel.tsx. Kept
-// as its own component rather than folded into InfoPanel since it shows a
-// trimmed subset of the same content (name + "which section", no role, nav,
-// or resume link) in a completely different fixed position, and reveals/
-// hides on scroll instead of always being visible. The role (tagline) and
-// quickSummary both live in the hamburger menu instead (see Nav.tsx) -
-// keeping this card to just identity + "which section" kept it from
-// getting cluttered. Which section object is active comes from
-// useActiveSectionInfo, shared with InfoPanel, rather than each deriving
-// it independently via its own sections.find/findIndex call - the kind of
-// duplication where a future new section could easily get wired into one
-// but not the other. All of the show/hide/reveal logic - scroll direction,
-// near-top, and the settle-on-a-new-section reveal - lives in
-// useMobileCardVisibility.
-function MobileInfoCard() {
-  const { activeId, activeSection } = useActiveSectionInfo()
-  const { visible, eased } = useMobileCardVisibility(activeId, 120)
+type MobileInfoCardProps = {
+  label: string
+  // The hosting section's tone - the card takes the opposite surface, the
+  // same alternating rule the section's own cards and InfoPanel follow.
+  tone: SectionTone
+}
 
+// Mobile counterpart to InfoPanel's desktop aside - see InfoPanel.tsx. Each
+// section renders its own instance, pinned in place inside that section's
+// own top gap (see the module CSS) rather than one shared instance floating
+// fixed over the viewport and tracking scroll to know which section it's
+// over - it scrolls away with its own section like ordinary page content
+// now, instead of reappearing/hiding based on scroll direction. That also
+// means it just takes the label as a prop instead of deriving "which
+// section is active" itself. Shows a trimmed subset of InfoPanel's content
+// (name + this section's label, no role, nav, or resume link) - the role
+// (tagline) and quickSummary both live in the hamburger menu instead (see
+// Nav.tsx) - keeping this to just identity + label kept it from getting
+// cluttered.
+function MobileInfoCard({ label, tone }: MobileInfoCardProps) {
   return (
-    <aside
-      className={cx(styles.card, !visible && styles.cardHidden, eased && styles.cardEased)}
-      aria-label="Page summary"
-      aria-hidden={!visible}
+    <div
+      className={styles.card}
+      style={{ '--card-bg': contrastSurface(tone) } as CSSProperties}
+      aria-hidden="true"
       data-testid="mobile-info-card"
     >
       <p className={styles.name}>{siteContent.name}</p>
-      {activeSection && <p className={styles.section}>{activeSection.label}</p>}
-    </aside>
+      <p className={styles.section}>{label}</p>
+    </div>
   )
 }
 

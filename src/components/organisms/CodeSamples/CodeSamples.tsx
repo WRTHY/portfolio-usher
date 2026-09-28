@@ -11,12 +11,14 @@ import CodeFileTabs from '../../molecules/CodeFileTabs/CodeFileTabs'
 import PanelFooter from '../../molecules/PanelFooter/PanelFooter'
 import ParticleBackground from '../../molecules/ParticleBackground/ParticleBackground'
 import SectionBody from '../../molecules/SectionBody/SectionBody'
-import { getSectionLabel } from '../../../content/navigation'
+import MobileInfoCard from '../MobileInfoCard/MobileInfoCard'
+import { getSectionLabel, getSectionTone } from '../../../content/navigation'
 import { codeExamples } from '../../../content/codeExamples'
 import type { Framework, TestingType } from '../../../content/codeExamples'
 import styles from './CodeSamples.module.css'
 
 const sectionLabel = getSectionLabel('code-samples')
+const sectionTone = getSectionTone('code-samples')
 
 const testingTypeOptions: SegmentedControlOption<TestingType>[] = [
   { value: 'e2e', label: 'End-to-End', icon: <EndToEndIcon aria-hidden="true" /> },
@@ -64,6 +66,7 @@ function CodeSamples() {
 
   return (
     <section id="code-samples" className="flush-section" aria-label={sectionLabel}>
+      <MobileInfoCard label={sectionLabel} tone={sectionTone} />
       <ParticleBackground variant="code-samples" />
       <SectionBody gap={16}>
         <Card className={styles.explainer}>

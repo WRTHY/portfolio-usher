@@ -13,3 +13,10 @@
 .link:hover {
   color: var(--accent);
 }
+
+/* Overrides ReadMoreText's default --text (see its own module CSS) just
+   here - About's bio is the one place this toggle should stand out as
+   purple from the start rather than only on hover. */
+.readMoreToggle {
+  color: var(--accent);
+}

@@ -22,6 +22,7 @@ import {
 } from 'react-icons/si'
 import { MaestroIcon, PlaywrightIcon, ReactNativeIcon, SlackIcon } from '../../atoms/icons/BrandIcons'
 import { PerformanceIcon } from '../../atoms/icons/TestingTypeIcons'
+import type { SkillColorway } from '../../../styles/syntaxPalette'
 
 export type Tool = {
   name: string
@@ -31,7 +32,7 @@ export type Tool = {
 export type ToolCategory = {
   id: string
   ariaLabel: string
-  colorway: 'languages' | 'testing' | 'tools' | 'devops'
+  colorway: SkillColorway
   tools: Tool[]
 }
 

@@ -2,35 +2,38 @@
   display: none;
 }
 
-@media (min-width: 640px) {
-  .infoPanel {
-    display: flex;
-    flex-direction: column;
-    position: fixed;
-    top: 80px;
-    left: var(--page-gutter-desktop);
-    /* Reset margin/width so this doesn't inherit the shared reading-column
-       indent that index.css applies to every direct child of a <section> -
-       harmless today (this renders at the template level, not inside a
-       section) but keeps a fixed, viewport-pinned left edge guaranteed
-       regardless of where it's ever mounted from. */
-    margin-left: 0;
-    max-width: none;
-    z-index: 8;
-    width: var(--info-panel-width);
-    height: 75svh;
-    padding: 32px;
-    /* Tracks whichever section is active (--panel-bg is set inline from
-       useActiveSection - see InfoPanel.tsx), crossfading between the
-       --bg/--section-alt-bg tones as the page scrolls, always opposite the
-       active section's own tone so the panel reads as a distinct surface
-       rather than blending into whatever's scrolled underneath it. */
-    background: var(--panel-bg, var(--code-bg));
-    transition: background-color 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow);
-  }
+/* Keyed off [data-viewport] (see useViewportMode.ts) instead of a raw width
+   media query - a landscape phone is often wider than 640px but nowhere
+   near tall enough for this fixed 75svh panel plus its `top: 80px` offset,
+   so it needs to stay in the mobile/hamburger treatment instead (see
+   index.css's matching section rule). */
+:root[data-viewport='desktop'] .infoPanel {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 80px;
+  left: var(--page-gutter-desktop);
+  /* Reset margin/width so this doesn't inherit the shared reading-column
+     indent that index.css applies to every direct child of a <section> -
+     harmless today (this renders at the template level, not inside a
+     section) but keeps a fixed, viewport-pinned left edge guaranteed
+     regardless of where it's ever mounted from. */
+  margin-left: 0;
+  max-width: none;
+  z-index: 8;
+  width: var(--info-panel-width);
+  height: 75svh;
+  padding: 32px;
+  /* Tracks whichever section is active (--panel-bg is set inline from
+     useActiveSection - see InfoPanel.tsx), crossfading between the
+     --bg/--section-alt-bg tones as the page scrolls, always opposite the
+     active section's own tone so the panel reads as a distinct surface
+     rather than blending into whatever's scrolled underneath it. */
+  background: var(--panel-bg, var(--code-bg));
+  transition: background-color 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
 }
 
 @media (prefers-reduced-motion: reduce) {

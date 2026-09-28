@@ -6,13 +6,13 @@ import CodeSamples from '../../organisms/CodeSamples/CodeSamples'
 import ApiTesting from '../../organisms/ApiTesting/ApiTesting'
 import Sidebar from '../../organisms/Sidebar/Sidebar'
 import InfoPanel from '../../organisms/InfoPanel/InfoPanel'
-import MobileInfoCard from '../../organisms/MobileInfoCard/MobileInfoCard'
 
+// MobileInfoCard isn't rendered here - each section renders its own
+// instance instead (see MobileInfoCard.tsx for why).
 function PortfolioTemplate() {
   return (
     <>
       <Header />
-      <MobileInfoCard />
       <Sidebar />
       <InfoPanel />
       <About />
