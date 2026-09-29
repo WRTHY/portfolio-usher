@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "node scripts/fetch-fonts.mjs && node scripts/fetch-api-testing-examples.mjs && tsc -b && vite build",
     "lint": "eslint .",
+    "typecheck": "tsc -b",
     "fetch:api-testing": "node scripts/fetch-api-testing-examples.mjs",
     "preview": "vite preview",
     "test": "npm run test:unit && npm run test:component:cypress && npm run test:e2e:playwright && npm run test:e2e:cypress",

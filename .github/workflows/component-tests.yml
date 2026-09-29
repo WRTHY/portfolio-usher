@@ -1,0 +1,48 @@
+name: Component Tests
+run-name: ${{ github.actor }} triggered ${{ github.event_name }} on ${{ github.ref_name }}
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+  workflow_dispatch:
+
+concurrency:
+  group: component-tests-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: 22
+
+jobs:
+  component-tests-cypress:
+    name: Component Tests (Cypress)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - uses: cypress-io/github-action@v6
+        with:
+          install: false
+          component: true
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: cypress-component-failures
+          path: |
+            cypress/screenshots
+            cypress/videos
+          retention-days: 5
+          if-no-files-found: ignore

@@ -10,15 +10,17 @@ export default defineConfig([
   globalIgnores(['dist']),
   {
     files: ['**/*.{ts,tsx}'],
-    extends: [
-      js.configs.recommended,
-      tseslint.configs.recommended,
-      reactHooks.configs.flat.recommended,
-      reactRefresh.configs.vite,
-    ],
+    extends: [js.configs.recommended, tseslint.configs.recommended],
     languageOptions: {
       globals: globals.browser,
     },
+  },
+  // React-specific rules only apply to actual React source - e2e/playwright's
+  // fixtures.ts has a `use` fixture parameter that eslint-plugin-react-hooks
+  // otherwise mistakes for a hook call.
+  {
+    files: ['src/**/*.{ts,tsx}'],
+    extends: [reactHooks.configs.flat.recommended, reactRefresh.configs.vite],
   },
   {
     files: ['e2e/cypress/**/*.ts', 'cypress/**/*.ts', 'src/**/*.cy.tsx', 'cypress.config.ts'],

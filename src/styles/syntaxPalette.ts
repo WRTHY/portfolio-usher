@@ -26,9 +26,11 @@ export const oneLightContrastFixes = {
   '#c18401': '#845a01',
 } as const
 
-// Only one-dark-pro's coral token (4.38:1) falls short.
+// one-dark-pro's coral token (4.38:1) and its comment gray (3.73:1, against
+// the theme's own #282c34 background) both fall short.
 export const oneDarkContrastFixes = {
   [oneDark.coral]: '#e37179',
+  '#7f848e': '#9198a3',
 } as const
 
 export type SkillColorway = 'languages' | 'testing' | 'tools' | 'devops'

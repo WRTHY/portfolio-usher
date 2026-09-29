@@ -65,7 +65,9 @@
   padding-right: 8px;
   border-right: 1px solid var(--border);
   text-align: right;
+  /* --text is already the muted/secondary tone relative to --text-h; halving
+     it further with opacity dropped dark mode to ~2.6:1 against --code-bg,
+     below WCAG AA's 4.5:1 (caught by the axe scan in accessibility.spec.ts). */
   color: var(--text);
-  opacity: 0.5;
   user-select: none;
 }
