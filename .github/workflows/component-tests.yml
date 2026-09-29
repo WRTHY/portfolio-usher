@@ -1,5 +1,5 @@
 name: Component Tests
-run-name: ${{ github.actor }} triggered ${{ github.event_name }} on ${{ github.ref_name }}
+run-name: "Component Tests: ${{ github.event_name }} by ${{ github.actor }} on ${{ github.ref_name }}"
 
 on:
   push:
@@ -24,7 +24,7 @@ env:
 
 jobs:
   component-tests-cypress:
-    name: Component Tests (Cypress)
+    name: Cypress
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7

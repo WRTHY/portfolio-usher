@@ -120,17 +120,19 @@ tests in one run (each passes in isolation) - see [`cypress.config.ts`](cypress.
 Every push to `master` and every pull request runs four GitHub Actions workflows in
 parallel, one per testing tier, mirroring the tiers documented above:
 
-| Workflow | Jobs | What it runs |
+| Workflow | Jobs (shown in checks as `<workflow> / <job>`) | What it runs |
 | --- | --- | --- |
-| [`lint-and-build.yml`](.github/workflows/lint-and-build.yml) | `lint-and-typecheck`, `build` | ESLint + `tsc -b`, then a full production build |
-| [`unit-tests.yml`](.github/workflows/unit-tests.yml) | `unit-tests` | `npm run test:unit` (Vitest) |
-| [`component-tests.yml`](.github/workflows/component-tests.yml) | `component-tests-cypress` | `cypress run --component` |
-| [`e2e-tests.yml`](.github/workflows/e2e-tests.yml) | `e2e-tests-playwright`, `e2e-tests-cypress` | Both e2e suites, run side by side |
+| [`lint-and-build.yml`](.github/workflows/lint-and-build.yml) | `ESLint & TypeScript`, `Vite Production Build` | ESLint + `tsc -b`, then a full production build |
+| [`unit-tests.yml`](.github/workflows/unit-tests.yml) | `Vitest` | `npm run test:unit` |
+| [`component-tests.yml`](.github/workflows/component-tests.yml) | `Cypress` | `cypress run --component` |
+| [`e2e-tests.yml`](.github/workflows/e2e-tests.yml) | `Playwright`, `Cypress` | Both e2e suites, run side by side |
 
-Each e2e/component job uploads its screenshots, videos, or HTML report as a build artifact
-on failure (Playwright's report is uploaded even on success) so a failure can be diagnosed
-from the Actions run without reproducing it locally. Splitting by tier instead of one
-monolithic workflow keeps each file scoped to a single concern; the trade-off is that
+Job names deliberately don't repeat their workflow's name - GitHub already prefixes each
+check with it (e.g. `E2E Tests / Playwright`), so the job name only needs to say which tool
+ran. Each e2e/component job uploads its screenshots, videos, or HTML report as a build
+artifact on failure (Playwright's report is uploaded even on success) so a failure can be
+diagnosed from the Actions run without reproducing it locally. Splitting by tier instead of
+one monolithic workflow keeps each file scoped to a single concern; the trade-off is that
 branch protection has to require each workflow's job(s) individually rather than gating on
 one combined status check.
 
