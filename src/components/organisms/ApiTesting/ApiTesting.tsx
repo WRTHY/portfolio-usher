@@ -53,7 +53,6 @@ function ApiTesting() {
           <Badge variant="outline-accent">Static preview - full suite lives in its own repo</Badge>
           <ReadMoreText collapsedLines={4}>
             {apiTestingIntro.paragraphs.map((paragraph, index) => (
-              // eslint-disable-next-line react/no-array-index-key
               <p key={index}>{paragraph}</p>
             ))}
           </ReadMoreText>
