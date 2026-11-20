@@ -42,13 +42,15 @@ src/
     atoms/       # Badge, Button, CopyButton, FramedImage, Heading, MenuToggle,
                  # NavLink, RunButton, SocialIcon, SoonBadge, icons/ ...
     molecules/   # CodeBlock, CodeFileTabs, FrameworkSwitcher, MediaText, Modal, Nav,
-                 # PanelFooter, ParticleBackground, SectionDots, SegmentedControl,
-                 # SocialLinks, TextCard, ThemeToggle
-    organisms/   # About, Experience, CaseStudies, CodeSamples, Header, Sidebar, InfoPanel
+                 # PanelFooter, SectionBody, SectionDots, SectionHeader,
+                 # SegmentedControl, SocialLinks, TextCard, ThemeToggle
+    organisms/   # Header (sticky top bar), Sidebar + InfoPanel (desktop left
+                 # rail and nav card), About, Experience, CaseStudies,
+                 # CodeSamples, ApiTesting
     templates/   # PortfolioTemplate - assembles the page
   content/       # Site copy and data (about copy, experience, case studies, code
                  # examples, nav)
-  hooks/         # useActiveSection, useOverscrollBump
+  hooks/         # useActiveSection, useActiveSectionInfo, usePrefersReducedMotion
 ```
 
 ## Getting started
