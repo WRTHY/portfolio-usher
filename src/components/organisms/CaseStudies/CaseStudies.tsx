@@ -6,9 +6,8 @@ import Card from '../../atoms/Card/Card'
 import Heading from '../../atoms/Heading/Heading'
 import IconButton from '../../atoms/IconButton/IconButton'
 import Modal from '../../molecules/Modal/Modal'
-import ParticleBackground from '../../molecules/ParticleBackground/ParticleBackground'
 import SectionBody from '../../molecules/SectionBody/SectionBody'
-import MobileInfoCard from '../MobileInfoCard/MobileInfoCard'
+import SectionHeader from '../../molecules/SectionHeader/SectionHeader'
 import { caseStudies } from '../../../content/caseStudies'
 import type { CaseStudy } from '../../../content/caseStudies'
 import usePrefersReducedMotion from '../../../hooks/usePrefersReducedMotion'
@@ -155,9 +154,8 @@ function CaseStudies() {
   )
 
   return (
-    <section id="case-studies" className="flush-section" aria-label={sectionLabel}>
-      <MobileInfoCard label={sectionLabel} tone={sectionTone} />
-      <ParticleBackground variant="case-studies" />
+    <section id="case-studies" aria-labelledby="case-studies-heading">
+      <SectionHeader id="case-studies-heading" title={sectionLabel} />
       <SectionBody>
         {caseStudies.map((caseStudy) => (
           <Card
