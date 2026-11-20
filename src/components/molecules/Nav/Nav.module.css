@@ -1,106 +1,119 @@
-.nav {
-  position: relative;
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  height: var(--nav-height);
 }
 
-/* The full-screen mobile overlay. Position/background/z-index live directly
-   on this base rule (not nested under &.open) so the >=640px override below
-   can re-declare them at equal specificity regardless of open state - same
-   trick this file already relied on before the panel/list split. */
+/* The display face has one weight: never request bold. */
+.wordmark {
+  font: 400 1.375rem / 1 var(--heading);
+  letter-spacing: 0;
+  color: var(--text-h);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.resume {
+  display: inline-flex;
+  align-items: center;
+  height: 40px;
+  padding: 0 1rem;
+  border: 1.5px solid var(--text-h);
+  border-radius: 999px;
+  font: 600 0.875rem / 1 var(--sans);
+  color: var(--text-h);
+  text-decoration: none;
+  transition:
+    border-color 160ms var(--ease-out),
+    color 160ms var(--ease-out);
+
+  &:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+}
+
+.toggleWrap {
+  display: contents;
+}
+
+/* The menu below the desktop breakpoint: fills the viewport under the bar. */
 .panel {
   display: none;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 40px;
+  gap: 2.5rem;
   position: fixed;
-  inset: 0;
-  padding: 32px 24px;
-  background: var(--bg);
+  inset: var(--nav-height) 0 0;
   z-index: 1;
+  padding: 2rem var(--page-gutter);
   overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--bg);
+  border-top: 1px solid var(--border);
 
   &.open {
     display: flex;
   }
 }
 
-.list {
-  list-style: none;
+.menuLinks {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 32px;
+  gap: 0.5rem;
   margin: 0;
   padding: 0;
+  list-style: none;
+}
 
-  a {
-    font-size: 18px;
+.menuLink {
+  font: 400 clamp(2rem, 9vw, 2.75rem) / 1.15 var(--heading);
+  letter-spacing: 0;
+}
+
+.panelFooter {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin-top: auto;
+}
+
+.tagline {
+  color: var(--text);
+}
+
+/* SocialLinks stacks vertically by default; in the menu it's one row. */
+.socials {
+  flex-direction: row;
+  gap: 1.25rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .resume {
+    transition: none;
   }
 }
 
-/* ThemeToggle sits alone at the top of the panel - see the comment in
-   Nav.tsx for why it's duplicated here rather than shared with Sidebar. */
-.themeToggleWrap {
-  align-self: center;
+@media (min-width: 1024px) {
+  /* Never shown at desktop widths (InfoPanel carries the links there), even
+     if it was left open on a phone before the window grew. */
+  .panel,
+  .panel.open {
+    display: none;
+  }
 }
 
-/* The role/title ("SDET | QE Lead") - moved here from MobileInfoCard (the
-   fixed card at the top of the page), which shows the active section's
-   label in this same slot instead now. Same size/color/weight that field
-   had on the card, just centered for the menu instead of left-aligned. */
-.title {
-  font-family: var(--heading);
-  color: var(--accent);
-  font-weight: 500;
-  font-size: 26px;
-  line-height: 1.2;
-  margin: 0;
-  text-align: center;
-}
-
-/* SocialLinks/Resume - see the comment in Nav.tsx for why these are
-   duplicated here rather than shared with Sidebar/InfoPanel. quickSummary
-   lives here too now - MobileInfoCard (the fixed card at the top of the
-   page) dropped it to stay uncluttered, and the menu is the other place
-   mobile users see this kind of "about me" copy. */
-.footer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-  width: 100%;
-  max-width: 280px;
-}
-
-.summary {
-  font-size: 14px;
-  line-height: 145%;
-  color: var(--text);
-  text-align: center;
-  margin: 0;
-}
-
-/* Beats SocialLinks.module.css's own .list (flex-direction: column) via the
-   extra ancestor class rather than relying on stylesheet import order. */
-.footer .socialLinks {
-  flex-direction: row;
-  gap: 16px;
-}
-
-/* Keyed off [data-viewport] (see useViewportMode.ts) instead of a raw width
-   media query - see index.css's matching section rule for why a landscape
-   phone needs the mobile (overlay) nav despite often being wider than
-   640px. */
-:root[data-viewport='desktop'] .panel {
-  display: contents;
-}
-
-:root[data-viewport='desktop'] .list {
-  flex-direction: row;
-  gap: 20px;
-}
-
-:root[data-viewport='desktop'] .themeToggleWrap,
-:root[data-viewport='desktop'] .footer {
-  display: none;
+/* Very narrow phones: the menu carries the resume button, so the bar's
+   pill can go to keep the wordmark, toggle and hamburger on one line. */
+@media (max-width: 359px) {
+  .resume {
+    display: none;
+  }
 }

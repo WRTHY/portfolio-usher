@@ -2,24 +2,19 @@
   display: none;
 }
 
-/* Keyed off [data-viewport] (see useViewportMode.ts) instead of a raw width
-   media query - a landscape phone is often wider than 640px but nowhere
-   near tall enough for this fixed 75svh panel plus its `top: 80px` offset,
-   so it needs to stay in the mobile/hamburger treatment instead (see
-   index.css's matching section rule). */
-:root[data-viewport='desktop'] .infoPanel {
-  display: flex;
+/* Desktop-only (>=1024px); below that the top bar's hamburger menu carries
+   the section links and resume instead. Pinned under the sticky top bar. */
+@media (min-width: 1024px) {
+  .infoPanel {
+    display: flex;
+  }
+}
+
+.infoPanel {
   flex-direction: column;
   position: fixed;
-  top: 80px;
+  top: calc(var(--nav-height) + 16px);
   left: var(--page-gutter-desktop);
-  /* Reset margin/width so this doesn't inherit the shared reading-column
-     indent that index.css applies to every direct child of a <section> -
-     harmless today (this renders at the template level, not inside a
-     section) but keeps a fixed, viewport-pinned left edge guaranteed
-     regardless of where it's ever mounted from. */
-  margin-left: 0;
-  max-width: none;
   z-index: 8;
   width: var(--info-panel-width);
   height: 75svh;
@@ -116,17 +111,20 @@
   margin: 8px 0 0;
 }
 
-/* Same band where index.css shrinks --info-panel-width - the smaller panel
-   still needs smaller padding and a smaller name to avoid the name
-   wrapping awkwardly or the fixed-height nav overflowing the fixed 75svh
-   panel height. Declared last so it wins over the base .infoPanel/.name
-   rules above at equal specificity. */
-@media (min-width: 640px) and (max-width: 1023px) {
-  .infoPanel {
-    padding: 24px;
+/* Section links in the display face. The sliding .marker shows the active
+   one, so NavLink's own underline is switched off here (two classes, so it
+   reliably beats NavLink's single-class rule). */
+.nav .navLink {
+  font: 400 1.0625rem / 1 var(--heading);
+  letter-spacing: 0;
+  text-decoration: none;
+  color: var(--text);
+
+  &:hover {
+    color: var(--text-h);
   }
 
-  .name {
-    font-size: 30px;
+  &[aria-current] {
+    color: var(--accent);
   }
 }

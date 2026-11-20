@@ -17,7 +17,6 @@ import type { Framework, TestingType } from '../../../content/codeExamples'
 import styles from './CodeSamples.module.css'
 
 const sectionLabel = getSectionLabel('code-samples')
-const sectionTone = getSectionTone('code-samples')
 
 const testingTypeOptions: SegmentedControlOption<TestingType>[] = [
   { value: 'e2e', label: 'End-to-End', icon: <EndToEndIcon aria-hidden="true" /> },
