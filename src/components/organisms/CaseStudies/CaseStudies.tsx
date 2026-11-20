@@ -1,5 +1,5 @@
 import { useEffect, useId, useRef, useState } from 'react'
-import { getSectionLabel, getSectionTone } from '../../../content/navigation'
+import { getSectionLabel } from '../../../content/navigation'
 import SkillBadge from '../../molecules/SkillBadge/SkillBadge'
 import { sortBySkillOrder } from '../../molecules/SkillsAndTools/skillColorway'
 import Card from '../../atoms/Card/Card'
@@ -14,7 +14,6 @@ import usePrefersReducedMotion from '../../../hooks/usePrefersReducedMotion'
 import styles from './CaseStudies.module.css'
 
 const sectionLabel = getSectionLabel('case-studies')
-const sectionTone = getSectionTone('case-studies')
 
 type ReportSection = {
   key: 'problem' | 'approach' | 'outcome'| 'futureIterations'
@@ -168,7 +167,7 @@ function CaseStudies() {
             data-testid={`case-study-card-${caseStudy.id}`}
             onClick={() => setSelectedId(caseStudy.id)}
           >
-            <Heading level={2}>{caseStudy.title}</Heading>
+            <Heading level={3}>{caseStudy.title}</Heading>
             <p className={styles.summary}>{caseStudy.summary}</p>
             <div className={styles.tags}>
               {sortBySkillOrder(caseStudy.tags).map((tag) => (

@@ -1,58 +1,19 @@
-/* Renders at every width now - SectionDots (inside .progressDots) is the
-   page's always-on scroll indicator, pinned to the left margin on mobile
-   instead of disappearing along with ThemeToggle/SocialLinks below. */
+/* Desktop-only left rail, pinned to the viewport edge beside InfoPanel.
+   Starts below the sticky top bar; dots at the top, socials at the bottom. */
 .sidebar {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  position: fixed;
-  left: 10px;
-  top: 0;
-  bottom: 0;
-  z-index: 5;
-  pointer-events: none;
-
-  > * {
-    pointer-events: auto;
-  }
-}
-
-.progressDots {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-}
-
-/* Same floating-card treatment as MenuToggle on mobile (see
-   MenuToggle.module.css) - bare dots sat directly on top of whatever card
-   was scrolled underneath, with nothing to separate the two. Desktop keeps
-   the plain, unboxed dots; they already sit in the page's own gutter there
-   instead of floating over content. Keyed off [data-viewport] (see
-   useViewportMode.ts) instead of a raw width media query - see index.css's
-   matching section rule for why a landscape phone needs this mobile
-   treatment despite often being wider than 640px. */
-:root[data-viewport='mobile'] .progressDots {
-  padding: 14px 10px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  background: var(--bg);
-  box-shadow: var(--shadow);
-}
-
-/* ThemeToggle/SocialLinks: desktop-only here - their mobile counterparts
-   live in the hamburger menu instead (see Nav.tsx/Sidebar.tsx). */
-.desktopOnly {
   display: none;
 }
 
-:root[data-viewport='desktop'] .sidebar {
-  left: 24px;
-  justify-content: space-between;
-  padding: 80px 0 32px;
-}
-
-:root[data-viewport='desktop'] .desktopOnly {
-  display: block;
+@media (min-width: 1024px) {
+  .sidebar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    position: fixed;
+    left: 24px;
+    top: calc(var(--nav-height) + 16px);
+    bottom: 32px;
+    z-index: 5;
+  }
 }

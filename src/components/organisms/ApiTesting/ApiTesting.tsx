@@ -18,7 +18,6 @@ import { links } from '../../../content/links'
 import styles from './ApiTesting.module.css'
 
 const sectionLabel = getSectionLabel('api-testing')
-const sectionTone = getSectionTone('api-testing')
 
 type ApiTool = 'playwright' | 'postman'
 
@@ -73,7 +72,7 @@ function ApiTesting() {
             <Card key={example.id} tone="alt" className={styles.exampleCard}>
               <div className={styles.exampleHeader}>
                 <Badge>{example.tag}</Badge>
-                <Heading level={2}>{example.title}</Heading>
+                <Heading level={3}>{example.title}</Heading>
               </div>
               <p className={styles.description}>{example.description}</p>
               <div className={styles.panel}>

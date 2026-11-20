@@ -2,15 +2,17 @@
   display: block;
 }
 
-/* Only clamps on mobile (see useViewportMode.ts) and only while collapsed -
-   desktop has the column width for these paragraphs to read fine at full
-   length, so there's nothing to preview-and-expand there. */
-:root[data-viewport='mobile'] .content.collapsed {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: var(--collapsed-lines, 5);
-  overflow: hidden;
-  text-overflow: ellipsis;
+/* Only clamps on phones and only while collapsed - wider screens have the
+   column width for these paragraphs to read fine at full length, so there's
+   nothing to preview-and-expand there. */
+@media (max-width: 639px) {
+  .content.collapsed {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: var(--collapsed-lines, 5);
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }
 
 /* Same treatment as CaseStudies' "Read case study" affordance (see its own

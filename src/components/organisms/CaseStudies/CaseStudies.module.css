@@ -23,7 +23,7 @@
   font-family: inherit;
 }
 
-.card h2 {
+.card h3 {
   margin: 0;
 }
 
@@ -60,9 +60,8 @@
 
 /* The "Reading Rail" modal layout: a left rail (tags, title, section-jump
    nav) beside a right content pane (Problem/Approach/Outcome). Mobile-first
-   - the rail stacks above the content by default, matching how the sidebar
-   InfoPanel is hidden below 640px everywhere else on the site - and becomes
-   a fixed-width side rail at the same 640px breakpoint. */
+   - the rail stacks above the content by default and becomes a fixed-width
+   side rail at 640px. */
 .rail {
   display: flex;
   flex-direction: column;
@@ -144,8 +143,7 @@
   color: var(--text);
 }
 
-/* Mobile: a horizontal, scrollable pill row instead of a vertical list -
-   the same "collapse the rail" convention used for InfoPanel's own nav. */
+/* Mobile: a horizontal, scrollable pill row instead of a vertical list. */
 .railNav {
   display: flex;
   gap: 8px;

@@ -1,4 +1,4 @@
-import { getSectionLabel, getSectionTone } from '../../../content/navigation'
+import { getSectionLabel } from '../../../content/navigation'
 import { experience } from '../../../content/experience'
 import Heading from '../../atoms/Heading/Heading'
 import SkillBadge from '../../molecules/SkillBadge/SkillBadge'
@@ -26,7 +26,7 @@ function Experience() {
           >
             <div className={styles.cardHeader}>
               <div>
-                <Heading level={2}>{entry.role}</Heading>
+                <Heading level={3}>{entry.role}</Heading>
                 <p className={styles.company}>{entry.company}</p>
               </div>
               <p className={styles.dates}>{entry.dates}</p>

@@ -8,12 +8,8 @@ type SectionBodyProps = {
   children: ReactNode
 }
 
-// The "flush full-bleed content column" every non-hero section wraps its
-// content in: cancels the shared reading-column inset (see index.css's
-// `section > *` rule) so wide content lines up at the same anchor as its
-// siblings, and lifts above the absolutely-positioned particle layer so it
-// paints in front rather than behind it. Previously hand-rolled, byte-for-
-// byte identical, in About/Experience/CaseStudies/CodeSamples.
+// The content column every section wraps its content in, under its
+// SectionHeader: a flex column with a configurable gap.
 function SectionBody({ gap = 20, className, children }: SectionBodyProps) {
   return (
     <div className={cx(styles.body, className)} style={{ gap } as CSSProperties}>

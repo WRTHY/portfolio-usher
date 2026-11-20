@@ -255,7 +255,7 @@ export type { SectionId }
 // Composition root for the site. It's a single page with no real per-URL
 // navigation, so rather than one class per route this models one root
 // object owning a component per section/region - the same shape the app
-// itself uses (Header/Sidebar/CaseStudies/CodeSamples as siblings).
+// itself uses (Header/About/Experience/CaseStudies/CodeSamples as siblings).
 export class PortfolioPage {
   readonly nav = new NavComponent()
   readonly themeToggle = new ThemeToggleComponent()
@@ -446,23 +446,13 @@ describe('SegmentedControl', () => {
       {
         filename: 'src/test/setup.ts',
         language: 'typescript',
-        code: `import type { ReactNode } from 'react'
-import { afterEach, vi } from 'vitest'
+        code: `import { afterEach } from 'vitest'
 import { cleanup } from '@testing-library/react'
 import '@testing-library/jest-dom/vitest'
 
 afterEach(() => {
   cleanup()
 })
-
-// jsdom's canvas has no transferControlToOffscreen, so the real engine throws
-// (as an unhandled rejection, since Particles doesn't await its load call)
-// the moment ParticleBackground mounts. Every section renders one now, so
-// stub the engine boundary globally rather than repeating this per test file.
-vi.mock('@tsparticles/react', () => ({
-  ParticlesProvider: ({ children }: { children: ReactNode }) => children,
-  Particles: () => null,
-}))
 
 // jsdom doesn't implement matchMedia at all. Default to "no preference matched"
 // so components that check media queries don't crash in tests that aren't
@@ -500,6 +490,21 @@ if (!window.IntersectionObserver) {
   }
 
   window.IntersectionObserver = IntersectionObserverStub
+}
+
+// jsdom doesn't implement ResizeObserver either (used by ReadMoreText to
+// detect line-clamp truncation). This stub never fires, so components
+// relying on it just keep their initial (untruncated) state during tests
+// that aren't specifically exercising that behavior - see ReadMoreText's
+// own test file for one that overrides it to simulate overflow.
+if (!window.ResizeObserver) {
+  class ResizeObserverStub implements ResizeObserver {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  }
+
+  window.ResizeObserver = ResizeObserverStub
 }
 `,
       },
