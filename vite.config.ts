@@ -6,12 +6,6 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   server: {
-    // Pin to IPv4 loopback: on Node 17+ "localhost" can resolve to ::1 only,
-    // so Vite listens on IPv6 while CI wait-on probes hit 127.0.0.1 and get
-    // refused. strictPort fails loudly instead of drifting to 5174.
-    host: '127.0.0.1',
-    port: 5173,
-    strictPort: true,
     watch: {
       usePolling: true,
     },

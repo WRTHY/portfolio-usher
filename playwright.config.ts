@@ -14,7 +14,7 @@ export default defineConfig({
   // masking a genuinely broken spec, which would still fail all 3 tries.
   retries: process.env.CI ? 2 : 0,
   use: {
-    baseURL: 'http://127.0.0.1:5173',
+    baseURL: 'http://localhost:5173',
     trace: 'on-first-retry',
   },
   // Firefox/WebKit are left out for now: Firefox's binary won't spawn in
@@ -24,7 +24,7 @@ export default defineConfig({
   projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
   webServer: {
     command: 'npm run dev',
-    url: 'http://127.0.0.1:5173',
+    url: 'http://localhost:5173',
     reuseExistingServer: !process.env.CI,
   },
 })
