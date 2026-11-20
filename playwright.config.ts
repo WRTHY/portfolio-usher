@@ -7,6 +7,12 @@ export default defineConfig({
   testDir: './e2e/playwright',
   fullyParallel: true,
   reporter: 'html',
+  // Retry only in CI, never locally - a spec that needs a retry to pass
+  // locally should fail loudly, not get silently rerun. In CI this
+  // absorbs the sandboxed-environment timing flakiness (see README/
+  // cypress.config.ts for the Cypress side of the same issue) without
+  // masking a genuinely broken spec, which would still fail all 3 tries.
+  retries: process.env.CI ? 2 : 0,
   use: {
     baseURL: 'http://localhost:5173',
     trace: 'on-first-retry',
