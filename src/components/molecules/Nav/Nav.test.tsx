@@ -1,32 +1,42 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import Nav from './Nav'
+import { sections } from '../../../content/navigation'
 import { siteContent } from '../../../content/site'
 
 describe('Nav', () => {
-  it('renders a link for each section', () => {
+  it('links the wordmark to the top of the page', () => {
     render(<Nav />)
-    expect(screen.getByRole('link', { name: 'About' })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'Experience' })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'Case Studies' })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'Automation Examples' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: siteContent.name })).toHaveAttribute(
+      'href',
+      `#${sections[0].id}`,
+    )
   })
 
-  // quickSummary moved here from MobileInfoCard (the fixed card at the top
-  // of the page) to keep that card from getting cluttered - see its own
-  // test file for the matching regression check that it's gone from there.
-  it('shows the quickSummary blurb near the bottom of the menu', () => {
+  // On desktop the section links live in InfoPanel (see its own tests); the
+  // bar itself only carries them in the hamburger menu.
+  it('renders a link for each section in the menu', () => {
     render(<Nav />)
-    expect(screen.getByText(siteContent.quickSummary)).toBeInTheDocument()
+    const menu = screen.getByRole('navigation', { name: 'Menu' })
+    sections.forEach((section) => {
+      expect(within(menu).getByRole('link', { name: section.label })).toHaveAttribute(
+        'href',
+        `#${section.id}`,
+      )
+    })
   })
 
-  // The role (tagline) moved here too, right under the theme toggle -
-  // MobileInfoCard shows the active section's label in that slot instead
-  // now (see its own test file for the matching regression check).
-  it('shows the role/title near the top of the menu', () => {
+  it('keeps the resume one click away in the bar, opening in a new tab', () => {
     render(<Nav />)
-    expect(screen.getByText(siteContent.tagline)).toBeInTheDocument()
+    const resume = screen.getByRole('link', { name: 'Resume' })
+    expect(resume).toHaveAttribute('href', siteContent.resumeUrl)
+    expect(resume).toHaveAttribute('target', '_blank')
+  })
+
+  it('shows the theme toggle in the bar', () => {
+    render(<Nav />)
+    expect(screen.getByRole('button', { name: /switch to (light|dark) mode/i })).toBeInTheDocument()
   })
 
   it('starts closed and opens when the menu toggle is clicked', async () => {
@@ -46,16 +56,38 @@ describe('Nav', () => {
     )
   })
 
-  it('closes again after a link is clicked', async () => {
+  it('closes again after a menu link is clicked', async () => {
     const user = userEvent.setup()
     render(<Nav />)
 
     await user.click(screen.getByRole('button', { name: 'Open menu' }))
-    await user.click(screen.getByRole('link', { name: 'About' }))
+    const menu = screen.getByRole('navigation', { name: 'Menu' })
+    await user.click(within(menu).getByRole('link', { name: 'About' }))
 
     expect(screen.getByRole('button', { name: 'Open menu' })).toHaveAttribute(
       'aria-expanded',
       'false',
+    )
+  })
+
+  it('closes on Escape and returns focus to the menu toggle', async () => {
+    const user = userEvent.setup()
+    render(<Nav />)
+
+    await user.click(screen.getByRole('button', { name: 'Open menu' }))
+    await user.keyboard('{Escape}')
+
+    const toggle = screen.getByRole('button', { name: 'Open menu' })
+    expect(toggle).toHaveAttribute('aria-expanded', 'false')
+    expect(toggle).toHaveFocus()
+  })
+
+  it('carries the tagline and the resume button in the menu', () => {
+    render(<Nav />)
+    expect(screen.getByText(siteContent.tagline)).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Download resume' })).toHaveAttribute(
+      'href',
+      siteContent.resumeUrl,
     )
   })
 })

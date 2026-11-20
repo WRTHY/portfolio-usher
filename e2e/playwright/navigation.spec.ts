@@ -1,6 +1,11 @@
 import { test, expect } from './fixtures'
 
 test.describe('primary navigation', () => {
+  // InfoPanel's nav card (with these links) only shows from 1024px up -
+  // below that they live in the hamburger menu. Pinned explicitly rather than
+  // relying on the project's default viewport, mirroring the mobile block below.
+  test.use({ viewport: { width: 1280, height: 720 } })
+
   test('each nav link scrolls its section into view', async ({ portfolioPage }) => {
     await portfolioPage.goto()
 

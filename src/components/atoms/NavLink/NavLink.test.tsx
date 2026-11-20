@@ -26,6 +26,7 @@ describe('NavLink', () => {
     )
     const link = screen.getByRole('link', { name: 'About' })
     expect(link).toHaveClass(styles.active)
-    expect(link).toHaveAttribute('aria-current', 'page')
+    // 'location', not 'page': every link targets a section of this one page.
+    expect(link).toHaveAttribute('aria-current', 'location')
   })
 })
