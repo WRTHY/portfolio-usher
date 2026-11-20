@@ -27,4 +27,19 @@ describe('Button', () => {
     expect(link).toHaveAttribute('target', '_blank')
     expect(link).toHaveAttribute('rel', 'noopener noreferrer')
   })
+
+  it('is the primary variant by default and switches to ghost on request', () => {
+    const { rerender } = render(<Button href="/resume.pdf">Resume</Button>)
+    const link = () => screen.getByRole('link', { name: 'Resume' })
+    expect(link().className).toMatch(/primary/)
+    expect(link().className).not.toMatch(/ghost/)
+
+    rerender(
+      <Button href="/resume.pdf" variant="ghost">
+        Resume
+      </Button>,
+    )
+    expect(link().className).toMatch(/ghost/)
+    expect(link().className).not.toMatch(/primary/)
+  })
 })
