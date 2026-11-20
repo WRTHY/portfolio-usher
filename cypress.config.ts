@@ -11,7 +11,7 @@ export default defineConfig({
   // implementations of the same test scenarios in other frameworks/languages
   // (Cypress here, Python/Java later).
   e2e: {
-    baseUrl: 'http://localhost:5173',
+    baseUrl: 'http://127.0.0.1:5173',
     specPattern: 'e2e/cypress/**/*.cy.ts',
     supportFile: 'e2e/cypress/support/e2e.ts',
     fixturesFolder: false,

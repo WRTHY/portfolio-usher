@@ -17,8 +17,8 @@
     "test:component:cypress:ui": "cypress open --component",
     "test:e2e:playwright": "playwright test",
     "test:e2e:playwright:ui": "playwright test --ui",
-    "test:e2e:cypress": "start-server-and-test dev http://localhost:5173 \"cypress run\"",
-    "test:e2e:cypress:ui": "start-server-and-test dev http://localhost:5173 \"cypress open\""
+    "test:e2e:cypress": "start-server-and-test dev http://127.0.0.1:5173 \"cypress run\"",
+    "test:e2e:cypress:ui": "start-server-and-test dev http://127.0.0.1:5173 \"cypress open\""
   },
   "dependencies": {
     "@iconify/react": "^6.0.2",
