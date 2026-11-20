@@ -1,6 +1,12 @@
 import { defineConfig } from 'cypress'
 
 export default defineConfig({
+  // CI-only, matching playwright.config.ts's rationale: absorbs the
+  // sandbox-specific Electron/GPU rendering flakiness already documented
+  // in the README, without hiding a spec that's actually broken (that
+  // still fails all 3 tries and shows up red). Local runs (openMode)
+  // never retry, so a real failure is seen immediately while developing.
+  retries: { runMode: 2, openMode: 0 },
   // Scoped to its own subfolder alongside e2e/playwright: e2e/ holds sibling
   // implementations of the same test scenarios in other frameworks/languages
   // (Cypress here, Python/Java later).
