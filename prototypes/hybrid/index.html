@@ -1,0 +1,815 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>James Usher — QA Lead &amp; SDET</title>
+<meta name="description" content="James Usher builds quality functions from zero: test strategy, automation across mobile, desktop and web, and the team that owns it." />
+<link rel="preconnect" href="https://api.fontshare.com" crossorigin />
+<link rel="preload" href="/fonts/TBJ-Orcherum.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600&display=swap" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" />
+<script>
+  // Decide before first paint whether the opener plays, so the page never
+  // flashes underneath it. ?intro forces a replay; reduced motion never plays.
+  (function () {
+    var force = /[?&]intro\b/.test(location.search)
+    var seen = false
+    try { seen = sessionStorage.getItem('ju-intro-seen') === '1' } catch (e) {}
+    var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (!reduce && (force || !seen)) document.documentElement.classList.add('intro')
+  })()
+</script>
+<style>
+  /* Brand display face: licensed, fetched into public/fonts by scripts/fetch-fonts.mjs */
+  @font-face {
+    font-family: 'TBJ Orcherum Mini';
+    src: url('/fonts/TBJ-Orcherum.woff2') format('woff2'), url('/fonts/TBJ-Orcherum.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  :root {
+    /* Cream & Violet, carried over from the current site; follows the OS light/dark setting */
+    color-scheme: light dark;
+    --ground: light-dark(#f8f1e1, #16171d);
+    --ink: light-dark(#1f1710, #f3f4f6);
+    --ink-2: light-dark(#5c5346, #9ca3af);
+    --rule: light-dark(#dccba3, #2e303a);
+    --accent: light-dark(#6d28d9, #a78bfa);
+    --accent-hover: light-dark(#5b21b6, #c4b5fd);
+    --accent-wash: light-dark(rgba(109, 40, 217, .18), rgba(167, 139, 250, .26));
+    --on-accent: light-dark(#f8f1e1, #16171d);
+    --surface: light-dark(#fffaf0, #1c1e26);
+    --shadow: light-dark(rgba(60, 40, 10, .28), rgba(0, 0, 0, .6));
+    /* The terminal is always dark, in both modes */
+    --term: light-dark(#16171d, #0e0f13);
+    --term-line: #2e303a;
+    --term-text: #e5e7eb;
+    --term-dim: #9ca3af;
+    --term-accent: #a78bfa;
+    --fail: #ff6b5e;
+
+    --display: 'TBJ Orcherum Mini', 'General Sans', sans-serif;
+    --sans: 'General Sans', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', ui-monospace, Consolas, monospace;
+
+    --gutter: clamp(20px, 5vw, 64px);
+    --max: 1200px;
+    --spring: cubic-bezier(.34, 1.56, .64, 1);
+    --out: cubic-bezier(.16, 1, .3, 1);
+
+    font-synthesis: none;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scrollbar-color: var(--ink-2) var(--ground); }
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font: 400 1.0625rem/1.6 var(--sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  ::selection { background: var(--accent); color: var(--on-accent); }
+  a { color: inherit; text-underline-offset: .22em; text-decoration-thickness: 1px; }
+  a:hover { text-decoration-thickness: 2px; }
+  :focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; border-radius: 2px; }
+  .wrap { max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  svg.icon { width: 1em; height: 1em; flex: none; }
+
+  /* ---------- Opener ---------- */
+  .opener { display: none; }
+  .intro .opener {
+    position: fixed; inset: 0; z-index: 50;
+    display: grid; place-items: center;
+    background: var(--term); color: var(--term-text);
+    font: 400 clamp(.8rem, 1.6vw, 1rem)/1.9 var(--mono);
+    clip-path: inset(0 0 0 0);
+    transition: clip-path 800ms cubic-bezier(.76, 0, .24, 1);
+  }
+  .intro body { overflow: hidden; }
+  .opener.leaving { clip-path: inset(0 0 100% 0); }
+  .opener-run { width: min(44rem, 100% - 2 * var(--gutter)); }
+  .opener-cmd { color: var(--term-dim); margin: 0 0 .25rem; }
+  .opener-cmd b { color: var(--term-text); font-weight: 500; }
+  .opener-meta { color: var(--term-dim); margin: 0 0 1rem; min-height: 1.9em; }
+  .opener ol { list-style: none; margin: 0; padding: 0; }
+  .opener li { display: flex; gap: .75rem; align-items: baseline; min-height: 1.9em; white-space: pre; overflow: hidden; }
+  .opener li .mark { width: 1rem; display: inline-grid; place-items: center; transform: scale(0); transition: transform 380ms var(--spring); color: var(--term-accent); }
+  .opener li.done .mark { transform: scale(1); }
+  .opener li .noise { color: var(--fail); opacity: .8; }
+  .opener-sum { margin: 1.25rem 0 0; min-height: 1.9em; color: var(--term-accent); font-weight: 500; opacity: 0; transition: opacity 200ms; }
+  .opener-sum.on { opacity: 1; }
+  .opener-skip {
+    position: absolute; right: var(--gutter); bottom: var(--gutter);
+    font: 500 .8125rem/1 var(--mono); color: var(--term-dim);
+    background: none; border: 1px solid var(--term-line); border-radius: 999px; padding: .6rem 1rem; cursor: pointer;
+  }
+  .opener-skip:hover { color: var(--term-text); border-color: var(--term-dim); }
+  .opener-skip:focus-visible { outline-color: var(--term-accent); }
+
+  /* ---------- Nav ---------- */
+  .nav {
+    position: sticky; top: 0; z-index: 10;
+    background: var(--ground);
+    border-bottom: 1px solid transparent;
+    transition: border-color 200ms;
+  }
+  .nav.stuck { border-bottom-color: var(--rule); }
+  .nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 4rem; gap: 1.5rem; }
+  .wordmark { font: 400 1.375rem/1 var(--display); letter-spacing: 0; text-decoration: none; }
+  .nav ul { display: flex; gap: clamp(1rem, 2.5vw, 2rem); list-style: none; margin: 0; padding: 0; align-items: center; }
+  .nav a.link { text-decoration: none; font-weight: 500; font-size: .9375rem; color: var(--ink-2); }
+  .nav a.link:hover { color: var(--ink); text-decoration: underline; }
+  .btn {
+    display: inline-flex; align-items: center; gap: .5rem;
+    font: 600 .9375rem/1 var(--sans); text-decoration: none;
+    padding: .8rem 1.15rem; border-radius: 999px;
+    border: 1.5px solid var(--ink);
+    transition: background-color 160ms, color 160ms, transform 300ms var(--out);
+  }
+  .btn:hover { text-decoration: none; transform: translateY(-2px); }
+  .btn:active { transform: translateY(0); }
+  .btn-solid { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+  .btn-solid:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+  .nav .btn { padding: .6rem 1rem; font-size: .875rem; }
+
+  /* ---------- Hero ---------- */
+  .hero { padding: clamp(2.5rem, 7vh, 5rem) 0 clamp(4rem, 10vh, 7rem); }
+  h1.name {
+    font: 400 clamp(4rem, 10vw, 9rem)/.84 var(--display);
+    letter-spacing: -.01em;
+    margin: 0 0 clamp(1.5rem, 3vw, 2.25rem);
+    cursor: default;
+  }
+  .name .word { display: inline-block; white-space: nowrap; }
+  .name .ch { display: inline-block; transition: transform 500ms var(--spring); }
+  .name .ch:hover { transform: translateY(-.07em) rotate(-5deg); }
+  .play .name .ch { animation: pop 820ms var(--spring) both; animation-delay: calc(var(--i) * 38ms); }
+  @keyframes pop {
+    0% { opacity: 0; transform: translateY(.55em) rotate(10deg) scale(.55); }
+    45% { opacity: 1; }
+  }
+
+  .hero-grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: clamp(2rem, 5vw, 4.5rem); align-items: center; }
+  .lead { font: 500 clamp(1.25rem, 2.1vw, 1.5rem)/1.45 var(--sans); letter-spacing: -.01em; margin: 0 0 1.75rem; max-width: 30ch; text-wrap: pretty; }
+  .lead em { font-style: normal; background: linear-gradient(transparent 58%, var(--accent-wash) 58% 94%, transparent 94%); }
+  .actions { display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; }
+  .status { display: flex; align-items: center; gap: .55rem; margin-top: 1.5rem; font-size: .9375rem; color: var(--ink-2); }
+  .status i { width: .55rem; height: .55rem; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 0 var(--accent-wash); animation: ping 2.4s var(--out) infinite; }
+  @keyframes ping { 70% { box-shadow: 0 0 0 .5rem transparent; } 100% { box-shadow: 0 0 0 0 transparent; } }
+
+  /* The run report: the opener's output, docked in the hero. */
+  .rig {
+    margin: 0;
+    border: 1px solid var(--term-line);
+    border-radius: 16px; overflow: hidden;
+    background: var(--term);
+    box-shadow: 0 30px 60px -30px var(--shadow);
+  }
+  /* Pick locator switch: lives on the hero, above the run panel. */
+  .hero-side { display: flex; flex-direction: column; gap: 1rem; }
+  .pick-row { display: flex; align-items: center; justify-content: flex-end; gap: .9rem; flex-wrap: wrap; }
+  .pick-hint { font-size: .875rem; color: var(--ink-2); }
+  .pick {
+    display: inline-flex; align-items: center; gap: .6rem;
+    font: 500 .8125rem/1 var(--mono); color: var(--ink);
+    background: var(--surface); border: 1px solid var(--rule); border-radius: 999px;
+    padding: .35rem .4rem .35rem .8rem; cursor: pointer;
+    transition: border-color 160ms;
+  }
+  .pick:hover { border-color: var(--accent); }
+  .pick > svg { color: var(--accent); }
+  .pick .track { position: relative; width: 2.15rem; height: 1.25rem; border-radius: 999px; background: var(--rule); transition: background-color 200ms; }
+  .pick .thumb { position: absolute; top: .175rem; left: .175rem; width: .9rem; height: .9rem; border-radius: 50%; background: var(--surface); box-shadow: 0 1px 2px rgba(0, 0, 0, .25); transition: transform 260ms var(--out); }
+  .pick[aria-checked=true] { border-color: var(--accent); }
+  .pick[aria-checked=true] .track { background: var(--accent); }
+  .pick[aria-checked=true] .thumb { transform: translateX(.9rem); }
+  .pick.hint { animation: hint 1.6s var(--out) 2; }
+  @keyframes hint { from { box-shadow: 0 0 0 0 var(--accent-wash); } to { box-shadow: 0 0 0 12px transparent; } }
+
+  /* Inspect mode: a pick-locator overlay, pointed at the real page. */
+  .inspecting [data-loc] { cursor: crosshair; }
+  .inspect-hl, .inspect-tip { position: fixed; pointer-events: none; opacity: 0; }
+  .inspect-hl {
+    z-index: 40; border: 1.5px solid var(--accent); background: var(--accent-wash); border-radius: 6px;
+    transition: opacity 160ms, left 380ms var(--out), top 380ms var(--out), width 380ms var(--out), height 380ms var(--out);
+  }
+  .inspect-tip {
+    z-index: 41; max-width: calc(100vw - 16px);
+    background: var(--term); color: var(--term-text); border: 1px solid var(--term-line);
+    font: 400 .75rem/1.5 var(--mono); padding: .5rem .7rem; border-radius: 6px;
+    box-shadow: 0 12px 24px -12px rgba(0, 0, 0, .55);
+    transition: opacity 160ms, left 380ms var(--out), top 380ms var(--out);
+  }
+  .inspect-hl.on, .inspect-tip.on { opacity: 1; }
+  .inspect-hl.jump, .inspect-tip.jump { transition: opacity 160ms; }
+  .inspect-tip .loc { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .inspect-tip .fn { color: #c4b5fd; }
+  .inspect-tip .str { color: #f2c38b; }
+  .inspect-tip .assert { display: flex; align-items: center; gap: .4rem; color: var(--term-dim); transition: color 200ms; }
+  .inspect-tip .assert svg { color: var(--term-accent); transform: scale(0); transition: transform 380ms var(--spring); }
+  .inspect-tip.passed .assert { color: var(--term-text); }
+  .inspect-tip.passed .assert svg { transform: scale(1); }
+
+  .report { color: var(--term-text); font: 400 .8125rem/1.55 var(--mono); }
+  .report-bar { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: .7rem 1.15rem; border-bottom: 1px solid var(--term-line); color: var(--term-dim); font-size: .75rem; }
+  .report ol { list-style: none; margin: 0; padding: .6rem 1.15rem; }
+  .report li { display: grid; grid-template-columns: 1rem 1fr auto; gap: .75rem; padding: .3rem 0; align-items: baseline; }
+  .report li .mark { color: var(--term-accent); transform: translateY(.12em); }
+  .report li small { color: var(--term-dim); font-size: .75rem; }
+  .report li b { color: #fff; font-weight: 500; }
+  .report-sum { display: flex; gap: 1.25rem; padding: .7rem 1.15rem; border-top: 1px solid var(--term-line); font: 400 .75rem/1.55 var(--mono); color: var(--term-dim); }
+  .report-sum span:first-child { color: var(--term-accent); font-weight: 500; }
+  .play .report li { animation: rise 600ms var(--out) both; animation-delay: calc(450ms + var(--i) * 70ms); }
+  @keyframes rise { from { opacity: 0; transform: translateY(8px); filter: blur(4px); } }
+
+  /* ---------- Sections ---------- */
+  section { scroll-margin-top: 4.5rem; }
+  .section { padding: clamp(4rem, 10vw, 7.5rem) 0; border-top: 1px solid var(--rule); }
+  h2 {
+    font: 400 clamp(2.5rem, 6vw, 4.25rem)/.95 var(--display);
+    letter-spacing: 0;
+    margin: 0 0 clamp(2rem, 4vw, 3rem);
+    text-wrap: balance;
+  }
+  .section-head { display: flex; justify-content: space-between; align-items: end; gap: 2rem; flex-wrap: wrap; }
+  .section-head p { margin: 0 0 clamp(2rem, 4vw, 3rem); color: var(--ink-2); max-width: 38ch; }
+
+  /* Experience ledger */
+  .ledger { list-style: none; margin: 0; padding: 0; }
+  .ledger li {
+    display: grid; grid-template-columns: 9.5rem minmax(0, 1.1fr) minmax(0, 1.6fr) minmax(0, .9fr);
+    gap: 1.5rem; padding: 1.5rem 0; border-top: 1px solid var(--rule); align-items: baseline;
+  }
+  .ledger li:last-child { border-bottom: 1px solid var(--rule); }
+  .ledger time { font: 400 .8125rem/1.5 var(--mono); color: var(--ink-2); font-variant-numeric: tabular-nums; }
+  .ledger h3 { font: 400 1.5rem/1.1 var(--display); letter-spacing: 0; margin: 0; }
+  .ledger h3 span { display: block; font: 500 .9375rem/1.5 var(--sans); color: var(--ink-2); letter-spacing: 0; margin-top: .2rem; }
+  .ledger p { margin: 0; }
+  .tools { display: flex; flex-wrap: wrap; gap: .35rem .9rem; font: 400 .8125rem/1.5 var(--mono); color: var(--ink-2); }
+
+  /* Case studies: the outcome leads */
+  .cases { border-bottom: 1px solid var(--rule); }
+  .case { border-top: 1px solid var(--rule); }
+  .case summary {
+    list-style: none; cursor: pointer;
+    display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr) 2.5rem; gap: 2rem; align-items: center;
+    padding: clamp(1.5rem, 3vw, 2.25rem) 0;
+  }
+  .case summary::-webkit-details-marker { display: none; }
+  .outcome { font: 400 clamp(2.25rem, 5vw, 3.75rem)/1 var(--display); letter-spacing: 0; font-variant-numeric: tabular-nums; }
+  .outcome span { background: linear-gradient(transparent 62%, var(--accent-wash) 62% 96%, transparent 96%); padding: 0 .06em; transition: background-size 400ms var(--out); }
+  .case h3 { font: 400 1.5rem/1.15 var(--display); margin: 0 0 .3rem; letter-spacing: 0; text-wrap: balance; }
+  .case summary p { margin: 0; color: var(--ink-2); font-size: .9375rem; }
+  .toggle {
+    width: 2.5rem; height: 2.5rem; border-radius: 50%; border: 1.5px solid var(--ink);
+    display: grid; place-items: center; transition: transform 450ms var(--out), background-color 160ms, color 160ms;
+  }
+  .case summary:hover .toggle { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+  .case[open] .toggle { transform: rotate(45deg); }
+  .case-body { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr) 2.5rem; gap: 2rem; padding: 0 0 2.25rem; }
+  .case-body > div { grid-column: 2; max-width: 62ch; }
+  .case-body h4 { font: 600 .8125rem/1.4 var(--mono); margin: 1.25rem 0 .35rem; color: var(--ink-2); }
+  .case-body h4:first-child { margin-top: 0; }
+  .case-body p { margin: 0; }
+  .case[open] .case-body { animation: rise 500ms var(--out) both; }
+
+  /* Proof: the one drenched field */
+  .proof { background: var(--accent); color: var(--on-accent); border-top: 0; }
+  .proof :focus-visible { outline-color: var(--on-accent); }
+  .proof .btn-ghost { border-color: var(--on-accent); }
+  .proof h2 { max-width: 12ch; }
+  .proof-grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(2rem, 5vw, 4rem); align-items: start; }
+  .proof p { margin: 0 0 1.5rem; max-width: 40ch; }
+  .counts { list-style: none; margin: 0 0 2rem; padding: 0; font: 400 .9375rem/1.5 var(--mono); }
+  .counts li { display: flex; justify-content: space-between; gap: 1rem; padding: .6rem 0; border-top: 1px solid color-mix(in srgb, var(--on-accent) 32%, transparent); font-variant-numeric: tabular-nums; }
+  .counts li:last-child { border-bottom: 1px solid color-mix(in srgb, var(--on-accent) 32%, transparent); font-weight: 500; }
+  .proof .btn-ghost:hover { background: var(--on-accent); border-color: var(--on-accent); color: var(--accent); }
+
+  .code { background: var(--term); color: var(--term-text); border-radius: 14px; overflow: hidden; box-shadow: 0 30px 60px -30px rgba(10, 6, 30, .6); }
+  .code [role=tablist] { display: flex; gap: .25rem; padding: .6rem; border-bottom: 1px solid var(--term-line); }
+  .code [role=tab] {
+    font: 500 .8125rem/1 var(--mono); color: var(--term-dim); background: none;
+    border: 1px solid transparent; border-radius: 999px; padding: .55rem .9rem; cursor: pointer;
+  }
+  .code [role=tab]:hover { color: var(--term-text); }
+  .code [role=tab][aria-selected=true] { color: #16171d; background: var(--term-accent); }
+  .code [role=tab]:focus-visible { outline-color: var(--term-accent); }
+  .code .path { margin-left: auto; align-self: center; padding-right: .5rem; font: 400 .75rem/1 var(--mono); color: var(--term-dim); }
+  .code pre { margin: 0; padding: 1.15rem 1.25rem 1.4rem; overflow: auto; font: 400 .8125rem/1.7 var(--mono); max-height: 26rem; scrollbar-color: var(--term-line) var(--term); }
+  .code pre:focus-visible { outline-color: var(--term-accent); outline-offset: -3px; }
+  .tok-k { color: #c4b5fd; }
+  .tok-s { color: #f2c38b; }
+  .tok-c { color: var(--term-dim); font-style: italic; }
+  .tok-f { color: #9fd4ff; }
+
+  /* Contact close */
+  .close { padding: clamp(5rem, 12vw, 9rem) 0 3rem; }
+  .close h2 { font-size: clamp(3rem, 9vw, 6rem); margin-bottom: 1.5rem; }
+  .mail { font: 500 clamp(1.25rem, 3.4vw, 2.25rem)/1.2 var(--sans); letter-spacing: -.01em; word-break: break-word; }
+  .socials { display: flex; gap: 1.5rem; margin: 2rem 0 0; padding: 0; list-style: none; }
+  .socials a { display: inline-flex; gap: .5rem; align-items: center; font-weight: 500; text-decoration: none; }
+  .socials a:hover { text-decoration: underline; }
+  .aside { color: var(--ink-2); max-width: 52ch; margin: 4rem 0 0; padding-top: 1.5rem; border-top: 1px solid var(--rule); font-size: .9375rem; }
+  .foot { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-top: 1.5rem; font: 400 .75rem/1.5 var(--mono); color: var(--ink-2); }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 900px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .ledger li { grid-template-columns: 1fr; gap: .5rem; }
+    .ledger time { order: -1; }
+    .proof-grid { grid-template-columns: 1fr; }
+    .case summary { grid-template-columns: minmax(0, 1fr) 2.5rem; gap: .75rem 1.25rem; }
+    .case summary .outcome { grid-column: 1 / -1; }
+    .case summary .toggle { grid-column: 2; grid-row: 2; }
+    .case-body { grid-template-columns: 1fr; }
+    .case-body > div { grid-column: 1; }
+  }
+  @media (max-width: 640px) {
+    .nav ul .link { display: none; }
+    .report li { grid-template-columns: 1rem 1fr; }
+    .report li small { display: none; }
+    .code .path { display: none; }
+    .inspect-tip { font-size: .6875rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<!--
+THESIS: The portfolio is a passing test run. A one-time opener runs "james-usher.spec.ts" in a dark terminal, noise resolving into green assertions, then wipes away to a calm, light page where that same run stays docked as the hero's proof. Refuses: avatar hero + about wall + card grid.
+OWN-WORLD: The existing Cream & Violet brand (light and dark), one violet accent used for actions, highlighter bands and one drenched section. TBJ Orcherum Mini display, General Sans body, JetBrains Mono only for real test output and code.
+STORY: In ten seconds a hiring manager sees name, role, five verified outcomes, and the resume button; deeper on demand: ledger, outcome-led case studies, the site's own test suite.
+FIRST VIEWPORT: Left: giant spring-in name, lead, resume/email actions. Right: the dark run report. A "Pick locator" switch above it turns the real hero into a locator inspector: hover, tap or tab to any hero element to see its verified page locator and a passing assertion.
+FORM: User-pinned hybrid (editorial minimal + test-runner opener); no roll.
+FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
+-->
+
+<div class="opener" aria-hidden="true">
+  <div class="opener-run">
+    <p class="opener-cmd">$ <b>npx playwright test james-usher.spec.ts</b></p>
+    <p class="opener-meta"></p>
+    <ol></ol>
+    <p class="opener-sum"></p>
+  </div>
+  <button class="opener-skip" type="button" tabindex="-1">skip intro</button>
+</div>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="wordmark" href="#top" data-loc="getByRole('link', { name: 'James Usher' })" data-check="toHaveAttribute('href', '#top')">James Usher</a>
+    <nav aria-label="Primary">
+      <ul>
+        <li><a class="link" href="#experience" data-loc="getByRole('link', { name: 'Experience' })" data-check="toHaveAttribute('href', '#experience')">Experience</a></li>
+        <li><a class="link" href="#case-studies" data-loc="getByRole('link', { name: 'Case studies' })" data-check="toHaveAttribute('href', '#case-studies')">Case studies</a></li>
+        <li><a class="link" href="#projects" data-loc="getByRole('link', { name: 'Projects' })" data-check="toHaveAttribute('href', '#projects')">Projects</a></li>
+        <li><a class="btn btn-ghost" href="/James_Usher_Resume.pdf" data-loc="getByRole('navigation', { name: 'Primary' }).getByRole('link', { name: 'Resume' })" data-check="toHaveAttribute('href', '/James_Usher_Resume.pdf')">Resume</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero" aria-labelledby="name">
+    <div class="wrap">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <h1 class="name" id="name" data-loc="getByRole('heading', { level: 1 })" data-check="toHaveAccessibleName('James Usher')">James Usher</h1>
+          <p class="lead" data-loc="getByText('QA Lead &amp; SDET. I walk into teams')" data-check="toContainText('no tests and no process')">QA Lead &amp; SDET. I walk into teams with <em>no tests and no process</em> and leave behind a quality function they own.</p>
+          <div class="actions">
+            <a class="btn btn-solid" href="/James_Usher_Resume.pdf" data-loc="getByRole('link', { name: 'Download resume' })" data-check="toHaveAttribute('href', '/James_Usher_Resume.pdf')">
+              Download resume
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v12m0 0 5-5m-5 5-5-5M5 20h14"/></svg>
+            </a>
+            <a class="btn btn-ghost" href="mailto:jamesusher1633@gmail.com" data-loc="getByRole('link', { name: 'Email me' })" data-check="toHaveAttribute('href', /^mailto:/)">Email me</a>
+          </div>
+          <p class="status" data-loc="getByText('Open to QA Lead and SDET roles')" data-check="toBeVisible()"><i aria-hidden="true"></i>Open to QA Lead and SDET roles · Chicago or remote</p>
+        </div>
+
+        <div class="hero-side">
+        <div class="pick-row">
+          <span class="pick-hint" id="pick-hint">See the page locator for anything up here</span>
+          <button class="pick" type="button" role="switch" aria-checked="false" aria-describedby="pick-hint" data-loc="getByRole('switch', { name: 'Pick locator' })" data-check="toBeChecked()"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="7"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg>Pick locator<span class="track" aria-hidden="true"><span class="thumb"></span></span></button>
+        </div>
+        <figure class="rig" aria-label="Career highlights, formatted as a test run" data-loc="getByRole('figure', { name: 'Career highlights, formatted as a test run' })" data-check="toContainText('5 passed')">
+          <div class="report">
+          <div class="report-bar">
+            <span>james-usher.spec.ts</span>
+            <span>1 worker</span>
+          </div>
+          <ol>
+            <li style="--i:0"><svg class="icon mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg><span>owns quality across <b>8 products</b></span><small>212ms</small></li>
+            <li style="--i:1"><svg class="icon mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg><span>automates in <b>Maestro, Playwright, Cypress</b></span><small>348ms</small></li>
+            <li style="--i:2"><svg class="icon mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg><span>critical-path checks <b>4 hrs → 10 min</b></span><small>401ms</small></li>
+            <li style="--i:3"><svg class="icon mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg><span>QA support load <b>10 → 2 hrs/wk</b></span><small>187ms</small></li>
+            <li style="--i:4"><svg class="icon mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg><span>hires and leads <b>the team that owns it</b></span><small>263ms</small></li>
+          </ol>
+          </div>
+          <figcaption class="report-sum"><span>5 passed</span><span>0 flaky</span><span>1.4s</span></figcaption>
+        </figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="experience" aria-labelledby="exp-h">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="exp-h">Experience</h2>
+        <p>Seven years in quality, from slot-machine certification to leading QA for a touring-industry software suite.</p>
+      </div>
+      <ol class="ledger">
+        <li>
+          <time>Jan 2025 – Aug 2026</time>
+          <h3>QA Lead / SDET<span><a href="https://www.eventric.com/">Eventric</a> · Master Tour</span></h3>
+          <p>Owned QA strategy and the release process across all 8 products. Hired and led Eventric's second quality engineer.</p>
+          <div class="tools"><span>Playwright</span><span>Maestro</span><span>Cypress</span><span>Jest</span></div>
+        </li>
+        <li>
+          <time>Mar 2023 – Jan 2025</time>
+          <h3>Software Automation Engineer<span><a href="https://www.eventric.com/">Eventric</a> · Master Tour</span></h3>
+          <p>Stood up Eventric's first E2E and component-testing framework. Started backlog grooming and cut average backlog age by 150+ days.</p>
+          <div class="tools"><span>Cypress</span><span>Jest</span><span>Postman</span></div>
+        </li>
+        <li>
+          <time>Jun 2022 – Nov 2022</time>
+          <h3>QA Specialist<span><a href="https://www.fubo.tv/welcome">Fubo Gaming</a></span></h3>
+          <p>Owned web and mobile testing for Fubo Sportsbook. Picked as the sole QA on R&amp;D for the TV-to-sportsbook integration.</p>
+          <div class="tools"><span>Selenium</span><span>Cucumber</span><span>Node.js</span></div>
+        </li>
+        <li>
+          <time>Sep 2019 – Jun 2022</time>
+          <h3>Software Quality Engineer<span><a href="https://www.lnw.com/">Scientific Games</a></span></h3>
+          <p>Took six video slot games through first-time GLI certification and released 13 titles in a year as the team's localization lead.</p>
+          <div class="tools"><span>GLI certification</span><span>Localization</span></div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section" id="case-studies" aria-labelledby="cs-h">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="cs-h">Case studies</h2>
+        <p>Real problems from real teams, written as problem, approach and outcome.</p>
+      </div>
+      <div class="cases">
+        <details class="case">
+          <summary>
+            <span class="outcome"><span>4 hrs → 10 min</span></span>
+            <span><h3>E2E automation from zero for an Electron desktop app</h3><p>Critical-path validation on Master Tour Desktop, once fully manual.</p></span>
+            <span class="toggle" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+          </summary>
+          <div class="case-body"><div>
+            <h4>problem</h4>
+            <p>Every release candidate was regression tested by hand, with heavy setup, and the team was moving toward faster releases.</p>
+            <h4>approach</h4>
+            <p>Chose Playwright through a written PRD, sequenced tests by business value, and designed the suite to run serially because parallel workers collided on the app's local SQLite database. Wired it into Bitbucket Pipelines on every PR and weekly.</p>
+            <h4>outcome</h4>
+            <p>Release regression went from manual to automated, and critical-path validation dropped from about 4 hours to about 10 minutes.</p>
+          </div></div>
+        </details>
+        <details class="case">
+          <summary>
+            <span class="outcome"><span>10 → 2 hrs/wk</span></span>
+            <span><h3>Cutting QA's support load with structured office hours</h3><p>Ad hoc support pings were eating a third of QA's week.</p></span>
+            <span class="toggle" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+          </summary>
+          <div class="case-body"><div>
+            <h4>problem</h4>
+            <p>QA was absorbing roughly 10 unplanned hours a week of tier 2/3 support, cutting into coverage work.</p>
+            <h4>approach</h4>
+            <p>Set up a standing office-hours block, started at twice a week, measured again, then stepped down to once a week once the numbers held.</p>
+            <h4>outcome</h4>
+            <p>About 8 hours a week went back to planned coverage, and the sessions surfaced 2 critical bugs straight to engineering.</p>
+          </div></div>
+        </details>
+        <details class="case">
+          <summary>
+            <span class="outcome"><span>20+ cases</span></span>
+            <span><h3>An AI-gated bugfix-to-automation pipeline</h3><p>Every bugfix now leaves a traceable test behind it.</p></span>
+            <span class="toggle" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+          </summary>
+          <div class="case-body"><div>
+            <h4>problem</h4>
+            <p>Bugs were getting fixed with no reliable way to make sure an automated case followed.</p>
+            <h4>approach</h4>
+            <p>Two gates before a bugfix PR opens: Claude checks the change against existing unit coverage, then drafts the follow-up QA story into a time-boxed intake epic linked from the PR.</p>
+            <h4>outcome</h4>
+            <p>20+ automation cases across 10+ fixed bugs in the first three months, without anyone having to remember to ask.</p>
+          </div></div>
+        </details>
+        <details class="case">
+          <summary>
+            <span class="outcome"><span>0 → 1</span></span>
+            <span><h3>Standing up a product's quality function from nothing</h3><p>The order of operations I follow on any product.</p></span>
+            <span class="toggle" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+          </summary>
+          <div class="case-body"><div>
+            <h4>problem</h4>
+            <p>As Eventric's first dedicated QA hire there was no process to build on and everything felt urgent at once.</p>
+            <h4>approach</h4>
+            <p>Assessment first, then manual gates before automation, foundations before features, and critical path before edge cases, expanding outward by risk tier.</p>
+            <h4>outcome</h4>
+            <p>The sequence held up solo and again with a second QA engineer. Team size changed the pace, not the order.</p>
+          </div></div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="section proof" id="projects" aria-labelledby="proof-h">
+    <div class="wrap proof-grid">
+      <div>
+        <h2 id="proof-h">This site tests itself.</h2>
+        <p>My past automation work is proprietary, so I pointed a full suite at this page instead. Every component, flow and accessibility rule here is covered, in two frameworks.</p>
+        <ul class="counts">
+          <li><span>Vitest + Testing Library</span><span>92</span></li>
+          <li><span>Cypress component</span><span>6</span></li>
+          <li><span>Playwright E2E</span><span>15</span></li>
+          <li><span>Cypress E2E</span><span>15</span></li>
+          <li><span>tests, axe on every run</span><span>128</span></li>
+        </ul>
+        <a class="btn btn-ghost" href="https://github.com/WRTHY/portfolio-usher">
+          Read the suite on GitHub
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>
+        </a>
+      </div>
+
+      <div class="code">
+        <div role="tablist" aria-label="Framework">
+          <button role="tab" id="t-pw" aria-controls="p-pw" aria-selected="true">Playwright</button>
+          <button role="tab" id="t-cy" aria-controls="p-cy" aria-selected="false" tabindex="-1">Cypress</button>
+          <span class="path" data-pw="e2e/playwright/case-studies.spec.ts" data-cy="e2e/cypress/case-studies.cy.ts">e2e/playwright/case-studies.spec.ts</span>
+        </div>
+        <pre role="tabpanel" id="p-pw" aria-labelledby="t-pw" tabindex="0"><code>test.describe('case study modal', () => {
+  test('Escape closes the modal and returns focus to the trigger', async ({ portfolioPage }) => {
+    await portfolioPage.goto()
+    const { caseStudies } = portfolioPage
+    const trigger = caseStudies.tile(CASE_STUDY_ID)
+
+    await caseStudies.open(CASE_STUDY_ID)
+    await expect(caseStudies.modal.dialog).toBeVisible()
+
+    await caseStudies.modal.closeWithEscape()
+    await expect(caseStudies.modal.dialog).not.toBeVisible()
+    await expect(trigger).toBeFocused()
+  })
+})</code></pre>
+        <pre role="tabpanel" id="p-cy" aria-labelledby="t-cy" tabindex="0" hidden><code>describe('case study modal', () => {
+  const portfolioPage = new PortfolioPage()
+
+  beforeEach(() => {
+    portfolioPage.visit()
+  })
+
+  it('Escape closes the modal and returns focus to the trigger', () => {
+    const { caseStudies } = portfolioPage
+
+    caseStudies.open(CASE_STUDY_ID)
+    caseStudies.modal.dialog.should('be.visible')
+
+    caseStudies.modal.closeWithEscape()
+    caseStudies.modal.dialog.should('not.exist')
+    // Re-queried fresh: findBy* doesn't re-resolve on a later .should()
+    caseStudies.tile(CASE_STUDY_ID).should('have.focus')
+  })
+})</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <section class="close" aria-labelledby="close-h">
+    <div class="wrap">
+      <h2 id="close-h">Let's talk.</h2>
+      <a class="mail" href="mailto:jamesusher1633@gmail.com">jamesusher1633@gmail.com</a>
+      <ul class="socials">
+        <li><a href="https://www.linkedin.com/in/james-usher-b6a859a8/"><svg class="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9.75h4V21H3V9.75Zm6.5 0h3.83v1.54h.06c.53-1 1.84-2.06 3.79-2.06 4.05 0 4.8 2.67 4.8 6.13V21h-4v-5c0-1.2-.02-2.73-1.66-2.73-1.67 0-1.92 1.3-1.92 2.64V21h-4V9.75Z"/></svg>LinkedIn</a></li>
+        <li><a href="https://github.com/WRTHY"><svg class="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.08.63-1.33-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.56 9.56 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2Z"/></svg>GitHub</a></li>
+        <li><a href="/James_Usher_Resume.pdf"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5Z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg>Resume</a></li>
+      </ul>
+      <p class="aside">Off the clock I release music as WRTHY, DJ under my own name, and play rec soccer, volleyball and ultimate. If your pickup game needs someone tall, that's also a reason to email.</p>
+      <div class="foot"><span>Built with React, TypeScript and Vite. Tested more than it strictly needs to be.</span><span>© 2026 James Usher</span></div>
+    </div>
+  </section>
+</main>
+
+<script>
+(function () {
+  var root = document.documentElement
+
+  // ---- Split the name into springy letters (screen readers keep the h1 text)
+  var name = document.getElementById('name')
+  var text = name.textContent
+  name.setAttribute('aria-label', text)
+  var i = 0
+  name.innerHTML = text.split(' ').map(function (w) {
+    return '<span class="word" aria-hidden="true">' + w.split('').map(function (c) {
+      return '<span class="ch" style="--i:' + (i++) + '">' + c + '</span>'
+    }).join('') + '</span>'
+  }).join(' ')
+
+  // ---- Sticky nav hairline
+  var nav = document.querySelector('.nav')
+  var onScroll = function () { nav.classList.toggle('stuck', window.scrollY > 8) }
+  window.addEventListener('scroll', onScroll, { passive: true }); onScroll()
+
+  // ---- Code highlighting (tiny, enough for these two snippets)
+  var KW = /\b(import|from|const|await|async|new|describe|test|it|beforeEach|expect)\b/
+  var TOKENS = /(\/\/[^\n]*)|('(?:[^'\\\n]|\\.)*'|`[^`]*`)|\b(import|from|const|await|async|new|describe|test|it|beforeEach|expect)\b|\.([a-zA-Z_]\w*)(?=\()/g
+  var esc = function (s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;') }
+  document.querySelectorAll('.code code').forEach(function (el) {
+    var src = el.textContent, out = '', last = 0, m
+    TOKENS.lastIndex = 0
+    while ((m = TOKENS.exec(src))) {
+      out += esc(src.slice(last, m.index))
+      if (m[1]) out += '<span class="tok-c">' + esc(m[1]) + '</span>'
+      else if (m[2]) out += '<span class="tok-s">' + esc(m[2]) + '</span>'
+      else if (m[3]) out += '<span class="tok-k">' + m[3] + '</span>'
+      else if (m[4]) out += '.<span class="tok-f">' + m[4] + '</span>'
+      last = TOKENS.lastIndex
+    }
+    el.innerHTML = out + esc(src.slice(last))
+  })
+
+  // ---- Framework tabs
+  var tabs = [].slice.call(document.querySelectorAll('.code [role=tab]'))
+  var path = document.querySelector('.code .path')
+  function select(tab) {
+    tabs.forEach(function (t) {
+      var on = t === tab
+      t.setAttribute('aria-selected', on)
+      t.tabIndex = on ? 0 : -1
+      document.getElementById(t.getAttribute('aria-controls')).hidden = !on
+    })
+    path.textContent = path.dataset[tab.id === 't-pw' ? 'pw' : 'cy']
+  }
+  tabs.forEach(function (t, idx) {
+    t.addEventListener('click', function () { select(t) })
+    t.addEventListener('keydown', function (e) {
+      if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return
+      var next = tabs[(idx + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length]
+      select(next); next.focus()
+    })
+  })
+
+  // ---- Pick locator: a locator-inspector overlay, pointed at this page.
+  // Every data-loc / data-check pair is a real locator and assertion for this
+  // page (verified by running them in Playwright).
+  var reduceMotion = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches
+  var pickBtn = document.querySelector('.pick')
+  var TICK = '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>'
+  var hlBox = document.createElement('div')
+  var tipBox = document.createElement('div')
+  hlBox.className = 'inspect-hl'
+  hlBox.setAttribute('aria-hidden', 'true')
+  tipBox.className = 'inspect-tip'
+  tipBox.setAttribute('aria-live', 'polite')
+  document.body.append(hlBox, tipBox)
+  var picked = null, passTimer = 0
+  var inspecting = function () { return root.classList.contains('inspecting') }
+  var paintLoc = function (s) {
+    return esc(s).replace(/'[^']*'/g, function (m) { return '<span class="str">' + m + '</span>' })
+      .replace(/^(\w+)/, '<span class="fn">$1</span>')
+  }
+  function place() {
+    if (!picked) return
+    var r = picked.getBoundingClientRect(), pad = 4
+    hlBox.style.left = (r.left - pad) + 'px'; hlBox.style.top = (r.top - pad) + 'px'
+    hlBox.style.width = (r.width + pad * 2) + 'px'; hlBox.style.height = (r.height + pad * 2) + 'px'
+    var tw = tipBox.offsetWidth, th = tipBox.offsetHeight
+    var left = Math.max(8, Math.min(r.left - pad, innerWidth - tw - 8))
+    var top = r.top - pad - th - 8
+    if (top < 8) top = r.bottom + pad + 8
+    tipBox.style.left = left + 'px'; tipBox.style.top = top + 'px'
+  }
+  function pick(el, jump) {
+    if (el === picked) return
+    picked = el
+    hlBox.classList.toggle('jump', !!jump); tipBox.classList.toggle('jump', !!jump)
+    tipBox.classList.remove('passed')
+    tipBox.innerHTML = '<div class="loc">' + paintLoc(el.dataset.loc) + '</div><div class="assert">' + TICK + '<span>' + esc(el.dataset.check) + '</span></div>'
+    place()
+    hlBox.classList.add('on'); tipBox.classList.add('on')
+    clearTimeout(passTimer)
+    passTimer = setTimeout(function () { tipBox.classList.add('passed') }, reduceMotion ? 0 : 380)
+  }
+  function setInspecting(on) {
+    root.classList.toggle('inspecting', on)
+    pickBtn.setAttribute('aria-checked', on)
+    pickBtn.classList.remove('hint')
+    if (on) { pick(document.getElementById('name'), true) }
+    else { picked = null; hlBox.classList.remove('on'); tipBox.classList.remove('on') }
+  }
+  var target = function (e) { return e.target.closest && e.target.closest('[data-loc]') }
+  pickBtn.addEventListener('click', function () { setInspecting(!inspecting()) })
+  document.addEventListener('pointerover', function (e) { var el = inspecting() && target(e); if (el) pick(el) })
+  document.addEventListener('focusin', function (e) { var el = inspecting() && target(e); if (el) pick(el) })
+  // While picking, clicks pick instead of navigating, like the real tool.
+  document.addEventListener('click', function (e) {
+    var el = inspecting() && target(e)
+    if (el && el !== pickBtn) { e.preventDefault(); pick(el) }
+  }, true)
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && inspecting()) { setInspecting(false); pickBtn.focus() }
+  })
+  window.addEventListener('scroll', function () { if (inspecting()) place() }, { passive: true })
+  // Picking belongs to the hero: leaving it switches the mode off.
+  var hero = document.querySelector('.hero')
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (entries) {
+      if (!entries[0].isIntersecting && inspecting()) setInspecting(false)
+    }).observe(hero)
+  }
+  window.addEventListener('resize', function () { if (inspecting()) place() })
+  function hintSoon() { setTimeout(function () { if (!inspecting()) pickBtn.classList.add('hint') }, 1600) }
+  if (!root.classList.contains('intro')) hintSoon()
+
+  // ---- Opener: noise resolves into passing assertions, then wipes away
+  function reveal() {
+    root.classList.add('play')
+    hintSoon()
+  }
+  if (!root.classList.contains('intro')) return
+
+  var opener = document.querySelector('.opener')
+  var meta = opener.querySelector('.opener-meta')
+  var list = opener.querySelector('ol')
+  var sum = opener.querySelector('.opener-sum')
+  var skipBtn = opener.querySelector('.opener-skip')
+  var lines = [
+    'owns quality across 8 products',
+    'automates in Maestro, Playwright, Cypress',
+    'critical-path checks 4 hrs → 10 min',
+    'QA support load 10 → 2 hrs/wk',
+    'hires and leads the team that owns it'
+  ]
+  var NOISE = '!<>-_\\/[]{}=+*^?#%&$'
+  var CHECK = '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>'
+  var timers = [], raf = 0, finished = false
+
+  function later(fn, ms) { timers.push(setTimeout(fn, ms)) }
+
+  function finish() {
+    if (finished) return
+    finished = true
+    timers.forEach(clearTimeout); cancelAnimationFrame(raf)
+    try { sessionStorage.setItem('ju-intro-seen', '1') } catch (e) {}
+    opener.classList.add('leaving')
+    later(reveal, 180)
+    setTimeout(function () {
+      root.classList.remove('intro')
+      opener.remove()
+    }, 820)
+    window.removeEventListener('keydown', finish)
+  }
+
+  function scramble(li, target, dur, done) {
+    var span = li.querySelector('.txt')
+    var start = performance.now()
+    function frame(now) {
+      var p = Math.min(1, (now - start) / dur)
+      var n = Math.floor(p * target.length)
+      var tail = ''
+      for (var k = n; k < Math.min(target.length, n + 14); k++) {
+        tail += target[k] === ' ' ? ' ' : NOISE[(Math.random() * NOISE.length) | 0]
+      }
+      span.innerHTML = esc(target.slice(0, n)) + '<span class="noise">' + esc(tail) + '</span>'
+      if (p < 1) raf = requestAnimationFrame(frame)
+      else { span.textContent = target; done() }
+    }
+    raf = requestAnimationFrame(frame)
+  }
+
+  later(function () { meta.textContent = 'Running 5 tests using 1 worker' }, 260)
+  var t = 520
+  lines.forEach(function (line, idx) {
+    later(function () {
+      var li = document.createElement('li')
+      li.innerHTML = '<span class="mark">' + CHECK + '</span><span class="txt"></span>'
+      list.appendChild(li)
+      scramble(li, line, 300, function () { li.classList.add('done') })
+    }, t + idx * 250)
+  })
+  later(function () { sum.textContent = '5 passed (1.4s)'; sum.classList.add('on') }, t + lines.length * 250 + 260)
+  later(finish, t + lines.length * 250 + 900)
+
+  skipBtn.addEventListener('click', finish)
+  opener.addEventListener('click', finish)
+  window.addEventListener('keydown', finish)
+})()
+</script>
+</body>
+</html>
