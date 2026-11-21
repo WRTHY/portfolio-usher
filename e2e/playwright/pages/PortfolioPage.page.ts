@@ -5,6 +5,7 @@ import { ThemeToggleComponent } from './ThemeToggleComponent.page'
 import { CaseStudiesSection } from './CaseStudiesSection.page'
 import { CodeSamplesSection } from './CodeSamplesSection.page'
 import { HeroSection } from './HeroSection.page'
+import { ExperienceSection } from './ExperienceSection.page'
 
 export type { SectionId }
 
@@ -15,6 +16,7 @@ export type { SectionId }
 export class PortfolioPage {
   readonly page: Page
   readonly hero: HeroSection
+  readonly experience: ExperienceSection
   readonly nav: NavComponent
   readonly themeToggle: ThemeToggleComponent
   readonly caseStudies: CaseStudiesSection
@@ -23,6 +25,7 @@ export class PortfolioPage {
   constructor(page: Page) {
     this.page = page
     this.hero = new HeroSection(page)
+    this.experience = new ExperienceSection(page)
     this.nav = new NavComponent(page)
     this.themeToggle = new ThemeToggleComponent(page)
     this.caseStudies = new CaseStudiesSection(page)
