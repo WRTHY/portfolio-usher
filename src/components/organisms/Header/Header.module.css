@@ -1,5 +1,5 @@
-/* Below 1024px: same inline padding formula as sections (see index.css), so
-   the wordmark and every section's content share one left edge. */
+/* Same inline padding formula as sections (see index.css), so the wordmark
+   and every section's content share one left edge. */
 .header {
   position: sticky;
   top: 0;
@@ -15,12 +15,6 @@
 }
 
 /* Desktop: the wordmark lines up with InfoPanel's left edge below it. */
-@media (min-width: 1024px) {
-  .header {
-    padding-inline: var(--page-gutter-desktop) var(--page-gutter);
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   .header {
     transition: none;
