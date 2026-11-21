@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import { cx } from '../../../utils/classNames'
+import type { DataAttributes } from '../../../utils/locatorAttrs'
 import styles from './Button.module.css'
 
 type ButtonProps = {
@@ -10,15 +11,24 @@ type ButtonProps = {
   external?: boolean
   fullWidth?: boolean
   className?: string
-}
+} & DataAttributes
 
-function Button({ href, children, variant = 'primary', external, fullWidth, className }: ButtonProps) {
+function Button({
+  href,
+  children,
+  variant = 'primary',
+  external,
+  fullWidth,
+  className,
+  ...dataAttributes
+}: ButtonProps) {
   return (
     <a
       href={href}
       className={cx(styles.button, styles[variant], fullWidth && styles.fullWidth, className)}
       target={external ? '_blank' : undefined}
       rel={external ? 'noopener noreferrer' : undefined}
+      {...dataAttributes}
     >
       {children}
     </a>

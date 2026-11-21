@@ -26,10 +26,10 @@ test.describe('accessibility', () => {
     await portfolioPage.page.addInitScript(() => window.localStorage.setItem('mode', 'light'))
     await portfolioPage.goto()
     await portfolioPage.themeToggle.toggle()
-    // InfoPanel's background-color transition runs 0.6s (see
-    // InfoPanel.module.css) - scanning before it settles catches axe
-    // mid-crossfade and flags transitional colors that never render.
-    await portfolioPage.page.waitForTimeout(700)
+    // Color transitions across the page run up to ~300ms after the mode
+    // flips - scanning before they settle catches axe mid-crossfade and
+    // flags transitional colors that never render.
+    await portfolioPage.page.waitForTimeout(400)
 
     const violations = await scanForViolations(portfolioPage.page)
     expect(violations.length, formatViolations(violations)).toBe(0)

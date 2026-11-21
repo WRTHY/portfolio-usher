@@ -5,7 +5,11 @@
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>portfolio</title>
+    <title>James Usher · QA Lead &amp; SDET</title>
+    <meta
+      name="description"
+      content="James Usher builds quality functions from zero: test strategy, automation across mobile, desktop and web, and the team that owns it."
+    />
     <!-- Body (General Sans, Fontshare) and code (JetBrains Mono, Google Fonts)
          faces; the display face is self-hosted, see src/index.css. One
          Fontshare request per family: combined requests have returned the
@@ -20,7 +24,7 @@
     <script>
       // Runs before first paint so a previously chosen light/dark mode applies
       // immediately, instead of flashing the system-default mode for a frame
-      // before React mounts. (data-theme, set separately, picks the palette.)
+      // before React mounts.
       (function () {
         try {
           var storedMode = localStorage.getItem('mode')
@@ -28,7 +32,19 @@
             document.documentElement.setAttribute('data-mode', storedMode)
           }
         } catch (e) {}
-      })()
+      })();
+      // Also before first paint: whether the opener plays (see Opener.tsx).
+      // It plays on the first visit of a browser session, or whenever the
+      // URL has ?intro, and never when the OS asks for reduced motion.
+      (function () {
+        var force = /[?&]intro\b/.test(location.search)
+        var seen = false
+        try {
+          seen = sessionStorage.getItem('ju-intro-seen') === '1'
+        } catch (e) {}
+        var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches
+        if (!reduce && (force || !seen)) document.documentElement.classList.add('intro')
+      })();
     </script>
   </head>
   <body>

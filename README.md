@@ -15,6 +15,12 @@ A production version of the app is live [here](https://jamesusher.vercel.app/)
 
 Live sections (see [`src/content/navigation.ts`](src/content/navigation.ts)):
 
+- **Hero** - name, pitch and resume, with my career outcomes formatted as a passing test
+  run. On the first visit of a session it plays in as a short terminal opener (skippable,
+  and never shown with reduced motion). Its **Pick locator** switch turns the hero into a
+  locator inspector: hover, tap or Tab to anything to see its page locator and a passing
+  assertion. Every locator shown is executed by
+  [`e2e/playwright/hero.spec.ts`](e2e/playwright/hero.spec.ts), at desktop and phone sizes.
 - **About** - background and links
 - **Experience** - a card per role, with stack and impact
 - **Case Studies** - a card grid of expandable write-ups detailing engineering decisions I have made and implemented (problem → approach → outcome)
@@ -40,17 +46,19 @@ Components follow atomic design, colocated with their styles and tests:
 src/
   components/
     atoms/       # Badge, Button, CopyButton, FramedImage, Heading, MenuToggle,
-                 # NavLink, RunButton, SocialIcon, SoonBadge, icons/ ...
-    molecules/   # CodeBlock, CodeFileTabs, FrameworkSwitcher, MediaText, Modal, Nav,
-                 # PanelFooter, SectionBody, SectionDots, SectionHeader,
-                 # SegmentedControl, SocialLinks, TextCard, ThemeToggle
-    organisms/   # Header (sticky top bar), Sidebar + InfoPanel (desktop left
-                 # rail and nav card), About, Experience, CaseStudies,
-                 # CodeSamples, ApiTesting
+                 # NavLink, RunButton, SocialIcon, SoonBadge, Switch, icons/ ...
+    molecules/   # CodeBlock, CodeFileTabs, FrameworkSwitcher, LocatorInspector,
+                 # MediaText, Modal, Nav, PanelFooter, RunReport, SectionBody,
+                 # SectionDots, SectionHeader, SegmentedControl, SocialLinks,
+                 # SpringName, TextCard, ThemeToggle
+    organisms/   # Opener (one-time terminal intro), Header (sticky top bar),
+                 # Sidebar (desktop left rail: section dots, theme toggle,
+                 # socials), Hero, About, Experience, CaseStudies, CodeSamples,
+                 # ApiTesting
     templates/   # PortfolioTemplate - assembles the page
-  content/       # Site copy and data (about copy, experience, case studies, code
-                 # examples, nav)
-  hooks/         # useActiveSection, useActiveSectionInfo, usePrefersReducedMotion
+  content/       # Site copy and data (hero and test run, about copy, experience,
+                 # case studies, code examples, nav)
+  hooks/         # useActiveSection, usePrefersReducedMotion
 ```
 
 ## Getting started

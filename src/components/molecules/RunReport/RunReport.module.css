@@ -1,0 +1,95 @@
+/* Terminal material: dark in both modes (see DESIGN.md, "The Terminal Is
+   Material"). */
+.report {
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--term-line);
+  border-radius: 16px;
+  background: var(--term);
+  color: var(--term-text);
+  font: 400 0.8125rem / 1.55 var(--mono);
+  box-shadow: 0 30px 60px -30px var(--shadow-color);
+}
+
+.bar {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.7rem 1.15rem;
+  border-bottom: 1px solid var(--term-line);
+  color: var(--term-dim);
+  font-size: 0.75rem;
+}
+
+.results {
+  margin: 0;
+  padding: 0.6rem 1.15rem;
+  list-style: none;
+
+  li {
+    display: grid;
+    grid-template-columns: 1rem 1fr auto;
+    gap: 0.75rem;
+    align-items: baseline;
+    padding: 0.3rem 0;
+  }
+
+  b {
+    font-weight: 500;
+    color: #fff;
+  }
+
+  small {
+    color: var(--term-dim);
+    font-size: 0.75rem;
+  }
+}
+
+.mark {
+  color: var(--term-accent);
+  transform: translateY(0.12em);
+}
+
+.summary {
+  display: flex;
+  gap: 1.25rem;
+  padding: 0.7rem 1.15rem;
+  border-top: 1px solid var(--term-line);
+  color: var(--term-dim);
+  font-size: 0.75rem;
+}
+
+.passed {
+  color: var(--term-accent);
+  font-weight: 500;
+}
+
+/* Lines rise in after the opener hands off (the page's `play` class). */
+:global(html.play) .results li {
+  animation: rise 600ms var(--ease-out) both;
+  animation-delay: calc(450ms + var(--i) * 70ms);
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+    filter: blur(4px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :global(html.play) .results li {
+    animation: none;
+  }
+}
+
+@media (max-width: 639px) {
+  .results li {
+    grid-template-columns: 1rem 1fr;
+  }
+
+  .results small {
+    display: none;
+  }
+}

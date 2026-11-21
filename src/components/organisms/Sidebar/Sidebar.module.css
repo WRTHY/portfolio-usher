@@ -1,5 +1,5 @@
-/* Desktop-only left rail, pinned to the viewport edge beside InfoPanel.
-   Starts below the sticky top bar; dots at the top, socials at the bottom. */
+/* Desktop-only left rail, pinned to the viewport edge below the sticky top
+   bar. Dots and theme toggle at the top, socials at the bottom. */
 .sidebar {
   display: none;
 }
@@ -12,8 +12,15 @@
     justify-content: space-between;
     position: fixed;
     left: 24px;
-    top: calc(var(--nav-height) + 16px);
+    top: calc(var(--nav-height) + 24px);
     bottom: 32px;
     z-index: 5;
   }
+}
+
+.top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
 }

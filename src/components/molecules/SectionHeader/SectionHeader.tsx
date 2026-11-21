@@ -9,9 +9,7 @@ type SectionHeaderProps = {
   intro?: ReactNode
 }
 
-// Every section's visible title. It used to live in the fixed InfoPanel
-// (desktop) and each section's MobileInfoCard (phones); now that the side
-// chrome is gone, the section carries its own heading.
+// Every section's visible title, at the top of the section itself.
 function SectionHeader({ id, title, intro }: SectionHeaderProps) {
   return (
     <div className={styles.head}>
