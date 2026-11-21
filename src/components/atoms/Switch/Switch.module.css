@@ -1,0 +1,60 @@
+.switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.35rem 0.4rem 0.35rem 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  font: 500 0.8125rem / 1 var(--mono);
+  color: var(--text-h);
+  cursor: pointer;
+  transition: border-color 160ms var(--ease-out);
+
+  &:hover,
+  &[aria-checked='true'] {
+    border-color: var(--accent);
+  }
+}
+
+.icon {
+  display: inline-flex;
+  color: var(--accent);
+}
+
+.track {
+  position: relative;
+  width: 2.15rem;
+  height: 1.25rem;
+  border-radius: 999px;
+  background: var(--border);
+  transition: background-color 200ms var(--ease-out);
+}
+
+.thumb {
+  position: absolute;
+  top: 0.175rem;
+  left: 0.175rem;
+  width: 0.9rem;
+  height: 0.9rem;
+  border-radius: 50%;
+  background: var(--surface);
+  box-shadow: 0 1px 2px var(--shadow-color);
+  transition: transform 260ms var(--ease-out);
+}
+
+.switch[aria-checked='true'] .track {
+  background: var(--accent);
+}
+
+.switch[aria-checked='true'] .thumb {
+  transform: translateX(0.9rem);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .switch,
+  .track,
+  .thumb {
+    transition: none;
+  }
+}
