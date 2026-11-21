@@ -1,12 +1,11 @@
 export type SectionId = 'about' | 'experience' | 'case-studies' | 'code-samples' | 'api-testing'
 
-// Two independent navs render the same section ids: InfoPanel's desktop nav
-// (visible at >=640px, when Header/the mobile nav is display:none) and this
-// hamburger's own mobile nav (visible below 640px). Both tag their links with
-// matching data-testids (see InfoPanel.tsx / Nav.tsx) keyed by SectionId, so
-// this looks those up directly rather than by accessible name - the ids
-// callers pass in ('case-studies') don't match the rendered label text
-// ('Case Studies').
+// Two navs render the same section ids: InfoPanel's left nav card (visible
+// at >=1024px) and the top bar's hamburger menu (below 1024px). Both tag
+// their links with matching data-testids (see InfoPanel.tsx / Nav.tsx) keyed
+// by SectionId, so this looks those up directly rather than by accessible
+// name - the ids callers pass in ('case-studies') don't match the rendered
+// label text ('Case Studies').
 export class NavComponent {
   link(id: SectionId): Cypress.Chainable<JQuery> {
     return cy.findByTestId(`nav-link-desktop-${id}`)

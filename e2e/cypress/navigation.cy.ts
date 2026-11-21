@@ -4,6 +4,11 @@ describe('primary navigation', () => {
   const portfolioPage = new PortfolioPage()
 
   beforeEach(() => {
+    // InfoPanel's nav card (with these links) only shows from 1024px up -
+    // below that they live in the hamburger menu - and Cypress's default
+    // viewport is 1000px wide, so this pins a desktop size, the same way the
+    // mobile block below pins a phone size.
+    cy.viewport(1280, 720)
     portfolioPage.visit()
   })
 

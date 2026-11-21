@@ -26,10 +26,11 @@ Live sections (see [`src/content/navigation.ts`](src/content/navigation.ts)):
 
 - [React 19](https://react.dev/) + [TypeScript](https://www.typescriptlang.org/) via [Vite](https://vite.dev/)
 - [Radix UI](https://www.radix-ui.com/) primitives (tabs, radio group) for accessible interactive bits
-- [tsparticles](https://particles.js.org/) for the background effect
 - [react-shiki](https://github.com/avgvstvs96/react-shiki) for syntax-highlighted code samples
-- CSS Modules for styling, with light/dark mode and a small registry of swappable
-  color themes (see [`src/content/themes.ts`](src/content/themes.ts))
+- CSS Modules for styling, with a Cream & Violet palette in light and dark mode (tokens in
+  [`src/index.css`](src/index.css))
+- Type: TBJ Orcherum Mini (display), [General Sans](https://www.fontshare.com/fonts/general-sans)
+  (body) and [JetBrains Mono](https://www.jetbrains.com/lp/mono/) (code and test output)
 
 ## Project structure
 
@@ -41,13 +42,15 @@ src/
     atoms/       # Badge, Button, CopyButton, FramedImage, Heading, MenuToggle,
                  # NavLink, RunButton, SocialIcon, SoonBadge, icons/ ...
     molecules/   # CodeBlock, CodeFileTabs, FrameworkSwitcher, MediaText, Modal, Nav,
-                 # PanelFooter, ParticleBackground, SectionDots, SegmentedControl,
-                 # SocialLinks, TextCard, ThemeToggle
-    organisms/   # About, Experience, CaseStudies, CodeSamples, Header, Sidebar, InfoPanel
+                 # PanelFooter, SectionBody, SectionDots, SectionHeader,
+                 # SegmentedControl, SocialLinks, TextCard, ThemeToggle
+    organisms/   # Header (sticky top bar), Sidebar + InfoPanel (desktop left
+                 # rail and nav card), About, Experience, CaseStudies,
+                 # CodeSamples, ApiTesting
     templates/   # PortfolioTemplate - assembles the page
   content/       # Site copy and data (about copy, experience, case studies, code
-                 # examples, nav, themes)
-  hooks/         # useActiveSection, useOverscrollBump
+                 # examples, nav)
+  hooks/         # useActiveSection, useActiveSectionInfo, usePrefersReducedMotion
 ```
 
 ## Getting started

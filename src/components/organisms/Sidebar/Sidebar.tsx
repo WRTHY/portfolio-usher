@@ -1,24 +1,16 @@
 import SectionDots from '../../molecules/SectionDots/SectionDots'
 import SocialLinks from '../../molecules/SocialLinks/SocialLinks'
-import ThemeToggle from '../../molecules/ThemeToggle/ThemeToggle'
 import styles from './Sidebar.module.css'
 
-// SectionDots stays visible at every width (pinned to the left margin on
-// mobile - see Sidebar.module.css) since it's the page's only always-on
-// scroll indicator. ThemeToggle/SocialLinks are desktop-only here: their
-// mobile counterparts live inside the hamburger menu instead (see Nav.tsx).
+// The desktop left rail: section progress dots up top, social links at the
+// bottom. Desktop-only (>=1024px, alongside InfoPanel); below that the top
+// bar's hamburger menu carries navigation and socials instead. The theme
+// toggle lives in the top bar at every width, so it isn't repeated here.
 function Sidebar() {
   return (
-    <aside className={styles.sidebar}>
-      <div className={styles.progressDots}>
-        <SectionDots />
-        <div className={styles.desktopOnly}>
-          <ThemeToggle />
-        </div>
-      </div>
-      <div className={styles.desktopOnly}>
-        <SocialLinks />
-      </div>
+    <aside className={styles.sidebar} aria-label="Section progress">
+      <SectionDots />
+      <SocialLinks />
     </aside>
   )
 }

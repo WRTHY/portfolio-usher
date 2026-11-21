@@ -1,23 +1,28 @@
-/* Bottom rather than top: every section pins its own MobileInfoCard to the
-   top of its own gap (see MobileInfoCard's module CSS), so the hamburger
-   floats at the opposite corner instead of sharing it - consistent with
-   MobileInfoCard's own floating-card treatment (see Sidebar.module.css's
-   .progressDots for the same pattern on the left edge). */
+/* Below 1024px: same inline padding formula as sections (see index.css), so
+   the wordmark and every section's content share one left edge. */
 .header {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 10;
-  padding: 12px 20px;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  padding-inline: max(var(--page-gutter), calc((100% - var(--page-max)) / 2));
+  background: var(--bg);
+  border-bottom: 1px solid transparent;
+  transition: border-color 200ms var(--ease-out);
 }
 
-/* Keyed off [data-viewport] (see useViewportMode.ts) instead of a raw width
-   media query - see index.css's matching section rule for why a landscape
-   phone needs this mobile chrome despite often being wider than 640px. */
-:root[data-viewport='desktop'] .header {
-  display: none;
+.scrolled {
+  border-bottom-color: var(--border);
+}
+
+/* Desktop: the wordmark lines up with InfoPanel's left edge below it. */
+@media (min-width: 1024px) {
+  .header {
+    padding-inline: var(--page-gutter-desktop) var(--page-gutter);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header {
+    transition: none;
+  }
 }

@@ -1,24 +1,18 @@
 import TextCard from '../../molecules/TextCard/TextCard'
 import SkillsAndTools from '../../molecules/SkillsAndTools/SkillsAndTools'
-import ParticleBackground from '../../molecules/ParticleBackground/ParticleBackground'
 import SectionBody from '../../molecules/SectionBody/SectionBody'
+import SectionHeader from '../../molecules/SectionHeader/SectionHeader'
 import ReadMoreText from '../../molecules/ReadMoreText/ReadMoreText'
-import MobileInfoCard from '../MobileInfoCard/MobileInfoCard'
-import useOverscrollBump from '../../../hooks/useOverscrollBump'
-import { getSectionLabel, getSectionTone } from '../../../content/navigation'
+import { getSectionLabel } from '../../../content/navigation'
 import { about } from '../../../content/site'
 import styles from './About.module.css'
 
 const sectionLabel = getSectionLabel('about')
-const sectionTone = getSectionTone('about')
 
 function About() {
-  const bumpRef = useOverscrollBump<HTMLElement>()
-
   return (
-    <section id="about" className="flush-section" aria-label={sectionLabel} ref={bumpRef}>
-      <MobileInfoCard label={sectionLabel} tone={sectionTone} />
-      <ParticleBackground variant="about" />
+    <section id="about" aria-labelledby="about-heading">
+      <SectionHeader id="about-heading" title={sectionLabel} />
       <SectionBody>
         <TextCard>
           <ReadMoreText toggleClassName={styles.readMoreToggle}>

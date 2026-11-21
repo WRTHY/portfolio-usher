@@ -9,7 +9,7 @@ type ReadMoreTextProps = {
   toggleClassName?: string
 }
 
-// Mobile-only (see the module CSS's [data-viewport='mobile'] gate) - long
+// Phone-only (see the module CSS's max-width: 639px gate) - long
 // text sections read as an unbroken wall on a phone screen, so this clips
 // to a short preview with a toggle instead. Desktop has the horizontal
 // room for the same paragraphs to read fine at full length, so the clamp

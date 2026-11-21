@@ -6,6 +6,17 @@
     <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>portfolio</title>
+    <!-- Body (General Sans, Fontshare) and code (JetBrains Mono, Google Fonts)
+         faces; the display face is self-hosted, see src/index.css. One
+         Fontshare request per family: combined requests have returned the
+         wrong family. -->
+    <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
+    <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preload" href="/fonts/TBJ-Orcherum.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" />
     <script>
       // Runs before first paint so a previously chosen light/dark mode applies
       // immediately, instead of flashing the system-default mode for a frame

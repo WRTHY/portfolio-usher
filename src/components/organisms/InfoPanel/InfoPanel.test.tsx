@@ -75,7 +75,7 @@ describe('InfoPanel', () => {
     })
     expect(within(nav).getByRole('link', { name: 'Case Studies' })).toHaveAttribute(
       'aria-current',
-      'page',
+      'location',
     )
   })
 
@@ -87,7 +87,7 @@ describe('InfoPanel', () => {
     const nav = screen.getByRole('navigation', { name: 'Sections' })
     expect(within(nav).getByRole('link', { name: 'Experience' })).toHaveAttribute(
       'aria-current',
-      'page',
+      'location',
     )
     expect(within(nav).getByRole('link', { name: 'Case Studies' })).not.toHaveAttribute('aria-current')
   })
@@ -98,7 +98,7 @@ describe('InfoPanel', () => {
     activateSection('about', 1)
 
     const nav = screen.getByRole('navigation', { name: 'Sections' })
-    expect(within(nav).getByRole('link', { name: 'About' })).toHaveAttribute('aria-current', 'page')
+    expect(within(nav).getByRole('link', { name: 'About' })).toHaveAttribute('aria-current', 'location')
   })
 
   it('contrasts its background against the active section\'s tone', () => {

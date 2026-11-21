@@ -8,8 +8,6 @@ import styles from './InfoPanel.module.css'
 
 function InfoPanel() {
   // activeIndex drives the sliding marker in .nav (see InfoPanel.module.css).
-  // Shared with MobileInfoCard via useActiveSectionInfo rather than each
-  // deriving the active section object independently - see its own comment.
   const { activeId, activeIndex, activeSection } = useActiveSectionInfo()
   // Opposite of the active section's own background (see contrastSurface in
   // navigation.ts), so the panel reads as a distinct surface against
@@ -38,6 +36,7 @@ function InfoPanel() {
                 href={`#${section.id}`}
                 isActive={activeId === section.id}
                 testId={`nav-link-desktop-${section.id}`}
+                className={styles.navLink}
               >
                 {section.label}
               </NavLink>

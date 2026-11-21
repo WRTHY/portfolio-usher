@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 
 type HeadingProps = {
-  level?: 1 | 2
+  level?: 1 | 2 | 3
   children: ReactNode
 }
 

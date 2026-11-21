@@ -10,7 +10,7 @@ export type { SectionId }
 // Composition root for the site. It's a single page with no real per-URL
 // navigation, so rather than one class per route this models one root
 // object owning a component per section/region - the same shape the app
-// itself uses (Header/Sidebar/CaseStudies/CodeSamples as siblings).
+// itself uses (Header/About/Experience/CaseStudies/CodeSamples as siblings).
 export class PortfolioPage {
   readonly page: Page
   readonly nav: NavComponent

@@ -7,19 +7,17 @@ import Card from '../../atoms/Card/Card'
 import Heading from '../../atoms/Heading/Heading'
 import CopyButton from '../../atoms/CopyButton/CopyButton'
 import CodeBlock from '../../molecules/CodeBlock/CodeBlock'
-import ParticleBackground from '../../molecules/ParticleBackground/ParticleBackground'
 import SectionBody from '../../molecules/SectionBody/SectionBody'
+import SectionHeader from '../../molecules/SectionHeader/SectionHeader'
 import ReadMoreText from '../../molecules/ReadMoreText/ReadMoreText'
-import MobileInfoCard from '../MobileInfoCard/MobileInfoCard'
 import SegmentedControl from '../../molecules/SegmentedControl/SegmentedControl'
 import type { SegmentedControlOption } from '../../molecules/SegmentedControl/SegmentedControl'
-import { getSectionLabel, getSectionTone } from '../../../content/navigation'
+import { getSectionLabel } from '../../../content/navigation'
 import { apiTestingIntro, apiTestingExamples } from '../../../content/apiTesting'
 import { links } from '../../../content/links'
 import styles from './ApiTesting.module.css'
 
 const sectionLabel = getSectionLabel('api-testing')
-const sectionTone = getSectionTone('api-testing')
 
 type ApiTool = 'playwright' | 'postman'
 
@@ -45,9 +43,8 @@ function ApiTesting() {
   const [tool, setTool] = useState<ApiTool>('postman')
 
   return (
-    <section id="api-testing" className="flush-section" aria-label={sectionLabel}>
-      <MobileInfoCard label={sectionLabel} tone={sectionTone} />
-      <ParticleBackground variant="api-testing" />
+    <section id="api-testing" aria-labelledby="api-testing-heading">
+      <SectionHeader id="api-testing-heading" title={sectionLabel} />
       <SectionBody gap={16}>
         <Card tone="alt" className={styles.explainer}>
           <Badge variant="outline-accent">Static preview - full suite lives in its own repo</Badge>
@@ -75,7 +72,7 @@ function ApiTesting() {
             <Card key={example.id} tone="alt" className={styles.exampleCard}>
               <div className={styles.exampleHeader}>
                 <Badge>{example.tag}</Badge>
-                <Heading level={2}>{example.title}</Heading>
+                <Heading level={3}>{example.title}</Heading>
               </div>
               <p className={styles.description}>{example.description}</p>
               <div className={styles.panel}>
