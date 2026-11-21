@@ -1,0 +1,114 @@
+/* Sized by its own width (container queries), not the viewport: two columns
+   once the hero's content box has room for both. */
+.hero {
+  container-type: inline-size;
+  padding-block: clamp(2.5rem, 7vh, 5rem) clamp(4rem, 10vh, 7rem);
+}
+
+/* A container query styles the container's descendants, never the container
+   itself, so the query lives on .hero and the grid on .inner. */
+.inner {
+  display: grid;
+  gap: clamp(2rem, 5vw, 4.5rem);
+  max-width: var(--page-max);
+}
+
+@container (min-width: 900px) {
+  .inner {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    align-items: center;
+  }
+}
+
+.copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.75rem;
+}
+
+.lead {
+  max-width: 30ch;
+  font: 500 clamp(1.25rem, 2.1vw, 1.5rem) / 1.45 var(--sans);
+  letter-spacing: -0.01em;
+  color: var(--text-h);
+  text-wrap: pretty;
+
+  em {
+    font-style: normal;
+    background: linear-gradient(transparent 58%, var(--accent-wash) 58% 94%, transparent 94%);
+  }
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.9375rem;
+  color: var(--text);
+}
+
+.dot {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: ping 2.4s var(--ease-out) infinite;
+}
+
+@keyframes ping {
+  from {
+    box-shadow: 0 0 0 0 var(--accent-wash);
+  }
+  70%,
+  to {
+    box-shadow: 0 0 0 0.5rem transparent;
+  }
+}
+
+.side {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.pickRow {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.pickHint {
+  font-size: 0.9375rem;
+  color: var(--text);
+}
+
+.hint {
+  animation: hint 1.6s var(--ease-out) 2;
+}
+
+@keyframes hint {
+  from {
+    box-shadow: 0 0 0 0 var(--accent-wash);
+  }
+  to {
+    box-shadow: 0 0 0 12px transparent;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dot,
+  .hint {
+    animation: none;
+  }
+}

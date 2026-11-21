@@ -1,0 +1,113 @@
+/* The page can't scroll under the opener. */
+:global(html.intro) body {
+  overflow: hidden;
+}
+
+.opener {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  background: var(--term);
+  color: var(--term-text);
+  font: 400 clamp(0.8rem, 1.6vw, 1rem) / 1.9 var(--mono);
+  clip-path: inset(0 0 0 0);
+  transition: clip-path 800ms cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+/* The hand-off: the terminal wipes up off the page. */
+.leaving {
+  clip-path: inset(0 0 100% 0);
+}
+
+.run {
+  width: min(44rem, 100% - 2 * var(--page-gutter));
+}
+
+.command {
+  margin: 0 0 0.25rem;
+  color: var(--term-dim);
+
+  b {
+    font-weight: 500;
+    color: var(--term-text);
+  }
+}
+
+.meta {
+  min-height: 1.9em;
+  margin: 0 0 1rem;
+  color: var(--term-dim);
+}
+
+.lines {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    display: flex;
+    gap: 0.75rem;
+    align-items: baseline;
+    min-height: 1.9em;
+    overflow: hidden;
+  }
+}
+
+.text {
+  white-space: pre;
+}
+
+.mark {
+  flex: none;
+  color: var(--term-accent);
+  transform: scale(0);
+  transition: transform 380ms var(--ease-spring);
+}
+
+.done .mark {
+  transform: scale(1);
+}
+
+.noise {
+  color: var(--term-fail);
+  opacity: 0.8;
+}
+
+.summary {
+  min-height: 1.9em;
+  margin: 1.25rem 0 0;
+  color: var(--term-accent);
+  font-weight: 500;
+  opacity: 0;
+  transition: opacity 200ms;
+}
+
+.summary.on {
+  opacity: 1;
+}
+
+.skip {
+  position: absolute;
+  right: var(--page-gutter);
+  bottom: var(--page-gutter);
+  padding: 0.6rem 1rem;
+  border: 1px solid var(--term-line);
+  border-radius: 999px;
+  background: none;
+  color: var(--term-dim);
+  font: 500 0.8125rem / 1 var(--mono);
+  cursor: pointer;
+
+  &:hover {
+    border-color: var(--term-dim);
+    color: var(--term-text);
+  }
+}
+
+@media (max-width: 639px) {
+  .text {
+    white-space: normal;
+  }
+}
