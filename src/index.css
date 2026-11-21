@@ -86,11 +86,6 @@
   --content-width-wide: 900px; /* wider two-column / media / gallery width */
   --nav-height: 64px;
 
-  /* Desktop (>=1024px) left chrome: the dots rail at left: 24px, then the
-     fixed InfoPanel nav card. Section content starts past both. */
-  --page-gutter-desktop: 128px; /* InfoPanel's left edge, clearing the rail */
-  --info-panel-width: 400px;
-  --content-clearance-desktop: calc(var(--page-gutter-desktop) + var(--info-panel-width) + 40px);
 
   font: 18px/145% var(--sans);
   letter-spacing: 0.18px;
@@ -169,10 +164,12 @@ main > section:first-child {
 }
 
 /* Desktop: content starts to the right of the fixed rail and InfoPanel. */
+/* Desktop: the fixed left rail (dots, theme toggle, socials) sits at
+   left: 24px, so the gutter grows enough to keep content clear of it. The
+   centered-column formula above still takes over on wide screens. */
 @media (min-width: 1024px) {
-  section {
-    padding-left: var(--content-clearance-desktop);
-    padding-right: var(--page-gutter);
+  :root {
+    --page-gutter: 88px;
   }
 }
 
@@ -184,17 +181,8 @@ h3 {
   color: var(--text-h);
 }
 
-h1 {
-  font-size: 56px;
-  font-weight: 700;
-  letter-spacing: -1.68px;
-  margin: 16px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 12px 0;
-  }
-}
-/* Card and modal titles. Section titles use SectionHeader's own scale. */
+/* The page's one h1 is the hero name (SpringName), which sets its own
+   scale. Card and modal titles. Section titles use SectionHeader's own scale. */
 h2,
 h3 {
   font-size: 24px;

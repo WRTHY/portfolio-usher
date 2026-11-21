@@ -6,16 +6,33 @@ import { sections } from '../../../content/navigation'
 import { siteContent } from '../../../content/site'
 
 describe('Nav', () => {
-  it('links the wordmark to the top of the page', () => {
+  it('links the wordmark to the top of the page (the hero)', () => {
     render(<Nav />)
-    expect(screen.getByRole('link', { name: siteContent.name })).toHaveAttribute(
-      'href',
-      `#${sections[0].id}`,
-    )
+    expect(screen.getByRole('link', { name: siteContent.name })).toHaveAttribute('href', '#top')
   })
 
-  // On desktop the section links live in InfoPanel (see its own tests); the
-  // bar itself only carries them in the hamburger menu.
+  it('hides the name while the hero name is on screen', () => {
+    const { rerender } = render(<Nav showName={false} />)
+    const wordmark = screen.getByRole('link', { name: siteContent.name })
+    expect(wordmark.className).toMatch(/undocked/)
+
+    rerender(<Nav showName />)
+    expect(wordmark.className).not.toMatch(/undocked/)
+  })
+
+  // jsdom doesn't apply the CSS that shows one link list and hides the other,
+  // so both lists are present here; each test scopes to its own landmark.
+  it('renders a link for each section in the bar', () => {
+    render(<Nav />)
+    const primary = screen.getByRole('navigation', { name: 'Primary' })
+    sections.forEach((section) => {
+      expect(within(primary).getByRole('link', { name: section.label })).toHaveAttribute(
+        'href',
+        `#${section.id}`,
+      )
+    })
+  })
+
   it('renders a link for each section in the menu', () => {
     render(<Nav />)
     const menu = screen.getByRole('navigation', { name: 'Menu' })

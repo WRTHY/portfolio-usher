@@ -1,0 +1,51 @@
+/* The display face has one weight: never ask for bold. */
+.name {
+  margin: 0;
+  font: 400 clamp(4rem, 10vw, 9rem) / 0.84 var(--heading);
+  letter-spacing: -0.01em;
+  color: var(--text-h);
+  cursor: default;
+}
+
+.word {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+/* The spring is one of the two places the design allows it (with the
+   opener's check marks): see DESIGN.md's motion rules. */
+.letter {
+  display: inline-block;
+  transition: transform 500ms var(--ease-spring);
+
+  &:hover {
+    transform: translateY(-0.07em) rotate(-5deg);
+  }
+}
+
+:global(html.play) .letter {
+  animation: pop 820ms var(--ease-spring) both;
+  animation-delay: calc(var(--i) * 38ms);
+}
+
+@keyframes pop {
+  0% {
+    opacity: 0;
+    transform: translateY(0.55em) rotate(10deg) scale(0.55);
+  }
+  45% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .letter,
+  :global(html.play) .letter {
+    transition: none;
+    animation: none;
+  }
+
+  .letter:hover {
+    transform: none;
+  }
+}
