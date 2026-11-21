@@ -1,0 +1,107 @@
+:global(html.inspecting) [data-loc] {
+  cursor: crosshair;
+}
+
+.box,
+.tip {
+  position: fixed;
+  pointer-events: none;
+}
+
+.box {
+  z-index: 40;
+  border: 1.5px solid var(--accent);
+  border-radius: 6px;
+  background: var(--accent-wash);
+  transition:
+    left 380ms var(--ease-out),
+    top 380ms var(--ease-out),
+    width 380ms var(--ease-out),
+    height 380ms var(--ease-out);
+}
+
+/* Terminal material, like the run report. */
+.tip {
+  z-index: 41;
+  max-width: calc(100vw - 16px);
+  padding: 0.5rem 0.7rem;
+  border: 1px solid var(--term-line);
+  border-radius: 6px;
+  background: var(--term);
+  color: var(--term-text);
+  font: 400 0.75rem / 1.5 var(--mono);
+  box-shadow: 0 12px 24px -12px var(--shadow-color);
+  transition:
+    left 380ms var(--ease-out),
+    top 380ms var(--ease-out);
+}
+
+/* The first pick appears in place instead of gliding in from the corner. */
+.box.jump,
+.tip.jump {
+  transition: none;
+}
+
+.locator {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.method {
+  color: #c4b5fd;
+}
+
+.string {
+  color: #f2c38b;
+}
+
+/* The assertion "runs" a beat after the locator shows: dim text, then the
+   check springs in and the text brightens. */
+.assert {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  animation: assert-pass 1ms linear 380ms both;
+}
+
+.tick {
+  color: var(--term-accent);
+  animation: tick-in 380ms var(--ease-spring) 380ms both;
+}
+
+@keyframes assert-pass {
+  from {
+    color: var(--term-dim);
+  }
+  to {
+    color: var(--term-text);
+  }
+}
+
+@keyframes tick-in {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .box,
+  .tip {
+    transition: none;
+  }
+
+  .assert,
+  .tick {
+    animation: none;
+  }
+}
+
+@media (max-width: 639px) {
+  .locator {
+    white-space: normal;
+  }
+}
