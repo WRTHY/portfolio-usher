@@ -19,7 +19,6 @@
   margin: 0;
   padding: 0;
   list-style: none;
-  border-bottom: 1px solid var(--border);
 }
 
 .row {
@@ -32,10 +31,33 @@
     'tools tools'
     'details details';
   gap: 0.5rem 1rem;
+  /* No dividers: the rows sit flat on the page, apart by their spacing. */
   padding: 1.5rem 0;
-  border-top: 1px solid var(--border);
   /* The whole row opens it, not only the "+". */
   cursor: pointer;
+  position: relative;
+  isolation: isolate;
+  /* Unhurried, so it reads as lifting off the page rather than snapping. */
+  transition: translate 420ms var(--ease-out);
+
+  /* The surface the row lifts on: a card a step lighter than the page,
+     reaching a little past the row's text on each side but stopping short
+     of the git-graph rail, which stays flat on the page. */
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0 -1rem;
+    z-index: -1;
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    box-shadow:
+      /* A hairline rim, only in dark mode, where a shadow alone barely reads. */
+      inset 0 0 0 1px light-dark(transparent, var(--border)),
+      0 1px 2px var(--shadow-color),
+      0 18px 32px -18px var(--shadow-color);
+    opacity: 0;
+    transition: opacity 420ms var(--ease-out);
+  }
 }
 
 /* The degree row has nothing to open. */
@@ -43,10 +65,19 @@
   cursor: auto;
 }
 
-/* A mouse or pen over the row, or keyboard focus on its "+", fills the "+"
-   (and rings the row's graph node), so it's clear before clicking that the
-   whole row is one target. Set from pointer events rather than :hover, so a
-   tap on a touch screen doesn't leave it stuck on. */
+/* A mouse or pen over the row, or keyboard focus on its "+", lifts the row
+   off the page (its graph node rises with it) and fills the "+", so it's
+   clear before clicking that the whole row is one target. Set from pointer
+   events rather than :hover, so a tap on a touch screen doesn't leave a
+   row stuck in the air. */
+.highlighted {
+  translate: 0 -2px;
+
+  &::before {
+    opacity: 1;
+  }
+}
+
 .highlighted .toggle {
   background: var(--accent);
   border-color: var(--accent);
@@ -313,7 +344,15 @@
 @media (prefers-reduced-motion: reduce) {
   .company,
   .reveal,
-  .more li {
+  .more li,
+  .row::before {
+    transition: none;
+  }
+
+  /* Still marks the row, without the movement. */
+  .row,
+  .highlighted {
+    translate: none;
     transition: none;
   }
 }

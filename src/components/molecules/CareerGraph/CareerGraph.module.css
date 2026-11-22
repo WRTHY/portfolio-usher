@@ -21,7 +21,9 @@
   transition:
     fill 200ms var(--ease-out),
     stroke 200ms var(--ease-out),
-    scale 240ms var(--ease-spring);
+    scale 240ms var(--ease-spring),
+    /* Matches its row's lift (Experience.module.css), so the two rise level. */
+    translate 420ms var(--ease-out);
 }
 
 .active {
@@ -29,13 +31,21 @@
   stroke: var(--accent);
 }
 
+/* Its row lifts 2px off the page on hover; the node rises with it, so the
+   two stay level. */
 .highlighted {
   stroke: var(--accent);
   scale: 1.35;
+  translate: 0 -2px;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .node {
     transition: none;
+  }
+
+  /* Its row doesn't lift either. */
+  .highlighted {
+    translate: none;
   }
 }
