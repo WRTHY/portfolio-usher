@@ -12,4 +12,7 @@ export const links = {
     fubo: 'https://www.fubo.tv/welcome',
     scientificGames: 'https://www.lnw.com/',
   },
+  schools: {
+    roseHulman: 'https://www.rose-hulman.edu/',
+  },
 } as const
