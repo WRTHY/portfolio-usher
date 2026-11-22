@@ -22,7 +22,12 @@ Live sections (see [`src/content/navigation.ts`](src/content/navigation.ts)):
   assertion. Every locator shown is executed by
   [`e2e/playwright/hero.spec.ts`](e2e/playwright/hero.spec.ts), at desktop and phone sizes.
 - **About** - background and links
-- **Experience** - a card per role, with stack and impact
+- **Experience** - a ledger, one row per role: dates, role and company, a one-sentence
+  impact line and up to four test tools, each with what it tested. The "+" (or a click
+  anywhere on the row) unfolds the role's detail bullets and grows the tools column into
+  its full stack, in one CSS-only motion. The degree closes the ledger. A git-graph rail runs down the left edge: one node per role
+  on a single line, lit while its role is open (content in
+  [`src/content/experience.ts`](src/content/experience.ts))
 - **Case Studies** - a card grid of expandable write-ups detailing engineering decisions I have made and implemented (problem → approach → outcome)
 - **Automation Examples** - a live browser of this repo's own test suite: pick a testing
   type (End-to-End / Component) and a framework (Playwright or Cypress for E2E, Vitest +
@@ -45,9 +50,9 @@ Components follow atomic design, colocated with their styles and tests:
 ```
 src/
   components/
-    atoms/       # Badge, Button, CopyButton, FramedImage, Heading, MenuToggle,
-                 # NavLink, RunButton, SocialIcon, SoonBadge, Switch, icons/ ...
-    molecules/   # CodeBlock, CodeFileTabs, FrameworkSwitcher, LocatorInspector,
+    atoms/       # Badge, Button, CopyButton, ExpandToggle, FramedImage, Heading,
+                 # MenuToggle, NavLink, RunButton, SocialIcon, SoonBadge, Switch, icons/ ...
+    molecules/   # CareerGraph, CodeBlock, CodeFileTabs, FrameworkSwitcher, LocatorInspector,
                  # MediaText, Modal, Nav, PanelFooter, RunReport, SectionBody,
                  # SectionDots, SectionHeader, SegmentedControl, SocialLinks,
                  # SpringName, TextCard, ThemeToggle

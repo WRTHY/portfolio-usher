@@ -250,6 +250,7 @@ import { ThemeToggleComponent } from './ThemeToggleComponent.page'
 import { CaseStudiesSection } from './CaseStudiesSection.page'
 import { CodeSamplesSection } from './CodeSamplesSection.page'
 import { HeroSection } from './HeroSection.page'
+import { ExperienceSection } from './ExperienceSection.page'
 
 export type { SectionId }
 
@@ -259,6 +260,7 @@ export type { SectionId }
 // itself uses (Header/Hero/About/Experience/CaseStudies/CodeSamples as siblings).
 export class PortfolioPage {
   readonly hero = new HeroSection()
+  readonly experience = new ExperienceSection()
   readonly nav = new NavComponent()
   readonly themeToggle = new ThemeToggleComponent()
   readonly caseStudies = new CaseStudiesSection()

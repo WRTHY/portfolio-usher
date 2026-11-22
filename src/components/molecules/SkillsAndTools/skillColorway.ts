@@ -38,6 +38,8 @@ const extraTools: Record<string, SkillColorway> = {
   launchdarkly: 'devops',
   bugsnag: 'devops',
   firebase: 'devops',
+  testrail: 'testing',
+  zephyr: 'testing',
 }
 
 function lookup(name: string): SkillPosition | undefined {

@@ -1,0 +1,51 @@
+/* Micrographic: a hairline and small nodes, in the rail's quiet register.
+   Violet only on active nodes. */
+.graph {
+  display: block;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.line {
+  stroke: var(--border);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+}
+
+.node {
+  fill: var(--bg);
+  stroke: var(--text);
+  stroke-width: 1.5;
+  transform-box: fill-box;
+  transform-origin: center;
+  transition:
+    fill 200ms var(--ease-out),
+    stroke 200ms var(--ease-out),
+    scale 240ms var(--ease-spring),
+    /* Matches its row's lift (Experience.module.css), so the two rise level. */
+    translate 420ms var(--ease-out);
+}
+
+.active {
+  fill: var(--accent);
+  stroke: var(--accent);
+}
+
+/* Its row lifts 2px off the page on hover; the node rises with it, so the
+   two stay level. */
+.highlighted {
+  stroke: var(--accent);
+  scale: 1.35;
+  translate: 0 -2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .node {
+    transition: none;
+  }
+
+  /* Its row doesn't lift either. */
+  .highlighted {
+    translate: none;
+  }
+}
