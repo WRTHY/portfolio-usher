@@ -7,13 +7,17 @@ const ROLES = [
   'Software Quality Engineer',
 ]
 
+// The degree closes the ledger as its last row, and the git-graph's root.
+const DEGREE = 'B.S. Computer Engineering'
+const ROWS = [...ROLES, DEGREE]
+
 test.describe('experience ledger', () => {
-  test('lists every role, newest first', async ({ portfolioPage }) => {
+  test('lists every role, newest first, then the degree', async ({ portfolioPage }) => {
     await portfolioPage.goto()
     const { experience } = portfolioPage
 
-    await expect(experience.rows).toHaveCount(ROLES.length)
-    await expect(experience.rows.getByRole('heading', { level: 3 })).toHaveText(ROLES)
+    await expect(experience.rows).toHaveCount(ROWS.length)
+    await expect(experience.rows.getByRole('heading', { level: 3 })).toHaveText(ROWS)
   })
 
   test('keeps each role to at most four tools', async ({ portfolioPage }) => {
@@ -22,9 +26,82 @@ test.describe('experience ledger', () => {
 
     for (const role of ROLES) {
       const count = await experience.tools(role).count()
-      expect(count, role).toBeGreaterThanOrEqual(1)
       expect(count, role).toBeLessThanOrEqual(4)
     }
+  })
+
+  test('the "+" opens a role in place and closes it again', async ({ portfolioPage }) => {
+    await portfolioPage.goto()
+    const { experience } = portfolioPage
+    const role = 'QA Lead / Senior SDET'
+
+    await expect(experience.details(role)).toBeHidden()
+    await experience.toggle(role).click()
+
+    await expect(experience.toggle(role)).toHaveAttribute('aria-expanded', 'true')
+    await expect(experience.details(role)).toBeVisible()
+    await expect(experience.details(role)).toContainText('Maestro suite of 100+ cases')
+    // The tools column grows into the rest of the stack beside the bullets.
+    await expect(experience.moreTools(role)).toBeVisible()
+    await expect(experience.moreTools(role)).toContainText('Qase')
+    // Other roles stay closed.
+    await expect(experience.details('QA Specialist')).toBeHidden()
+
+    await experience.toggle(role).click()
+    await expect(experience.details(role)).toBeHidden()
+    await expect(experience.moreTools(role)).toBeHidden()
+  })
+
+  test('the git-graph rail puts a node level with each role', async ({ portfolioPage }) => {
+    await portfolioPage.goto()
+    const { experience } = portfolioPage
+    await experience.root.scrollIntoViewIfNeeded()
+
+    await expect(experience.graph.locator('circle')).toHaveCount(ROWS.length)
+    await expect(experience.graph.locator('line')).toHaveCount(1)
+
+    // Each node sits on its role's dates line, within a pixel.
+    for (const [i, role] of ROWS.entries()) {
+      const dates = await experience.row(role).locator('[data-graph-anchor]').boundingBox()
+      const node = await experience.graph.locator('circle').nth(i).boundingBox()
+      expect(Math.abs(node!.y + node!.height / 2 - (dates!.y + dates!.height / 2)), role).toBeLessThanOrEqual(1)
+    }
+  })
+
+  test('hovering a row rings its node, and a click anywhere on the row opens it', async ({ portfolioPage }) => {
+    await portfolioPage.goto()
+    const { experience } = portfolioPage
+    const role = 'QA Specialist'
+
+    await experience.impact(role).hover()
+    await expect(experience.row(role)).toHaveAttribute('data-highlighted', 'true')
+    await expect(experience.graphNode('fubo-gaming-qa-specialist')).toHaveAttribute('data-highlighted', 'true')
+    // The "+" fills to say the row is clickable, though the pointer isn't on it.
+    await expect(experience.toggle(role)).not.toHaveCSS('background-color', 'rgba(0, 0, 0, 0)')
+
+    await experience.impact(role).click()
+    await expect(experience.toggle(role)).toHaveAttribute('aria-expanded', 'true')
+    await expect(experience.details(role)).toBeVisible()
+  })
+
+  test('opening a role lights its node and keeps the rail aligned', async ({ portfolioPage }) => {
+    await portfolioPage.goto()
+    const { experience } = portfolioPage
+    const sdet = 'Software Development Engineer in Test'
+
+    // No role is current, so nothing is lit until a role is opened.
+    await expect(experience.graph.locator('circle')).toHaveCount(ROWS.length)
+    await expect(experience.graph.locator('[data-active]')).toHaveCount(0)
+    await experience.toggle(sdet).click()
+    await expect(experience.graphNode('eventric-sdet')).toHaveAttribute('data-active', 'true')
+
+    // The row below grew taller; its node must have followed it.
+    const role = 'QA Specialist'
+    await expect(async () => {
+      const dates = await experience.row(role).locator('[data-graph-anchor]').boundingBox()
+      const node = await experience.graphNode('fubo-gaming-qa-specialist').boundingBox()
+      expect(Math.abs(node!.y + node!.height / 2 - (dates!.y + dates!.height / 2))).toBeLessThanOrEqual(1)
+    }).toPass()
   })
 
   test('company links open in a new tab', async ({ portfolioPage }) => {
