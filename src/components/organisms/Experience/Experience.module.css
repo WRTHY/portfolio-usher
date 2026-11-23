@@ -22,6 +22,7 @@
 }
 
 .row {
+  composes: liftable from '../../../styles/lift.module.css';
   display: grid;
   grid-template-columns: minmax(0, 1fr) 2.5rem;
   grid-template-areas:
@@ -35,29 +36,6 @@
   padding: 1.5rem 0;
   /* The whole row opens it, not only the "+". */
   cursor: pointer;
-  position: relative;
-  isolation: isolate;
-  /* Unhurried, so it reads as lifting off the page rather than snapping. */
-  transition: translate 420ms var(--ease-out);
-
-  /* The surface the row lifts on: a card a step lighter than the page,
-     reaching a little past the row's text on each side but stopping short
-     of the git-graph rail, which stays flat on the page. */
-  &::before {
-    content: '';
-    position: absolute;
-    inset: 0 -1rem;
-    z-index: -1;
-    border-radius: var(--radius-lg);
-    background: var(--surface);
-    box-shadow:
-      /* A hairline rim, only in dark mode, where a shadow alone barely reads. */
-      inset 0 0 0 1px light-dark(transparent, var(--border)),
-      0 1px 2px var(--shadow-color),
-      0 18px 32px -18px var(--shadow-color);
-    opacity: 0;
-    transition: opacity 420ms var(--ease-out);
-  }
 }
 
 /* The degree row has nothing to open. */
@@ -66,16 +44,11 @@
 }
 
 /* A mouse or pen over the row, or keyboard focus on its "+", lifts the row
-   off the page (its graph node rises with it) and fills the "+", so it's
-   clear before clicking that the whole row is one target. Set from pointer
-   events rather than :hover, so a tap on a touch screen doesn't leave a
-   row stuck in the air. */
+   off the page (see lift.module.css; its graph node rises with it) and
+   fills the "+", so it's clear before clicking that the whole row is one
+   target. */
 .highlighted {
-  translate: 0 -2px;
-
-  &::before {
-    opacity: 1;
-  }
+  composes: lifted from '../../../styles/lift.module.css';
 }
 
 .highlighted .toggle {
@@ -221,36 +194,6 @@
   color: var(--text);
 }
 
-/* Opening a role unfolds its detail bullets and the rest of its stack
-   together, as one motion. Each region's single grid row grows from 0fr to
-   1fr: an animation to the content's own height that every current browser
-   runs, where height: auto only animates in Chromium so far. The regions
-   keep the real `hidden` attribute, so a closed one is out of the page and
-   the accessibility tree; allow-discrete holds off display: none until the
-   fold has finished, and @starting-style gives the opening a first frame. */
-.reveal {
-  display: grid;
-  grid-template-rows: 1fr;
-  opacity: 1;
-  transition:
-    grid-template-rows 440ms var(--ease-out),
-    opacity 320ms var(--ease-out),
-    display 440ms allow-discrete;
-
-  &[hidden] {
-    display: none;
-    grid-template-rows: 0fr;
-    opacity: 0;
-  }
-}
-
-/* Clips the content while its row is shorter than it. A block formatting
-   context, so the children's margins fold away with it too. */
-.revealInner {
-  min-height: 0;
-  overflow: hidden;
-}
-
 /* The rest of the stack, under the key tools: plainer than them, since
    these are the toolchain around the testing rather than the testing. */
 .moreBody {
@@ -289,7 +232,9 @@
   }
 }
 
-.reveal[hidden] .more li {
+/* Folding away: the names go together, without the stagger. The region
+   that holds them is a Reveal, closed with the `hidden` attribute. */
+[hidden] .more li {
   opacity: 0;
   translate: 0 -4px;
   transition-delay: 0ms;
@@ -330,11 +275,6 @@
 }
 
 @starting-style {
-  .reveal {
-    grid-template-rows: 0fr;
-    opacity: 0;
-  }
-
   .more li {
     opacity: 0;
     translate: 0 -4px;
@@ -343,16 +283,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .company,
-  .reveal,
-  .more li,
-  .row::before {
-    transition: none;
-  }
-
-  /* Still marks the row, without the movement. */
-  .row,
-  .highlighted {
-    translate: none;
+  .more li {
     transition: none;
   }
 }
