@@ -1,229 +1,147 @@
-import { act, render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { afterEach, describe, expect, it, vi } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import CaseStudies from './CaseStudies'
 import { caseStudies } from '../../../content/caseStudies'
-import styles from './CaseStudies.module.css'
 
-// jsdom never lays anything out, so a section's real offsetTop/offsetHeight
-// and the pane's real scrollHeight/clientHeight are all 0 by default - stub
-// a synthetic layout so useReadingRail's boundary math (see CaseStudies.tsx)
-// has real geometry to scale against. Chosen to mirror the shape of the bug
-// being guarded against: Approach is much taller than Outcome, and Outcome
-// plus Future Iterations together are shorter than one pane height - so a
-// naive "scroll this section's top to a fixed line near the pane's top"
-// approach could never bring Outcome's own top near that line before the
-// pane ran out of room to scroll, permanently skipping it.
-function stubReadingRailLayout(contentPane: Element) {
-  Object.defineProperty(contentPane, 'scrollHeight', { value: 850, configurable: true })
-  Object.defineProperty(contentPane, 'clientHeight', { value: 500, configurable: true })
-  ;(
-    [
-      ['case-study-section-problem', 0, 100],
-      ['case-study-section-approach', 100, 400],
-      ['case-study-section-outcome', 524, 100],
-      ['case-study-section-futureIterations', 648, 150],
-    ] as const
-  ).forEach(([testId, offsetTop, height]) => {
-    const el = screen.queryByTestId(testId)
-    if (!el) return
-    Object.defineProperty(el, 'offsetTop', { value: offsetTop, configurable: true })
-    Object.defineProperty(el, 'offsetHeight', { value: height, configurable: true })
-  })
-}
+// Content fields can be multi-paragraph strings whose whitespace the page
+// collapses, so compare text with whitespace normalized on both sides.
+const normalize = (text: string | null) => (text ?? '').replace(/\s+/g, ' ').trim()
 
-// DRY note: content fields can be multi-paragraph template literals with
-// embedded indentation/newlines that the browser collapses visually but
-// that don't match a testing-library element's normalized textContent
-// verbatim. Normalizing both sides the same way keeps assertions robust
-// to how a field happens to be formatted in caseStudies.ts.
-//
-// Blank-line-separated paragraphs render as separate <p> elements (see
-// the Paragraphs component in CaseStudies.tsx), and jsdom's textContent
-// concatenates adjacent elements with no separator - so paragraph breaks
-// collapse to nothing here rather than to a space, matching the DOM.
-const normalizeWhitespace = (text: string) =>
-  text
-    .split(/\n\s*\n+/)
-    .map((paragraph) => paragraph.replace(/\s+/g, ' ').trim())
-    .filter(Boolean)
-    .join('')
+const rowFor = (id: string) => screen.getByTestId(`case-study-${id}`)
+const toggleFor = (id: string) => within(rowFor(id)).getByRole('button', { name: /^Read case study:/ })
+const writeUpFor = (id: string) => screen.getByTestId(`case-study-write-up-${id}`)
 
 describe('CaseStudies', () => {
-  it('renders a card for every case study', () => {
+  it('is the region named by its heading', () => {
     render(<CaseStudies />)
-    caseStudies.forEach((caseStudy) => {
-      expect(screen.getByTestId(`case-study-card-${caseStudy.id}`)).toBeInTheDocument()
-    })
+    expect(screen.getByRole('region', { name: 'Case Studies' })).toHaveAttribute('id', 'case-studies')
   })
 
-  it('opens a detail modal with the full report when a card is clicked', async () => {
+  it('lists one row per case study, in order', () => {
+    render(<CaseStudies />)
+    const titles = screen.getAllByRole('heading', { level: 3 }).map((heading) => heading.textContent)
+    expect(titles).toEqual(caseStudies.map((caseStudy) => caseStudy.title))
+  })
+
+  it.each(caseStudies.map((caseStudy) => [caseStudy.id, caseStudy] as const))(
+    '%s leads with its outcome and topics, with the write-up waiting behind the "+"',
+    (id, caseStudy) => {
+      render(<CaseStudies />)
+      const row = rowFor(id)
+      const [headline] = caseStudy.highlights
+      expect(within(row).getByText(headline.value)).toBeVisible()
+      expect(within(row).getByText(headline.label)).toBeVisible()
+
+      const topics = within(row).getByRole('list', { name: `Topics: ${caseStudy.title}` })
+      expect(within(topics).getAllByRole('listitem').map((item) => item.textContent).sort()).toEqual(
+        [...caseStudy.tags].sort(),
+      )
+
+      expect(toggleFor(id)).toHaveAttribute('aria-expanded', 'false')
+      expect(writeUpFor(id)).not.toBeVisible()
+    },
+  )
+
+  it.each(caseStudies.map((caseStudy) => [caseStudy.id, caseStudy] as const))(
+    '%s opens its full write-up in place with the "+", and closes again',
+    async (id, caseStudy) => {
+      const user = userEvent.setup()
+      render(<CaseStudies />)
+
+      await user.click(toggleFor(id))
+
+      expect(toggleFor(id)).toHaveAttribute('aria-expanded', 'true')
+      const writeUp = writeUpFor(id)
+      expect(writeUp).toBeVisible()
+      expect(within(writeUp).getByText(normalize(caseStudy.summary))).toBeVisible()
+
+      const parts = within(writeUp)
+        .getAllByRole('heading', { level: 4 })
+        .map((heading) => heading.textContent)
+      const expected = ['Problem', 'Approach', 'Outcome', ...(caseStudy.futureIterations ? ['Future iterations'] : [])]
+      expect(parts.filter((part) => part !== 'The framework, phase by phase')).toEqual(expected)
+      expect(normalize(within(writeUp).getByTestId('case-study-part-outcome').textContent)).toContain(
+        normalize(caseStudy.outcome),
+      )
+
+      // Any figures past the headline sit beside the write-up once open.
+      const [, ...figures] = caseStudy.highlights
+      figures.forEach(({ value }) => expect(within(rowFor(id)).getByText(value)).toBeVisible())
+
+      await user.click(toggleFor(id))
+      expect(writeUpFor(id)).not.toBeVisible()
+    },
+  )
+
+  it('opens CS 1 on its phases, in order', async () => {
     const user = userEvent.setup()
     render(<CaseStudies />)
+    const [framework] = caseStudies
+    await user.click(toggleFor(framework.id))
 
-    const first = caseStudies[0]
-    await user.click(screen.getByTestId(`case-study-card-${first.id}`))
-
-    const dialog = screen.getByRole('dialog')
-    expect(dialog).toBeInTheDocument()
-    expect(screen.getByTestId('case-study-section-problem')).toHaveTextContent(
-      normalizeWhitespace(first.problem),
+    const phases = within(writeUpFor(framework.id)).getByRole('list', { name: 'The framework, phase by phase' })
+    expect(within(phases).getAllByRole('listitem').map((item) => item.firstChild?.textContent)).toEqual(
+      framework.phases?.map((phase) => phase.name),
     )
-    expect(screen.getByTestId('case-study-section-approach')).toHaveTextContent(
-      normalizeWhitespace(first.approach),
-    )
-    expect(screen.getByTestId('case-study-section-outcome')).toHaveTextContent(
-      normalizeWhitespace(first.outcome),
-    )
-    if (first.futureIterations) {
-      expect(screen.getByTestId('case-study-section-futureIterations')).toHaveTextContent(
-        normalizeWhitespace(first.futureIterations),
-      )
-    }
   })
 
-  it('closes the modal when the close button is clicked', async () => {
+  it('opens case studies independently', async () => {
     const user = userEvent.setup()
     render(<CaseStudies />)
+    const [first, second] = caseStudies
+    await user.click(toggleFor(first.id))
 
-    const first = caseStudies[0]
-    await user.click(screen.getByTestId(`case-study-card-${first.id}`))
-    await user.click(screen.getByRole('button', { name: 'Close' }))
-
-    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    expect(writeUpFor(first.id)).toBeVisible()
+    expect(writeUpFor(second.id)).not.toBeVisible()
   })
 
-  it('renders the Future Iterations section only for case studies that have it', async () => {
+  it('opens from a click anywhere on the row, and leaves an open write-up alone when clicked', async () => {
     const user = userEvent.setup()
     render(<CaseStudies />)
+    const [caseStudy] = caseStudies
 
-    const withFuture = caseStudies.find((caseStudy) => caseStudy.futureIterations)
-    const withoutFuture = caseStudies.find((caseStudy) => !caseStudy.futureIterations)
-    expect(withFuture).toBeDefined()
+    await user.click(within(rowFor(caseStudy.id)).getByText(caseStudy.highlights[0].label))
+    expect(toggleFor(caseStudy.id)).toHaveAttribute('aria-expanded', 'true')
 
-    await user.click(screen.getByTestId(`case-study-card-${withFuture!.id}`))
-    expect(screen.getByRole('heading', { name: 'Future iterations' })).toBeInTheDocument()
-    expect(screen.getByTestId('case-study-section-futureIterations')).toHaveTextContent(
-      normalizeWhitespace(withFuture!.futureIterations!),
-    )
-    expect(screen.getByRole('button', { name: 'Future iterations' })).toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: 'Close' }))
-
-    // All current case studies (including the unwritten placeholders) carry
-    // futureIterations text, so there's no "without" case to click through
-    // right now. Once real case studies replace the placeholders this guard
-    // will start exercising the negative path again without any test change.
-    if (withoutFuture) {
-      await user.click(screen.getByTestId(`case-study-card-${withoutFuture.id}`))
-      expect(screen.queryByRole('heading', { name: 'Future iterations' })).not.toBeInTheDocument()
-      expect(screen.queryByTestId('case-study-section-futureIterations')).not.toBeInTheDocument()
-      expect(screen.queryByRole('button', { name: 'Future iterations' })).not.toBeInTheDocument()
-    }
+    await user.click(within(writeUpFor(caseStudy.id)).getByText(normalize(caseStudy.summary)))
+    expect(toggleFor(caseStudy.id)).toHaveAttribute('aria-expanded', 'true')
   })
 
-  describe('reading rail nav', () => {
-    afterEach(() => {
-      vi.restoreAllMocks()
-    })
+  it('closes from the end of the write-up and hands focus back to the "+"', async () => {
+    const user = userEvent.setup()
+    render(<CaseStudies />)
+    const [caseStudy] = caseStudies
+    await user.click(toggleFor(caseStudy.id))
 
-    it('scrolls to the clicked section and marks it active once the pane reports that scroll position', async () => {
-      const scrollTo = vi.fn()
-      Element.prototype.scrollTo = scrollTo
+    await user.click(within(writeUpFor(caseStudy.id)).getByRole('button', { name: 'Close case study' }))
 
-      const user = userEvent.setup()
-      render(<CaseStudies />)
+    expect(writeUpFor(caseStudy.id)).not.toBeVisible()
+    expect(toggleFor(caseStudy.id)).toHaveFocus()
+  })
 
-      const withFuture = caseStudies.find((caseStudy) => caseStudy.futureIterations)!
-      await user.click(screen.getByTestId(`case-study-card-${withFuture.id}`))
+  it('opens and closes from the keyboard', async () => {
+    const user = userEvent.setup()
+    render(<CaseStudies />)
+    const [caseStudy] = caseStudies
+    toggleFor(caseStudy.id).focus()
 
-      const contentPane = document.querySelector(`.${styles.content}`)!
-      stubReadingRailLayout(contentPane)
+    await user.keyboard('{Enter}')
+    expect(writeUpFor(caseStudy.id)).toBeVisible()
 
-      const approachNavItem = screen.getByRole('button', { name: 'Approach' })
-      expect(approachNavItem).not.toHaveClass(styles.navItemActive)
+    await user.keyboard(' ')
+    expect(writeUpFor(caseStudy.id)).not.toBeVisible()
+  })
 
-      await user.click(approachNavItem)
+  it('lifts a row while the pointer is over it', async () => {
+    const user = userEvent.setup()
+    render(<CaseStudies />)
+    const [caseStudy] = caseStudies
 
-      // Approach's boundary is its own offsetTop (100) rescaled into the
-      // pane's actual scrollable range (maxScroll 350 over a 648px span):
-      // 100 * (350 / 648) ≈ 54.
-      expect(scrollTo).toHaveBeenCalledTimes(1)
-      const [{ top, behavior }] = scrollTo.mock.calls[0]
-      expect(top).toBeCloseTo(54, 0)
-      expect(behavior).toBe('smooth')
+    await user.hover(within(rowFor(caseStudy.id)).getByText(caseStudy.title))
+    expect(rowFor(caseStudy.id)).toHaveAttribute('data-highlighted', 'true')
 
-      contentPane.scrollTop = top
-      act(() => {
-        contentPane.dispatchEvent(new Event('scroll'))
-      })
-
-      expect(approachNavItem).toHaveClass(styles.navItemActive)
-    })
-
-    it('marks a short section active on its own, without the taller section above it hogging the highlight', async () => {
-      Element.prototype.scrollTo = vi.fn()
-
-      const user = userEvent.setup()
-      render(<CaseStudies />)
-
-      const withFuture = caseStudies.find((caseStudy) => caseStudy.futureIterations)!
-      await user.click(screen.getByTestId(`case-study-card-${withFuture.id}`))
-
-      const contentPane = document.querySelector(`.${styles.content}`)!
-      stubReadingRailLayout(contentPane)
-
-      // Outcome's boundary (≈283) sits well short of maxScroll (350) even
-      // though Outcome itself is far shorter than Approach - this is the
-      // exact case that used to leave Outcome permanently skipped, since a
-      // fixed reading-line offset could never bring its own short top this
-      // close to the pane's top before the pane ran out of room to scroll.
-      contentPane.scrollTop = 300
-      act(() => {
-        contentPane.dispatchEvent(new Event('scroll'))
-      })
-
-      expect(screen.getByRole('button', { name: 'Outcome' })).toHaveClass(styles.navItemActive)
-      expect(screen.getByRole('button', { name: 'Approach' })).not.toHaveClass(
-        styles.navItemActive,
-      )
-      expect(screen.getByRole('button', { name: 'Future iterations' })).not.toHaveClass(
-        styles.navItemActive,
-      )
-    })
-
-    it('marks the last section active once scrolled to the very bottom of the pane', async () => {
-      Element.prototype.scrollTo = vi.fn()
-
-      const user = userEvent.setup()
-      render(<CaseStudies />)
-
-      const withFuture = caseStudies.find((caseStudy) => caseStudy.futureIterations)!
-      await user.click(screen.getByTestId(`case-study-card-${withFuture.id}`))
-
-      const contentPane = document.querySelector(`.${styles.content}`)!
-      stubReadingRailLayout(contentPane)
-
-      contentPane.scrollTop = 350 // maxScroll: scrollHeight (850) - clientHeight (500)
-      act(() => {
-        contentPane.dispatchEvent(new Event('scroll'))
-      })
-
-      expect(screen.getByRole('button', { name: 'Future iterations' })).toHaveClass(
-        styles.navItemActive,
-      )
-    })
-
-    it('is active on Problem when the modal first opens', async () => {
-      const user = userEvent.setup()
-      render(<CaseStudies />)
-
-      const first = caseStudies[0]
-      await user.click(screen.getByTestId(`case-study-card-${first.id}`))
-
-      expect(screen.getByRole('button', { name: 'Problem' })).toHaveClass(styles.navItemActive)
-      expect(screen.getByRole('button', { name: 'Approach' })).not.toHaveClass(
-        styles.navItemActive,
-      )
-    })
+    await user.unhover(within(rowFor(caseStudy.id)).getByText(caseStudy.title))
+    expect(rowFor(caseStudy.id)).not.toHaveAttribute('data-highlighted')
   })
 })

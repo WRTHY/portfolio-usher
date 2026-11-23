@@ -12,10 +12,10 @@ describe('accessibility', () => {
     })
   })
 
-  it('the case study modal has no violations while open', () => {
+  it('an open case study has no violations', () => {
     portfolioPage.visit()
     portfolioPage.caseStudies.open('CS 1')
-    portfolioPage.caseStudies.modal.dialog.should('be.visible')
+    portfolioPage.caseStudies.writeUp('CS 1').should('be.visible')
 
     scanForViolations().then((violations) => {
       expect(violations.length, formatViolations(violations)).to.equal(0)

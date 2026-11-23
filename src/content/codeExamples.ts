@@ -36,45 +36,52 @@ export const codeExamples: readonly AutomationExample[] = [
         language: 'typescript',
         code: `import { test, expect } from './fixtures'
 
-const CASE_STUDY_ID = 'CS 1'
+const CASE_STUDY_ID = 'CS 2'
 const CASE_STUDY_TITLE = \`Building E2E Test Automation From Zero for Eventric's Flagship Desktop App\`
 
-test.describe('case study modal', () => {
-  test('clicking a tile opens the modal with that case study', async ({ portfolioPage }) => {
+test.describe('case studies', () => {
+  test('a row leads with its outcome, and keeps the write-up closed', async ({ portfolioPage }) => {
     await portfolioPage.goto()
     const { caseStudies } = portfolioPage
+    const row = caseStudies.row(CASE_STUDY_ID)
 
-    await caseStudies.open(CASE_STUDY_ID)
-
-    const { modal } = caseStudies
-    await expect(modal.dialog).toBeVisible()
-    await expect(modal.title).toHaveText(CASE_STUDY_TITLE)
+    await expect(row.getByRole('heading', { level: 3 })).toHaveText(CASE_STUDY_TITLE)
+    await expect(row).toContainText('4 hrs → 10 min')
+    await expect(caseStudies.toggle(CASE_STUDY_ID)).toHaveAttribute('aria-expanded', 'false')
+    await expect(caseStudies.writeUp(CASE_STUDY_ID)).toBeHidden()
   })
 
-  test('Escape closes the modal and returns focus to the trigger', async ({ portfolioPage }) => {
+  test('the "+" opens the write-up in place, and closes it again', async ({ portfolioPage }) => {
     await portfolioPage.goto()
     const { caseStudies } = portfolioPage
-    const trigger = caseStudies.tile(CASE_STUDY_ID)
 
     await caseStudies.open(CASE_STUDY_ID)
-    await expect(caseStudies.modal.dialog).toBeVisible()
 
-    await caseStudies.modal.closeWithEscape()
-    await expect(caseStudies.modal.dialog).not.toBeVisible()
-    await expect(trigger).toBeFocused()
+    await expect(caseStudies.toggle(CASE_STUDY_ID)).toHaveAttribute('aria-expanded', 'true')
+    const writeUp = caseStudies.writeUp(CASE_STUDY_ID)
+    await expect(writeUp).toBeVisible()
+    await expect(writeUp.getByRole('heading', { level: 4 })).toHaveText([
+      'Problem',
+      'Approach',
+      'Outcome',
+      'Future iterations',
+    ])
+
+    await caseStudies.toggle(CASE_STUDY_ID).click()
+    await expect(writeUp).toBeHidden()
   })
 
-  test('the close button closes the modal and returns focus to the trigger', async ({ portfolioPage }) => {
+  test('closing from the end of a write-up returns focus and the view to its row', async ({ portfolioPage }) => {
     await portfolioPage.goto()
     const { caseStudies } = portfolioPage
-    const trigger = caseStudies.tile(CASE_STUDY_ID)
 
     await caseStudies.open(CASE_STUDY_ID)
-    await expect(caseStudies.modal.dialog).toBeVisible()
+    // The write-up is long enough that its end is well below the row's top.
+    await caseStudies.closeFromEnd(CASE_STUDY_ID).click()
 
-    await caseStudies.modal.close()
-    await expect(caseStudies.modal.dialog).not.toBeVisible()
-    await expect(trigger).toBeFocused()
+    await expect(caseStudies.writeUp(CASE_STUDY_ID)).toBeHidden()
+    await expect(caseStudies.toggle(CASE_STUDY_ID)).toBeFocused()
+    await expect(caseStudies.row(CASE_STUDY_ID)).toBeInViewport()
   })
 })
 `,
@@ -83,25 +90,40 @@ test.describe('case study modal', () => {
         filename: 'playwright/pages/CaseStudiesSection.page.ts',
         language: 'typescript',
         code: `import type { Locator, Page } from '@playwright/test'
-import { CaseStudyModal } from './CaseStudyModal.page'
 
+// The Case Studies ledger: one outcome-led row per case study, each opening
+// its write-up in place.
 export class CaseStudiesSection {
-  private readonly page: Page
   readonly section: Locator
-  readonly modal: CaseStudyModal
 
   constructor(page: Page) {
-    this.page = page
     this.section = page.locator('#case-studies')
-    this.modal = new CaseStudyModal(page)
   }
 
-  tile(caseStudyId: string): Locator {
-    return this.page.getByTestId(\`case-study-card-\${caseStudyId}\`)
+  // Rows are looked up by case study id (e.g. 'CS 2') through their test id:
+  // a row's visible text is its outcome, title and topics, none of which is
+  // as stable a handle as the id callers pass in.
+  row(id: string): Locator {
+    return this.section.getByTestId(\`case-study-\${id}\`)
   }
 
-  async open(caseStudyId: string) {
-    await this.tile(caseStudyId).click()
+  /** The row's "+": a disclosure button named for its case study. */
+  toggle(id: string): Locator {
+    return this.row(id).getByRole('button', { name: /^Read case study:/ })
+  }
+
+  /** The full write-up. Resolves while closed too, so specs can assert both. */
+  writeUp(id: string): Locator {
+    return this.section.getByTestId(\`case-study-write-up-\${id}\`)
+  }
+
+  /** The control at the end of an open write-up. */
+  closeFromEnd(id: string): Locator {
+    return this.writeUp(id).getByRole('button', { name: 'Close case study' })
+  }
+
+  async open(id: string) {
+    await this.toggle(id).click()
   }
 }
 `,
@@ -137,14 +159,20 @@ export default defineConfig({
   testDir: './e2e/playwright',
   fullyParallel: true,
   reporter: 'html',
+  // Retry only in CI, never locally - a spec that needs a retry to pass
+  // locally should fail loudly, not get silently rerun. In CI this
+  // absorbs the sandboxed-environment timing flakiness (see README/
+  // cypress.config.ts for the Cypress side of the same issue) without
+  // masking a genuinely broken spec, which would still fail all 3 tries.
+  retries: process.env.CI ? 2 : 0,
   use: {
     baseURL: 'http://localhost:5173',
     trace: 'on-first-retry',
   },
   // Firefox/WebKit are left out for now: Firefox's binary won't spawn in
-  // this sandboxed dev environment, and WebKit has a genuine pre-existing
-  // focus-restoration bug in Modal.tsx (its useEffect cleanup calls
-  // .focus() too late for WebKit to honor it) that's a separate fix.
+  // this sandboxed dev environment. WebKit was held back by a focus bug in
+  // the old case-study modal; the modal is gone, but WebKit hasn't been
+  // re-verified against the suite since, so it isn't added back yet.
   projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
   webServer: {
     command: 'npm run dev',
@@ -173,48 +201,62 @@ export default defineConfig({
         language: 'typescript',
         code: `import { PortfolioPage } from './pages/PortfolioPage.page'
 
-const CASE_STUDY_ID = 'CS 1'
+const CASE_STUDY_ID = 'CS 2'
 const CASE_STUDY_TITLE = \`Building E2E Test Automation From Zero for Eventric's Flagship Desktop App\`
 
-describe('case study modal', () => {
+describe('case studies', () => {
   const portfolioPage = new PortfolioPage()
 
   beforeEach(() => {
     portfolioPage.visit()
   })
 
-  it('clicking a tile opens the modal with that case study', () => {
+  it('a row leads with its outcome, and keeps the write-up closed', () => {
     const { caseStudies } = portfolioPage
 
-    caseStudies.open(CASE_STUDY_ID)
-
-    const { modal } = caseStudies
-    modal.dialog.should('be.visible')
-    modal.title.should('have.text', CASE_STUDY_TITLE)
+    caseStudies.row(CASE_STUDY_ID).findByRole('heading', { level: 3 }).should('have.text', CASE_STUDY_TITLE)
+    caseStudies.row(CASE_STUDY_ID).should('contain.text', '4 hrs → 10 min')
+    caseStudies.toggle(CASE_STUDY_ID).should('have.attr', 'aria-expanded', 'false')
+    caseStudies.writeUp(CASE_STUDY_ID).should('not.be.visible')
   })
 
-  it('Escape closes the modal and returns focus to the trigger', () => {
+  it('the "+" opens the write-up in place, and closes it again', () => {
     const { caseStudies } = portfolioPage
-    const trigger = caseStudies.tile(CASE_STUDY_ID)
 
     caseStudies.open(CASE_STUDY_ID)
-    caseStudies.modal.dialog.should('be.visible')
 
-    caseStudies.modal.closeWithEscape()
-    caseStudies.modal.dialog.should('not.exist')
-    trigger.should('have.focus')
+    caseStudies.toggle(CASE_STUDY_ID).should('have.attr', 'aria-expanded', 'true')
+    caseStudies.writeUp(CASE_STUDY_ID).should('be.visible')
+    caseStudies
+      .writeUp(CASE_STUDY_ID)
+      .findAllByRole('heading', { level: 4 })
+      .then((headings) => {
+        expect([...headings].map((heading) => heading.textContent)).to.deep.equal([
+          'Problem',
+          'Approach',
+          'Outcome',
+          'Future iterations',
+        ])
+      })
+
+    caseStudies.toggle(CASE_STUDY_ID).click()
+    caseStudies.writeUp(CASE_STUDY_ID).should('not.be.visible')
   })
 
-  it('the close button closes the modal and returns focus to the trigger', () => {
+  it('closing from the end of a write-up returns focus and the view to its row', () => {
     const { caseStudies } = portfolioPage
-    const trigger = caseStudies.tile(CASE_STUDY_ID)
 
     caseStudies.open(CASE_STUDY_ID)
-    caseStudies.modal.dialog.should('be.visible')
+    // The write-up is long enough that its end is well below the row's top.
+    caseStudies.closeFromEnd(CASE_STUDY_ID).click()
 
-    caseStudies.modal.close()
-    caseStudies.modal.dialog.should('not.exist')
-    trigger.should('have.focus')
+    caseStudies.writeUp(CASE_STUDY_ID).should('not.be.visible')
+    caseStudies.toggle(CASE_STUDY_ID).should('have.focus')
+    // Back in view: the row's top is on screen again, not scrolled above it.
+    caseStudies.row(CASE_STUDY_ID).should(($row) => {
+      const { top } = $row[0].getBoundingClientRect()
+      expect(top).to.be.within(0, Cypress.config('viewportHeight'))
+    })
   })
 })
 `,
@@ -222,21 +264,37 @@ describe('case study modal', () => {
       {
         filename: 'cypress/pages/CaseStudiesSection.page.ts',
         language: 'typescript',
-        code: `import { CaseStudyModal } from './CaseStudyModal.page'
-
+        code: `// The Case Studies ledger: one outcome-led row per case study, each opening
+// its write-up in place.
 export class CaseStudiesSection {
-  readonly modal = new CaseStudyModal()
-
   get section(): Cypress.Chainable<JQuery> {
     return cy.get('#case-studies')
   }
 
-  tile(caseStudyId: string): Cypress.Chainable<JQuery> {
-    return cy.findByTestId(\`case-study-card-\${caseStudyId}\`)
+  // Rows are looked up by case study id (e.g. 'CS 2') through their test id:
+  // a row's visible text is its outcome, title and topics, none of which is
+  // as stable a handle as the id callers pass in.
+  row(id: string): Cypress.Chainable<JQuery> {
+    return cy.findByTestId(\`case-study-\${id}\`)
   }
 
-  open(caseStudyId: string) {
-    this.tile(caseStudyId).click()
+  /** The row's "+": a disclosure button named for its case study. */
+  toggle(id: string): Cypress.Chainable<JQuery> {
+    return this.row(id).findByRole('button', { name: /^Read case study:/ })
+  }
+
+  /** The full write-up. A plain query, so specs can assert it closed too. */
+  writeUp(id: string): Cypress.Chainable<JQuery> {
+    return cy.get(\`[data-testid="case-study-write-up-\${id}"]\`)
+  }
+
+  /** The control at the end of an open write-up. */
+  closeFromEnd(id: string): Cypress.Chainable<JQuery> {
+    return this.writeUp(id).findByRole('button', { name: 'Close case study' })
+  }
+
+  open(id: string) {
+    this.toggle(id).click()
   }
 }
 `,
@@ -289,6 +347,12 @@ export class PortfolioPage {
         code: `import { defineConfig } from 'cypress'
 
 export default defineConfig({
+  // CI-only, matching playwright.config.ts's rationale: absorbs the
+  // sandbox-specific Electron/GPU rendering flakiness already documented
+  // in the README, without hiding a spec that's actually broken (that
+  // still fails all 3 tries and shows up red). Local runs (openMode)
+  // never retry, so a real failure is seen immediately while developing.
+  retries: { runMode: 2, openMode: 0 },
   // Scoped to its own subfolder alongside e2e/playwright: e2e/ holds sibling
   // implementations of the same test scenarios in other frameworks/languages
   // (Cypress here, Python/Java later).
@@ -298,6 +362,24 @@ export default defineConfig({
     supportFile: 'e2e/cypress/support/e2e.ts',
     fixturesFolder: false,
     setupNodeEvents() {},
+  },
+  // Deliberately redundant with the Vitest + React Testing Library suite:
+  // same components, same assertions, different runner. It exists so the
+  // Component tier of the portfolio's "Automation Examples" panel can offer
+  // a real framework choice (Vitest vs Cypress) the same way the E2E tier
+  // does (Playwright vs Cypress), not because the coverage was missing.
+  // Specs are co-located under src/ next to the components they mount,
+  // matching the *.test.tsx convention, rather than living under e2e/ like
+  // the E2E specs above.
+  component: {
+    devServer: {
+      framework: 'react',
+      bundler: 'vite',
+    },
+    specPattern: 'src/**/*.cy.tsx',
+    supportFile: 'cypress/support/component.ts',
+    indexHtmlFile: 'cypress/support/component-index.html',
+    fixturesFolder: false,
   },
 })
 `,

@@ -18,9 +18,9 @@ export default defineConfig({
     trace: 'on-first-retry',
   },
   // Firefox/WebKit are left out for now: Firefox's binary won't spawn in
-  // this sandboxed dev environment, and WebKit has a genuine pre-existing
-  // focus-restoration bug in Modal.tsx (its useEffect cleanup calls
-  // .focus() too late for WebKit to honor it) that's a separate fix.
+  // this sandboxed dev environment. WebKit was held back by a focus bug in
+  // the old case-study modal; the modal is gone, but WebKit hasn't been
+  // re-verified against the suite since, so it isn't added back yet.
   projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
   webServer: {
     command: 'npm run dev',

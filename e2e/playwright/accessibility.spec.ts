@@ -9,10 +9,10 @@ test.describe('accessibility', () => {
     expect(violations.length, formatViolations(violations)).toBe(0)
   })
 
-  test('the case study modal has no violations while open', async ({ portfolioPage }) => {
+  test('an open case study has no violations', async ({ portfolioPage }) => {
     await portfolioPage.goto()
     await portfolioPage.caseStudies.open('CS 1')
-    await expect(portfolioPage.caseStudies.modal.dialog).toBeVisible()
+    await expect(portfolioPage.caseStudies.writeUp('CS 1')).toBeVisible()
 
     const violations = await scanForViolations(portfolioPage.page)
     expect(violations.length, formatViolations(violations)).toBe(0)

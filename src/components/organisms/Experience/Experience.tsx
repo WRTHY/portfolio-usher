@@ -6,6 +6,8 @@ import { education, experience, experienceIntro, remainingStack } from '../../..
 import type { EducationEntry, ExperienceEntry } from '../../../content/experience'
 import Heading from '../../atoms/Heading/Heading'
 import ExpandToggle from '../../atoms/ExpandToggle/ExpandToggle'
+import Reveal from '../../atoms/Reveal/Reveal'
+import { isRowToggleClick } from '../../../utils/rowToggle'
 import SectionHeader from '../../molecules/SectionHeader/SectionHeader'
 import CareerGraph from '../../molecules/CareerGraph/CareerGraph'
 import type { CareerGraphNode } from '../../molecules/CareerGraph/CareerGraph'
@@ -34,17 +36,9 @@ function ExperienceRow({ entry, open, onToggle, highlighted, onHighlightChange }
   const moreTools = remainingStack(entry)
   const hasTools = entry.keyTools.length > 0 || moreTools.length > 0
 
-  // The whole row is a target for the pointer, not just the "+". The "+"
-  // stays the real control (keyboard and screen readers use it), so this
-  // only adds a larger mouse and touch target. It leaves the company link,
-  // the "+" itself and the opened write-up alone, and never fires when the
-  // click was the end of selecting some text.
+  // The whole row opens it, not only the "+" (see isRowToggleClick).
   const handleRowClick = (event: MouseEvent<HTMLLIElement>) => {
-    const target = event.target as HTMLElement
-    if (target.closest('a, button')) return
-    if (detailsRef.current?.contains(target) || moreRef.current?.contains(target)) return
-    if (window.getSelection()?.toString()) return
-    onToggle()
+    if (isRowToggleClick(event.target, [detailsRef.current, moreRef.current])) onToggle()
   }
 
   return (
@@ -84,9 +78,8 @@ function ExperienceRow({ entry, open, onToggle, highlighted, onHighlightChange }
           {moreTools.length > 0 && (
             // Opening the role grows this column into the full stack: the
             // key tools stay put and the rest unfolds beneath them.
-            <div id={moreId} ref={moreRef} className={styles.reveal} hidden={!open}>
-              <div className={styles.revealInner}>
-                <div className={styles.moreBody}>
+            <Reveal id={moreId} ref={moreRef} open={open}>
+              <div className={styles.moreBody}>
                   <p className={styles.moreLabel} aria-hidden="true">
                     Also in the stack
                   </p>
@@ -108,9 +101,8 @@ function ExperienceRow({ entry, open, onToggle, highlighted, onHighlightChange }
                       </li>
                     ))}
                   </ul>
-                </div>
               </div>
-            </div>
+            </Reveal>
           )}
         </div>
       )}
@@ -123,15 +115,13 @@ function ExperienceRow({ entry, open, onToggle, highlighted, onHighlightChange }
         onFocus={(event) => event.currentTarget.matches(':focus-visible') && onHighlightChange(true)}
         onBlur={() => onHighlightChange(false)}
       />
-      <div id={detailsId} ref={detailsRef} className={cx(styles.details, styles.reveal)} hidden={!open}>
-        <div className={styles.revealInner}>
-          <ul className={styles.points} aria-label={`What I did as ${entry.role}`}>
-            {entry.details.map((detail) => (
-              <li key={detail}>{detail}</li>
-            ))}
-          </ul>
-        </div>
-      </div>
+      <Reveal id={detailsId} ref={detailsRef} open={open} className={styles.details}>
+        <ul className={styles.points} aria-label={`What I did as ${entry.role}`}>
+          {entry.details.map((detail) => (
+            <li key={detail}>{detail}</li>
+          ))}
+        </ul>
+      </Reveal>
     </li>
   )
 }

@@ -1,0 +1,51 @@
+/* A ledger row that lifts off the page: the rows sit flat, with no dividers,
+   and the one under the pointer (or with keyboard focus on its "+") rises
+   2px onto a card a step lighter than the page. Composed into the Experience
+   and Case Studies rows; the state class is set from pointer events rather
+   than :hover, so a tap on a touch screen doesn't leave a row in the air. */
+.liftable {
+  position: relative;
+  isolation: isolate;
+  /* Unhurried, so it reads as lifting off the page rather than snapping. */
+  transition: translate 420ms var(--ease-out);
+
+  /* The surface the row lifts on, reaching a little past the row's text on
+     each side (and stopping short of Experience's git-graph rail, which
+     stays flat on the page). */
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0 -1rem;
+    z-index: -1;
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    box-shadow:
+      /* A hairline rim, only in dark mode, where a shadow alone barely reads. */
+      inset 0 0 0 1px light-dark(transparent, var(--border)),
+      0 1px 2px var(--shadow-color),
+      0 18px 32px -18px var(--shadow-color);
+    opacity: 0;
+    transition: opacity 420ms var(--ease-out);
+  }
+}
+
+.lifted {
+  translate: 0 -2px;
+
+  &::before {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Still marks the row, without the movement. */
+  .liftable,
+  .lifted {
+    translate: none;
+    transition: none;
+  }
+
+  .liftable::before {
+    transition: none;
+  }
+}
