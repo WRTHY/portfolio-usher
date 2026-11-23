@@ -1,26 +1,37 @@
 import type { Locator, Page } from '@playwright/test'
-import { CaseStudyModal } from './CaseStudyModal.page'
 
+// The Case Studies ledger: one outcome-led row per case study, each opening
+// its write-up in place.
 export class CaseStudiesSection {
-  private readonly page: Page
   readonly section: Locator
-  readonly modal: CaseStudyModal
 
   constructor(page: Page) {
-    this.page = page
     this.section = page.locator('#case-studies')
-    this.modal = new CaseStudyModal(page)
   }
 
-  // Tile buttons have no aria-label - their accessible name is the badge +
-  // title + summary text concatenated, not the case study id callers pass
-  // in (e.g. 'CS 2') - so this looks up the card's data-testid instead
-  // (see CaseStudies.tsx: `case-study-card-${caseStudy.id}`).
-  tile(id: string): Locator {
-    return this.page.getByTestId(`case-study-card-${id}`)
+  // Rows are looked up by case study id (e.g. 'CS 2') through their test id:
+  // a row's visible text is its outcome, title and topics, none of which is
+  // as stable a handle as the id callers pass in.
+  row(id: string): Locator {
+    return this.section.getByTestId(`case-study-${id}`)
+  }
+
+  /** The row's "+": a disclosure button named for its case study. */
+  toggle(id: string): Locator {
+    return this.row(id).getByRole('button', { name: /^Read case study:/ })
+  }
+
+  /** The full write-up. Resolves while closed too, so specs can assert both. */
+  writeUp(id: string): Locator {
+    return this.section.getByTestId(`case-study-write-up-${id}`)
+  }
+
+  /** The control at the end of an open write-up. */
+  closeFromEnd(id: string): Locator {
+    return this.writeUp(id).getByRole('button', { name: 'Close case study' })
   }
 
   async open(id: string) {
-    await this.tile(id).click()
+    await this.toggle(id).click()
   }
 }

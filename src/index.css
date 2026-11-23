@@ -145,10 +145,12 @@ body {
   outline-offset: 3px;
 }
 
-/* Every section is a band of the one centered page column, separated from
-   the one above by a hairline. Sections are ordinary document flow: no
-   full-viewport height, no scroll-snap, no side chrome to clear. */
-section {
+/* Every page section is a band of the one centered page column, separated
+   from the one above by a hairline. Sections are ordinary document flow: no
+   full-viewport height, no scroll-snap, no side chrome to clear. Scoped to
+   the page's own sections, so a section nested inside one (a case study's
+   Problem or Approach) stays plain. */
+main > section {
   /* Inline padding that grows past the gutter on wide screens, so section
      content always starts on the same left edge as the nav's wordmark. */
   padding-block: clamp(4rem, 10vw, 7.5rem);
@@ -163,7 +165,6 @@ main > section:first-child {
   border-top: 0;
 }
 
-/* Desktop: content starts to the right of the fixed rail and InfoPanel. */
 /* Desktop: the fixed left rail (dots, theme toggle, socials) sits at
    left: 24px, so the gutter grows enough to keep content clear of it. The
    centered-column formula above still takes over on wide screens. */
