@@ -5,8 +5,7 @@ import Hero from '../../organisms/Hero/Hero'
 import About from '../../organisms/About/About'
 import Experience from '../../organisms/Experience/Experience'
 import CaseStudies from '../../organisms/CaseStudies/CaseStudies'
-import CodeSamples from '../../organisms/CodeSamples/CodeSamples'
-import ApiTesting from '../../organisms/ApiTesting/ApiTesting'
+import Projects from '../../organisms/Projects/Projects'
 import Sidebar from '../../organisms/Sidebar/Sidebar'
 
 function PortfolioTemplate() {
@@ -26,8 +25,7 @@ function PortfolioTemplate() {
         <About />
         <Experience />
         <CaseStudies />
-        <CodeSamples />
-        <ApiTesting />
+        <Projects />
       </main>
     </>
   )

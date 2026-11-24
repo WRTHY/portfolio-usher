@@ -5,10 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "node scripts/fetch-fonts.mjs && node scripts/fetch-api-testing-examples.mjs && tsc -b && vite build",
+    "build": "node scripts/fetch-fonts.mjs && node scripts/fetch-api-testing-examples.mjs && node scripts/count-tests.mjs && tsc -b && vite build",
     "lint": "eslint .",
     "typecheck": "tsc -b",
     "fetch:api-testing": "node scripts/fetch-api-testing-examples.mjs",
+    "count:tests": "node scripts/count-tests.mjs",
     "preview": "vite preview",
     "test": "npm run test:unit && npm run test:component:cypress && npm run test:e2e:playwright && npm run test:e2e:cypress",
     "test:unit": "vitest run",

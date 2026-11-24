@@ -2,27 +2,22 @@ import { NavComponent } from './NavComponent.page'
 import type { SectionId } from './NavComponent.page'
 import { ThemeToggleComponent } from './ThemeToggleComponent.page'
 import { CaseStudiesSection } from './CaseStudiesSection.page'
-import { CodeSamplesSection } from './CodeSamplesSection.page'
+import { ProjectsSection } from './ProjectsSection.page'
 import { HeroSection } from './HeroSection.page'
 import { ExperienceSection } from './ExperienceSection.page'
 
 export type { SectionId }
 
-// Composition root for the site. It's a single page with no real per-URL
-// navigation, so rather than one class per route this models one root
-// object owning a component per section/region - the same shape the app
-// itself uses (Header/Hero/About/Experience/CaseStudies/CodeSamples as siblings).
+// One page, so one root object with a component per section
 export class PortfolioPage {
   readonly hero = new HeroSection()
   readonly experience = new ExperienceSection()
   readonly nav = new NavComponent()
   readonly themeToggle = new ThemeToggleComponent()
   readonly caseStudies = new CaseStudiesSection()
-  readonly codeSamples = new CodeSamplesSection()
+  readonly projects = new ProjectsSection()
 
-  // The opener plays on the first visit of each browser session and would
-  // cover the page for its first few seconds, so by default this marks it as
-  // already seen. Specs about the opener itself pass { intro: true }.
+  // Skips the first-visit intro unless a spec asks for it.
   visit({ intro = false }: { intro?: boolean } = {}) {
     cy.visit('/', {
       onBeforeLoad(win) {
@@ -33,5 +28,22 @@ export class PortfolioPage {
 
   section(id: SectionId): Cypress.Chainable<JQuery> {
     return cy.get(`#${id}`)
+  }
+
+  get rail(): Cypress.Chainable<JQuery> {
+    return cy.findByRole('complementary', { name: 'Quick links' })
+  }
+
+  get railPartsOnAccent(): Cypress.Chainable<JQuery> {
+    return this.rail.find('[data-on-accent]')
+  }
+
+  scrollSectionToTop(id: SectionId) {
+    this.section(id).then(($section) => {
+      cy.window().then((win) => {
+        const top = $section[0].getBoundingClientRect().top + win.scrollY - 80
+        win.scrollTo({ top, behavior: 'instant' })
+      })
+    })
   }
 }

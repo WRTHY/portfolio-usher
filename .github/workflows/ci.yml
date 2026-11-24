@@ -1,0 +1,45 @@
+name: CI
+run-name: "CI: ${{ github.event_name }} by ${{ github.actor }} on ${{ github.ref_name }}"
+
+# Cheapest tier first; each waits for the one before it to pass.
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+  workflow_dispatch:
+
+# A new push cancels the old run
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  static-checks:
+    name: Static checks
+    uses: ./.github/workflows/lint-and-build.yml
+
+  # Tier 2 - unit and component run side by side
+  unit:
+    name: Unit
+    needs: [static-checks]
+    uses: ./.github/workflows/unit-tests.yml
+
+  component:
+    name: Component
+    needs: [static-checks]
+    uses: ./.github/workflows/component-tests.yml
+
+  # Tier 3 - only once both fast tiers pass
+  e2e:
+    name: End-to-end
+    needs: [unit, component]
+    uses: ./.github/workflows/e2e-tests.yml

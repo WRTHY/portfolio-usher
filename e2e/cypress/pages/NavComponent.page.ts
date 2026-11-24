@@ -1,4 +1,4 @@
-export type SectionId = 'about' | 'experience' | 'case-studies' | 'code-samples' | 'api-testing'
+export type SectionId = 'about' | 'experience' | 'case-studies' | 'projects'
 
 // The top bar renders the same section ids twice: inline in the bar
 // (visible at >=1024px) and in the hamburger menu (below 1024px). Both lists
