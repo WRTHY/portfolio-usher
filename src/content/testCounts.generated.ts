@@ -5,7 +5,7 @@ export const testCounts = {
     {
       "id": "vitest",
       "label": "Vitest + Testing Library",
-      "count": 225
+      "count": 226
     },
     {
       "id": "cypress-component",
@@ -15,12 +15,12 @@ export const testCounts = {
     {
       "id": "playwright",
       "label": "Playwright E2E",
-      "count": 36
+      "count": 37
     },
     {
       "id": "cypress-e2e",
       "label": "Cypress E2E",
-      "count": 32
+      "count": 33
     }
   ]
 } as const

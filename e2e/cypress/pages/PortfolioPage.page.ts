@@ -36,6 +36,10 @@ export class PortfolioPage {
     return cy.findByRole('complementary', { name: 'Quick links' })
   }
 
+  get railSocials(): Cypress.Chainable<JQuery> {
+    return this.rail.findByTestId('rail-socials')
+  }
+
   get railPartsOnAccent(): Cypress.Chainable<JQuery> {
     return this.rail.find('[data-on-accent]')
   }

@@ -29,6 +29,22 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  transition:
+    opacity 240ms var(--ease-out),
+    translate 240ms var(--ease-out);
+}
+
+/* Faded out while the page shows the same links itself (see Sidebar.tsx). */
+.handedOff {
+  opacity: 0;
+  translate: 0 0.5rem;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .group {
+    transition: none;
+  }
 }
 
 /* Over a violet section the page's colours vanish into it, so the group

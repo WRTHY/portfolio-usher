@@ -131,6 +131,8 @@ Intentional changes to the plan or the prototype, made or approved by James as t
 - **Close and About (stage 8):**
   - The prototype's close: "Let's talk.", the email set large, LinkedIn / GitHub / Resume, and
     the personal note, with a page footer after it. Not in the nav.
+  - The rail's socials fade out once the close is a quarter of the way up the screen, since
+    it carries the same links, and fade back in above it (James's call, like the name hand-off).
   - About is gone: the hero carries the pitch, Experience the career, and the close the
     personal note. James kept Skills & Tools, moved under the Experience ledger and shrunk to
     a quick reference: small icon tiles by category, the name previewed on hover (on touch

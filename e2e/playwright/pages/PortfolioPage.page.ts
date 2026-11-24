@@ -54,6 +54,10 @@ export class PortfolioPage {
     return this.page.getByRole('complementary', { name: 'Quick links' })
   }
 
+  get railSocials(): Locator {
+    return this.rail.getByTestId('rail-socials')
+  }
+
   /** Parts of the rail showing the violet section's colours right now. */
   get railPartsOnAccent(): Locator {
     return this.rail.locator('[data-on-accent]')

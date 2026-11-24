@@ -35,6 +35,19 @@ test.describe('primary navigation', () => {
   })
 })
 
+test.describe('rail socials', () => {
+  test('fade out at the contact close, which has the same links, and back in above it', async ({ portfolioPage }) => {
+    await portfolioPage.goto()
+    await expect(portfolioPage.railSocials).toHaveCSS('opacity', '1')
+
+    await portfolioPage.contact.section.scrollIntoViewIfNeeded()
+    await expect(portfolioPage.railSocials).toHaveCSS('opacity', '0')
+
+    await portfolioPage.scrollSectionToTop('experience')
+    await expect(portfolioPage.railSocials).toHaveCSS('opacity', '1')
+  })
+})
+
 test.describe('mobile navigation', () => {
   test.use({ viewport: { width: 375, height: 812 } })
 

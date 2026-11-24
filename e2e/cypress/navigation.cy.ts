@@ -38,6 +38,26 @@ describe('primary navigation', () => {
   })
 })
 
+describe('rail socials', () => {
+  const portfolioPage = new PortfolioPage()
+
+  beforeEach(() => {
+    // The rail is desktop-only.
+    cy.viewport(1280, 720)
+    portfolioPage.visit()
+  })
+
+  it('fade out at the contact close, which has the same links, and back in above it', () => {
+    portfolioPage.railSocials.should('have.css', 'opacity', '1')
+
+    portfolioPage.contact.section.scrollIntoView()
+    portfolioPage.railSocials.should('have.css', 'opacity', '0')
+
+    portfolioPage.scrollSectionToTop('experience')
+    portfolioPage.railSocials.should('have.css', 'opacity', '1')
+  })
+})
+
 describe('mobile navigation', () => {
   const portfolioPage = new PortfolioPage()
 
