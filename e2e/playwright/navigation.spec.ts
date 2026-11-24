@@ -12,14 +12,26 @@ test.describe('primary navigation', () => {
     await portfolioPage.nav.goTo('case-studies')
     await expect(portfolioPage.section('case-studies')).toBeInViewport()
 
-    await portfolioPage.nav.goTo('code-samples')
-    await expect(portfolioPage.section('code-samples')).toBeInViewport()
+    await portfolioPage.nav.goTo('projects')
+    await expect(portfolioPage.section('projects')).toBeInViewport()
 
     await portfolioPage.nav.goTo('experience')
     await expect(portfolioPage.section('experience')).toBeInViewport()
 
     await portfolioPage.nav.goTo('about')
     await expect(portfolioPage.section('about')).toBeInViewport()
+  })
+
+  test('the left rail switches to readable colours over the violet section', async ({ portfolioPage }) => {
+    await portfolioPage.goto()
+    // Dots, theme toggle and socials each switch on their own.
+    await expect(portfolioPage.railPartsOnAccent).toHaveCount(0)
+
+    await portfolioPage.scrollSectionToTop('projects')
+    await expect(portfolioPage.railPartsOnAccent).toHaveCount(3)
+
+    await portfolioPage.scrollSectionToTop('experience')
+    await expect(portfolioPage.railPartsOnAccent).toHaveCount(0)
   })
 })
 

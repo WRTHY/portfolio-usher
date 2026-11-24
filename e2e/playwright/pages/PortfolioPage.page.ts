@@ -3,7 +3,7 @@ import { NavComponent } from './NavComponent.page'
 import type { SectionId } from './NavComponent.page'
 import { ThemeToggleComponent } from './ThemeToggleComponent.page'
 import { CaseStudiesSection } from './CaseStudiesSection.page'
-import { CodeSamplesSection } from './CodeSamplesSection.page'
+import { ProjectsSection } from './ProjectsSection.page'
 import { HeroSection } from './HeroSection.page'
 import { ExperienceSection } from './ExperienceSection.page'
 
@@ -12,7 +12,7 @@ export type { SectionId }
 // Composition root for the site. It's a single page with no real per-URL
 // navigation, so rather than one class per route this models one root
 // object owning a component per section/region - the same shape the app
-// itself uses (Header/Hero/About/Experience/CaseStudies/CodeSamples as siblings).
+// itself uses (Header/Hero/About/Experience/CaseStudies/Projects as siblings).
 export class PortfolioPage {
   readonly page: Page
   readonly hero: HeroSection
@@ -20,7 +20,7 @@ export class PortfolioPage {
   readonly nav: NavComponent
   readonly themeToggle: ThemeToggleComponent
   readonly caseStudies: CaseStudiesSection
-  readonly codeSamples: CodeSamplesSection
+  readonly projects: ProjectsSection
 
   constructor(page: Page) {
     this.page = page
@@ -29,7 +29,7 @@ export class PortfolioPage {
     this.nav = new NavComponent(page)
     this.themeToggle = new ThemeToggleComponent(page)
     this.caseStudies = new CaseStudiesSection(page)
-    this.codeSamples = new CodeSamplesSection(page)
+    this.projects = new ProjectsSection(page)
   }
 
   // The opener plays on the first visit of each browser session and would
@@ -44,5 +44,22 @@ export class PortfolioPage {
 
   section(id: SectionId): Locator {
     return this.page.locator(`#${id}`)
+  }
+
+  /** The desktop left rail: section dots, theme toggle, socials. */
+  get rail(): Locator {
+    return this.page.getByRole('complementary', { name: 'Quick links' })
+  }
+
+  /** Parts of the rail showing the violet section's colours right now. */
+  get railPartsOnAccent(): Locator {
+    return this.rail.locator('[data-on-accent]')
+  }
+
+  /** Scrolls so the section's top sits just under the sticky top bar. */
+  async scrollSectionToTop(id: SectionId) {
+    await this.section(id).evaluate((section) =>
+      window.scrollTo({ top: section.getBoundingClientRect().top + window.scrollY - 80, behavior: 'instant' }),
+    )
   }
 }

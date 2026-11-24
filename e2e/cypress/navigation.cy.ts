@@ -16,14 +16,25 @@ describe('primary navigation', () => {
     portfolioPage.nav.goTo('case-studies')
     portfolioPage.section('case-studies').should('be.inViewport')
 
-    portfolioPage.nav.goTo('code-samples')
-    portfolioPage.section('code-samples').should('be.inViewport')
+    portfolioPage.nav.goTo('projects')
+    portfolioPage.section('projects').should('be.inViewport')
 
     portfolioPage.nav.goTo('experience')
     portfolioPage.section('experience').should('be.inViewport')
 
     portfolioPage.nav.goTo('about')
     portfolioPage.section('about').should('be.inViewport')
+  })
+
+  it('the left rail switches to readable colours over the violet section', () => {
+    // Dots, theme toggle and socials each switch on their own.
+    portfolioPage.railPartsOnAccent.should('have.length', 0)
+
+    portfolioPage.scrollSectionToTop('projects')
+    portfolioPage.railPartsOnAccent.should('have.length', 3)
+
+    portfolioPage.scrollSectionToTop('experience')
+    portfolioPage.railPartsOnAccent.should('have.length', 0)
   })
 })
 
