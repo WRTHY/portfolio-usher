@@ -99,8 +99,23 @@
   background: var(--accent);
 }
 
+/* A host can cap the code's height with --code-max-height; past it, the
+   code scrolls inside the panel instead of stretching the page. */
 .codeArea {
   min-width: 0;
+  max-height: var(--code-max-height, none);
+  overflow: auto;
+}
+
+/* A line of context above the code, for files that need one. */
+.note {
+  margin: 0;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--code-bg);
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  color: var(--text);
 }
 
 /* Every file panel is force-mounted (see CodeFileTabs.tsx) so switching

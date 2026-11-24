@@ -1,19 +1,19 @@
 .codeBlock {
   display: block;
-  /* react-shiki renders nothing at all - not even a <pre> - until its async
-     highlight() call resolves, so this wrapper (always present, unlike
-     pre.shiki below) is what has to carry the height reservation. Without
-     it the panel collapses to 0 for that gap and then snaps open once
-     highlighting finishes, a visible resize on every first-time mount.
-     --code-lines is set inline per instance (see CodeBlock.tsx) from that
-     file's own line count - not a shared value from a sibling file - so a
-     short file never gets padded out to match a longer one from the same
-     example, which left a large blank gap (the code theme's background
-     showing through as a gray bar) under whichever file was shortest.
-     font-size is repeated here (matching pre.shiki's) purely so the `em` in
-     min-height resolves to the same value regardless of inherited context. */
+  /* --code-lines is set inline per instance (see CodeBlock.tsx) from that
+     file's own line count, so a short file is never padded out to match a
+     longer sibling. font-size is repeated here (matching pre.shiki's) so
+     the em in min-height resolves the same in any context. */
   font-size: 13px;
   min-height: calc(var(--code-lines, 1) * 1.45em + 32px);
+}
+
+/* The plain version drawn until Shiki's highlighting arrives (see
+   CodeBlock.tsx): the themes' own background and text colours, so the
+   swap only adds the token colours. */
+.plain {
+  background-color: light-dark(#fafafa, #282c34);
+  color: light-dark(#383a42, #abb2bf);
 }
 
 /* index.css defines a global `code {}` rule for short inline snippets in
@@ -44,20 +44,18 @@
   min-height: calc(var(--code-lines, 1) * 1.45em);
 }
 
-/* addDefaultStyles={false} (see CodeBlock.tsx) opts out of Shiki's own
-   default stylesheet so our theme colors aren't fought over - but that
-   stylesheet is also what increments the line-number counter. The
-   counter-reset itself ships unconditionally from Shiki's base CSS; this
-   is the only piece we have to restore ourselves. Shiki's raw markup
-   already separates each `.line` span with a literal "\n" text node,
+/* Line numbers: a counter on each line. CodeBlock uses react-shiki's hook,
+   not its component, so none of the library's own CSS (which counted
+   lines too) is on the page. Shiki's raw markup separates each `.line` span with a literal "\n" text node,
    which (since `pre` preserves whitespace) is what puts each line on its
    own row - `.line` must stay inline or that "\n" doubles up with a
    block-level line break, doubling every line's vertical spacing. */
-.codeBlock :global(.line) {
-  counter-increment: line-number;
+.codeBlock :global(.rs-has-line-numbers) {
+  counter-reset: line-number;
 }
 
 .codeBlock :global(.rs-line-number)::before {
+  counter-increment: line-number;
   content: counter(line-number);
   display: inline-block;
   width: 2em;

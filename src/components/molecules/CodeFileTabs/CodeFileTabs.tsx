@@ -1,8 +1,8 @@
 import * as Tabs from '@radix-ui/react-tabs'
-import { SiTypescript } from 'react-icons/si'
+import { SiJavascript, SiTypescript, SiYaml } from 'react-icons/si'
 import CopyButton from '../../atoms/CopyButton/CopyButton'
 import CodeBlock from '../CodeBlock/CodeBlock'
-import type { CodeFile } from '../../../content/codeExamples'
+import type { CodeFile, CodeLanguage } from '../../../content/codeExamples'
 import styles from './CodeFileTabs.module.css'
 
 type CodeFileTabsProps = {
@@ -11,8 +11,19 @@ type CodeFileTabsProps = {
   onChange: (index: number) => void
 }
 
+const languages: Record<CodeLanguage, { name: string; icon: React.ReactNode }> = {
+  typescript: { name: 'TypeScript', icon: <SiTypescript aria-hidden="true" /> },
+  javascript: { name: 'JavaScript', icon: <SiJavascript aria-hidden="true" /> },
+  yaml: { name: 'YAML', icon: <SiYaml aria-hidden="true" /> },
+}
+
+// A file's tab: its label when it has one (two files can share a name, like
+// the API examples' pairs), otherwise the file's own name.
+const tabName = (file: CodeFile) => file.label ?? file.filename.split('/').pop()!
+
 function CodeFileTabs({ files, activeIndex, onChange }: CodeFileTabsProps) {
   const activeFile = files[activeIndex]
+  const language = languages[activeFile.language]
 
   return (
     <Tabs.Root
@@ -22,30 +33,24 @@ function CodeFileTabs({ files, activeIndex, onChange }: CodeFileTabsProps) {
     >
       <div className={styles.row}>
         <div className={styles.left}>
-          {/* Only one language exists today, so this is a static badge, not
-              a selector - LanguageTabs was removed for the same reason.
-              Promote it back into a real selector when a second language
-              ships. */}
+          {/* The active file's language: a static badge, not a selector. */}
           <span className={styles.languageBadge}>
-            <SiTypescript aria-hidden="true" />
-            TypeScript
+            {language.icon}
+            {language.name}
           </span>
           <span className={styles.divider} aria-hidden="true" />
           <Tabs.List className={styles.list} aria-label="Files in this example">
-            {files.map((file, index) => {
-              const baseName = file.filename.split('/').pop()
-              return (
-                <Tabs.Trigger
-                  key={file.filename}
-                  value={String(index)}
-                  className={styles.trigger}
-                  data-testid={`file-tab-${baseName}`}
-                >
-                  <span className={styles.dot} aria-hidden="true" />
-                  {baseName}
-                </Tabs.Trigger>
-              )
-            })}
+            {files.map((file, index) => (
+              <Tabs.Trigger
+                key={index}
+                value={String(index)}
+                className={styles.trigger}
+                data-testid={`file-tab-${tabName(file)}`}
+              >
+                <span className={styles.dot} aria-hidden="true" />
+                {tabName(file)}
+              </Tabs.Trigger>
+            ))}
           </Tabs.List>
         </div>
         <CopyButton text={activeFile.code} />
@@ -58,7 +63,7 @@ function CodeFileTabs({ files, activeIndex, onChange }: CodeFileTabsProps) {
           the loading gap. */}
       {files.map((file, index) => (
         <Tabs.Content
-          key={file.filename}
+          key={index}
           value={String(index)}
           forceMount
           className={styles.codeArea}
@@ -68,6 +73,7 @@ function CodeFileTabs({ files, activeIndex, onChange }: CodeFileTabsProps) {
           // instead of matching every mounted-but-hidden panel too.
           data-testid={index === activeIndex ? 'active-code-panel' : undefined}
         >
+          {file.note && <p className={styles.note}>{file.note}</p>}
           <CodeBlock code={file.code} language={file.language} />
         </Tabs.Content>
       ))}

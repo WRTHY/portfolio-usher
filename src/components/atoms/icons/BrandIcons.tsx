@@ -9,8 +9,8 @@ import { Icon, type IconifyIcon } from '@iconify/react/offline'
 type MaskIconProps = Pick<AriaAttributes, 'aria-hidden'>
 
 // Simple Icons (react-icons/si) has no mark at all for these three - checked
-// against the installed version, same finding as Cypress/Playwright in
-// FrameworkSwitcher/frameworkOptions.tsx. Iconify's aggregated collections
+// against the installed version, the same finding as for Playwright (see
+// CodePanel.tsx). Iconify's aggregated collections
 // (searched via api.iconify.design) cover all three instead. The icon data
 // below was extracted once from each collection's own npm package
 // (@iconify-json/devicon-plain, @iconify-json/tabler - installed only long
