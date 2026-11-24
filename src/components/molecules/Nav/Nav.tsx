@@ -9,10 +9,10 @@ import useActiveSection from '../../../hooks/useActiveSection'
 import { sections } from '../../../content/navigation'
 import { siteContent } from '../../../content/site'
 import { cx } from '../../../utils/classNames'
-import { locatorAttrs } from '../../../utils/locatorAttrs'
 import styles from './Nav.module.css'
 
-// The sticky top bar: wordmark left; section links and the Resume pill right.
+// The sticky top bar: wordmark left; section links right. The resume is in
+// the hero and the contact close.
 // From 1024px the section links sit inline (nav-link-desktop-* test ids);
 // below that they move into a full-height menu behind the hamburger
 // (nav-link-mobile-*). Only one list is ever displayed, so only one is in the
@@ -85,18 +85,6 @@ function Nav({ showName = true }: NavProps) {
         <div className={styles.barThemeToggle}>
           <ThemeToggle />
         </div>
-        <a
-          className={styles.resume}
-          href={siteContent.resumeUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          {...locatorAttrs(
-            "getByRole('banner').getByRole('link', { name: 'Resume', exact: true })",
-            `toHaveAttribute('href', '${siteContent.resumeUrl}')`,
-          )}
-        >
-          Resume
-        </a>
         <div ref={toggleRef} className={styles.toggleWrap}>
           <MenuToggle isOpen={isOpen} onClick={() => setIsOpen((open) => !open)} />
         </div>

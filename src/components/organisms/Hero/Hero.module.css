@@ -47,12 +47,21 @@
   gap: 0.75rem;
 }
 
+/* Availability, above the test run. One line where the column has room;
+   in two columns it sits flush right, over the run. */
 .status {
   display: flex;
   align-items: center;
   gap: 0.55rem;
+  margin: 0;
   font-size: 0.9375rem;
   color: var(--text);
+}
+
+@container (min-width: 900px) {
+  .status {
+    justify-content: flex-end;
+  }
 }
 
 .dot {
@@ -80,17 +89,50 @@
   min-width: 0;
 }
 
+/* The easter egg, folded under the name until a letter of it is clicked
+   (see Hero.tsx): the switch, a line on what it does, and a way to fold it
+   away again. */
 .pickRow {
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-end;
   align-items: center;
-  gap: 0.9rem;
+  gap: 0.6rem 0.9rem;
+  padding: 1.1rem 0.75rem 0.75rem;
+}
+
+/* The fold clips its content, so it reaches past the column by the pulse
+   ring's width on every side but the top; the row's padding brings the
+   switch back to the column's edge. */
+.pickFold {
+  margin: 0 -0.75rem -0.75rem;
 }
 
 .pickHint {
+  max-width: 34ch;
   font-size: 0.9375rem;
+  line-height: 1.4;
   color: var(--text);
+}
+
+.pickHide {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.25rem 0;
+  border: 0;
+  background: none;
+  font: 500 0.875rem / 1 var(--sans);
+  color: var(--text);
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 0.25em;
+  cursor: pointer;
+  transition: text-decoration-color 160ms var(--ease-out);
+
+  &:hover {
+    color: var(--text-h);
+    text-decoration-color: currentColor;
+  }
 }
 
 .hint {
@@ -110,5 +152,9 @@
   .dot,
   .hint {
     animation: none;
+  }
+
+  .pickHide {
+    transition: none;
   }
 }

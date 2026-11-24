@@ -26,6 +26,14 @@ describe('primary navigation', () => {
     portfolioPage.section('case-studies').should('be.inViewport')
   })
 
+  it('at the hero nothing in the bar is marked, and the rail marks the hero itself', () => {
+    cy.get('header [aria-current]').should('not.exist')
+    portfolioPage.rail.findByRole('link', { name: 'Intro' }).should('have.attr', 'aria-current', 'true')
+
+    portfolioPage.scrollSectionToTop('experience')
+    portfolioPage.rail.findByRole('link', { name: 'Experience' }).should('have.attr', 'aria-current', 'true')
+  })
+
   it('the left rail switches to readable colours over the violet section', () => {
     // Dots, theme toggle and socials each switch on their own.
     portfolioPage.railPartsOnAccent.should('have.length', 0)

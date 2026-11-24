@@ -5,6 +5,10 @@ import Hero from './Hero'
 import { hero } from '../../../content/hero'
 import { siteContent } from '../../../content/site'
 
+// The switch is an easter egg: a click on a letter of the name shows it.
+const revealPicker = (user: ReturnType<typeof userEvent.setup>) =>
+  user.click(within(screen.getByRole('heading', { level: 1 })).getByText('J'))
+
 describe('Hero', () => {
   it('leads with the name, the pitch and the two actions', () => {
     render(<Hero />)
@@ -25,9 +29,25 @@ describe('Hero', () => {
     expect(within(run).getByText(`${hero.run.results.length} passed`)).toBeInTheDocument()
   })
 
+  it('keeps the Pick locator switch hidden until a letter of the name is clicked, and can hide it again', async () => {
+    const user = userEvent.setup()
+    render(<Hero />)
+    expect(screen.queryByRole('switch', { name: 'Pick locator' })).not.toBeInTheDocument()
+
+    await revealPicker(user)
+    const toggle = screen.getByRole('switch', { name: 'Pick locator' })
+    await user.click(toggle)
+    expect(document.documentElement).toHaveClass('inspecting')
+
+    await user.click(screen.getByRole('button', { name: 'Hide the locator picker' }))
+    expect(screen.queryByRole('switch', { name: 'Pick locator' })).not.toBeInTheDocument()
+    expect(document.documentElement).not.toHaveClass('inspecting')
+  })
+
   it('turns the locator inspector on with the switch, starting on the name', async () => {
     const user = userEvent.setup()
     render(<Hero />)
+    await revealPicker(user)
     const toggle = screen.getByRole('switch', { name: 'Pick locator' })
     expect(toggle).not.toBeChecked()
 
@@ -46,6 +66,7 @@ describe('Hero', () => {
   it('picks whatever tagged element is hovered, and clicks pick instead of navigating', async () => {
     const user = userEvent.setup()
     render(<Hero />)
+    await revealPicker(user)
     await user.click(screen.getByRole('switch', { name: 'Pick locator' }))
 
     const email = screen.getByRole('link', { name: 'Email me' })
@@ -63,6 +84,7 @@ describe('Hero', () => {
   it('stops on Escape and returns focus to the switch', async () => {
     const user = userEvent.setup()
     render(<Hero />)
+    await revealPicker(user)
     const toggle = screen.getByRole('switch', { name: 'Pick locator' })
     await user.click(toggle)
     await user.keyboard('{Escape}')

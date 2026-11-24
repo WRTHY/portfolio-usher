@@ -22,6 +22,16 @@ test.describe('primary navigation', () => {
     await expect(portfolioPage.section('case-studies')).toBeInViewport()
   })
 
+  test('at the hero nothing in the bar is marked, and the rail marks the hero itself', async ({ portfolioPage }) => {
+    await portfolioPage.goto()
+
+    await expect(portfolioPage.page.getByRole('banner').locator('[aria-current]')).toHaveCount(0)
+    await expect(portfolioPage.rail.getByRole('link', { name: 'Intro' })).toHaveAttribute('aria-current', 'true')
+
+    await portfolioPage.scrollSectionToTop('experience')
+    await expect(portfolioPage.rail.getByRole('link', { name: 'Experience' })).toHaveAttribute('aria-current', 'true')
+  })
+
   test('the left rail switches to readable colours over the violet section', async ({ portfolioPage }) => {
     await portfolioPage.goto()
     // Dots, theme toggle and socials each switch on their own.

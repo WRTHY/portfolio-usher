@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { FaArrowDown, FaCrosshairs } from 'react-icons/fa6'
+import { FaArrowDown, FaCrosshairs, FaXmark } from 'react-icons/fa6'
 import Button from '../../atoms/Button/Button'
+import Reveal from '../../atoms/Reveal/Reveal'
 import Switch from '../../atoms/Switch/Switch'
 import SpringName from '../../molecules/SpringName/SpringName'
 import RunReport from '../../molecules/RunReport/RunReport'
 import LocatorInspector from '../../molecules/LocatorInspector/LocatorInspector'
-import { OPENER_DONE_EVENT, introRequested } from '../../../utils/intro'
 import { hero } from '../../../content/hero'
 import { siteContent } from '../../../content/site'
 import { links } from '../../../content/links'
@@ -15,10 +15,11 @@ import styles from './Hero.module.css'
 
 const RUN_LABEL = 'Career highlights, formatted as a test run'
 
-// The page's first screen: name, pitch, the two actions and availability on
-// one side; the opener's test run docked on the other, under the Pick locator
-// switch. Turning the switch on lets visitors inspect the hero (and the top
-// bar) like a locator picker - see LocatorInspector.
+// The page's first screen: name, pitch and the two actions on one side;
+// availability and the opener's test run, docked, on the other. An easter
+// egg: clicking a letter of the name unfolds the Pick locator switch under
+// it, and it can be folded away again. Turning it on lets visitors inspect
+// the hero (and the top bar) like a locator picker - see LocatorInspector.
 //
 // onNameGoneChange: reports whether the big name has scrolled up under the
 // sticky top bar, so the page can hand the name over to the bar (see
@@ -33,6 +34,7 @@ function Hero({ onNameGoneChange }: HeroProps) {
   const switchRef = useRef<HTMLButtonElement>(null)
   const [picked, setPicked] = useState<HTMLElement | null>(null)
   const [hint, setHint] = useState(false)
+  const [pickerFound, setPickerFound] = useState(false)
 
   useEffect(() => {
     const name = heroRef.current?.querySelector('h1')
@@ -49,19 +51,19 @@ function Hero({ onNameGoneChange }: HeroProps) {
     return () => observer.disconnect()
   }, [onNameGoneChange])
 
-  // Pulse the switch twice once the page is showing, so it gets noticed.
-  useEffect(() => {
-    let timer = 0
-    const showHint = () => {
-      timer = window.setTimeout(() => setHint(true), 1600)
-    }
-    if (introRequested()) window.addEventListener(OPENER_DONE_EVENT, showHint, { once: true })
-    else showHint()
-    return () => {
-      window.clearTimeout(timer)
-      window.removeEventListener(OPENER_DONE_EVENT, showHint)
-    }
-  }, [])
+  // Found: the switch unfolds and pulses twice, so it gets noticed.
+  const revealPicker = () => {
+    if (pickerFound) return
+    setPickerFound(true)
+    setHint(true)
+  }
+
+  // Folded away again, which also stops any picking.
+  const hidePicker = () => {
+    setPicked(null)
+    setHint(false)
+    setPickerFound(false)
+  }
 
   const stopPicking = useCallback(() => setPicked(null), [])
   const togglePicking = (on: boolean) => {
@@ -73,11 +75,36 @@ function Hero({ onNameGoneChange }: HeroProps) {
     <section id="top" ref={heroRef} className={styles.hero} aria-labelledby="hero-name">
       <div className={styles.inner}>
         <div className={styles.copy}>
-          <SpringName
-            id="hero-name"
-            name={siteContent.name}
-            {...locatorAttrs("getByRole('heading', { level: 1 })", `toHaveAccessibleName('${siteContent.name}')`)}
-          />
+          <div>
+            <SpringName
+              id="hero-name"
+              name={siteContent.name}
+              onLetterClick={revealPicker}
+              {...locatorAttrs("getByRole('heading', { level: 1 })", `toHaveAccessibleName('${siteContent.name}')`)}
+            />
+            <Reveal open={pickerFound} className={styles.pickFold}>
+              <div className={styles.pickRow} data-testid="pick-row">
+                <Switch
+                  ref={switchRef}
+                  checked={picked !== null}
+                  onChange={togglePicking}
+                  icon={<FaCrosshairs aria-hidden="true" />}
+                  describedBy="pick-hint"
+                  className={cx(hint && styles.hint)}
+                  {...locatorAttrs("getByRole('switch', { name: 'Pick locator' })", 'toBeChecked()')}
+                >
+                  Pick locator
+                </Switch>
+                <span className={styles.pickHint} id="pick-hint">
+                  {hero.pickHint}
+                </span>
+                <button type="button" className={styles.pickHide} onClick={hidePicker} aria-label="Hide the locator picker">
+                  <FaXmark aria-hidden="true" />
+                  {hero.pickHide}
+                </button>
+              </div>
+            </Reveal>
+          </div>
           <p
             className={styles.lead}
             {...locatorAttrs("getByText('QA Lead & SDET. I walk into teams')", `toContainText('${hero.lead.highlight}')`)}
@@ -106,6 +133,9 @@ function Hero({ onNameGoneChange }: HeroProps) {
               Email me
             </Button>
           </div>
+        </div>
+
+        <div className={styles.side}>
           <p
             className={styles.status}
             {...locatorAttrs("getByText('Open to QA Lead and SDET roles')", 'toBeVisible()')}
@@ -113,25 +143,6 @@ function Hero({ onNameGoneChange }: HeroProps) {
             <i className={styles.dot} aria-hidden="true" />
             {hero.status}
           </p>
-        </div>
-
-        <div className={styles.side}>
-          <div className={styles.pickRow}>
-            <span className={styles.pickHint} id="pick-hint">
-              {hero.pickHint}
-            </span>
-            <Switch
-              ref={switchRef}
-              checked={picked !== null}
-              onChange={togglePicking}
-              icon={<FaCrosshairs aria-hidden="true" />}
-              describedBy="pick-hint"
-              className={cx(hint && styles.hint)}
-              {...locatorAttrs("getByRole('switch', { name: 'Pick locator' })", 'toBeChecked()')}
-            >
-              Pick locator
-            </Switch>
-          </div>
           <RunReport
             label={RUN_LABEL}
             spec={hero.run.spec}

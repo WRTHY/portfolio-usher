@@ -15,12 +15,12 @@ export const testCounts = {
     {
       "id": "playwright",
       "label": "Playwright E2E",
-      "count": 37
+      "count": 38
     },
     {
       "id": "cypress-e2e",
       "label": "Cypress E2E",
-      "count": 33
+      "count": 34
     }
   ]
 } as const

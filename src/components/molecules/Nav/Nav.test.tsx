@@ -44,13 +44,6 @@ describe('Nav', () => {
     })
   })
 
-  it('keeps the resume one click away in the bar, opening in a new tab', () => {
-    render(<Nav />)
-    const resume = screen.getByRole('link', { name: 'Resume' })
-    expect(resume).toHaveAttribute('href', siteContent.resumeUrl)
-    expect(resume).toHaveAttribute('target', '_blank')
-  })
-
   it('shows the theme toggle in the bar', () => {
     render(<Nav />)
     expect(screen.getByRole('button', { name: /switch to (light|dark) mode/i })).toBeInTheDocument()
