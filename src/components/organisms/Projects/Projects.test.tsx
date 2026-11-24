@@ -197,6 +197,22 @@ describe('Projects', () => {
     expect(within(api).getByText('JavaScript')).toBeInTheDocument()
   })
 
+  it('opens one project at a time, folding the one that was open', async () => {
+    const user = userEvent.setup()
+    render(<Projects />)
+    const siteToggle = toggleOf('project-site')
+    const apiToggle = within(screen.getByTestId('project-api')).getByRole('button', { name: /^Open:/ })
+    expect(siteToggle).toHaveAttribute('aria-expanded', 'true')
+
+    await user.click(apiToggle)
+    expect(apiToggle).toHaveAttribute('aria-expanded', 'true')
+    expect(siteToggle).toHaveAttribute('aria-expanded', 'false')
+
+    await user.click(siteToggle)
+    expect(siteToggle).toHaveAttribute('aria-expanded', 'true')
+    expect(apiToggle).toHaveAttribute('aria-expanded', 'false')
+  })
+
   it('opens the API suite from a click anywhere on its row', async () => {
     const user = userEvent.setup()
     render(<Projects />)

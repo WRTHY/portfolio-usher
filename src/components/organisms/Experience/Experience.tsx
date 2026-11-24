@@ -7,6 +7,7 @@ import type { EducationEntry, ExperienceEntry } from '../../../content/experienc
 import Heading from '../../atoms/Heading/Heading'
 import ExpandToggle from '../../atoms/ExpandToggle/ExpandToggle'
 import Reveal from '../../atoms/Reveal/Reveal'
+import { useAccordion } from '../../../hooks/useAccordion'
 import { isRowToggleClick } from '../../../utils/rowToggle'
 import SectionHeader from '../../molecules/SectionHeader/SectionHeader'
 import CareerGraph from '../../molecules/CareerGraph/CareerGraph'
@@ -46,6 +47,7 @@ function ExperienceRow({ entry, open, onToggle, highlighted, onHighlightChange }
     <li
       className={cx(styles.row, open && styles.open, highlighted && styles.highlighted)}
       data-testid={`experience-${entry.id}`}
+      data-accordion-row={entry.id}
       data-highlighted={highlighted || undefined}
       onClick={handleRowClick}
       onPointerEnter={(event) => event.pointerType !== 'touch' && onHighlightChange(true)}
@@ -152,16 +154,15 @@ type GraphLayout = { ys: readonly number[]; height: number }
 // runs down its left edge (see CareerGraph): a role's node is lit while the
 // role is open. None is lit by default, since no role is a current one.
 function Experience() {
-  const [openIds, setOpenIds] = useState<ReadonlySet<string>>(() => new Set())
+  const { openId, toggle, scopeRef } = useAccordion<HTMLDivElement>()
   const [highlightedId, setHighlightedId] = useState<string | null>(null)
   const [layout, setLayout] = useState<GraphLayout>({ ys: [], height: 0 })
-  const frameRef = useRef<HTMLDivElement>(null)
 
   // Node positions come from the rendered rows, re-measured whenever the
   // ledger resizes (a row opening, fonts loading, the window changing), so
   // the graph always lines up with the dates it marks.
   useEffect(() => {
-    const frame = frameRef.current
+    const frame = scopeRef.current
     if (!frame) return
     const measure = () => {
       const top = frame.getBoundingClientRect().top
@@ -179,15 +180,7 @@ function Experience() {
     const observer = new ResizeObserver(measure)
     observer.observe(frame)
     return () => observer.disconnect()
-  }, [])
-
-  const toggle = (id: string) =>
-    setOpenIds((current) => {
-      const next = new Set(current)
-      if (next.has(id)) next.delete(id)
-      else next.add(id)
-      return next
-    })
+  }, [scopeRef])
 
   // One node per ledger row: each role, then the degree at the root.
   const nodeIds = [...experience.map((entry) => entry.id), education.id]
@@ -196,7 +189,7 @@ function Experience() {
       ? nodeIds.map((id, i) => ({
           id,
           y: layout.ys[i],
-          active: openIds.has(id),
+          active: openId === id,
           highlighted: highlightedId === id,
         }))
       : []
@@ -204,14 +197,14 @@ function Experience() {
   return (
     <section id="experience" aria-labelledby="experience-heading">
       <SectionHeader id="experience-heading" title={sectionLabel} intro={experienceIntro} />
-      <div ref={frameRef} className={styles.ledgerFrame}>
+      <div ref={scopeRef} className={styles.ledgerFrame}>
         <CareerGraph className={styles.graph} nodes={nodes} height={layout.height} />
         <ol className={styles.ledger}>
           {experience.map((entry) => (
             <ExperienceRow
               key={entry.id}
               entry={entry}
-              open={openIds.has(entry.id)}
+              open={openId === entry.id}
               onToggle={() => toggle(entry.id)}
               highlighted={highlightedId === entry.id}
               onHighlightChange={(highlighted) =>
