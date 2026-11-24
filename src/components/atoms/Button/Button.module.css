@@ -1,4 +1,4 @@
-/* Link-buttons are pills in General Sans. Primary is the solid violet main
+/* Link-buttons are rounded rectangles in General Sans. Primary is the solid violet main
    action; ghost is the outlined secondary. */
 .button {
   display: inline-flex;
@@ -7,7 +7,7 @@
   gap: 0.5rem;
   padding: 0.8rem 1.15rem;
   border: 1.5px solid transparent;
-  border-radius: 999px;
+  border-radius: var(--radius-button);
   font: 600 0.9375rem / 1 var(--sans);
   text-decoration: none;
   white-space: nowrap;

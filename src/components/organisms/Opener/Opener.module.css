@@ -94,7 +94,7 @@
   bottom: var(--page-gutter);
   padding: 0.6rem 1rem;
   border: 1px solid var(--term-line);
-  border-radius: 999px;
+  border-radius: var(--radius-button);
   background: none;
   color: var(--term-dim);
   font: 500 0.8125rem / 1 var(--mono);

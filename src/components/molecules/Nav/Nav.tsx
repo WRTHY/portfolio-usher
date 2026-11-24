@@ -13,8 +13,8 @@ import { locatorAttrs } from '../../../utils/locatorAttrs'
 import { cx } from '../../../utils/classNames'
 import styles from './Nav.module.css'
 
-// The sticky top bar: wordmark left; section links and the "Let's talk" pill
-// right. The pill jumps to the contact close; it's an action, not a section,
+// The sticky top bar: wordmark left; section links and the "Let's talk" button
+// right. The button jumps to the contact close; it's an action, not a section,
 // so it isn't one of the links or the rail's dots. The resume is in the hero
 // and the contact close.
 // From 1024px the section links sit inline (nav-link-desktop-* test ids);

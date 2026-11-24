@@ -78,6 +78,9 @@
      repeated across each of their CSS modules. */
   --radius-lg: 12px;
 
+  /* Every button: a rectangle with rounded corners, not a pill. */
+  --radius-button: 8px;
+
   /* Shared page-layout tokens. The page is one centered column: the sticky
      top nav and every section line up on --page-max inside --page-gutter. */
   --page-gutter: clamp(20px, 5vw, 64px);
