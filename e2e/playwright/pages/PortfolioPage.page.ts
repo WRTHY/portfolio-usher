@@ -6,6 +6,7 @@ import { CaseStudiesSection } from './CaseStudiesSection.page'
 import { ProjectsSection } from './ProjectsSection.page'
 import { HeroSection } from './HeroSection.page'
 import { ExperienceSection } from './ExperienceSection.page'
+import { ContactSection } from './ContactSection.page'
 
 export type { SectionId }
 
@@ -21,6 +22,7 @@ export class PortfolioPage {
   readonly themeToggle: ThemeToggleComponent
   readonly caseStudies: CaseStudiesSection
   readonly projects: ProjectsSection
+  readonly contact: ContactSection
 
   constructor(page: Page) {
     this.page = page
@@ -30,6 +32,7 @@ export class PortfolioPage {
     this.themeToggle = new ThemeToggleComponent(page)
     this.caseStudies = new CaseStudiesSection(page)
     this.projects = new ProjectsSection(page)
+    this.contact = new ContactSection(page)
   }
 
   // The opener plays on the first visit of each browser session and would

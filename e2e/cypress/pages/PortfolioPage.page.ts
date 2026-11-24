@@ -5,6 +5,7 @@ import { CaseStudiesSection } from './CaseStudiesSection.page'
 import { ProjectsSection } from './ProjectsSection.page'
 import { HeroSection } from './HeroSection.page'
 import { ExperienceSection } from './ExperienceSection.page'
+import { ContactSection } from './ContactSection.page'
 
 export type { SectionId }
 
@@ -16,6 +17,7 @@ export class PortfolioPage {
   readonly themeToggle = new ThemeToggleComponent()
   readonly caseStudies = new CaseStudiesSection()
   readonly projects = new ProjectsSection()
+  readonly contact = new ContactSection()
 
   // Skips the first-visit intro unless a spec asks for it.
   visit({ intro = false }: { intro?: boolean } = {}) {

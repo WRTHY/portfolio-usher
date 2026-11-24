@@ -6,6 +6,8 @@ import About from '../../organisms/About/About'
 import Experience from '../../organisms/Experience/Experience'
 import CaseStudies from '../../organisms/CaseStudies/CaseStudies'
 import Projects from '../../organisms/Projects/Projects'
+import Contact from '../../organisms/Contact/Contact'
+import Footer from '../../organisms/Footer/Footer'
 import Sidebar from '../../organisms/Sidebar/Sidebar'
 
 function PortfolioTemplate() {
@@ -26,7 +28,9 @@ function PortfolioTemplate() {
         <Experience />
         <CaseStudies />
         <Projects />
+        <Contact />
       </main>
+      <Footer />
     </>
   )
 }
