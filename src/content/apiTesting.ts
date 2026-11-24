@@ -14,6 +14,8 @@ export type ApiTestingSnippet = {
   filename: string
   language: 'typescript' | 'javascript'
   code: string
+  /** The code, highlighted at build time. */
+  html: string
 }
 
 export type ApiTestingExample = {
