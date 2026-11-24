@@ -7,7 +7,8 @@ export class HeroSection {
   }
 
   get pickSwitch(): Cypress.Chainable<JQuery> {
-    return cy.findByRole('switch', { name: 'Pick locator' })
+    // hidden: true, so specs can assert it before it's revealed.
+    return cy.findByRole('switch', { name: 'Pick locator', hidden: true })
   }
 
   // cy.get, not findBy*: specs assert both its presence and its absence.
@@ -25,7 +26,17 @@ export class HeroSection {
     return cy.get('[data-testid="opener"]')
   }
 
+  // The switch is an easter egg: clicking a letter of the name shows it.
+  revealPicker() {
+    this.name.contains('span', /^J$/).click()
+  }
+
+  hidePicker() {
+    cy.findByRole('button', { name: 'Hide the locator picker' }).click()
+  }
+
   startPicking() {
+    this.revealPicker()
     this.pickSwitch.click()
   }
 }

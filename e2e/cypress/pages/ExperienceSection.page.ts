@@ -1,7 +1,7 @@
 // The Experience ledger: one row per role, newest first.
 export class ExperienceSection {
   get roleHeadings(): Cypress.Chainable<JQuery> {
-    return cy.get('#experience').findAllByRole('heading', { level: 3 })
+    return cy.get('#experience').find('ol').findAllByRole('heading', { level: 3 })
   }
 
   row(role: string): Cypress.Chainable<JQuery<HTMLLIElement>> {

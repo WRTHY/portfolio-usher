@@ -13,6 +13,16 @@ describe('hero locator inspector', () => {
     portfolioPage.visit()
   })
 
+  it('the switch stays hidden until a letter of the name is clicked, and folds away again', () => {
+    hero.pickSwitch.should('not.be.visible')
+    hero.startPicking()
+    hero.pickSwitch.should('have.attr', 'aria-checked', 'true')
+
+    hero.hidePicker()
+    hero.pickSwitch.should('not.be.visible')
+    hero.locatorTip.should('not.exist')
+  })
+
   it('starts on the name and follows the pointer', () => {
     hero.startPicking()
     hero.pickSwitch.should('have.attr', 'aria-checked', 'true')

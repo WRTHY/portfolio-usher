@@ -18,7 +18,10 @@ export const hero = {
     after: ' and leave behind a quality function they own.',
   },
   status: 'Open to QA Lead and SDET roles · San Francisco, Chicago, or remote',
-  pickHint: 'See the page locator for anything up here',
+  // James's: shown once a visitor finds the switch by clicking a letter of
+  // the name. The hide button's label is Claude's (in COPY.md).
+  pickHint: 'You found me :)',
+  pickHide: 'Hide',
   run: {
     command: 'npx playwright test james-usher.spec.ts',
     spec: 'james-usher.spec.ts',

@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest'
 import Nav from './Nav'
 import { sections } from '../../../content/navigation'
 import { siteContent } from '../../../content/site'
+import { contactCopy } from '../../../content/contact'
 
 describe('Nav', () => {
   it('links the wordmark to the top of the page (the hero)', () => {
@@ -44,11 +45,11 @@ describe('Nav', () => {
     })
   })
 
-  it('keeps the resume one click away in the bar, opening in a new tab', () => {
+  it("offers a Let's talk link to the contact close, apart from the section links", () => {
     render(<Nav />)
-    const resume = screen.getByRole('link', { name: 'Resume' })
-    expect(resume).toHaveAttribute('href', siteContent.resumeUrl)
-    expect(resume).toHaveAttribute('target', '_blank')
+    const talk = screen.getByRole('link', { name: contactCopy.heading })
+    expect(talk).toHaveAttribute('href', '#contact')
+    expect(within(screen.getByRole('navigation', { name: 'Primary' })).queryByRole('link', { name: contactCopy.heading })).not.toBeInTheDocument()
   })
 
   it('shows the theme toggle in the bar', () => {
@@ -79,7 +80,7 @@ describe('Nav', () => {
 
     await user.click(screen.getByRole('button', { name: 'Open menu' }))
     const menu = screen.getByRole('navigation', { name: 'Menu' })
-    await user.click(within(menu).getByRole('link', { name: 'About' }))
+    await user.click(within(menu).getByRole('link', { name: 'Experience' }))
 
     expect(screen.getByRole('button', { name: 'Open menu' })).toHaveAttribute(
       'aria-expanded',

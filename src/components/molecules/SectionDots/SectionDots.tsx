@@ -2,12 +2,16 @@ import useActiveSection from '../../../hooks/useActiveSection'
 import { sections } from '../../../content/navigation'
 import styles from './SectionDots.module.css'
 
+// The hero counts as a page here, unlike in the header: it's the first dot,
+// and the active one until the reader scrolls into a section.
+const HERO = { id: 'top', label: 'Intro' }
+
 function SectionDots() {
-  const activeId = useActiveSection()
+  const activeId = useActiveSection() || HERO.id
 
   return (
     <ul className={styles.dots}>
-      {sections.map((section) => (
+      {[HERO, ...sections].map((section) => (
         <li key={section.id}>
           <a
             href={`#${section.id}`}

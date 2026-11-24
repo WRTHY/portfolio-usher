@@ -287,3 +287,19 @@
     transition: none;
   }
 }
+
+/* The tool tiles under the ledger, on the same left edge as its rows. */
+.skills {
+  display: grid;
+  gap: 1rem;
+  max-width: var(--page-max);
+  margin-top: clamp(2.5rem, 5vw, 3.5rem);
+  padding-left: 2rem;
+}
+
+.skillsHeading {
+  margin: 0;
+  font: 400 1.5rem / 1.1 var(--heading);
+  letter-spacing: 0;
+  color: var(--text-h);
+}

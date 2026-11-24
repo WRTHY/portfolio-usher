@@ -2,10 +2,11 @@ import { useState } from 'react'
 import Opener from '../../organisms/Opener/Opener'
 import Header from '../../organisms/Header/Header'
 import Hero from '../../organisms/Hero/Hero'
-import About from '../../organisms/About/About'
 import Experience from '../../organisms/Experience/Experience'
 import CaseStudies from '../../organisms/CaseStudies/CaseStudies'
 import Projects from '../../organisms/Projects/Projects'
+import Contact from '../../organisms/Contact/Contact'
+import Footer from '../../organisms/Footer/Footer'
 import Sidebar from '../../organisms/Sidebar/Sidebar'
 
 function PortfolioTemplate() {
@@ -22,11 +23,12 @@ function PortfolioTemplate() {
       <Sidebar />
       <main>
         <Hero onNameGoneChange={setHeroNameGone} />
-        <About />
         <Experience />
         <CaseStudies />
         <Projects />
+        <Contact />
       </main>
+      <Footer />
     </>
   )
 }

@@ -2,7 +2,8 @@ import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import Experience from './Experience'
-import { education, experience, experienceIntro, remainingStack } from '../../../content/experience'
+import { education, experience, experienceIntro, remainingStack, skillsHeading } from '../../../content/experience'
+import { toolCategories } from '../../molecules/SkillsAndTools/toolCategories'
 
 describe('Experience', () => {
   it('is the region named by its heading, with the intro beside it', () => {
@@ -11,13 +12,21 @@ describe('Experience', () => {
     expect(screen.getByText(experienceIntro)).toBeInTheDocument()
   })
 
-  it('lists one ledger row per role, newest first, then the degree', () => {
+  it('lists one ledger row per role, newest first, then the degree, then the tools', () => {
     render(<Experience />)
     const rows = screen.getAllByRole('heading', { level: 3 })
     expect(rows.map((heading) => heading.textContent)).toEqual([
       ...experience.map((entry) => entry.role),
       education.degree,
+      skillsHeading,
     ])
+  })
+
+  it('ends on every tool at a glance, grouped by category', () => {
+    render(<Experience />)
+    toolCategories.forEach((category) => {
+      expect(screen.getByRole('list', { name: category.ariaLabel })).toBeInTheDocument()
+    })
   })
 
   it('closes on the degree: the school linked out, and nothing to open', () => {

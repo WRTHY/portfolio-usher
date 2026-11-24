@@ -1,5 +1,6 @@
 import { Fragment } from 'react'
 import * as RadioGroup from '@radix-ui/react-radio-group'
+import { FaCodePullRequest } from 'react-icons/fa6'
 import type { PipelineChoice, PipelineStart, PipelineTier, StageId } from '../../../content/pipeline'
 import styles from './PipelineStages.module.css'
 
@@ -31,7 +32,10 @@ const Arrow = () => (
 function PipelineStages({ label, start, tiers, counts, value, onChange }: PipelineStagesProps) {
   return (
     <div className={styles.pipeline}>
-      <p className={styles.label}>{label}</p>
+      <p className={styles.label}>
+        <FaCodePullRequest aria-hidden="true" />
+        {label}
+      </p>
       <RadioGroup.Root
         value={value}
         onValueChange={(next) => onChange(next as PipelineChoice)}

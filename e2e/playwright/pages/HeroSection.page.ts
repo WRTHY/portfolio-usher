@@ -31,7 +31,17 @@ export class HeroSection {
     this.barName = page.getByRole('banner').getByRole('link', { name: 'James Usher', includeHidden: true })
   }
 
+  /** The switch is an easter egg: clicking a letter of the name shows it. */
+  async revealPicker() {
+    await this.name.getByText('J', { exact: true }).click()
+  }
+
+  async hidePicker() {
+    await this.root.getByRole('button', { name: 'Hide the locator picker' }).click()
+  }
+
   async startPicking() {
+    await this.revealPicker()
     await this.pickSwitch.click()
   }
 

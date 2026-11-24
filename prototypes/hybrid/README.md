@@ -57,7 +57,7 @@ which `scripts/fetch-fonts.mjs` fills; without it, headings fall back to General
 7. **Projects section** (named "Proof" in the prototype): merge Automation Examples and API
    Testing; generate test counts at build time; replace the hand-copied code in
    `codeExamples.ts` with imports of the real files, so the panel can't drift. *Done.*
-8. **Close and About cut**: contact close and footer; reduce About to the hero line.
+8. **Close and About cut**: contact close and footer; reduce About to the hero line. *Done.*
 9. **Weight pass**: keep one icon library (both `react-icons` and `@iconify/react` are still in),
    move Shiki highlighting to build time, and record Lighthouse and bundle sizes before and after.
 10. **Copy pass**: James rewrites, in his own words, every line of copy that Claude wrote or that
@@ -128,6 +128,22 @@ Intentional changes to the plan or the prototype, made or approved by James as t
     02's shows while it's closed; its accessible name adds the project's. 01's its headline is James's ("This portfolio
     tests itself"), and its description is set in regular weight. The "Cheapest first" line
     under the pipeline was dropped (James's call); the arrows carry the order.
+- **Close and About (stage 8):**
+  - The prototype's close: "Let's talk.", the email set large, LinkedIn / GitHub / Resume, and
+    the personal note, with a page footer after it. Not in the nav.
+  - Quick tweaks after: the Pick locator switch became an easter egg (hidden until a letter
+    of the name is clicked, unfolding under the name, with a Hide to fold it away again); the
+    availability line moved above the test run, as one line; the header's Resume pill went
+    (the resume is in the hero, the menu and the close); in its place a "Let's talk" pill jumps to
+    the close, kept out of the section links and dots. Footer and close note are James's. The
+    hero now counts as a page in the rail (four dots), and a section is only marked once its
+    top passes 40% of the screen, so nothing in the bar is marked at the hero.
+  - The rail's socials fade out once the close is a quarter of the way up the screen, since
+    it carries the same links, and fade back in above it (James's call, like the name hand-off).
+  - About is gone: the hero carries the pitch, Experience the career, and the close the
+    personal note. James kept Skills & Tools, moved under the Experience ledger and shrunk to
+    a quick reference: small icon tiles by category, the name previewed on hover (on touch
+    screens, beside the icon). The nav's "About" item went with it.
 - **Local docs:** DESIGN.md and PRODUCT.md stay out of the repo for now (`.gitignore`: "not ready
   for the public repo yet"), so the plan and these lists live here.
 

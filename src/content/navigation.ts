@@ -2,7 +2,6 @@
 // desktop, in the hamburger menu below that), the left rail's section dots,
 // and each section's visible title.
 export const sections = [
-  { id: 'about', label: 'About' },
   { id: 'experience', label: 'Experience' },
   { id: 'case-studies', label: 'Case Studies' },
   { id: 'projects', label: 'Projects' },

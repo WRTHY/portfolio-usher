@@ -6,12 +6,10 @@ import { toolCategories } from './toolCategories'
 const allTools = toolCategories.flatMap((category) => category.tools)
 
 describe('SkillsAndTools', () => {
-  it('renders every tool name in the DOM, even though visually hidden pre-hover', () => {
+  it('names every tool, whether or not its preview is showing', () => {
     render(<SkillsAndTools />)
 
-    // Each name appears twice per chip (the aria-hidden .hoverLabel and the
-    // always-present .srOnly text) - asserting at least one match is enough
-    // to confirm the name reaches the DOM regardless of hover state.
+    // Each name is there twice: the hover preview and the screen-reader text.
     allTools.forEach((tool) => {
       expect(screen.getAllByText(tool.name).length).toBeGreaterThan(0)
     })
@@ -23,7 +21,7 @@ describe('SkillsAndTools', () => {
     // Icons render as either <svg> (react-icons, the hand-drawn Reassure
     // glyph) or <span> (the Iconify mask-mode icons in BrandIcons.tsx) - the
     // wrapper itself, not the tag, is what carries aria-hidden.
-    const iconWraps = container.querySelectorAll('[class*="iconWrap"]')
+    const iconWraps = container.querySelectorAll('[class*="icon"]')
     expect(iconWraps.length).toBe(allTools.length)
     iconWraps.forEach((iconWrap) => {
       expect(iconWrap.getAttribute('aria-hidden')).toBe('true')

@@ -32,7 +32,7 @@ for (const [device, viewport] of [
       await hero.startPicking()
 
       const tagged = await hero.taggedElements()
-      expect(tagged.length).toBeGreaterThanOrEqual(8)
+      expect(tagged.length).toBeGreaterThanOrEqual(7)
 
       for (const element of tagged) {
         await test.step(`${element.loc} -> ${element.check}`, async () => {
@@ -48,6 +48,21 @@ for (const [device, viewport] of [
 
 test.describe('hero locator inspector', () => {
   test.use({ viewport: { width: 1280, height: 800 } })
+
+  test('the switch stays hidden until a letter of the name is clicked, and folds away again', async ({
+    portfolioPage,
+  }) => {
+    await portfolioPage.goto()
+    const { hero } = portfolioPage
+
+    await expect(hero.pickSwitch).toBeHidden()
+    await hero.startPicking()
+    await expect(hero.pickSwitch).toBeChecked()
+
+    await hero.hidePicker()
+    await expect(hero.pickSwitch).toBeHidden()
+    await expect(hero.locatorTip).toHaveCount(0)
+  })
 
   test('starts on the name and follows the pointer', async ({ portfolioPage }) => {
     await portfolioPage.goto()

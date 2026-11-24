@@ -73,7 +73,12 @@
   gap: 0.75rem;
 }
 
-.resume {
+.toggleWrap {
+  display: contents;
+}
+
+/* "Let's talk": an outlined pill, the bar's one call to action. */
+.talk {
   display: inline-flex;
   align-items: center;
   height: 40px;
@@ -81,6 +86,7 @@
   border: 1.5px solid var(--text-h);
   border-radius: 999px;
   font: 600 0.875rem / 1 var(--sans);
+  white-space: nowrap;
   color: var(--text-h);
   text-decoration: none;
   transition:
@@ -93,8 +99,18 @@
   }
 }
 
-.toggleWrap {
-  display: contents;
+@media (prefers-reduced-motion: reduce) {
+  .talk {
+    transition: none;
+  }
+}
+
+/* Very narrow phones: the pill goes, to keep the wordmark, theme toggle and
+   menu on one line; the close is still at the bottom of the page. */
+@media (max-width: 359px) {
+  .talk {
+    display: none;
+  }
 }
 
 /* The menu below the desktop breakpoint: fills the viewport under the bar. */
@@ -147,12 +163,6 @@
   gap: 1.25rem;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .resume {
-    transition: none;
-  }
-}
-
 @media (min-width: 1024px) {
   .primary {
     display: block;
@@ -171,10 +181,3 @@
   }
 }
 
-/* Very narrow phones: the menu carries the resume button, so the bar's
-   pill can go to keep the wordmark, toggle and hamburger on one line. */
-@media (max-width: 359px) {
-  .resume {
-    display: none;
-  }
-}
