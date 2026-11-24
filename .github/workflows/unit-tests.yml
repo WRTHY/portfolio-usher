@@ -1,15 +1,9 @@
 name: Unit Tests
 run-name: "Unit Tests: ${{ github.event_name }} by ${{ github.actor }} on ${{ github.ref_name }}"
 
+# Tier 2, called by ci.yml. Run alone from the Actions tab.
 on:
-  push:
-    branches:
-      - master
-  pull_request:
-    types:
-      - opened
-      - synchronize
-      - reopened
+  workflow_call:
   workflow_dispatch:
 
 concurrency:

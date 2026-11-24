@@ -1,9 +1,10 @@
 # James Usher - Portfolio
 
-[![Lint & Build](https://github.com/WRTHY/portfolio-usher/actions/workflows/lint-and-build.yml/badge.svg)](https://github.com/WRTHY/portfolio-usher/actions/workflows/lint-and-build.yml)
-[![Unit Tests](https://github.com/WRTHY/portfolio-usher/actions/workflows/unit-tests.yml/badge.svg)](https://github.com/WRTHY/portfolio-usher/actions/workflows/unit-tests.yml)
-[![Component Tests](https://github.com/WRTHY/portfolio-usher/actions/workflows/component-tests.yml/badge.svg)](https://github.com/WRTHY/portfolio-usher/actions/workflows/component-tests.yml)
-[![E2E Tests](https://github.com/WRTHY/portfolio-usher/actions/workflows/e2e-tests.yml/badge.svg)](https://github.com/WRTHY/portfolio-usher/actions/workflows/e2e-tests.yml)
+[![CI](https://github.com/WRTHY/portfolio-usher/actions/workflows/ci.yml/badge.svg)](https://github.com/WRTHY/portfolio-usher/actions/workflows/ci.yml)
+
+1. Static checks: [![ESLint & TypeScript](https://img.shields.io/github/check-runs/WRTHY/portfolio-usher/master?nameFilter=Static%20checks%20%2F%20ESLint%20%26%20TypeScript&label=ESLint%20%26%20TypeScript)](https://github.com/WRTHY/portfolio-usher/actions/workflows/ci.yml) [![Vite build](https://img.shields.io/github/check-runs/WRTHY/portfolio-usher/master?nameFilter=Static%20checks%20%2F%20Vite%20Production%20Build&label=Vite%20build)](https://github.com/WRTHY/portfolio-usher/actions/workflows/ci.yml)
+2. Fast tests: [![Vitest](https://img.shields.io/github/check-runs/WRTHY/portfolio-usher/master?nameFilter=Unit%20%2F%20Vitest&label=Vitest)](https://github.com/WRTHY/portfolio-usher/actions/workflows/ci.yml) [![Cypress component](https://img.shields.io/github/check-runs/WRTHY/portfolio-usher/master?nameFilter=Component%20%2F%20Cypress&label=Cypress%20component)](https://github.com/WRTHY/portfolio-usher/actions/workflows/ci.yml)
+3. End-to-end: [![Playwright](https://img.shields.io/github/check-runs/WRTHY/portfolio-usher/master?nameFilter=End-to-end%20%2F%20Playwright&label=Playwright)](https://github.com/WRTHY/portfolio-usher/actions/workflows/ci.yml) [![Cypress E2E](https://img.shields.io/github/check-runs/WRTHY/portfolio-usher/master?nameFilter=End-to-end%20%2F%20Cypress&label=Cypress%20E2E)](https://github.com/WRTHY/portfolio-usher/actions/workflows/ci.yml)
 
 My personal portfolio site: a single-page React app introducing me, walking through my
 work history and a few case studies, and showing off some hands-on test automation
@@ -32,9 +33,15 @@ Live sections (see [`src/content/navigation.ts`](src/content/navigation.ts)):
   implemented. Each row leads with its outcome figure; the "+" (or a click on the row)
   opens the full write-up in place (problem → approach → outcome → future iterations),
   with no modal (content in [`src/content/caseStudies.ts`](src/content/caseStudies.ts))
-- **Automation Examples** - a live browser of this repo's own test suite: pick a testing
-  type (End-to-End / Component) and a framework (Playwright or Cypress for E2E, Vitest +
-  RTL or Cypress Component Testing for Component) and read the real files. Performance testing coming soon
+- **Projects** - the one violet section, holding two numbered projects, indexed beside its
+  title. 01 is this site's own testing, drawn as its CI pipeline (see [CI/CD](#cicd)): three
+  tiers, cheapest first, each gating the next; choosing a stage shows its tests and the
+  workflow that runs them, and the first tier shows the pipeline file itself. The drawing is
+  checked against `.github/workflows/` by a test, each stage's test count is generated at
+  build time by [`scripts/count-tests.mjs`](scripts/count-tests.mjs), and the code is
+  imported straight from the repo (`?raw`) and checked against each file's path, so none
+  of it can drift from the suite. 02 is a separate API test suite against a third-party API
+  (Postman, then Playwright), as a row that opens in place
 
 ## Tech stack
 
@@ -62,11 +69,10 @@ src/
                  # SpringName, TextCard, ThemeToggle
     organisms/   # Opener (one-time terminal intro), Header (sticky top bar),
                  # Sidebar (desktop left rail: section dots, theme toggle,
-                 # socials), Hero, About, Experience, CaseStudies, CodeSamples,
-                 # ApiTesting
+                 # socials), Hero, About, Experience, CaseStudies, Projects
     templates/   # PortfolioTemplate - assembles the page
   content/       # Site copy and data (hero and test run, about copy, experience,
-                 # case studies, code examples, nav)
+                 # case studies, projects, code examples, test counts, nav)
   hooks/         # useActiveSection, usePrefersReducedMotion
   styles/        # Shared CSS modules (the ledger rows' hover lift, code colors)
   utils/         # Small helpers (class names, locator attributes, row clicks)
@@ -83,7 +89,8 @@ Other scripts:
 
 | Command | What it does |
 | --- | --- |
-| `npm run build` | Type-check and build for production |
+| `npm run build` | Fetch fonts and the API examples, count the tests, type-check, and build for production |
+| `npm run count:tests` | Recount the tests per suite for the Projects section |
 | `npm run preview` | Preview the production build locally |
 | `npm run lint` | Run ESLint |
 | `npm test` | Run the full suite: unit tests, Cypress component tests, then Playwright, then Cypress e2e |
@@ -106,12 +113,12 @@ and interaction behavior in isolation.
 (`Component.cy.tsx`, e.g. [`CopyButton.cy.tsx`](src/components/atoms/CopyButton/CopyButton.cy.tsx),
 [`SegmentedControl.cy.tsx`](src/components/molecules/SegmentedControl/SegmentedControl.cy.tsx)),
 mounting the same components in a real browser and asserting the same behavior as their
-Vitest counterparts - deliberately redundant coverage, so the Automation Examples panel
+Vitest counterparts - deliberately redundant coverage, so the Projects panel
 can offer a genuine framework choice (Vitest vs. Cypress) at the component tier, the same
 way it does at the E2E tier. See [`cypress.config.ts`](cypress.config.ts).
 
 **End-to-end tests** live under [`e2e/`](e2e), one subfolder per framework, covering the
-same scenarios - navigation, opening and closing case studies, the automation-examples panel, theme
+same scenarios - navigation, opening and closing case studies, the Projects panel, theme
 switching, and accessibility - against a Page Object Model in each:
 
 - [`e2e/playwright/`](e2e/playwright) ([pages](e2e/playwright/pages)) - the original suite
@@ -140,24 +147,34 @@ tests in one run (each passes in isolation) - see [`cypress.config.ts`](cypress.
 
 ## CI/CD
 
-Every push to `master` and every pull request runs four GitHub Actions workflows in
-parallel, one per testing tier, mirroring the tiers documented above:
+Every push to `master` and every pull request runs one pipeline,
+[`ci.yml`](.github/workflows/ci.yml), in three tiers, cheapest first. Each tier starts
+only once every job before it has passed, so a failure stops everything after it: a lint
+error is reported in seconds, without spending minutes of browser time on end-to-end tests
+for a commit that's already broken. Jobs within a tier run in parallel, so a green run isn't
+slowed down more than it has to be.
 
-| Workflow | Jobs (shown in checks as `<workflow> / <job>`) | What it runs |
-| --- | --- | --- |
-| [`lint-and-build.yml`](.github/workflows/lint-and-build.yml) | `ESLint & TypeScript`, `Vite Production Build` | ESLint + `tsc -b`, then a full production build |
-| [`unit-tests.yml`](.github/workflows/unit-tests.yml) | `Vitest` | `npm run test:unit` |
-| [`component-tests.yml`](.github/workflows/component-tests.yml) | `Cypress` | `cypress run --component` |
-| [`e2e-tests.yml`](.github/workflows/e2e-tests.yml) | `Playwright`, `Cypress` | Both e2e suites, run side by side |
+| Tier | Workflow (called by `ci.yml`) | Jobs | What it runs |
+| --- | --- | --- | --- |
+| 1. Static checks | [`lint-and-build.yml`](.github/workflows/lint-and-build.yml) | `ESLint & TypeScript`, `Vite Production Build` | ESLint + `tsc -b`, then a full production build |
+| 2. Fast tests | [`unit-tests.yml`](.github/workflows/unit-tests.yml) | `Vitest` | `npm run test:unit` |
+| 2. Fast tests | [`component-tests.yml`](.github/workflows/component-tests.yml) | `Cypress` | `cypress run --component` |
+| 3. End-to-end | [`e2e-tests.yml`](.github/workflows/e2e-tests.yml) | `Playwright`, `Cypress` | Both e2e suites, side by side |
 
-Job names deliberately don't repeat their workflow's name - GitHub already prefixes each
-check with it (e.g. `E2E Tests / Playwright`), so the job name only needs to say which tool
-ran. Each e2e/component job uploads its screenshots, videos, or HTML report as a build
-artifact on failure (Playwright's report is uploaded even on success) so a failure can be
-diagnosed from the Actions run without reproducing it locally. Splitting by tier instead of
-one monolithic workflow keeps each file scoped to a single concern; the trade-off is that
-branch protection has to require each workflow's job(s) individually rather than gating on
-one combined status check.
+Each tier is its own reusable workflow (`workflow_call`), so `ci.yml` is just the joins
+between them. None of them triggers on a push or pull request itself, so nothing runs
+twice, but each can still be run on its own from the Actions tab (`workflow_dispatch`).
+Checks show as `CI / <tier> / <job>`, e.g. `CI / End-to-end / Playwright`, so branch
+protection requires those names. The badges at the top read the same checks on `master`, one per job
+(via shields.io), so each tier's result shows on its own. Each e2e/component job uploads its screenshots, videos,
+or HTML report as a build artifact on failure (Playwright's report is uploaded even on
+success), so a failure can be diagnosed from the Actions run without reproducing it
+locally.
+
+The Projects section draws this pipeline, and
+[`src/content/pipeline.test.ts`](src/content/pipeline.test.ts) checks the drawing
+against the workflow files (the tiers, what each needs, the job names, the artifacts), so
+the page can't claim something CI doesn't do.
 
 ## Notes
 
