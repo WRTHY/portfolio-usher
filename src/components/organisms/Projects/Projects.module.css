@@ -1,0 +1,225 @@
+/* The page's one solid violet section. Its text re-points the colour tokens
+   at the violet field, so shared pieces (the section title, the pipeline,
+   the "+") pick up the right colours without knowing they're on violet.
+   The page's own tokens are kept first (--page-*), so the code panels,
+   page-coloured surfaces floating on the field, can switch back to them. */
+.projects {
+  --page-text: var(--text);
+  --page-text-h: var(--text-h);
+  --page-border: var(--border);
+  --page-accent: var(--accent);
+  container-type: inline-size;
+  /* Tighter than the other sections: this one is mostly code, and its
+     second project should be in reach of the first. */
+  padding-block: clamp(3rem, 7vw, 5rem);
+  background: var(--accent);
+  color: var(--on-accent);
+  border-top: 0;
+}
+
+.onField {
+  --text-h: var(--on-accent);
+  --text: color-mix(in srgb, var(--on-accent) 86%, transparent);
+  --border: color-mix(in srgb, var(--on-accent) 36%, transparent);
+  --accent: var(--on-accent);
+  /* The chosen pipeline stage: a chip of the field's text colour, with the
+     violet itself as its text. */
+  --chip: var(--on-accent);
+  --on-chip: var(--page-accent);
+  color: var(--text);
+
+  :focus-visible {
+    outline-color: var(--on-accent);
+  }
+
+  /* The page's selection is --accent behind --on-accent text, which are the
+     same colour here: select in the field's text colour instead, with the
+     violet as the text, like the chosen stage. */
+  ::selection {
+    background: var(--on-accent);
+    color: var(--page-accent);
+  }
+}
+
+/* Back to the page's colours, on the code panels. */
+.page {
+  --text: var(--page-text);
+  --text-h: var(--page-text-h);
+  --border: var(--page-border);
+  --accent: var(--page-accent);
+
+  /* And the page's own selection, inside them. */
+  ::selection {
+    background: var(--page-accent);
+    color: var(--on-accent);
+  }
+}
+
+/* The index beside the title: both projects, numbered, so the second one
+   is known about before scrolling to it. */
+.index {
+  display: grid;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font: 500 0.9375rem / 1.4 var(--sans);
+
+  a {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    color: var(--text-h);
+    text-decoration: underline;
+    text-decoration-color: var(--border);
+    text-underline-offset: 0.25em;
+    transition: text-decoration-color 160ms var(--ease-out);
+
+    &:hover {
+      text-decoration-color: currentColor;
+    }
+  }
+}
+
+/* A project's number, set small in mono before its name. */
+.number {
+  font: 400 0.75rem / 1 var(--mono);
+  letter-spacing: 0.04em;
+  color: var(--text);
+}
+
+/* Each project: a row that opens in place, like the ledgers above. Its
+   number, name and intro show while it's closed; 01 starts open. Jumped to
+   from the index, it lands clear of the sticky top bar. */
+.project {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 2.5rem;
+  grid-template-areas:
+    'head toggle'
+    'body body';
+  column-gap: 1.5rem;
+  scroll-margin-top: calc(var(--nav-height) + 1.5rem);
+  cursor: pointer;
+}
+
+/* The second sits under a hairline. */
+.project + .project {
+  margin-top: 2.25rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.head {
+  grid-area: head;
+  display: grid;
+  gap: 0.5rem;
+  justify-items: start;
+}
+
+/* The name, with the project's repo link beside it on its baseline; the
+   link wraps under the name when there's no room. */
+.titleLine {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 1.25rem;
+  row-gap: 0.5rem;
+}
+
+/* The display face has one weight: never ask for bold. */
+.projectName {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin: 0;
+  font: 400 1.5rem / 1.1 var(--heading);
+  letter-spacing: 0;
+  color: var(--text-h);
+}
+
+.description {
+  margin: 0;
+  max-width: 72ch;
+  font: 400 1rem / 1.5 var(--sans);
+  color: var(--text-h);
+}
+
+.apiSummary {
+  margin: 0;
+  max-width: 72ch;
+  line-height: 1.55;
+}
+
+/* Beside each project's name. */
+.repoLink {
+  display: inline-flex;
+  justify-self: start;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--text-h);
+  text-decoration: underline;
+  text-decoration-color: var(--border);
+  text-underline-offset: 0.25em;
+  transition: text-decoration-color 160ms var(--ease-out);
+
+  &:hover {
+    text-decoration-color: currentColor;
+  }
+
+  svg {
+    flex-shrink: 0;
+  }
+}
+
+.toggle {
+  grid-area: toggle;
+  align-self: start;
+}
+
+/* The shared "+" fills with --accent and draws its icon in --on-accent,
+   which are the same colour on the violet field; draw the icon in the
+   violet instead, on hover and while the row's intro is hovered (the
+   opened part isn't a target, so it doesn't light the "+"). */
+.project .toggle:hover {
+  color: var(--page-accent);
+}
+
+@media (hover: hover) {
+  .project:has(> .head:hover) .toggle {
+    background: var(--on-accent);
+    border-color: var(--on-accent);
+    color: var(--page-accent);
+  }
+}
+
+.body {
+  grid-area: body;
+  /* The opened write-up and code are for reading, not another target. */
+  cursor: auto;
+}
+
+/* 01, this site's own testing: the pipeline, then the code. */
+.siteInner {
+  display: grid;
+  gap: 1.25rem;
+  padding-top: 1.25rem;
+}
+
+.apiInner {
+  display: grid;
+  gap: 1.5rem;
+  padding-top: 1.25rem;
+}
+
+.apiStory {
+  margin: 0;
+  max-width: 72ch;
+  line-height: 1.6;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .index a,
+  .repoLink {
+    transition: none;
+  }
+}

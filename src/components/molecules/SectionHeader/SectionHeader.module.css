@@ -17,6 +17,15 @@
   text-wrap: balance;
 }
 
+/* A small count after the title, set like a footnote: mono, raised, quiet. */
+.count {
+  margin-left: 0.35em;
+  font: 400 0.8125rem / 1 var(--mono);
+  letter-spacing: 0;
+  vertical-align: super;
+  color: var(--text);
+}
+
 .intro {
   margin: 0;
   max-width: 38ch;
