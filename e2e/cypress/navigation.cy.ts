@@ -22,8 +22,8 @@ describe('primary navigation', () => {
     portfolioPage.nav.goTo('experience')
     portfolioPage.section('experience').should('be.inViewport')
 
-    portfolioPage.nav.goTo('about')
-    portfolioPage.section('about').should('be.inViewport')
+    portfolioPage.nav.goTo('case-studies')
+    portfolioPage.section('case-studies').should('be.inViewport')
   })
 
   it('the left rail switches to readable colours over the violet section', () => {
@@ -49,24 +49,24 @@ describe('mobile navigation', () => {
   it('the menu toggle opens and closes the nav', () => {
     const { nav } = portfolioPage
 
-    nav.mobileLink('about').should('not.be.visible')
+    nav.mobileLink('experience').should('not.be.visible')
 
     nav.openMenu()
     nav.menuToggle.should('have.attr', 'aria-label', 'Close menu')
-    nav.mobileLink('about').should('be.visible')
+    nav.mobileLink('experience').should('be.visible')
 
     nav.closeMenu()
     nav.menuToggle.should('have.attr', 'aria-label', 'Open menu')
-    nav.mobileLink('about').should('not.be.visible')
+    nav.mobileLink('experience').should('not.be.visible')
   })
 
   it('choosing a link closes the menu and scrolls to the section', () => {
     const { nav } = portfolioPage
 
     nav.openMenu()
-    nav.mobileGoTo('about')
+    nav.mobileGoTo('experience')
 
-    portfolioPage.section('about').should('be.inViewport')
+    portfolioPage.section('experience').should('be.inViewport')
     nav.menuToggle.should('have.attr', 'aria-label', 'Open menu')
   })
 })

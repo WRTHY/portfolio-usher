@@ -79,7 +79,7 @@ describe('Nav', () => {
 
     await user.click(screen.getByRole('button', { name: 'Open menu' }))
     const menu = screen.getByRole('navigation', { name: 'Menu' })
-    await user.click(within(menu).getByRole('link', { name: 'About' }))
+    await user.click(within(menu).getByRole('link', { name: 'Experience' }))
 
     expect(screen.getByRole('button', { name: 'Open menu' })).toHaveAttribute(
       'aria-expanded',

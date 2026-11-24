@@ -2,7 +2,7 @@ import { Fragment, useEffect, useId, useRef, useState } from 'react'
 import type { CSSProperties, MouseEvent } from 'react'
 import { flushSync } from 'react-dom'
 import { getSectionLabel } from '../../../content/navigation'
-import { education, experience, experienceIntro, remainingStack } from '../../../content/experience'
+import { education, experience, experienceIntro, remainingStack, skillsHeading } from '../../../content/experience'
 import type { EducationEntry, ExperienceEntry } from '../../../content/experience'
 import Heading from '../../atoms/Heading/Heading'
 import ExpandToggle from '../../atoms/ExpandToggle/ExpandToggle'
@@ -10,6 +10,7 @@ import Reveal from '../../atoms/Reveal/Reveal'
 import { isRowToggleClick } from '../../../utils/rowToggle'
 import SectionHeader from '../../molecules/SectionHeader/SectionHeader'
 import CareerGraph from '../../molecules/CareerGraph/CareerGraph'
+import SkillsAndTools from '../../molecules/SkillsAndTools/SkillsAndTools'
 import type { CareerGraphNode } from '../../molecules/CareerGraph/CareerGraph'
 import { cx } from '../../../utils/classNames'
 import styles from './Experience.module.css'
@@ -220,6 +221,13 @@ function Experience() {
           ))}
           <EducationRow entry={education} />
         </ol>
+      </div>
+      {/* Every tool across the roles above, at a glance. */}
+      <div className={styles.skills}>
+        <Heading level={3} className={styles.skillsHeading}>
+          {skillsHeading}
+        </Heading>
+        <SkillsAndTools />
       </div>
     </section>
   )

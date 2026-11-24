@@ -2,7 +2,6 @@ import { useState } from 'react'
 import Opener from '../../organisms/Opener/Opener'
 import Header from '../../organisms/Header/Header'
 import Hero from '../../organisms/Hero/Hero'
-import About from '../../organisms/About/About'
 import Experience from '../../organisms/Experience/Experience'
 import CaseStudies from '../../organisms/CaseStudies/CaseStudies'
 import Projects from '../../organisms/Projects/Projects'
@@ -24,7 +23,6 @@ function PortfolioTemplate() {
       <Sidebar />
       <main>
         <Hero onNameGoneChange={setHeroNameGone} />
-        <About />
         <Experience />
         <CaseStudies />
         <Projects />

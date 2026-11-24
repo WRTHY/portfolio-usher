@@ -1,9 +1,0 @@
-/* The content column under a section's header: left-aligned on the page
-   column, capped at the wide reading width until each section gets its own
-   redesigned layout. */
-.body {
-  width: 100%;
-  max-width: var(--content-width-wide);
-  display: flex;
-  flex-direction: column;
-}

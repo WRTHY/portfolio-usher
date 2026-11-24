@@ -8,9 +8,16 @@
 }
 
 .label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   margin: 0;
   font: 400 0.8125rem / 1.45 var(--mono);
   color: var(--text);
+
+  svg {
+    flex-shrink: 0;
+  }
 }
 
 /* Top to bottom on a phone, each arrow pointing down to the next tier. */

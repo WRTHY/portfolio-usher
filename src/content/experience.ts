@@ -40,6 +40,9 @@ export type ExperienceEntry = {
   stack?: readonly string[]
 }
 
+// Placeholder (Claude's, in COPY.md): above the tool tiles under the ledger.
+export const skillsHeading = 'Skills & tools'
+
 // One-line framing shown beside the Experience heading.
 export const experienceIntro =
   'SDET and QA lead who builds test automation and release gates from scratch across web, desktop and mobile apps.'

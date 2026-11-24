@@ -18,8 +18,8 @@ test.describe('primary navigation', () => {
     await portfolioPage.nav.goTo('experience')
     await expect(portfolioPage.section('experience')).toBeInViewport()
 
-    await portfolioPage.nav.goTo('about')
-    await expect(portfolioPage.section('about')).toBeInViewport()
+    await portfolioPage.nav.goTo('case-studies')
+    await expect(portfolioPage.section('case-studies')).toBeInViewport()
   })
 
   test('the left rail switches to readable colours over the violet section', async ({ portfolioPage }) => {
@@ -42,15 +42,15 @@ test.describe('mobile navigation', () => {
     await portfolioPage.goto()
     const { nav } = portfolioPage
 
-    await expect(nav.mobileLink('about')).not.toBeVisible()
+    await expect(nav.mobileLink('experience')).not.toBeVisible()
 
     await nav.openMenu()
     await expect(nav.menuToggle).toHaveAccessibleName('Close menu')
-    await expect(nav.mobileLink('about')).toBeVisible()
+    await expect(nav.mobileLink('experience')).toBeVisible()
 
     await nav.closeMenu()
     await expect(nav.menuToggle).toHaveAccessibleName('Open menu')
-    await expect(nav.mobileLink('about')).not.toBeVisible()
+    await expect(nav.mobileLink('experience')).not.toBeVisible()
   })
 
   test('choosing a link closes the menu and scrolls to the section', async ({ portfolioPage }) => {
@@ -58,9 +58,9 @@ test.describe('mobile navigation', () => {
     const { nav } = portfolioPage
 
     await nav.openMenu()
-    await nav.mobileGoTo('about')
+    await nav.mobileGoTo('experience')
 
-    await expect(portfolioPage.section('about')).toBeInViewport()
+    await expect(portfolioPage.section('experience')).toBeInViewport()
     await expect(nav.menuToggle).toHaveAccessibleName('Open menu')
   })
 })
