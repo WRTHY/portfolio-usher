@@ -22,6 +22,13 @@ test.describe('primary navigation', () => {
     await expect(portfolioPage.section('case-studies')).toBeInViewport()
   })
 
+  test("the bar's Let's talk pill jumps to the contact close", async ({ portfolioPage }) => {
+    await portfolioPage.goto()
+
+    await portfolioPage.page.getByRole('banner').getByRole('link', { name: 'Let’s talk' }).click()
+    await expect(portfolioPage.contact.section).toBeInViewport()
+  })
+
   test('at the hero nothing in the bar is marked, and the rail marks the hero itself', async ({ portfolioPage }) => {
     await portfolioPage.goto()
 

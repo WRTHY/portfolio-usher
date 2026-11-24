@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest'
 import Nav from './Nav'
 import { sections } from '../../../content/navigation'
 import { siteContent } from '../../../content/site'
+import { contactCopy } from '../../../content/contact'
 
 describe('Nav', () => {
   it('links the wordmark to the top of the page (the hero)', () => {
@@ -42,6 +43,13 @@ describe('Nav', () => {
         `#${section.id}`,
       )
     })
+  })
+
+  it("offers a Let's talk link to the contact close, apart from the section links", () => {
+    render(<Nav />)
+    const talk = screen.getByRole('link', { name: contactCopy.heading })
+    expect(talk).toHaveAttribute('href', '#contact')
+    expect(within(screen.getByRole('navigation', { name: 'Primary' })).queryByRole('link', { name: contactCopy.heading })).not.toBeInTheDocument()
   })
 
   it('shows the theme toggle in the bar', () => {

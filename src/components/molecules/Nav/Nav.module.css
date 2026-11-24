@@ -77,6 +77,42 @@
   display: contents;
 }
 
+/* "Let's talk": an outlined pill, the bar's one call to action. */
+.talk {
+  display: inline-flex;
+  align-items: center;
+  height: 40px;
+  padding: 0 1rem;
+  border: 1.5px solid var(--text-h);
+  border-radius: 999px;
+  font: 600 0.875rem / 1 var(--sans);
+  white-space: nowrap;
+  color: var(--text-h);
+  text-decoration: none;
+  transition:
+    border-color 160ms var(--ease-out),
+    color 160ms var(--ease-out);
+
+  &:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .talk {
+    transition: none;
+  }
+}
+
+/* Very narrow phones: the pill goes, to keep the wordmark, theme toggle and
+   menu on one line; the close is still at the bottom of the page. */
+@media (max-width: 359px) {
+  .talk {
+    display: none;
+  }
+}
+
 /* The menu below the desktop breakpoint: fills the viewport under the bar. */
 .panel {
   display: none;

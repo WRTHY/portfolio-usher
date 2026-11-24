@@ -26,6 +26,11 @@ describe('primary navigation', () => {
     portfolioPage.section('case-studies').should('be.inViewport')
   })
 
+  it("the bar's Let's talk pill jumps to the contact close", () => {
+    cy.get('header').findByRole('link', { name: 'Let’s talk' }).click()
+    portfolioPage.contact.section.should('be.inViewport')
+  })
+
   it('at the hero nothing in the bar is marked, and the rail marks the hero itself', () => {
     cy.get('header [aria-current]').should('not.exist')
     portfolioPage.rail.findByRole('link', { name: 'Intro' }).should('have.attr', 'aria-current', 'true')

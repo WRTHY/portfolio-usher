@@ -8,11 +8,15 @@ import SocialLinks from '../SocialLinks/SocialLinks'
 import useActiveSection from '../../../hooks/useActiveSection'
 import { sections } from '../../../content/navigation'
 import { siteContent } from '../../../content/site'
+import { contactCopy } from '../../../content/contact'
+import { locatorAttrs } from '../../../utils/locatorAttrs'
 import { cx } from '../../../utils/classNames'
 import styles from './Nav.module.css'
 
-// The sticky top bar: wordmark left; section links right. The resume is in
-// the hero and the contact close.
+// The sticky top bar: wordmark left; section links and the "Let's talk" pill
+// right. The pill jumps to the contact close; it's an action, not a section,
+// so it isn't one of the links or the rail's dots. The resume is in the hero
+// and the contact close.
 // From 1024px the section links sit inline (nav-link-desktop-* test ids);
 // below that they move into a full-height menu behind the hamburger
 // (nav-link-mobile-*). Only one list is ever displayed, so only one is in the
@@ -85,6 +89,16 @@ function Nav({ showName = true }: NavProps) {
         <div className={styles.barThemeToggle}>
           <ThemeToggle />
         </div>
+        <a
+          className={styles.talk}
+          href="#contact"
+          {...locatorAttrs(
+            `getByRole('banner').getByRole('link', { name: "${contactCopy.heading}" })`,
+            "toHaveAttribute('href', '#contact')",
+          )}
+        >
+          {contactCopy.heading}
+        </a>
         <div ref={toggleRef} className={styles.toggleWrap}>
           <MenuToggle isOpen={isOpen} onClick={() => setIsOpen((open) => !open)} />
         </div>

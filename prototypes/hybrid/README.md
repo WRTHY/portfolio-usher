@@ -134,7 +134,10 @@ Intentional changes to the plan or the prototype, made or approved by James as t
   - Quick tweaks after: the Pick locator switch became an easter egg (hidden until a letter
     of the name is clicked, unfolding under the name, with a Hide to fold it away again); the
     availability line moved above the test run, as one line; the header's Resume pill went
-    (the resume is in the hero, the menu and the close). Footer and close note are James's.
+    (the resume is in the hero, the menu and the close); in its place a "Let's talk" pill jumps to
+    the close, kept out of the section links and dots. Footer and close note are James's. The
+    hero now counts as a page in the rail (four dots), and a section is only marked once its
+    top passes 40% of the screen, so nothing in the bar is marked at the hero.
   - The rail's socials fade out once the close is a quarter of the way up the screen, since
     it carries the same links, and fade back in above it (James's call, like the name hand-off).
   - About is gone: the hero carries the pitch, Experience the career, and the close the
