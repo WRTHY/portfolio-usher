@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import SegmentedControl from './SegmentedControl'
 
+// Vitest twin of SegmentedControl.cy.tsx
 describe('SegmentedControl', () => {
   it('renders every option and marks the active one checked', () => {
     render(
@@ -41,7 +42,7 @@ describe('SegmentedControl', () => {
     expect(onChange).toHaveBeenCalledWith('b')
   })
 
-  it('never fires onChange for a disabled option and renders it as soon', async () => {
+  it('never fires onChange for a disabled option', async () => {
     const user = userEvent.setup()
     const onChange = vi.fn()
     render(

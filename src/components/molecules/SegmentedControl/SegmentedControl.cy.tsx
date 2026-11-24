@@ -1,10 +1,6 @@
 import SegmentedControl from './SegmentedControl'
 
-// Deliberately redundant with SegmentedControl.test.tsx (Vitest + React
-// Testing Library): same component, same three behaviors, run through
-// Cypress's real-browser mount instead of jsdom. Featured verbatim as the
-// Component/Cypress example in codeExamples.ts - keep this file's content
-// and that copy in sync if either changes.
+// Same tests as SegmentedControl.test.tsx, in a real browser
 describe('SegmentedControl', () => {
   it('renders every option and marks the active one checked', () => {
     cy.mount(
@@ -42,7 +38,7 @@ describe('SegmentedControl', () => {
     cy.get('@onChange').should('have.been.calledWith', 'b')
   })
 
-  it('never fires onChange for a disabled option and renders it as soon', () => {
+  it('never fires onChange for a disabled option', () => {
     const onChange = cy.stub().as('onChange')
     cy.mount(
       <SegmentedControl
@@ -57,6 +53,7 @@ describe('SegmentedControl', () => {
     )
 
     cy.findByRole('radio', { name: /B/ }).should('be.disabled')
+    // Forced, since Cypress won't click a disabled element on its own
     cy.findByRole('radio', { name: /B/ }).click({ force: true })
 
     cy.get('@onChange').should('not.have.been.called')

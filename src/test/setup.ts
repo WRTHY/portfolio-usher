@@ -2,14 +2,12 @@ import { afterEach } from 'vitest'
 import { cleanup } from '@testing-library/react'
 import '@testing-library/jest-dom/vitest'
 
+// Unmount after every test
 afterEach(() => {
   cleanup()
 })
 
-// jsdom doesn't implement matchMedia at all. Default to "no preference matched"
-// so components that check media queries don't crash in tests that aren't
-// specifically exercising that behavior. Individual tests can still override
-// this with vi.stubGlobal('matchMedia', ...) for a specific query result.
+// Browser APIs jsdom doesn't implement.
 if (!window.matchMedia) {
   window.matchMedia = (query: string) =>
     ({
@@ -24,9 +22,6 @@ if (!window.matchMedia) {
     }) as MediaQueryList
 }
 
-// jsdom doesn't implement IntersectionObserver either. This stub never fires
-// its callback, so components relying on it just keep their initial state
-// during tests that aren't specifically exercising intersection behavior.
 if (!window.IntersectionObserver) {
   class IntersectionObserverStub implements IntersectionObserver {
     readonly root = null
@@ -44,11 +39,6 @@ if (!window.IntersectionObserver) {
   window.IntersectionObserver = IntersectionObserverStub
 }
 
-// jsdom doesn't implement ResizeObserver either (used by ReadMoreText to
-// detect line-clamp truncation). This stub never fires, so components
-// relying on it just keep their initial (untruncated) state during tests
-// that aren't specifically exercising that behavior - see ReadMoreText's
-// own test file for one that overrides it to simulate overflow.
 if (!window.ResizeObserver) {
   class ResizeObserverStub implements ResizeObserver {
     observe() {}

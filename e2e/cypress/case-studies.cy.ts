@@ -10,6 +10,7 @@ describe('case studies', () => {
     portfolioPage.visit()
   })
 
+  // Closed by default - just the outcome and title
   it('a row leads with its outcome, and keeps the write-up closed', () => {
     const { caseStudies } = portfolioPage
 
@@ -19,6 +20,7 @@ describe('case studies', () => {
     caseStudies.writeUp(CASE_STUDY_ID).should('not.be.visible')
   })
 
+  // Every write-up should have the same four parts
   it('the "+" opens the write-up in place, and closes it again', () => {
     const { caseStudies } = portfolioPage
 
@@ -42,16 +44,15 @@ describe('case studies', () => {
     caseStudies.writeUp(CASE_STUDY_ID).should('not.be.visible')
   })
 
+  // Close button at the bottom of a long write-up - focus and scroll go back to the row
   it('closing from the end of a write-up returns focus and the view to its row', () => {
     const { caseStudies } = portfolioPage
 
     caseStudies.open(CASE_STUDY_ID)
-    // The write-up is long enough that its end is well below the row's top.
     caseStudies.closeFromEnd(CASE_STUDY_ID).click()
 
     caseStudies.writeUp(CASE_STUDY_ID).should('not.be.visible')
     caseStudies.toggle(CASE_STUDY_ID).should('have.focus')
-    // Back in view: the row's top is on screen again, not scrolled above it.
     caseStudies.row(CASE_STUDY_ID).should(($row) => {
       const { top } = $row[0].getBoundingClientRect()
       expect(top).to.be.within(0, Cypress.config('viewportHeight'))
