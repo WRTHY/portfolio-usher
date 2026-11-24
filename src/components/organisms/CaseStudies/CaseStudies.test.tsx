@@ -1,6 +1,6 @@
 import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import CaseStudies from './CaseStudies'
 import { caseStudies } from '../../../content/caseStudies'
 
@@ -13,6 +13,12 @@ const toggleFor = (id: string) => within(rowFor(id)).getByRole('button', { name:
 const writeUpFor = (id: string) => screen.getByTestId(`case-study-write-up-${id}`)
 
 describe('CaseStudies', () => {
+  // jsdom has no scrolling; opening a row below an open one scrolls the page after it.
+  beforeEach(() => {
+    vi.spyOn(window, 'scrollTo').mockImplementation(() => {})
+    vi.spyOn(window, 'scrollBy').mockImplementation(() => {})
+  })
+
   it('is the region named by its heading', () => {
     render(<CaseStudies />)
     expect(screen.getByRole('region', { name: 'Case Studies' })).toHaveAttribute('id', 'case-studies')
@@ -86,13 +92,21 @@ describe('CaseStudies', () => {
     )
   })
 
-  it('opens case studies independently', async () => {
+  it('opens one case study at a time, folding the one that was open', async () => {
     const user = userEvent.setup()
     render(<CaseStudies />)
     const [first, second] = caseStudies
     await user.click(toggleFor(first.id))
 
     expect(writeUpFor(first.id)).toBeVisible()
+    expect(writeUpFor(second.id)).not.toBeVisible()
+
+    await user.click(toggleFor(second.id))
+    expect(writeUpFor(second.id)).toBeVisible()
+    expect(writeUpFor(first.id)).not.toBeVisible()
+    expect(toggleFor(first.id)).toHaveAttribute('aria-expanded', 'false')
+
+    await user.click(toggleFor(second.id))
     expect(writeUpFor(second.id)).not.toBeVisible()
   })
 

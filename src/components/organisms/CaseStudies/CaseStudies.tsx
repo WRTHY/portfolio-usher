@@ -1,4 +1,5 @@
 import { useId, useRef, useState } from 'react'
+import { useAccordion } from '../../../hooks/useAccordion'
 import type { MouseEvent } from 'react'
 import { getSectionLabel } from '../../../content/navigation'
 import { caseStudies } from '../../../content/caseStudies'
@@ -85,6 +86,7 @@ function CaseStudyRow({ caseStudy, open, onToggle }: CaseStudyRowProps) {
       ref={rowRef}
       className={cx(styles.row, highlighted && styles.highlighted)}
       data-testid={`case-study-${caseStudy.id}`}
+      data-accordion-row={caseStudy.id}
       data-highlighted={highlighted || undefined}
       onClick={handleRowClick}
       onPointerEnter={(event) => event.pointerType !== 'touch' && setHighlighted(true)}
@@ -164,25 +166,17 @@ function CaseStudyRow({ caseStudy, open, onToggle }: CaseStudyRowProps) {
 // no second scroll container, and the page's own scroll and back button
 // keep working while a case study is open.
 function CaseStudies() {
-  const [openIds, setOpenIds] = useState<ReadonlySet<string>>(() => new Set())
-
-  const toggle = (id: string) =>
-    setOpenIds((current) => {
-      const next = new Set(current)
-      if (next.has(id)) next.delete(id)
-      else next.add(id)
-      return next
-    })
+  const { openId, toggle, scopeRef } = useAccordion<HTMLOListElement>()
 
   return (
     <section id="case-studies" aria-labelledby="case-studies-heading">
       <SectionHeader id="case-studies-heading" title={sectionLabel} />
-      <ol className={styles.ledger}>
+      <ol ref={scopeRef} className={styles.ledger}>
         {caseStudies.map((caseStudy) => (
           <CaseStudyRow
             key={caseStudy.id}
             caseStudy={caseStudy}
-            open={openIds.has(caseStudy.id)}
+            open={openId === caseStudy.id}
             onToggle={() => toggle(caseStudy.id)}
           />
         ))}

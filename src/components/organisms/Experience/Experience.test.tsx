@@ -1,11 +1,17 @@
 import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import Experience from './Experience'
 import { education, experience, experienceIntro, remainingStack, skillsHeading } from '../../../content/experience'
 import { toolCategories } from '../../molecules/SkillsAndTools/toolCategories'
 
 describe('Experience', () => {
+  // jsdom has no scrolling; opening a row below an open one scrolls the page after it.
+  beforeEach(() => {
+    vi.spyOn(window, 'scrollTo').mockImplementation(() => {})
+    vi.spyOn(window, 'scrollBy').mockImplementation(() => {})
+  })
+
   it('is the region named by its heading, with the intro beside it', () => {
     render(<Experience />)
     expect(screen.getByRole('region', { name: 'Experience' })).toHaveAttribute('id', 'experience')
@@ -94,13 +100,22 @@ describe('Experience', () => {
     },
   )
 
-  it('opens rows independently', async () => {
+  it('opens one row at a time, folding the one that was open', async () => {
     const user = userEvent.setup()
     render(<Experience />)
     const [first, second] = experience
-    await user.click(screen.getByRole('button', { name: `Details: ${first.role}` }))
+    const toggleFor = (role: string) => screen.getByRole('button', { name: `Details: ${role}` })
 
+    await user.click(toggleFor(first.role))
     expect(screen.getByText(first.details[0])).toBeVisible()
+    expect(screen.getByText(second.details[0])).not.toBeVisible()
+
+    await user.click(toggleFor(second.role))
+    expect(screen.getByText(second.details[0])).toBeVisible()
+    expect(screen.getByText(first.details[0])).not.toBeVisible()
+    expect(toggleFor(first.role)).toHaveAttribute('aria-expanded', 'false')
+
+    await user.click(toggleFor(second.role))
     expect(screen.getByText(second.details[0])).not.toBeVisible()
   })
 

@@ -50,6 +50,19 @@ describe('experience ledger', () => {
     experience.moreTools(role).should('not.be.visible')
   })
 
+  it('opening a role folds the one that was open', () => {
+    const [first, second] = ['QA Lead / Senior SDET', 'QA Specialist']
+
+    experience.toggle(first).click()
+    experience.details(first).should('be.visible')
+
+    experience.toggle(second).click()
+    experience.toggle(second).should('have.attr', 'aria-expanded', 'true')
+    experience.details(second).should('be.visible')
+    experience.toggle(first).should('have.attr', 'aria-expanded', 'false')
+    experience.details(first).should('not.be.visible')
+  })
+
   it('the git-graph rail has a node per role on one line', () => {
     cy.get('#experience').scrollIntoView()
 

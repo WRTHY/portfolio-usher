@@ -15,6 +15,7 @@ import type { PipelineChoice, StageId } from '../../../content/pipeline'
 import { projectsCopy } from '../../../content/projects'
 import { testCounts } from '../../../content/testCounts.generated'
 import usePrefersReducedMotion from '../../../hooks/usePrefersReducedMotion'
+import { FOLLOW_DURATION, useAccordion } from '../../../hooks/useAccordion'
 import { isRowToggleClick } from '../../../utils/rowToggle'
 import { scrollToTopFollowing } from '../../../utils/scrollToTopFollowing'
 import styles from './Projects.module.css'
@@ -30,10 +31,6 @@ const projects = [
 
 type Project = (typeof projects)[number]
 type ProjectId = Project['id']
-
-// A jump from the index runs while the rows fold and unfold (Reveal's 440ms),
-// and a little past it, so it lands on the settled page.
-const JUMP_DURATION = 560
 
 // A project's "+": the row's own toggle, a direct child of its article.
 const toggleOf = (id: ProjectId) =>
@@ -95,7 +92,7 @@ function ProjectRow({ project, open, onToggle, repo, intro, children }: ProjectR
   }
 
   return (
-    <article id={project.id} className={styles.project} data-testid={project.id} onClick={handleClick}>
+    <article id={project.id} className={styles.project} data-testid={project.id} data-accordion-row={project.id} onClick={handleClick}>
       <div className={styles.head}>
         <div className={styles.titleLine}>
           <h3 className={styles.projectName}>
@@ -136,32 +133,30 @@ function ProjectRow({ project, open, onToggle, repo, intro, children }: ProjectR
 // part of this site's testing, so it sits apart under its own name.
 function Projects() {
   const [choice, setChoice] = useState<PipelineChoice>('e2e')
-  const [open, setOpen] = useState<Record<ProjectId, boolean>>({ 'project-site': true, 'project-api': false })
+  const { openId, setOpenId, toggle, scopeRef } = useAccordion<HTMLElement>('project-site')
   const stopJump = useRef<() => void>(undefined)
   const prefersReducedMotion = usePrefersReducedMotion()
   const panel = panelFor(choice)
 
   useEffect(() => () => stopJump.current?.(), [])
 
-  const toggle = (id: ProjectId) => setOpen((current) => ({ ...current, [id]: !current[id] }))
-
   // The index opens only the project it names, folding the other away, and
   // brings it to the top of the page. Focus moves to its "+", so the
   // keyboard carries on from there.
   const jumpTo = (event: MouseEvent<HTMLAnchorElement>, id: ProjectId) => {
     event.preventDefault()
-    setOpen(Object.fromEntries(projects.map((project) => [project.id, project.id === id])) as Record<ProjectId, boolean>)
+    setOpenId(id)
     const element = document.getElementById(id)
     if (!element) return
     // The other projects' opened regions, which are about to fold away.
-    const folding = projects
-      .filter((project) => project.id !== id && open[project.id])
-      .map((project) => document.getElementById(toggleOf(project.id)?.getAttribute('aria-controls') ?? ''))
-      .filter((region) => region !== null)
+    const folding =
+      openId && openId !== id
+        ? [document.getElementById(toggleOf(openId as ProjectId)?.getAttribute('aria-controls') ?? '')].filter((region) => region !== null)
+        : []
     toggleOf(id)?.focus({ preventScroll: true })
     stopJump.current?.()
     stopJump.current = scrollToTopFollowing(element, {
-      duration: JUMP_DURATION,
+      duration: FOLLOW_DURATION,
       reducedMotion: prefersReducedMotion,
       folding,
     })
@@ -169,7 +164,7 @@ function Projects() {
 
   const rowProps = (project: Project) => ({
     project,
-    open: open[project.id],
+    open: openId === project.id,
     onToggle: () => toggle(project.id),
   })
 
@@ -191,7 +186,7 @@ function Projects() {
   return (
     // data-surface marks it for fixed chrome passing over it (the left rail),
     // which switches to the violet field's colours here.
-    <section id="projects" className={styles.projects} aria-labelledby="projects-heading" data-surface="accent">
+    <section ref={scopeRef} id="projects" className={styles.projects} aria-labelledby="projects-heading" data-surface="accent">
       <div className={styles.onField}>
         <SectionHeader id="projects-heading" title={sectionLabel} count={projects.length} aside={index} />
 
