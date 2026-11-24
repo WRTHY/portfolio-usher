@@ -29,6 +29,17 @@ describe('code examples', () => {
     expect(file.code).toBe(real.replace(/\r\n/g, '\n'))
   })
 
+  // The copy button copies `code` while readers see `html`; both are made at
+  // build time, and this holds them to being the same text.
+  it.each(codeExamples.flatMap((example) => example.files.map((file) => [file.filename, file] as const)))(
+    '%s: the highlighted markup reads as its code, verbatim',
+    (_filename, file) => {
+      const shown = document.createElement('div')
+      shown.innerHTML = file.html
+      expect(shown.textContent).toBe(file.code)
+    },
+  )
+
   it('every example has at least one file, with no two tabs named alike', () => {
     codeExamples.forEach((example) => {
       expect(example.files.length).toBeGreaterThan(0)

@@ -58,8 +58,8 @@ which `scripts/fetch-fonts.mjs` fills; without it, headings fall back to General
    Testing; generate test counts at build time; replace the hand-copied code in
    `codeExamples.ts` with imports of the real files, so the panel can't drift. *Done.*
 8. **Close and About cut**: contact close and footer; reduce About to the hero line. *Done.*
-9. **Weight pass**: keep one icon library (both `react-icons` and `@iconify/react` are still in),
-   move Shiki highlighting to build time, and record Lighthouse and bundle sizes before and after.
+9. **Weight pass**: one icon library, Shiki highlighting moved to build time, and Lighthouse and
+   bundle sizes recorded before and after. *Done, except the Lighthouse run (see decisions).*
 10. **Copy pass**: James rewrites, in his own words, every line of copy that Claude wrote or that
     came in from another chat. The local `COPY.md` sheet lists each one with its current text and
     limits; layout is fitted to the new text afterwards. Added after stage 6, when that copy was
@@ -144,6 +144,24 @@ Intentional changes to the plan or the prototype, made or approved by James as t
     personal note. James kept Skills & Tools, moved under the Experience ledger and shrunk to
     a quick reference: small icon tiles by category, the name previewed on hover (on touch
     screens, beside the icon). The nav's "About" item went with it.
+- **Weight pass (stage 9):**
+  - **One icon library:** the three marks only `@iconify/react` supplied (Playwright, Slack,
+    React Native) are now inline SVGs beside the Maestro one, drawn in `currentColor` like the
+    rest, and `@iconify/react` is out. `react-icons` is the one library.
+  - **Highlighting at build time:** `react-shiki` is out and `shiki` is a dev dependency.
+    `scripts/highlight.ts` is the one highlighter (same themes, JS regex engine and contrast
+    fixes as before). A Vite plugin turns `import x from './file.ts?highlight'` into
+    `{ code, html }` for the repo's own files, and `fetch-api-testing-examples.mjs` writes `html`
+    for the API snippets. `CodeBlock` injects the finished markup, so a panel is complete on
+    first paint (the plain-then-highlighted swap is gone). The redundant `--shiki-*` variables
+    are stripped from the markup, which was most of its size. A test holds each file's `html`
+    to reading exactly as its `code`.
+  - **Numbers, unthrottled on a local preview build:** a visit downloaded 6 files, 871 KB raw /
+    227 KB gzip, and now 2 (one script, one stylesheet), 662 KB / 135 KB. The whole build went
+    from 309 JS files (10.3 MB) to 1. Total blocking time fell from about 324 ms to 70 ms; first
+    paint (about 266 ms) and layout shift (0.027) did not move.
+  - **Lighthouse not yet run:** `npx lighthouse` needs a package download the sandbox declined, so
+    the numbers above come from the browser's own performance API instead.
 - **Local docs:** DESIGN.md and PRODUCT.md stay out of the repo for now (`.gitignore`: "not ready
   for the public repo yet"), so the plan and these lists live here.
 
@@ -181,10 +199,11 @@ either kept with a reason or slated to change.
   description, both repo links, and the API suite's lead and intro are James's own; the API
   suite's name and one-liner, and the pipeline's labels, are Claude's. All are in `COPY.md`, with the explainer that was
   dropped from the page.
-- **Code panels could show an empty box (fixed in stage 7).** react-shiki draws nothing until
+- **Code panels could show an empty box (fixed in stage 7, then by design in stage 9).** react-shiki draws nothing until
   its highlighting resolves, and nothing ever if a language's grammar fails to load (as YAML's
   did, from a stale Vite cache). The code is now drawn plain first, in the theme's colours, and
-  the highlighted version replaces it.
+  the highlighted version replaces it. Stage 9 moved highlighting to build time, so the panel
+  now ships already highlighted and the swap is gone.
 - **Test counts add about 30 seconds to `npm run build` (kept).** Counting Vitest's tests means
   loading every test file; Playwright lists its own quickly, and Cypress specs are counted
   statically (the script refuses a spec whose tests it can't count that way). A suite that

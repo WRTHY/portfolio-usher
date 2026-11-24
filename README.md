@@ -47,7 +47,7 @@ Live sections (see [`src/content/navigation.ts`](src/content/navigation.ts)):
 
 - [React 19](https://react.dev/) + [TypeScript](https://www.typescriptlang.org/) via [Vite](https://vite.dev/)
 - [Radix UI](https://www.radix-ui.com/) primitives (tabs, radio group) for accessible interactive bits
-- [react-shiki](https://github.com/avgvstvs96/react-shiki) for syntax-highlighted code samples
+- [Shiki](https://shiki.style/), run at build time (see `scripts/highlight.ts`), for the syntax-highlighted code samples, so the browser ships no highlighter
 - CSS Modules for styling, with a Cream & Violet palette in light and dark mode (tokens in
   [`src/index.css`](src/index.css))
 - Type: TBJ Orcherum Mini (display), [General Sans](https://www.fontshare.com/fonts/general-sans)

@@ -77,14 +77,14 @@
   display: contents;
 }
 
-/* "Let's talk": an outlined pill, the bar's one call to action. */
+/* "Let's talk": an outlined button, the bar's one call to action. */
 .talk {
   display: inline-flex;
   align-items: center;
   height: 40px;
   padding: 0 1rem;
   border: 1.5px solid var(--text-h);
-  border-radius: 999px;
+  border-radius: var(--radius-button);
   font: 600 0.875rem / 1 var(--sans);
   white-space: nowrap;
   color: var(--text-h);
@@ -105,7 +105,7 @@
   }
 }
 
-/* Very narrow phones: the pill goes, to keep the wordmark, theme toggle and
+/* Very narrow phones: the button goes, to keep the wordmark, theme toggle and
    menu on one line; the close is still at the bottom of the page. */
 @media (max-width: 359px) {
   .talk {

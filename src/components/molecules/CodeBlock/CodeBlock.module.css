@@ -8,14 +8,6 @@
   min-height: calc(var(--code-lines, 1) * 1.45em + 32px);
 }
 
-/* The plain version drawn until Shiki's highlighting arrives (see
-   CodeBlock.tsx): the themes' own background and text colours, so the
-   swap only adds the token colours. */
-.plain {
-  background-color: light-dark(#fafafa, #282c34);
-  color: light-dark(#383a42, #abb2bf);
-}
-
 /* index.css defines a global `code {}` rule for short inline snippets in
    prose (display: inline-flex, a small background/padding). Shiki's own
    root element here happens to be a real <code> tag too, so without this
@@ -44,17 +36,17 @@
   min-height: calc(var(--code-lines, 1) * 1.45em);
 }
 
-/* Line numbers: a counter on each line. CodeBlock uses react-shiki's hook,
-   not its component, so none of the library's own CSS (which counted
-   lines too) is on the page. Shiki's raw markup separates each `.line` span with a literal "\n" text node,
-   which (since `pre` preserves whitespace) is what puts each line on its
-   own row - `.line` must stay inline or that "\n" doubles up with a
-   block-level line break, doubling every line's vertical spacing. */
-.codeBlock :global(.rs-has-line-numbers) {
+/* Line numbers: a counter on each line (the markup is made in
+   scripts/highlight.ts). Shiki's markup separates each `.line` span with a
+   literal newline text node, which (since `pre` preserves whitespace) is what
+   puts each line on its own row - `.line` must stay inline or that newline
+   doubles up with a block-level line break, doubling every line's vertical
+   spacing. */
+.codeBlock :global(.has-line-numbers) {
   counter-reset: line-number;
 }
 
-.codeBlock :global(.rs-line-number)::before {
+.codeBlock :global(.numbered-line)::before {
   counter-increment: line-number;
   content: counter(line-number);
   display: inline-block;

@@ -1,29 +1,31 @@
 // The Projects section's code panel. Every file here is imported from the
-// real file it names (Vite's `?raw` import), so the panel shows exactly what
-// runs: it can't drift from the suite the way hand-copied code did.
+// real file it names (`?highlight`: its text plus that text highlighted, both
+// made at build time; see scripts/highlight-plugin.ts), so the panel shows
+// exactly what runs: it can't drift from the suite the way hand-copied code
+// did.
 import { apiTestingExamples } from './apiTesting'
 import { links } from './links'
 
-import playwrightSpec from '../../e2e/playwright/case-studies.spec.ts?raw'
-import playwrightPage from '../../e2e/playwright/pages/CaseStudiesSection.page.ts?raw'
-import playwrightFixtures from '../../e2e/playwright/fixtures.ts?raw'
-import playwrightConfig from '../../playwright.config.ts?raw'
-import cypressSpec from '../../e2e/cypress/case-studies.cy.ts?raw'
-import cypressPage from '../../e2e/cypress/pages/CaseStudiesSection.page.ts?raw'
-import cypressPortfolioPage from '../../e2e/cypress/pages/PortfolioPage.page.ts?raw'
-import cypressConfig from '../../cypress.config.ts?raw'
-import copyButtonTest from '../components/atoms/CopyButton/CopyButton.test.tsx?raw'
-import segmentedControlTest from '../components/molecules/SegmentedControl/SegmentedControl.test.tsx?raw'
-import vitestSetup from '../test/setup.ts?raw'
-import copyButtonCy from '../components/atoms/CopyButton/CopyButton.cy.tsx?raw'
-import segmentedControlCy from '../components/molecules/SegmentedControl/SegmentedControl.cy.tsx?raw'
-import cypressComponentSupport from '../../cypress/support/component.ts?raw'
-import eslintConfig from '../../eslint.config.js?raw'
-import ciWorkflow from '../../.github/workflows/ci.yml?raw'
-import lintAndBuildWorkflow from '../../.github/workflows/lint-and-build.yml?raw'
-import unitWorkflow from '../../.github/workflows/unit-tests.yml?raw'
-import componentWorkflow from '../../.github/workflows/component-tests.yml?raw'
-import e2eWorkflow from '../../.github/workflows/e2e-tests.yml?raw'
+import playwrightSpec from '../../e2e/playwright/case-studies.spec.ts?highlight'
+import playwrightPage from '../../e2e/playwright/pages/CaseStudiesSection.page.ts?highlight'
+import playwrightFixtures from '../../e2e/playwright/fixtures.ts?highlight'
+import playwrightConfig from '../../playwright.config.ts?highlight'
+import cypressSpec from '../../e2e/cypress/case-studies.cy.ts?highlight'
+import cypressPage from '../../e2e/cypress/pages/CaseStudiesSection.page.ts?highlight'
+import cypressPortfolioPage from '../../e2e/cypress/pages/PortfolioPage.page.ts?highlight'
+import cypressConfig from '../../cypress.config.ts?highlight'
+import copyButtonTest from '../components/atoms/CopyButton/CopyButton.test.tsx?highlight'
+import segmentedControlTest from '../components/molecules/SegmentedControl/SegmentedControl.test.tsx?highlight'
+import vitestSetup from '../test/setup.ts?highlight'
+import copyButtonCy from '../components/atoms/CopyButton/CopyButton.cy.tsx?highlight'
+import segmentedControlCy from '../components/molecules/SegmentedControl/SegmentedControl.cy.tsx?highlight'
+import cypressComponentSupport from '../../cypress/support/component.ts?highlight'
+import eslintConfig from '../../eslint.config.js?highlight'
+import ciWorkflow from '../../.github/workflows/ci.yml?highlight'
+import lintAndBuildWorkflow from '../../.github/workflows/lint-and-build.yml?highlight'
+import unitWorkflow from '../../.github/workflows/unit-tests.yml?highlight'
+import componentWorkflow from '../../.github/workflows/component-tests.yml?highlight'
+import e2eWorkflow from '../../.github/workflows/e2e-tests.yml?highlight'
 
 export type TestingType = 'pipeline' | 'static' | 'e2e' | 'component' | 'api'
 
@@ -40,6 +42,8 @@ export type CodeFile = {
   note?: string
   language: CodeLanguage
   code: string
+  /** The code, highlighted at build time. */
+  html: string
 }
 
 export type AutomationExample = {
@@ -49,28 +53,27 @@ export type AutomationExample = {
   files: CodeFile[]
 }
 
-// Files are checked out with Windows line endings on some machines; the
-// highlighter would count each \r\n as two lines.
-const source = (raw: string) => raw.replace(/\r\n/g, '\n')
+// A file imported with ?highlight: its text and that text highlighted.
+type Highlighted = { code: string; html: string }
 
-const typescript = (filename: string, raw: string): CodeFile => ({
+const typescript = (filename: string, file: Highlighted): CodeFile => ({
   filename,
   language: 'typescript',
-  code: source(raw),
+  ...file,
 })
 
-const javascript = (filename: string, raw: string): CodeFile => ({
+const javascript = (filename: string, file: Highlighted): CodeFile => ({
   filename,
   language: 'javascript',
-  code: source(raw),
+  ...file,
 })
 
 // The CI workflow that runs an example, shown as its last file: the hard
 // evidence of how (and when) its tests are executed.
-const workflow = (file: string, raw: string): CodeFile => ({
+const workflow = (file: string, highlighted: Highlighted): CodeFile => ({
   filename: `.github/workflows/${file}`,
   language: 'yaml',
-  code: source(raw),
+  ...highlighted,
 })
 
 // The API examples live in their own repo (fetched at build time; see
@@ -83,7 +86,8 @@ const apiFiles = (tool: 'playwright' | 'postman'): CodeFile[] =>
     label: example.title.split(': ').pop(),
     note: example.description,
     language: example[tool].language,
-    code: source(example[tool].code),
+    code: example[tool].code,
+    html: example[tool].html,
   }))
 
 export const codeExamples: readonly AutomationExample[] = [

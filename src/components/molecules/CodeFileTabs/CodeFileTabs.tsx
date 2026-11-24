@@ -57,10 +57,8 @@ function CodeFileTabs({ files, activeIndex, onChange }: CodeFileTabsProps) {
       </div>
 
       {/* forceMount + CSS visibility (rather than Radix's default
-          unmount-on-inactive) keeps every file's highlighted output in the
-          DOM once rendered, so re-visiting a file is an instant style swap
-          instead of re-running Shiki's async highlight and re-triggering
-          the loading gap. */}
+          unmount-on-inactive) keeps every file's code in the DOM, so
+          switching files is an instant style swap, not a re-mount. */}
       {files.map((file, index) => (
         <Tabs.Content
           key={index}
@@ -74,7 +72,7 @@ function CodeFileTabs({ files, activeIndex, onChange }: CodeFileTabsProps) {
           data-testid={index === activeIndex ? 'active-code-panel' : undefined}
         >
           {file.note && <p className={styles.note}>{file.note}</p>}
-          <CodeBlock code={file.code} language={file.language} />
+          <CodeBlock code={file.code} html={file.html} />
         </Tabs.Content>
       ))}
     </Tabs.Root>

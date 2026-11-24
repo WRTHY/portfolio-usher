@@ -18,9 +18,7 @@ describe('SkillsAndTools', () => {
   it('hides every icon from the accessibility tree', () => {
     const { container } = render(<SkillsAndTools />)
 
-    // Icons render as either <svg> (react-icons, the hand-drawn Reassure
-    // glyph) or <span> (the Iconify mask-mode icons in BrandIcons.tsx) - the
-    // wrapper itself, not the tag, is what carries aria-hidden.
+    // The wrapper around each icon, not the icon itself, carries aria-hidden.
     const iconWraps = container.querySelectorAll('[class*="icon"]')
     expect(iconWraps.length).toBe(allTools.length)
     iconWraps.forEach((iconWrap) => {

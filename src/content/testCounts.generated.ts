@@ -5,7 +5,7 @@ export const testCounts = {
     {
       "id": "vitest",
       "label": "Vitest + Testing Library",
-      "count": 227
+      "count": 252
     },
     {
       "id": "cypress-component",

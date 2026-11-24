@@ -1,7 +1,7 @@
 /* The hamburger in the top nav's action row, below the desktop breakpoint.
-   A round pill like the nav's other controls; the three bars fold into an X
+   A rounded square like the nav's other controls; the three bars fold into an X
    while the menu is open. 40px square, comfortably over the 24px minimum
-   target and matching the Resume pill's height. */
+   target and matching the Resume button's height. */
 .toggle {
   display: inline-flex;
   flex-direction: column;
@@ -11,7 +11,7 @@
   height: 40px;
   padding: 0 11px;
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-button);
   background: var(--surface);
   cursor: pointer;
   transition: border-color 160ms var(--ease-out);
