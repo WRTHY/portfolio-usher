@@ -52,6 +52,26 @@ test.describe('experience ledger', () => {
     await expect(experience.moreTools(role)).toBeHidden()
   })
 
+  test('opening a role folds the one that was open, and keeps the new one where it was clicked', async ({ portfolioPage }) => {
+    await portfolioPage.goto()
+    const { experience } = portfolioPage
+    const [first, second] = ['QA Lead / Senior SDET', 'QA Specialist']
+
+    await experience.toggle(first).click()
+    await expect(experience.details(first)).toBeVisible()
+
+    await experience.toggle(second).scrollIntoViewIfNeeded()
+    const before = (await experience.toggle(second).boundingBox())!.y
+    await experience.toggle(second).click()
+
+    await expect(experience.toggle(second)).toHaveAttribute('aria-expanded', 'true')
+    await expect(experience.details(second)).toBeVisible()
+    await expect(experience.toggle(first)).toHaveAttribute('aria-expanded', 'false')
+    await expect(experience.details(first)).toBeHidden()
+    // The role above folded away, but the page held the clicked one in place.
+    await expect.poll(async () => Math.abs((await experience.toggle(second).boundingBox())!.y - before)).toBeLessThanOrEqual(2)
+  })
+
   test('the git-graph rail puts a node level with each role', async ({ portfolioPage }) => {
     await portfolioPage.goto()
     const { experience } = portfolioPage
