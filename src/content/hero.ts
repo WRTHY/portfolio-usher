@@ -11,12 +11,19 @@ export type RunResult = {
   ms: number
 }
 
+/** A piece of the pitch; marked pieces get the highlighter. */
+export type LeadPart = { text: string; mark?: boolean }
+
 export const hero = {
-  lead: {
-    before: 'QA Lead & SDET. I walk into teams with ',
-    highlight: 'no tests and no process',
-    after: ' and leave behind a quality function they own.',
-  },
+  lead: [
+    { text: 'Startup QA Lead & SDET. ' },
+    { text: 'Quality', mark: true },
+    { text: ' wrought from ' },
+    { text: 'Chaos', mark: true },
+    { text: ' through ' },
+    { text: 'Consistency', mark: true },
+    { text: '.' },
+  ] satisfies LeadPart[],
   status: 'Open to QA Lead and SDET roles · San Francisco, Chicago, or remote',
   // James's: shown once a visitor finds the switch by clicking a letter of
   // the name. The hide button's label is Claude's (in COPY.md).
@@ -27,10 +34,10 @@ export const hero = {
     spec: 'james-usher.spec.ts',
     workers: '1 worker',
     results: [
-      { text: 'owns quality across ', strong: '8 products', ms: 212 },
-      { text: 'automates in ', strong: 'Maestro, Playwright, Cypress', ms: 348 },
-      { text: 'critical-path checks ', strong: '4 hrs → 10 min', ms: 401 },
-      { text: 'QA support load ', strong: '10 → 2 hrs/wk', ms: 187 },
+      { text: 'owns Quality across ', strong: 'the entire engineering org', ms: 212 },
+      { text: 'architects automation in ', strong: 'Maestro, Playwright, Cypress', ms: 348 },
+      { text: 'tests critical user flows ', strong: 'in a 20th of the time', ms: 401 },
+      { text: 'drives initiatives that lift ', strong: 'cross-team performance', ms: 187 },
       { text: 'hires and leads ', strong: 'the team that owns it', ms: 263 },
     ] satisfies RunResult[],
     flaky: 0,

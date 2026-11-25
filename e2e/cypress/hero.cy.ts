@@ -28,17 +28,17 @@ describe('hero locator inspector', () => {
     hero.pickSwitch.should('have.attr', 'aria-checked', 'true')
     hero.locatorTip.should('contain.text', "getByRole('heading', { level: 1 })")
 
-    cy.findByRole('link', { name: 'Email me' }).trigger('pointerover')
-    hero.locatorTip.should('contain.text', "getByRole('link', { name: 'Email me' })")
+    cy.findByRole('link', { name: 'Download resume' }).trigger('pointerover')
+    hero.locatorTip.should('contain.text', "getByRole('link', { name: 'Download resume' })")
   })
 
   it('clicks pick instead of navigating while it is on', () => {
     hero.startPicking()
 
-    cy.findByRole('link', { name: 'Email me' }).click()
+    cy.findByRole('link', { name: 'Download resume' }).click()
 
     cy.location('pathname').should('eq', '/')
-    hero.locatorTip.should('contain.text', "name: 'Email me'")
+    hero.locatorTip.should('contain.text', "name: 'Download resume'")
   })
 
   it('Escape turns it off and returns focus to the switch', () => {
