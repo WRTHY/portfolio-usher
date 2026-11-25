@@ -24,8 +24,8 @@ function PortfolioTemplate() {
       <main>
         <Hero onNameGoneChange={setHeroNameGone} />
         <Experience />
-        <CaseStudies />
         <Projects />
+        <CaseStudies />
         <Contact />
       </main>
       <Footer />
