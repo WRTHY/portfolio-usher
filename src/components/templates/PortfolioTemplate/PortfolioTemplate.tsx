@@ -8,6 +8,7 @@ import Projects from '../../organisms/Projects/Projects'
 import Contact from '../../organisms/Contact/Contact'
 import Footer from '../../organisms/Footer/Footer'
 import Sidebar from '../../organisms/Sidebar/Sidebar'
+import styles from './PortfolioTemplate.module.css'
 
 function PortfolioTemplate() {
   // The name hand-off: the hero reports when its big name has scrolled up
@@ -21,7 +22,7 @@ function PortfolioTemplate() {
       <Opener />
       <Header showName={heroNameGone} />
       <Sidebar />
-      <main>
+      <main className={styles.main}>
         <Hero onNameGoneChange={setHeroNameGone} />
         <Experience />
         <Projects />

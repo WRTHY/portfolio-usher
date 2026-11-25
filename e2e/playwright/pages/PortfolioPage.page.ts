@@ -69,4 +69,16 @@ export class PortfolioPage {
       window.scrollTo({ top: section.getBoundingClientRect().top + window.scrollY - 80, behavior: 'instant' }),
     )
   }
+
+  /** Scrolls so the section's top sits this far down the viewport (0 = top, 1 = bottom). */
+  async scrollSectionTopTo(id: SectionId | 'contact', fraction: number) {
+    await this.page.locator(`#${id}`).evaluate(
+      (section, at) =>
+        window.scrollTo({
+          top: section.getBoundingClientRect().top + window.scrollY - window.innerHeight * at,
+          behavior: 'instant',
+        }),
+      fraction,
+    )
+  }
 }
