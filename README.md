@@ -22,17 +22,12 @@ Live sections (see [`src/content/navigation.ts`](src/content/navigation.ts)):
   locator inspector: hover, tap or Tab to anything to see its page locator and a passing
   assertion. Every locator shown is executed by
   [`e2e/playwright/hero.spec.ts`](e2e/playwright/hero.spec.ts), at desktop and phone sizes.
-- **About** - background and links
 - **Experience** - a ledger, one row per role: dates, role and company, a one-sentence
   impact line and up to four test tools, each with what it tested. The "+" (or a click
   anywhere on the row) unfolds the role's detail bullets and grows the tools column into
   its full stack, in one CSS-only motion. The degree closes the ledger. A git-graph rail runs down the left edge: one node per role
   on a single line, lit while its role is open (content in
   [`src/content/experience.ts`](src/content/experience.ts))
-- **Case Studies** - a second ledger of write-ups on engineering decisions I've made and
-  implemented. Each row leads with its outcome figure; the "+" (or a click on the row)
-  opens the full write-up in place (problem → approach → outcome → future iterations),
-  with no modal (content in [`src/content/caseStudies.ts`](src/content/caseStudies.ts))
 - **Projects** - the one violet section, holding two numbered projects, indexed beside its
   title. 01 is this site's own testing, drawn as its CI pipeline (see [CI/CD](#cicd)): three
   tiers, cheapest first, each gating the next; choosing a stage shows its tests and the
@@ -42,6 +37,10 @@ Live sections (see [`src/content/navigation.ts`](src/content/navigation.ts)):
   imported straight from the repo (`?raw`) and checked against each file's path, so none
   of it can drift from the suite. 02 is a separate API test suite against a third-party API
   (Postman, then Playwright), as a row that opens in place
+- **Case Studies** - a second ledger of write-ups on engineering decisions I've made and
+  implemented. Each row leads with its outcome figure; the "+" (or a click on the row)
+  opens the full write-up in place (problem → approach → outcome → future iterations),
+  with no modal (content in [`src/content/caseStudies.ts`](src/content/caseStudies.ts))
 
 ## Tech stack
 
@@ -60,20 +59,22 @@ Components follow atomic design, colocated with their styles and tests:
 ```
 src/
   components/
-    atoms/       # Badge, Button, CopyButton, ExpandToggle, FramedImage, Heading,
-                 # MenuToggle, NavLink, Reveal, RunButton, SocialIcon, SoonBadge,
-                 # Switch, icons/ ...
-    molecules/   # CareerGraph, CodeBlock, CodeFileTabs, FrameworkSwitcher, LocatorInspector,
-                 # MediaText, Nav, PanelFooter, RunReport, SectionBody,
-                 # SectionDots, SectionHeader, SegmentedControl, SocialLinks,
-                 # SpringName, TextCard, ThemeToggle
+    atoms/       # Badge, Button, CopyButton, ExpandToggle, Heading, IconButton,
+                 # MenuToggle, NavLink, Reveal, SocialIcon, SoonBadge, Switch,
+                 # icons/
+    molecules/   # CareerGraph, CodeBlock, CodeFileTabs, CodePanel, LocatorInspector,
+                 # Nav, PanelFooter, PipelineStages, RunReport, SectionDots,
+                 # SectionHeader, SegmentedControl, SkillsAndTools, SocialLinks,
+                 # SpringName, ThemeToggle
     organisms/   # Opener (one-time terminal intro), Header (sticky top bar),
                  # Sidebar (desktop left rail: section dots, theme toggle,
-                 # socials), Hero, About, Experience, CaseStudies, Projects
+                 # socials), Hero, Experience, Projects, CaseStudies, Contact,
+                 # Footer
     templates/   # PortfolioTemplate - assembles the page
-  content/       # Site copy and data (hero and test run, about copy, experience,
-                 # case studies, projects, code examples, test counts, nav)
-  hooks/         # useActiveSection, usePrefersReducedMotion
+  content/       # Site copy and data (hero and test run, experience, case
+                 # studies, projects, code examples, contact, test counts, nav)
+  hooks/         # useAccordion, useActiveSection, useElementInView,
+                 # useOverAccentSurface, usePrefersReducedMotion
   styles/        # Shared CSS modules (the ledger rows' hover lift, code colors)
   utils/         # Small helpers (class names, locator attributes, row clicks)
 ```
