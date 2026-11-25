@@ -1,0 +1,258 @@
+/* The section transitions.
+
+   Every section after the hero is a sheet of paper laid over the one above,
+   and its title and content fade up as it arrives. The two seams of the
+   violet Projects field also get the "gradient reveal", so the field melts
+   into its neighbours instead of meeting them at an edge:
+
+   - Going in, a violet hill rises through an empty stretch of runway at the
+     bottom of the section before it, and fills it.
+   - Coming out, a hill of the page's own colour rises the same way out of
+     the section after it, through an empty stretch at the bottom of the
+     field, and fills it.
+
+   Cream against violet is the only contrast in the palette strong enough to
+   carry this, so the cream to cream seams keep just the sheet edge.
+
+   The motion is tied to scroll position (CSS scroll-driven animations), not
+   time, and only acts while a piece is near the bottom of the viewport, so
+   a reload or a jump lands on a finished page. Content is masked, never
+   display: none, visibility: hidden or aria-hidden, so it stays in the
+   accessibility tree and the tab order, and a section holding keyboard
+   focus drops the effect at once (tabbing scrolls the focused element only
+   just into view, right where the effect is strongest). Browsers without
+   scroll-driven animations, print, and anyone who prefers reduced motion
+   get a still frame of the blend instead. */
+
+/* The hill's two moving parts, as shares of its box's height: how far up
+   its flat base has risen, and how tall the bell in the middle stands on
+   top of that. */
+@property --hill-rise {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 0;
+}
+
+@property --hill-bump {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 0;
+}
+
+/* Each section after the hero is a sheet of paper laid over the one above:
+   rounded top corners, pulled up by the radius so the section above shows
+   in the corners, and a hairline plus a soft upward shadow in place of the
+   flat border. The overlap only covers the section above's bottom padding
+   (every section has at least 3rem). Later sections stack on top of
+   earlier ones by DOM order. */
+.main > section:not(:first-child) {
+  --sheet-radius: clamp(20px, 3.5vw, 40px);
+  /* The empty stretch before each of the violet field's seams that the
+     colour flows through. It stands in for that section's bottom padding
+     (see the runways below), so the gap matches the other seams. */
+  --runway: clamp(9rem, 26vh, 14rem);
+  position: relative;
+  isolation: isolate;
+  margin-top: calc(-1 * var(--sheet-radius));
+  border-top: 0;
+  border-radius: var(--sheet-radius) var(--sheet-radius) 0 0;
+  box-shadow:
+    0 -1px 0 var(--border),
+    0 -18px 36px -24px var(--shadow-color);
+}
+
+/* A sheet needs its own paper, or the section above would show through.
+   Zero specificity, so a section's own fill (the violet Projects field)
+   still wins. */
+:where(.main > section:not(:first-child)) {
+  background: var(--bg);
+}
+
+/* The runways: empty room at the bottom of the section before each of the
+   field's seams, in that section's own colour, in place of its usual
+   bottom padding. */
+.main > section:has(+ section[data-surface='accent']),
+.main > section[data-surface='accent'] {
+  padding-bottom: 0;
+}
+
+.main > section:has(+ section[data-surface='accent'])::after,
+.main > section[data-surface='accent']::after {
+  content: '';
+  display: block;
+  height: var(--runway);
+}
+
+/* The hill. One shape: a flat plane with a bell curve rising smoothly out
+   of the middle of it (the mask image, a blurred SVG silhouette, so the
+   whole edge has the same soft band), filled with the field's violet. The
+   silhouette is scaled to the bell's height and slid up to the plane's
+   height; a plain gradient fills in below it once it rises past its own
+   bottom. The gradient's soft edge sits inside the silhouette's solid
+   base while the bell is up, and takes over as the bell flattens out.
+
+   It stands on the arriving section's top edge and fills the runway
+   above, down into the sheet's top corners so they fill too: violet going
+   into the field, the page's colour coming out of it. Decorative only,
+   never clickable. Without motion it's a still frame part-way up. */
+.main > section[data-surface='accent']::before,
+.main > section[data-surface='accent'] + section::before {
+  --hill-rise: 0.35;
+  --hill-bump: 0.45;
+  /* The box reaches a sheet radius down into the arriving sheet's corners,
+     and that sheet overlaps the runway by the same radius, so a box of
+     runway minus clearance stops exactly the clearance short of the last
+     line of text in the section above. */
+  --hill-clearance: 2rem;
+  --hill-box: calc(var(--runway) - var(--hill-clearance));
+  /* Where the silhouette image ends at the bottom (its lower 40 of 140
+     units, under the base), measured up from the box's bottom. The plane
+     is solid to exactly there, so no half-transparent strip opens up
+     between the two layers. */
+  --hill-plane: calc(var(--hill-box) * (var(--hill-rise) - var(--hill-bump) * 2 * 40 / 140));
+  --hill-shape: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 140' preserveAspectRatio='none'%3E%3Cfilter id='s' x='-.2' y='-.3' width='1.4' height='1.6'%3E%3CfeGaussianBlur stdDeviation='1.6 5'/%3E%3C/filter%3E%3Cpath d='M-12 220L-12 99.9L-10 99.9L-8 99.8L-6 99.7L-4 99.6L-2 99.4L0 99.1L2 98.7L4 98.2L6 97.6L8 96.7L10 95.6L12 94.3L14 92.6L16 90.6L18 88.2L20 85.3L22 82.1L24 78.4L26 74.2L28 69.8L30 65L32 60.1L34 55.1L36 50.2L38 45.5L40 41.2L42 37.4L44 34.2L46 31.9L48 30.5L50 30L52 30.5L54 31.9L56 34.2L58 37.4L60 41.2L62 45.5L64 50.2L66 55.1L68 60.1L70 65L72 69.8L74 74.2L76 78.4L78 82.1L80 85.3L82 88.2L84 90.6L86 92.6L88 94.3L90 95.6L92 96.7L94 97.6L96 98.2L98 98.7L100 99.1L102 99.4L104 99.6L106 99.7L108 99.8L110 99.9L112 99.9L112 220Z' filter='url(%23s)'/%3E%3C/svg%3E");
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset-inline: 0;
+  bottom: calc(100% - var(--sheet-radius));
+  height: var(--hill-box);
+  pointer-events: none;
+  background: var(--accent);
+  mask-image:
+    var(--hill-shape),
+    linear-gradient(to top, #000 calc(var(--hill-plane) + 2px), transparent calc(var(--hill-plane) + var(--hill-box) * 0.18));
+  mask-repeat: no-repeat;
+  /* The silhouette's viewBox is 140 tall with the bell 70 of it, and its
+     base 100 down from the top. */
+  mask-size:
+    100% calc(var(--hill-box) * var(--hill-bump) * 2),
+    100% 100%;
+  mask-position:
+    50% calc(var(--hill-box) * (1 - var(--hill-rise)) - var(--hill-box) * var(--hill-bump) * 2 * 100 / 140),
+    0 0;
+}
+
+.main > section[data-surface='accent'] + section::before {
+  background: var(--bg);
+}
+
+/* On a phone the bell is a wider share of the screen, so it stays a hill
+   rather than a pillar. */
+@media (max-width: 640px) {
+  .main > section[data-surface='accent']::before,
+  .main > section[data-surface='accent'] + section::before {
+    --hill-shape: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 140' preserveAspectRatio='none'%3E%3Cfilter id='s' x='-.2' y='-.3' width='1.4' height='1.6'%3E%3CfeGaussianBlur stdDeviation='1.6 5'/%3E%3C/filter%3E%3Cpath d='M-12 220L-12 92.1L-10 90.9L-8 89.6L-6 88.2L-4 86.6L-2 84.9L0 83L2 81L4 78.9L6 76.6L8 74.2L10 71.7L12 69.1L14 66.4L16 63.7L18 60.8L20 58L22 55.1L24 52.3L26 49.5L28 46.8L30 44.2L32 41.7L34 39.5L36 37.4L38 35.5L40 33.9L42 32.5L44 31.4L46 30.6L48 30.2L50 30L52 30.2L54 30.6L56 31.4L58 32.5L60 33.9L62 35.5L64 37.4L66 39.5L68 41.7L70 44.2L72 46.8L74 49.5L76 52.3L78 55.1L80 58L82 60.8L84 63.7L86 66.4L88 69.1L90 71.7L92 74.2L94 76.6L96 78.9L98 81L100 83L102 84.9L104 86.6L106 88.2L108 89.6L110 90.9L112 92.1L112 220Z' filter='url(%23s)'/%3E%3C/svg%3E");
+  }
+}
+
+@media screen and (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .main > section:not(:first-child) {
+      view-timeline: --section-reveal block;
+    }
+
+    /* The hill starts as the runway's top comes up over the bottom of the
+       screen and has filled it by the time the seam is 30% from the top.
+       It stays filled after that, so scrolling on reads as one colour
+       running into the next, and it sinks back when you scroll up. */
+    .main > section[data-surface='accent']::before,
+    .main > section[data-surface='accent'] + section::before {
+      animation: hill linear both;
+      animation-timeline: --section-reveal;
+      animation-range: entry calc(-1 * var(--runway)) entry 70vh;
+    }
+
+    /* The pieces a section uncovers one by one: its children, or for the
+       violet section, the children of the field wrapper inside it. */
+    .main > section:not(:first-child, [data-surface='accent']) > *,
+    .main > section[data-surface='accent'] > * > * {
+      animation: uncover linear;
+      animation-timeline: view();
+      animation-range: entry 0% entry 50vh;
+    }
+
+    /* Each section's title also rises out of a blur. Contact's title is
+       itself one of the pieces, so it keeps the uncover as well. */
+    .main > section:not(:first-child) h2[id$='-heading'] {
+      animation: rise var(--ease-out);
+      animation-timeline: view();
+      animation-range: entry 0% entry 40vh;
+    }
+
+    .main > section:not(:first-child) > h2[id$='-heading'] {
+      animation:
+        uncover linear,
+        rise var(--ease-out);
+      animation-timeline: view(), view();
+      animation-range:
+        entry 0% entry 50vh,
+        entry 0% entry 40vh;
+    }
+
+    /* Keyboard focus inside a section shows all of it immediately. The :is()
+       keeps this rule above the title rules' specificity. The hill is
+       scenery, not content, so it carries on. */
+    .main > section:not(:first-child):focus-within :is(*, h2[id$='-heading']) {
+      animation: none;
+    }
+  }
+}
+
+/* After the original effect: the bell shoots up first while the plane
+   starts slow, then the plane overtakes it and flattens it out. The hill's
+   top (rise + bump, plus its soft edge) always stays inside the box, so
+   nothing is ever cut off in a straight line: it finishes a soft band
+   short of the top and fades into the colour above. */
+@keyframes hill {
+  0% {
+    --hill-rise: 0;
+    --hill-bump: 0;
+  }
+  35% {
+    --hill-rise: 0.2;
+    --hill-bump: 0.55;
+  }
+  65% {
+    --hill-rise: 0.5;
+    --hill-bump: 0.38;
+  }
+  85% {
+    --hill-rise: 0.75;
+    --hill-bump: 0.12;
+  }
+  100% {
+    /* Plus the plane's soft edge (18% of the box), just under the top. */
+    --hill-rise: 0.8;
+    --hill-bump: 0;
+  }
+}
+
+/* The soft edge: a mask image, opaque down to 12rem above its own bottom and
+   fading out below that, grows from nothing to past what's on screen. The
+   edge trails the bottom of the viewport, so content fades up into view
+   rather than being wiped. The mask only exists while the animation runs
+   (no fill), so it never clips shadows or hover lifts once a piece is up. */
+@keyframes uncover {
+  from {
+    mask-image: linear-gradient(#000 calc(100% - 12rem), transparent);
+    mask-repeat: no-repeat;
+    mask-size: 100% 0;
+  }
+  to {
+    mask-image: linear-gradient(#000 calc(100% - 12rem), transparent);
+    mask-repeat: no-repeat;
+    mask-size: 100% calc(50vh + 12rem);
+  }
+}
+
+@keyframes rise {
+  from {
+    translate: 0 24px;
+    filter: blur(6px);
+  }
+  to {
+    translate: 0 0;
+    filter: blur(0);
+  }
+}

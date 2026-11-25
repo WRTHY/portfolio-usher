@@ -15,7 +15,7 @@ export const testCounts = {
     {
       "id": "playwright",
       "label": "Playwright E2E",
-      "count": 43
+      "count": 49
     },
     {
       "id": "cypress-e2e",

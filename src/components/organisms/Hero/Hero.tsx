@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { FaArrowDown, FaCrosshairs, FaXmark } from 'react-icons/fa6'
+import { FaCrosshairs, FaDownload, FaXmark } from 'react-icons/fa6'
 import Button from '../../atoms/Button/Button'
 import Reveal from '../../atoms/Reveal/Reveal'
 import Switch from '../../atoms/Switch/Switch'
@@ -120,7 +120,9 @@ function Hero({ onNameGoneChange }: HeroProps) {
               )}
             >
               Download resume
-              <FaArrowDown aria-hidden="true" />
+              {/* An arrow into a tray, so it reads as a download, not as
+                  "scroll down the page". */}
+              <FaDownload aria-hidden="true" />
             </Button>
           </div>
         </div>
