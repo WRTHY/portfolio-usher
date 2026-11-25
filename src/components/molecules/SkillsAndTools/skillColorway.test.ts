@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { experience } from '../../../content/experience'
-import { skillColorway, sortBySkillOrder } from './skillColorway'
+import { gridToolsIn, skillColorway, sortBySkillOrder } from './skillColorway'
 
 describe('skillColorway', () => {
   it.each([
@@ -34,9 +34,9 @@ describe('skillColorway', () => {
   })
 
   // Guards against adding a new tool to a stack and forgetting to
-  // categorize it - it would silently render as a violet pill instead.
-  // Practice skills are meant to be violet, so they're listed here as
-  // deliberate exceptions; add new ones to this list.
+  // categorize it, which would leave it ranked after every tool. Practice
+  // skills aren't tools, so they're listed here as deliberate exceptions;
+  // add new ones to this list.
   it('categorizes every Experience stack entry that is a tool', () => {
     const practiceSkills = new Set([
       'Manual Testing',
@@ -86,5 +86,16 @@ describe('sortBySkillOrder', () => {
     const labels = ['Jira', 'Playwright']
     sortBySkillOrder(labels)
     expect(labels).toEqual(['Jira', 'Playwright'])
+  })
+
+  it.each([
+    ['Playwright', ['Playwright']],
+    ['TypeScript/JavaScript', ['TypeScript', 'JavaScript']],
+    ['JavaScript (Node.js, React Native)', ['JavaScript', 'Node.js', 'React Native']],
+    ['Postman/Apidog', ['Postman']],
+    ['React Native Testing Library', ['RNTL']],
+    ['LaunchDarkly', []],
+  ] as const)('finds the grid tools named in %s', (label, expected) => {
+    expect(gridToolsIn(label)).toEqual(expected)
   })
 })

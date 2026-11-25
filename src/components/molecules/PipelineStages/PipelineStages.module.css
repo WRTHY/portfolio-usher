@@ -1,0 +1,161 @@
+/* Drawn in whatever colours it's given: --text and --border for the lines
+   and cards, --text-h for names, and --chip / --on-chip for the chosen stage
+   (the Projects section sets them for its violet field). */
+.pipeline {
+  container-type: inline-size;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  font: 400 0.8125rem / 1.45 var(--mono);
+  color: var(--text);
+
+  svg {
+    flex-shrink: 0;
+  }
+}
+
+/* Top to bottom on a phone, each arrow pointing down to the next tier. */
+.tiers {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.arrow {
+  display: grid;
+  place-items: center;
+  color: var(--text);
+
+  svg {
+    width: 1.5rem;
+    height: 0.75rem;
+    rotate: 90deg;
+  }
+}
+
+/* Left to right once they fit in a row: the pipeline file first, narrower,
+   then the tiers; tier 2 is twice as wide, its two stages side by side,
+   since they run in parallel. */
+@container (min-width: 820px) {
+  .tiers {
+    grid-template-columns:
+      minmax(0, 0.8fr) auto minmax(0, 1fr) auto minmax(0, 2fr)
+      auto minmax(0, 1fr);
+    align-items: stretch;
+    gap: 0.5rem 0.75rem;
+  }
+
+  .arrow {
+    /* Level with the cards, below the tier labels. */
+    padding-top: 1.6rem;
+
+    svg {
+      rotate: none;
+    }
+  }
+}
+
+.tier {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.tierLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  /* Level with the tiers' labels, whose numbers are in rings. */
+  min-height: 1.2rem;
+  margin: 0;
+  font: 400 0.75rem / 1.4 var(--mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+/* The tier's number, in a small ring: the order is the point. */
+.tierNumber {
+  display: inline-grid;
+  place-items: center;
+  width: 1.2rem;
+  height: 1.2rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: 0.75rem;
+  letter-spacing: 0;
+}
+
+.tierStages {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  gap: 0.5rem;
+}
+
+.stage {
+  display: grid;
+  align-content: start;
+  gap: 0.2rem;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: none;
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background-color 200ms var(--ease-out),
+    border-color 200ms var(--ease-out),
+    color 200ms var(--ease-out);
+
+  &:hover {
+    border-color: var(--text-h);
+  }
+
+  &[data-state='checked'] {
+    border-color: var(--chip, var(--accent));
+    background: var(--chip, var(--accent));
+    color: var(--on-chip, var(--on-accent));
+
+    .name {
+      color: inherit;
+    }
+
+    /* Selected text on the chip: its colours swapped, so the highlight
+       never matches the chip itself. */
+    ::selection {
+      background: var(--on-chip, var(--on-accent));
+      color: var(--chip, var(--accent));
+    }
+  }
+}
+
+.name {
+  font: 500 0.9375rem / 1.3 var(--sans);
+  color: var(--text-h);
+}
+
+/* The pipeline node is named for its file. */
+.file {
+  font: 500 0.875rem / 1.3 var(--mono);
+}
+
+/* No dimming past --text: on the violet field that already sits close to
+   the WCAG contrast floor at this size (axe holds it there). */
+.tools {
+  font: 400 0.75rem / 1.45 var(--mono);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stage {
+    transition: none;
+  }
+}

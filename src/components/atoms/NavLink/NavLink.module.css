@@ -1,28 +1,30 @@
+/* A section link in the top nav. The section in view gets ink color and a
+   violet underline rather than a weight change, so the row never reflows. */
 .link {
-  font-family: var(--heading);
+  font: 500 0.9375rem / 1.2 var(--sans);
   color: var(--text);
-  text-decoration: none;
-  font-size: 28px;
-  transition: color 0.2s ease;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.45em;
+  white-space: nowrap;
+  transition:
+    color 160ms var(--ease-out),
+    text-decoration-color 160ms var(--ease-out);
 
   &:hover {
-    color: var(--accent);
+    color: var(--text-h);
+    text-decoration-color: var(--border);
   }
 
   &.active {
-    color: var(--accent);
-    font-weight: 700;
+    color: var(--text-h);
+    text-decoration-color: var(--accent);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .link {
     transition: none;
-  }
-}
-
-@media (min-width: 640px) {
-  .link {
-    font-size: 1rem;
   }
 }

@@ -1,25 +1,35 @@
+import { useState } from 'react'
+import Opener from '../../organisms/Opener/Opener'
 import Header from '../../organisms/Header/Header'
-import About from '../../organisms/About/About'
+import Hero from '../../organisms/Hero/Hero'
 import Experience from '../../organisms/Experience/Experience'
 import CaseStudies from '../../organisms/CaseStudies/CaseStudies'
-import CodeSamples from '../../organisms/CodeSamples/CodeSamples'
-import ApiTesting from '../../organisms/ApiTesting/ApiTesting'
+import Projects from '../../organisms/Projects/Projects'
+import Contact from '../../organisms/Contact/Contact'
+import Footer from '../../organisms/Footer/Footer'
 import Sidebar from '../../organisms/Sidebar/Sidebar'
-import InfoPanel from '../../organisms/InfoPanel/InfoPanel'
+import styles from './PortfolioTemplate.module.css'
 
-// MobileInfoCard isn't rendered here - each section renders its own
-// instance instead (see MobileInfoCard.tsx for why).
 function PortfolioTemplate() {
+  // The name hand-off: the hero reports when its big name has scrolled up
+  // under the top bar, and only then does the bar show the name. Starts
+  // false because the page loads at the hero; a reload further down gets
+  // corrected by the hero's first report.
+  const [heroNameGone, setHeroNameGone] = useState(false)
+
   return (
     <>
-      <Header />
+      <Opener />
+      <Header showName={heroNameGone} />
       <Sidebar />
-      <InfoPanel />
-      <About />
-      <Experience />
-      <CaseStudies />
-      <CodeSamples />
-      <ApiTesting />
+      <main className={styles.main}>
+        <Hero onNameGoneChange={setHeroNameGone} />
+        <Experience />
+        <Projects />
+        <CaseStudies />
+        <Contact />
+      </main>
+      <Footer />
     </>
   )
 }

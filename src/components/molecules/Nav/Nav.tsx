@@ -1,55 +1,136 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import type { CSSProperties } from 'react'
 import NavLink from '../../atoms/NavLink/NavLink'
 import MenuToggle from '../../atoms/MenuToggle/MenuToggle'
+import Button from '../../atoms/Button/Button'
 import ThemeToggle from '../ThemeToggle/ThemeToggle'
 import SocialLinks from '../SocialLinks/SocialLinks'
-import Button from '../../atoms/Button/Button'
 import useActiveSection from '../../../hooks/useActiveSection'
 import { sections } from '../../../content/navigation'
 import { siteContent } from '../../../content/site'
+import { contactCopy } from '../../../content/contact'
+import { locatorAttrs } from '../../../utils/locatorAttrs'
 import { cx } from '../../../utils/classNames'
 import styles from './Nav.module.css'
 
-// Below 640px, Sidebar (ThemeToggle/SocialLinks) and InfoPanel (the resume
-// button) are both display:none - see their module CSS - so this panel is
-// the only place those controls exist on mobile. It duplicates them rather
-// than reusing a shared "mobile-only" wrapper since each one still renders
-// independently at desktop widths from its own fixed-position component.
-function Nav() {
+// The sticky top bar: wordmark left; section links and the "Let's talk" button
+// right. The button jumps to the contact close; it's an action, not a section,
+// so it isn't one of the links or the rail's dots. The resume is in the hero
+// and the contact close.
+// From 1024px the section links sit inline (nav-link-desktop-* test ids);
+// below that they move into a full-height menu behind the hamburger
+// (nav-link-mobile-*). Only one list is ever displayed, so only one is in the
+// accessibility tree at a time. The theme toggle shows here only below
+// 1024px; on desktop it lives in the left rail (see Sidebar).
+//
+// showName: the wordmark only shows once the hero's big name has scrolled up
+// under the bar (Header tracks that). Its letters spring in when it arrives
+// and drop away when you scroll back to the hero, so the name is never on
+// screen twice.
+type NavProps = {
+  showName?: boolean
+}
+
+function Nav({ showName = true }: NavProps) {
   const [isOpen, setIsOpen] = useState(false)
   const activeId = useActiveSection()
+  const toggleRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!isOpen) return
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape') return
+      setIsOpen(false)
+      toggleRef.current?.querySelector('button')?.focus()
+    }
+    document.addEventListener('keydown', onKeyDown)
+    return () => document.removeEventListener('keydown', onKeyDown)
+  }, [isOpen])
 
   return (
-    <nav className={styles.nav}>
-      <MenuToggle isOpen={isOpen} onClick={() => setIsOpen((open) => !open)} />
-      <div className={cx(styles.panel, isOpen && styles.open)}>
-        <div className={styles.themeToggleWrap}>
-          <ThemeToggle />
-        </div>
-        <p className={styles.title}>{siteContent.tagline}</p>
-        <ul id="site-nav-list" className={styles.list}>
+    <div className={styles.bar}>
+      {/* Named once via aria-label: per-letter inline-block spans would
+          otherwise be read (and accessibility-named) letter by letter. */}
+      <a
+        className={cx(styles.wordmark, !showName && styles.undocked)}
+        href="#top"
+        aria-label={siteContent.name}
+      >
+        <span aria-hidden="true">
+          {siteContent.name.split('').map((letter, i) =>
+            letter === ' ' ? (
+              ' '
+            ) : (
+              <span key={i} className={styles.letter} style={{ '--i': i } as CSSProperties}>
+                {letter}
+              </span>
+            ),
+          )}
+        </span>
+      </a>
+
+      <nav aria-label="Primary" className={styles.primary}>
+        <ul className={styles.links}>
           {sections.map((section) => (
             <li key={section.id}>
               <NavLink
                 href={`#${section.id}`}
-                onClick={() => setIsOpen(false)}
                 isActive={activeId === section.id}
-                testId={`nav-link-mobile-${section.id}`}
+                testId={`nav-link-desktop-${section.id}`}
               >
                 {section.label}
               </NavLink>
             </li>
           ))}
         </ul>
-        <div className={styles.footer}>
-          <p className={styles.summary}>{siteContent.quickSummary}</p>
-          <SocialLinks className={styles.socialLinks} />
+      </nav>
+
+      <div className={styles.actions}>
+        <div className={styles.barThemeToggle}>
+          <ThemeToggle />
+        </div>
+        <a
+          className={styles.talk}
+          href="#contact"
+          {...locatorAttrs(
+            `getByRole('banner').getByRole('link', { name: "${contactCopy.heading}" })`,
+            "toHaveAttribute('href', '#contact')",
+          )}
+        >
+          {contactCopy.heading}
+        </a>
+        <div ref={toggleRef} className={styles.toggleWrap}>
+          <MenuToggle isOpen={isOpen} onClick={() => setIsOpen((open) => !open)} />
+        </div>
+      </div>
+
+      <div id="site-nav-list" className={cx(styles.panel, isOpen && styles.open)}>
+        <nav aria-label="Menu">
+          <ul className={styles.menuLinks}>
+            {sections.map((section) => (
+              <li key={section.id}>
+                <NavLink
+                  href={`#${section.id}`}
+                  onClick={() => setIsOpen(false)}
+                  isActive={activeId === section.id}
+                  testId={`nav-link-mobile-${section.id}`}
+                  className={styles.menuLink}
+                >
+                  {section.label}
+                </NavLink>
+              </li>
+            ))}
+          </ul>
+        </nav>
+        <div className={styles.panelFooter}>
+          <p className={styles.tagline}>{siteContent.tagline}</p>
+          <SocialLinks className={styles.socials} />
           <Button href={siteContent.resumeUrl} external fullWidth>
-            My Resume
+            Download resume
           </Button>
         </div>
       </div>
-    </nav>
+    </div>
   )
 }
 

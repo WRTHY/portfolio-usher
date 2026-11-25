@@ -10,8 +10,8 @@ type SkillPosition = {
 // Leaves room for each category's tools to rank inside its own block.
 const CATEGORY_STRIDE = 1000
 
-// Every tool in the Skills & Tools grid, keyed by lowercase name, so a pill
-// elsewhere on the site picks up the same category color and ordering.
+// Every tool in the Skills & Tools grid, keyed by lowercase name, so tags
+// elsewhere on the site (the case studies') sort the way the grid does.
 const positionByName = new Map<string, SkillPosition>(
   toolCategories.flatMap((category, categoryIndex) =>
     category.tools.map(
@@ -38,6 +38,8 @@ const extraTools: Record<string, SkillColorway> = {
   launchdarkly: 'devops',
   bugsnag: 'devops',
   firebase: 'devops',
+  testrail: 'testing',
+  'tricentis qtest': 'testing',
 }
 
 function lookup(name: string): SkillPosition | undefined {
@@ -57,8 +59,8 @@ function skillPosition(label: string): SkillPosition | undefined {
   return lookup(label) ?? lookup(label.split(/[/(]/)[0])
 }
 
-// Resolves a pill label to its Skills & Tools category. Returns undefined
-// for non-tool tags like "Leadership", which keep the default accent Badge.
+// Resolves a label to its Skills & Tools category. Returns undefined for
+// non-tool tags like "Leadership".
 export function skillColorway(label: string): SkillColorway | undefined {
   return skillPosition(label)?.colorway
 }
@@ -68,4 +70,18 @@ export function skillColorway(label: string): SkillColorway | undefined {
 export function sortBySkillOrder(labels: readonly string[]): string[] {
   const rankOf = (label: string) => skillPosition(label)?.rank ?? Number.POSITIVE_INFINITY
   return [...labels].sort((a, b) => rankOf(a) - rankOf(b))
+}
+
+// The grid's own spelling of each tool, keyed by lowercase name.
+const gridNameByKey = new Map(
+  toolCategories.flatMap((category) => category.tools.map((tool) => [tool.name.toLowerCase(), tool.name] as const)),
+)
+
+// Every grid tool a stack label names, in the grid's spelling: compound
+// labels name several ("TypeScript/JavaScript" is both), and aliases count
+// ("Postman/Apidog" is Postman once). Labels naming no grid tool give [].
+export function gridToolsIn(label: string): string[] {
+  const parts = [label, ...label.split(/[/(),]/)].map((part) => part.trim().toLowerCase()).filter(Boolean)
+  const names = parts.flatMap((key) => gridNameByKey.get(nameAliases[key] ?? key) ?? [])
+  return [...new Set(names)]
 }

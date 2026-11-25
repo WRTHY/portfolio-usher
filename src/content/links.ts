@@ -7,9 +7,13 @@ export const links = {
   email: 'jamesusher1633@gmail.com',
   resume: '/James_Usher_Resume.pdf',
   apiTestingRepo: 'https://github.com/WRTHY/API-testing-sample',
+  portfolioRepo: 'https://github.com/WRTHY/portfolio-usher',
   companies: {
     eventric: 'https://www.eventric.com/',
     fubo: 'https://www.fubo.tv/welcome',
     scientificGames: 'https://www.lnw.com/',
+  },
+  schools: {
+    roseHulman: 'https://www.rose-hulman.edu/',
   },
 } as const

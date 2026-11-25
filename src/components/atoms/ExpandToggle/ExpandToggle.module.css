@@ -1,0 +1,38 @@
+.toggle {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border: 1.5px solid var(--text-h);
+  border-radius: var(--radius-button);
+  background: transparent;
+  color: var(--text-h);
+  font-size: 0.8125rem;
+  cursor: pointer;
+  transition:
+    background-color 160ms var(--ease-out),
+    border-color 160ms var(--ease-out),
+    color 160ms var(--ease-out);
+
+  svg {
+    transition: transform 320ms var(--ease-out);
+  }
+
+  &:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--on-accent);
+  }
+
+  &[aria-expanded='true'] svg {
+    transform: rotate(45deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toggle,
+  .toggle svg {
+    transition: none;
+  }
+}

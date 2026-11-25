@@ -8,15 +8,16 @@ type NavLinkProps = {
   onClick?: MouseEventHandler<HTMLAnchorElement>
   isActive?: boolean
   testId?: string
+  className?: string
 }
 
-function NavLink({ href, children, onClick, isActive, testId }: NavLinkProps) {
+function NavLink({ href, children, onClick, isActive, testId, className }: NavLinkProps) {
   return (
     <a
       href={href}
       onClick={onClick}
-      className={cx(styles.link, isActive && styles.active)}
-      aria-current={isActive ? 'page' : undefined}
+      className={cx(styles.link, isActive && styles.active, className)}
+      aria-current={isActive ? 'location' : undefined}
       data-testid={testId}
     >
       {children}

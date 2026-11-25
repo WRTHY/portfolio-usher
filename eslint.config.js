@@ -15,9 +15,7 @@ export default defineConfig([
       globals: globals.browser,
     },
   },
-  // React-specific rules only apply to actual React source - e2e/playwright's
-  // fixtures.ts has a `use` fixture parameter that eslint-plugin-react-hooks
-  // otherwise mistakes for a hook call.
+  // React rules on app code only: Playwright's `use` fixture isn't a hook.
   {
     files: ['src/**/*.{ts,tsx}'],
     extends: [reactHooks.configs.flat.recommended, reactRefresh.configs.vite],

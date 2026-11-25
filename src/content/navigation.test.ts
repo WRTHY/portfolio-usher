@@ -1,24 +1,17 @@
 import { describe, expect, it } from 'vitest'
-import { contrastSurface, getSectionTone, sections } from './navigation'
+import { getSectionLabel, sections } from './navigation'
 
-describe('contrastSurface', () => {
-  it('puts --section-alt-bg surfaces on base sections and --bg on alt ones', () => {
-    expect(contrastSurface('base')).toBe('var(--section-alt-bg)')
-    expect(contrastSurface('alt')).toBe('var(--bg)')
+describe('sections', () => {
+  it('gives every section a unique id', () => {
+    const ids = sections.map((section) => section.id)
+    expect(new Set(ids).size).toBe(ids.length)
   })
 })
 
-describe('getSectionTone', () => {
-  it('returns the tone each section is declared with', () => {
+describe('getSectionLabel', () => {
+  it('returns the label each section is declared with', () => {
     sections.forEach((section) => {
-      expect(getSectionTone(section.id)).toBe(section.tone)
-    })
-  })
-
-  // Sections alternate down the page, so neighbours never share a tone.
-  it('alternates tones between neighbouring sections', () => {
-    sections.slice(1).forEach((section, i) => {
-      expect(section.tone).not.toBe(sections[i].tone)
+      expect(getSectionLabel(section.id)).toBe(section.label)
     })
   })
 })

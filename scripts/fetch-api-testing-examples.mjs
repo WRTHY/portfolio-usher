@@ -4,11 +4,13 @@
 // section stays scannable.
 //
 // Run manually (npm run fetch:api-testing) or as part of `npm run build`.
-// Non-fatal on failure, like fetch-fonts.mjs: a network hiccup or a renamed
+// Each snippet is also highlighted here (see highlight.ts), so the browser
+// never has to. Non-fatal on failure, like fetch-fonts.mjs: a network hiccup or a renamed
 // file/test just leaves the previously committed generated file in place.
 import { readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { highlightCode } from './highlight.ts';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const MANIFEST_PATH = path.resolve(__dirname, '../src/content/apiTestingManifest.json');
@@ -230,11 +232,13 @@ for (const entry of manifest) {
       filename: entry.playwright.repoPath,
       language: 'typescript',
       code: playwrightCode,
+      html: await highlightCode(playwrightCode, 'typescript'),
     },
     postman: {
       filename: postmanFilename,
       language: 'javascript',
       code: postmanCode,
+      html: await highlightCode(postmanCode, 'javascript'),
     },
   });
   console.log(

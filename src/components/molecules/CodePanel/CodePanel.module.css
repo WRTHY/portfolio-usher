@@ -1,0 +1,24 @@
+/* A page-coloured surface. On the violet Projects section it floats, with
+   the one soft shadow recipe used for things that float. The code inside
+   is capped in height and scrolls, so a long file doesn't take the page. */
+.panel {
+  --code-max-height: 26rem;
+  display: grid;
+  gap: 0.75rem;
+  min-width: 0;
+  padding: 0.75rem;
+  border-radius: 14px;
+  background: var(--bg);
+  color: var(--text);
+  box-shadow: 0 30px 60px -30px var(--shadow-color);
+}
+
+.code {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg);
+}

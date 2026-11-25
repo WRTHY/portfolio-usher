@@ -53,7 +53,7 @@ export const toolCategories: ToolCategory[] = [
       // Shortened from "React Native Testing Library": read as a duplicate
       // of "React Native" below at a glance.
       { name: 'RNTL', icon: <SiTestinglibrary aria-hidden="true" /> },
-      // No Iconify icon exists for Reassure; reuses CodeSamples' Performance glyph.
+      // No mark exists for Reassure; reuses the Performance testing-type glyph.
       { name: 'Reassure', icon: <PerformanceIcon aria-hidden="true" /> },
       { name: 'Qase', icon: <SiQase aria-hidden="true" /> },
       { name: 'Postman', icon: <SiPostman aria-hidden="true" /> },

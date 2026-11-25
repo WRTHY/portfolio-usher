@@ -1,0 +1,41 @@
+/* The region's single grid row grows from 0fr to 1fr: an animation to the
+   content's own height that every current browser runs, where height: auto
+   only animates in Chromium so far. allow-discrete holds off display: none
+   until the fold has finished, and @starting-style gives the opening its
+   first frame. Regions opened together share this timing, so they read as
+   one motion. */
+.reveal {
+  display: grid;
+  grid-template-rows: 1fr;
+  opacity: 1;
+  transition:
+    grid-template-rows 440ms var(--ease-out),
+    opacity 320ms var(--ease-out),
+    display 440ms allow-discrete;
+
+  &[hidden] {
+    display: none;
+    grid-template-rows: 0fr;
+    opacity: 0;
+  }
+}
+
+/* Clips the content while its row is shorter than it. A block formatting
+   context, so the children's margins fold away with it too. */
+.inner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+@starting-style {
+  .reveal {
+    grid-template-rows: 0fr;
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    transition: none;
+  }
+}

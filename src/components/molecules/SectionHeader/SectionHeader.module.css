@@ -1,0 +1,33 @@
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1rem 2rem;
+  margin-bottom: clamp(2rem, 4vw, 3rem);
+}
+
+/* The display face has one weight; never ask for bold (font-synthesis is
+   off globally, so a heavier weight would silently fall back to regular). */
+.title {
+  margin: 0;
+  font: 400 clamp(2.5rem, 6vw, 4.25rem) / 0.95 var(--heading);
+  letter-spacing: 0;
+  color: var(--text-h);
+  text-wrap: balance;
+}
+
+/* A small count after the title, set like a footnote: mono, raised, quiet. */
+.count {
+  margin-left: 0.35em;
+  font: 400 0.8125rem / 1 var(--mono);
+  letter-spacing: 0;
+  vertical-align: super;
+  color: var(--text);
+}
+
+.intro {
+  margin: 0;
+  max-width: 38ch;
+  color: var(--text);
+}

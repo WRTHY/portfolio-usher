@@ -1,26 +1,30 @@
 import type { Locator, Page } from '@playwright/test'
-import { CaseStudyModal } from './CaseStudyModal.page'
 
+// Case studies section - rows are looked up by id, e.g. 'CS 2'
 export class CaseStudiesSection {
-  private readonly page: Page
   readonly section: Locator
-  readonly modal: CaseStudyModal
 
   constructor(page: Page) {
-    this.page = page
     this.section = page.locator('#case-studies')
-    this.modal = new CaseStudyModal(page)
   }
 
-  // Tile buttons have no aria-label - their accessible name is the badge +
-  // title + summary text concatenated, not the case study id callers pass
-  // in (e.g. 'CS 2') - so this looks up the card's data-testid instead
-  // (see CaseStudies.tsx: `case-study-card-${caseStudy.id}`).
-  tile(id: string): Locator {
-    return this.page.getByTestId(`case-study-card-${id}`)
+  row(id: string): Locator {
+    return this.section.getByTestId(`case-study-${id}`)
+  }
+
+  toggle(id: string): Locator {
+    return this.row(id).getByRole('button', { name: /^Read case study:/ })
+  }
+
+  writeUp(id: string): Locator {
+    return this.section.getByTestId(`case-study-write-up-${id}`)
+  }
+
+  closeFromEnd(id: string): Locator {
+    return this.writeUp(id).getByRole('button', { name: 'Close case study' })
   }
 
   async open(id: string) {
-    await this.tile(id).click()
+    await this.toggle(id).click()
   }
 }

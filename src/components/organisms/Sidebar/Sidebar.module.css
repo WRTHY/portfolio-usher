@@ -1,58 +1,63 @@
-/* Renders at every width now - SectionDots (inside .progressDots) is the
-   page's always-on scroll indicator, pinned to the left margin on mobile
-   instead of disappearing along with ThemeToggle/SocialLinks below. */
+/* Desktop-only left rail, pinned to the viewport edge below the sticky top
+   bar. Dots and theme toggle at the top, socials at the bottom. */
 .sidebar {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  position: fixed;
-  left: 10px;
-  top: 0;
-  bottom: 0;
-  z-index: 5;
-  pointer-events: none;
+  display: none;
+}
 
-  > * {
-    pointer-events: auto;
+@media (min-width: 1024px) {
+  .sidebar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    position: fixed;
+    left: 24px;
+    top: calc(var(--nav-height) + 24px);
+    bottom: 32px;
+    z-index: 5;
   }
 }
 
-.progressDots {
+.top {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 20px;
 }
 
-/* Same floating-card treatment as MenuToggle on mobile (see
-   MenuToggle.module.css) - bare dots sat directly on top of whatever card
-   was scrolled underneath, with nothing to separate the two. Desktop keeps
-   the plain, unboxed dots; they already sit in the page's own gutter there
-   instead of floating over content. Keyed off [data-viewport] (see
-   useViewportMode.ts) instead of a raw width media query - see index.css's
-   matching section rule for why a landscape phone needs this mobile
-   treatment despite often being wider than 640px. */
-:root[data-viewport='mobile'] .progressDots {
-  padding: 14px 10px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  background: var(--bg);
-  box-shadow: var(--shadow);
+.group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition:
+    opacity 240ms var(--ease-out),
+    translate 240ms var(--ease-out);
 }
 
-/* ThemeToggle/SocialLinks: desktop-only here - their mobile counterparts
-   live in the hamburger menu instead (see Nav.tsx/Sidebar.tsx). */
-.desktopOnly {
-  display: none;
+/* Faded out while the page shows the same links itself (see Sidebar.tsx). */
+.handedOff {
+  opacity: 0;
+  translate: 0 0.5rem;
+  pointer-events: none;
 }
 
-:root[data-viewport='desktop'] .sidebar {
-  left: 24px;
-  justify-content: space-between;
-  padding: 80px 0 32px;
+@media (prefers-reduced-motion: reduce) {
+  .group {
+    transition: none;
+  }
 }
 
-:root[data-viewport='desktop'] .desktopOnly {
-  display: block;
+/* Over a violet section the page's colours vanish into it, so the group
+   re-points the tokens its pieces already use at the violet field's own
+   text colour: idle dots and icons a little dimmed, the active dot and a
+   hovered icon at full strength. The pieces' existing colour transitions
+   make the switch a fade. */
+.onAccent {
+  --text: color-mix(in srgb, var(--on-accent) 82%, transparent);
+  --border: color-mix(in srgb, var(--on-accent) 45%, transparent);
+  --accent: var(--on-accent);
+
+  :focus-visible {
+    outline-color: var(--on-accent);
+  }
 }

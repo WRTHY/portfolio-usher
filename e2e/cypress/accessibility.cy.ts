@@ -12,10 +12,10 @@ describe('accessibility', () => {
     })
   })
 
-  it('the case study modal has no violations while open', () => {
+  it('an open case study has no violations', () => {
     portfolioPage.visit()
     portfolioPage.caseStudies.open('CS 1')
-    portfolioPage.caseStudies.modal.dialog.should('be.visible')
+    portfolioPage.caseStudies.writeUp('CS 1').should('be.visible')
 
     scanForViolations().then((violations) => {
       expect(violations.length, formatViolations(violations)).to.equal(0)
@@ -29,12 +29,12 @@ describe('accessibility', () => {
     // falls back to that preference whenever localStorage is empty).
     cy.visit('/', { onBeforeLoad: (win) => win.localStorage.setItem('mode', 'light') })
     portfolioPage.themeToggle.toggle()
-    // InfoPanel's background-color transition runs 0.6s (see
-    // InfoPanel.module.css) - scanning before it settles catches axe
-    // mid-crossfade and flags transitional colors that never render. No DOM
-    // signal marks the transition's end, so a fixed wait is unavoidable here.
+    // Color transitions across the page run up to ~300ms after the mode
+    // flips - scanning before they settle catches axe mid-crossfade and
+    // flags transitional colors that never render. No DOM signal marks the
+    // transitions' end, so a fixed wait is unavoidable here.
     // eslint-disable-next-line cypress/no-unnecessary-waiting
-    cy.wait(700)
+    cy.wait(400)
 
     scanForViolations().then((violations) => {
       expect(violations.length, formatViolations(violations)).to.equal(0)

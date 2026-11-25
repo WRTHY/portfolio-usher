@@ -1,0 +1,12 @@
+/* Sits on the same left edge as the sections above (see main > section in
+   index.css). */
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  padding-block: 1.5rem 2.5rem;
+  padding-inline: max(var(--page-gutter), calc((100% - var(--page-max)) / 2));
+  font: 400 0.75rem / 1.5 var(--mono);
+  color: var(--text);
+}

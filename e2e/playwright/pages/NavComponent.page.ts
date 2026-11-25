@@ -1,14 +1,13 @@
 import type { Locator, Page } from '@playwright/test'
 
-export type SectionId = 'about' | 'experience' | 'case-studies' | 'code-samples' | 'api-testing'
+export type SectionId = 'experience' | 'case-studies' | 'projects'
 
-// Two independent navs render the same section ids: InfoPanel's desktop nav
-// (visible at >=640px, when Header/the mobile nav is display:none) and this
-// hamburger's own mobile nav (visible below 640px). Both tag their links with
-// matching data-testids (see InfoPanel.tsx / Nav.tsx) keyed by SectionId, so
-// this looks those up directly rather than by accessible name - the ids
-// callers pass in ('case-studies') don't match the rendered label text
-// ('Case Studies').
+// The top bar renders the same section ids twice: inline in the bar
+// (visible at >=1024px) and in the hamburger menu (below 1024px). Both lists
+// tag their links with matching data-testids (see Nav.tsx) keyed by
+// SectionId, so this looks those up directly rather than by accessible name -
+// the ids callers pass in ('case-studies') don't match the rendered label
+// text ('Case Studies').
 export class NavComponent {
   private readonly page: Page
 

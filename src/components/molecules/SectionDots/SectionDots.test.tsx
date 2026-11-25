@@ -2,7 +2,6 @@ import { render, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import SectionDots from './SectionDots'
 import { sections } from '../../../content/navigation'
-import styles from './SectionDots.module.css'
 
 describe('SectionDots', () => {
   it('renders a dot for every section', () => {
@@ -12,8 +11,14 @@ describe('SectionDots', () => {
     })
   })
 
-  it('marks the first section active by default', () => {
+  it('counts the hero as the first dot, active until a section is reached', () => {
     render(<SectionDots />)
-    expect(screen.getByRole('link', { name: sections[0].label })).toHaveClass(styles.active)
+    const dots = screen.getAllByRole('link')
+    expect(dots).toHaveLength(sections.length + 1)
+    expect(dots[0]).toHaveAttribute('href', '#top')
+    expect(dots[0]).toHaveAttribute('aria-current', 'true')
+    sections.forEach((section) => {
+      expect(screen.getByRole('link', { name: section.label })).not.toHaveAttribute('aria-current')
+    })
   })
 })

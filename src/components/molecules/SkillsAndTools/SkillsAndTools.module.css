@@ -1,119 +1,118 @@
-/* No per-category wrapper card - all three categories' chips share this one
-   grid (see SkillsAndTools.tsx: each category's <ul> is display: contents,
-   so its <li>s become direct items here) and waterfall across the card's
-   full width together. auto-fill with a fixed-width track (matching .chip's
-   own width below) fits as many columns as the available width allows and
-   wraps the rest, instead of three separately-boxed groups each stuck with
-   their own column count and leftover blank space. justify-content centers
-   the resulting block (and any leftover partial-column slack) rather than
-   pinning it to one edge. */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, 80px);
-  justify-content: center;
-  gap: 12px;
+/* The categories run on as one block, each label inline before its
+   chips, so the strip stays a few lines tall. */
+.groups {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 1.75rem;
 }
 
-/* display: contents keeps the <ul> (and its aria-label grouping) out of
-   the visual grid entirely - its <li> children lay out as if they were
-   .grid's direct children, which is what lets chips from different
-   categories share rows instead of being boxed apart. */
-.categoryList {
-  display: contents;
-  list-style: none;
+.group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.6rem;
+}
+
+.groupLabel {
+  margin: 0;
+  font: 400 0.6875rem / 1.4 var(--mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
   margin: 0;
   padding: 0;
+  list-style: none;
 }
 
-.chip {
-  position: relative;
-  width: 80px;
-  height: 80px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 4px;
-  overflow: hidden;
-  /* Category tint, set inline per chip from the shared syntax palette
-     (src/styles/syntaxPalette.ts) - one-dark-pro's hues, as a deliberate
-     callback to the code blocks; see DESIGN.md's "Skills & Tools accent
-     exception" note by the One Accent Rule. With no wrapping card
-     underneath, this is the only color surface marking a tool's category. */
-  background: var(--skill-bg);
-}
+/* On a phone each category is one row that scrolls sideways, its label
+   above, rather than a tall stack of wrapped chips. */
+@media (max-width: 639px) {
+  .groups {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap: 0.75rem;
+  }
 
-.iconWrap {
-  display: flex;
-  color: var(--text-h);
-  font-size: 37px;
-  transition: transform 0.2s ease;
-}
+  .group {
+    display: grid;
+    gap: 0.35rem;
+    min-width: 0;
+  }
 
-/* react-icons' svgs and Iconify's mask-mode spans both size themselves via
-   an explicit width/height="1em" attribute, which resolves against
-   .iconWrap's font-size above - but the hand-authored icons (Maestro,
-   Reassure's shared PerformanceIcon) only set a viewBox, with no intrinsic
-   size at all, so as bare flex children they were rendering at 0×0.
-   Targets any plain <svg> specifically so it doesn't touch the Iconify
-   mask <span>s, which already size correctly on their own. */
-.iconWrap svg {
-  width: 1em;
-  height: 1em;
-}
+  .chips {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 0.35rem;
+    scrollbar-width: thin;
+  }
 
-.hoverLabel {
-  position: absolute;
-  left: 3px;
-  right: 3px;
-  bottom: 8px;
-  text-align: center;
-  font-size: 13px;
-  font-weight: 400;
-  /* line-height: 1 clipped descenders (g/y/p) against this element's own
-     overflow: hidden - the line box was exactly 1em tall, shorter than most
-     fonts' actual ascent+descent. 1.3 gives descenders room without
-     visibly shifting the label (bottom stays anchored at 8px from the
-     chip's own bottom edge; the extra height grows upward). */
-  line-height: 1.3;
-  color: var(--text-h);
-  opacity: 0;
-  transform: translateY(8px);
-  transition:
-    opacity 0.2s ease,
-    transform 0.2s ease;
-  white-space: nowrap;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-.chip:hover .iconWrap {
-  transform: translateY(-12px) scale(0.68);
-}
-
-.chip:hover .hoverLabel {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .iconWrap,
-  .hoverLabel {
-    transition: none;
+  .chip {
+    flex: none;
   }
 }
 
-/* Standard visually-hidden pattern - no shared utility for this existed yet
-   in the codebase, so it's scoped to this component rather than added
-   globally. Carries each tool's name at all times, independent of the
-   hover-only .hoverLabel, since hover never fires on touch devices. */
-.srOnly {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
+/* Category tint from the shared syntax palette (see syntaxPalette.ts): the
+   one colour that marks a tool's category. */
+.chip {
+  border-radius: 4px;
+  background: var(--skill-bg);
+  transition:
+    opacity 200ms var(--ease-out),
+    box-shadow 160ms var(--ease-out);
+}
+
+.chipButton,
+.chipBody {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.55rem 0.3rem 0.45rem;
   border: 0;
+  border-radius: inherit;
+  background: none;
+  font: 400 0.8125rem / 1.2 var(--mono);
+  color: var(--text-h);
+}
+
+.chipButton {
+  cursor: pointer;
+}
+
+.icon {
+  display: flex;
+  font-size: 0.9375rem;
+
+  /* The hand-drawn icons only set a viewBox, so size them like the rest. */
+  svg {
+    width: 1em;
+    height: 1em;
+  }
+}
+
+/* While the ledger is filtered, the chosen tool stays at full strength and
+   the others step back. A picked tool keeps a ring, so it reads as on. */
+.filtering .chip:not(.active) {
+  opacity: 0.45;
+}
+
+.active {
+  box-shadow: inset 0 0 0 1.5px var(--text-h);
+}
+
+@media (hover: hover) {
+  .chip:has(.chipButton:hover) {
+    box-shadow: inset 0 0 0 1.5px var(--text-h);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chip {
+    transition: none;
+  }
 }

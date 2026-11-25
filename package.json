@@ -1,14 +1,15 @@
 {
   "name": "portfolio",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "node scripts/fetch-fonts.mjs && node scripts/fetch-api-testing-examples.mjs && tsc -b && vite build",
+    "build": "node scripts/fetch-fonts.mjs && node scripts/fetch-api-testing-examples.mjs && node scripts/count-tests.mjs && tsc -b && vite build",
     "lint": "eslint .",
     "typecheck": "tsc -b",
     "fetch:api-testing": "node scripts/fetch-api-testing-examples.mjs",
+    "count:tests": "node scripts/count-tests.mjs",
     "preview": "vite preview",
     "test": "npm run test:unit && npm run test:component:cypress && npm run test:e2e:playwright && npm run test:e2e:cypress",
     "test:unit": "vitest run",
@@ -21,15 +22,11 @@
     "test:e2e:cypress:ui": "start-server-and-test dev http://localhost:5173 \"cypress open\""
   },
   "dependencies": {
-    "@iconify/react": "^6.0.2",
     "@radix-ui/react-radio-group": "^1.4.7",
     "@radix-ui/react-tabs": "^1.1.21",
-    "@tsparticles/react": "^4.3.2",
-    "@tsparticles/slim": "^4.3.2",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
-    "react-icons": "^5.7.0",
-    "react-shiki": "^0.11.1"
+    "react-icons": "^5.7.0"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",
@@ -52,6 +49,7 @@
     "eslint-plugin-react-refresh": "^0.5.3",
     "globals": "^17.7.0",
     "jsdom": "^30.0.1",
+    "shiki": "^4.4.3",
     "start-server-and-test": "^3.0.12",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.65.0",

@@ -18,10 +18,10 @@ export type CaseStudy = {
   outcome: string
   /** Reflections - what I'd do differently or explore next, in hindsight. Optional. */
   futureIterations?: string;
-  /** Real thumbnail image, once one exists. Falls back to a gradient placeholder. */
-  image?: string;
-  /** Small stat callouts shown in the modal's left rail. Optional, any number. */
-  highlights?: readonly Highlight[];
+  /** Stat callouts. The first leads the case study's row in the ledger, so
+   *  it's the outcome a reader should see before opening it; any others sit
+   *  beside the write-up once it's open. Real figures only: never invented. */
+  highlights: readonly [Highlight, ...Highlight[]];
   /** Compact, ordered timeline strip for a case study built around a multi-phase
    *  framework rather than a single project narrative. Renders at the top of the
    *  content pane. Optional - most case studies won't have one. */
@@ -43,6 +43,9 @@ export const caseStudies: readonly CaseStudy[] = [
       "This isn't theoretical - it's the order I actually followed building Eventric's quality function from nothing, and the MT3 desktop automation case study is phases 2 and 3 of this framework in practice: the same fixtures, page-object layer, and critical-path-first sequencing described here. I've now run the early phases solo and the later ones with a second QA engineer, and the sequencing held up under both - team size changed the pace, not the order.",
     futureIterations:
       "The phase I've tested least is late-stage maturity - where tests actually block releases and coverage becomes an ongoing operating model rather than a project with an end date. I got Eventric through the early-to-mid phases in full and partway into that maturity stretch, but I haven't run this at a company big enough to see how the later phases hold up under real pressure to ship automation results faster than the sequencing recommends.",
+    // No before/after metric for a framework, so its row leads with its
+    // shape instead: the phase count, from the phases below.
+    highlights: [{ value: "7 phases", label: "Zero to one, built in a set order" }],
     phases: [
       { name: "Assessment", timeframe: "Wks 1–2" },
       { name: "Manual Gates & Quick Wins", timeframe: "Wks 2–6" },

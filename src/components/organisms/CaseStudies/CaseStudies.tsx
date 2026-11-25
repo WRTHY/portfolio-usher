@@ -1,26 +1,28 @@
-import { useEffect, useId, useRef, useState } from 'react'
-import { getSectionLabel, getSectionTone } from '../../../content/navigation'
-import SkillBadge from '../../molecules/SkillBadge/SkillBadge'
-import { sortBySkillOrder } from '../../molecules/SkillsAndTools/skillColorway'
-import Card from '../../atoms/Card/Card'
-import Heading from '../../atoms/Heading/Heading'
-import IconButton from '../../atoms/IconButton/IconButton'
-import Modal from '../../molecules/Modal/Modal'
-import ParticleBackground from '../../molecules/ParticleBackground/ParticleBackground'
-import SectionBody from '../../molecules/SectionBody/SectionBody'
-import MobileInfoCard from '../MobileInfoCard/MobileInfoCard'
+import { useId, useRef, useState } from 'react'
+import { useAccordion } from '../../../hooks/useAccordion'
+import type { MouseEvent } from 'react'
+import { getSectionLabel } from '../../../content/navigation'
 import { caseStudies } from '../../../content/caseStudies'
 import type { CaseStudy } from '../../../content/caseStudies'
+import ExpandToggle from '../../atoms/ExpandToggle/ExpandToggle'
+import Heading from '../../atoms/Heading/Heading'
+import Reveal from '../../atoms/Reveal/Reveal'
+import SectionHeader from '../../molecules/SectionHeader/SectionHeader'
+import { sortBySkillOrder } from '../../molecules/SkillsAndTools/skillColorway'
 import usePrefersReducedMotion from '../../../hooks/usePrefersReducedMotion'
+import { cx } from '../../../utils/classNames'
+import { isRowToggleClick } from '../../../utils/rowToggle'
 import styles from './CaseStudies.module.css'
 
 const sectionLabel = getSectionLabel('case-studies')
-const sectionTone = getSectionTone('case-studies')
 
-type ReportSection = {
-  key: 'problem' | 'approach' | 'outcome'| 'futureIterations'
-  label: string
-}
+// The write-up's parts, in reading order. Future iterations is optional.
+const PARTS = [
+  { key: 'problem', label: 'Problem' },
+  { key: 'approach', label: 'Approach' },
+  { key: 'outcome', label: 'Outcome' },
+  { key: 'futureIterations', label: 'Future iterations' },
+] as const
 
 // Content fields are plain strings with blank-line-separated paragraphs.
 // A single <p> collapses those newlines like any other HTML whitespace, so
@@ -39,272 +41,146 @@ function Paragraphs({ text }: { text: string }) {
   )
 }
 
-function reportSectionsFor(caseStudy: CaseStudy): ReportSection[] {
-  return [
-    { key: 'problem', label: 'Problem' },
-    { key: 'approach', label: 'Approach' },
-    { key: 'outcome', label: 'Outcome' },
-    ...(caseStudy.futureIterations
-      ? [{ key: 'futureIterations' as const, label: 'Future iterations' }]
-      : []),
-  ]
+type CaseStudyRowProps = {
+  caseStudy: CaseStudy
+  open: boolean
+  onToggle: () => void
 }
 
-// The Reading Rail's section-jump nav: scrolls the clicked section into view
-// and tracks which section is in view to highlight the matching rail item,
-// scoped to the content pane's own scroll position, since the pane scrolls.
-function useReadingRail(reportSections: ReportSection[], resetKey: string | null) {
-  const contentRef = useRef<HTMLDivElement>(null)
-  const sectionRefs = useRef(new Map<string, HTMLElement>())
-  const [activeKey, setActiveKey] = useState<ReportSection['key']>('problem')
+// One row, led by its outcome: the headline figure and what it measures,
+// then the title and its topics. The "+" (or a click anywhere on the row)
+// unfolds the full write-up in place, with any other figures beside it.
+function CaseStudyRow({ caseStudy, open, onToggle }: CaseStudyRowProps) {
+  const [highlighted, setHighlighted] = useState(false)
+  const titleId = useId()
+  const writeUpId = useId()
+  const figuresId = useId()
+  const writeUpRef = useRef<HTMLDivElement>(null)
+  const figuresRef = useRef<HTMLDivElement>(null)
+  const toggleRef = useRef<HTMLButtonElement>(null)
+  const rowRef = useRef<HTMLLIElement>(null)
   const prefersReducedMotion = usePrefersReducedMotion()
 
-  // Resets to Problem when a different case study opens. Adjusting state
-  // during render avoids an extra render vs. doing this in an effect:
-  // https://react.dev/learn/you-might-not-need-an-effect
-  const [trackedResetKey, setTrackedResetKey] = useState(resetKey)
-  if (resetKey !== trackedResetKey) {
-    setTrackedResetKey(resetKey)
-    setActiveKey('problem')
+  const [headline, ...figures] = caseStudy.highlights
+  const parts = PARTS.filter(({ key }) => caseStudy[key])
+  const controls = figures.length > 0 ? `${writeUpId} ${figuresId}` : writeUpId
+
+  const handleRowClick = (event: MouseEvent<HTMLLIElement>) => {
+    if (isRowToggleClick(event.target, [writeUpRef.current, figuresRef.current])) onToggle()
   }
 
-  // Rescales each section's document position onto the pane's actual
-  // scrollable range (0 to maxScroll), rather than checking whether its top
-  // reached a fixed reading line - a short trailing section can need more
-  // room to reach that line than the pane has left to scroll, which would
-  // skip it entirely. Rescaling guarantees every section gets a
-  // proportional share of whatever range exists.
-  const getSectionBoundaries = (pane: HTMLDivElement) => {
-    const maxScroll = pane.scrollHeight - pane.clientHeight
-    const firstEl = sectionRefs.current.get(reportSections[0]?.key)
-    const lastEl = sectionRefs.current.get(reportSections[reportSections.length - 1]?.key)
-    const boundaries = new Map<string, number>()
-    // scrollHeight is 0 only before the pane has been laid out, not when
-    // laid-out content simply fits without scrolling - distinguish the two
-    // so this doesn't jump to the last section before layout settles.
-    if (!firstEl || !lastEl || pane.scrollHeight === 0) return boundaries
-
-    const span = lastEl.offsetTop - firstEl.offsetTop
-    const scale = span > 0 && maxScroll > 0 ? maxScroll / span : 0
-    reportSections.forEach(({ key }) => {
-      const el = sectionRefs.current.get(key)
-      if (el) boundaries.set(key, (el.offsetTop - firstEl.offsetTop) * scale)
-    })
-    return boundaries
-  }
-
-  useEffect(() => {
-    const pane = contentRef.current
-    if (!pane) return
-
-    const updateActiveSection = () => {
-      const boundaries = getSectionBoundaries(pane)
-      let nextKey = reportSections[0]?.key
-      reportSections.forEach(({ key }) => {
-        const boundary = boundaries.get(key)
-        // 1px tolerance: scrollTop can land fractionally short of a
-        // boundary that was computed to equal maxScroll exactly.
-        if (boundary !== undefined && pane.scrollTop >= boundary - 1) nextKey = key
-      })
-
-      if (nextKey) setActiveKey((current) => (current === nextKey ? current : nextKey))
+  // The write-ups are long, so there's a way to close one from its end. It
+  // hands focus back to the "+" and, if the row's top has scrolled away,
+  // brings it back into view, so the reader lands where the case study began.
+  const closeFromEnd = () => {
+    onToggle()
+    toggleRef.current?.focus({ preventScroll: true })
+    const row = rowRef.current
+    if (row && row.getBoundingClientRect().top < 0) {
+      row.scrollIntoView({ block: 'start', behavior: prefersReducedMotion ? 'auto' : 'smooth' })
     }
-
-    updateActiveSection()
-    pane.addEventListener('scroll', updateActiveSection, { passive: true })
-    window.addEventListener('resize', updateActiveSection)
-    return () => {
-      pane.removeEventListener('scroll', updateActiveSection)
-      window.removeEventListener('resize', updateActiveSection)
-    }
-    // reportSections is derived fresh from `selected` each render; keying
-    // off its length (rather than the array reference) avoids tearing this
-    // listener down and rebuilding it every render for no reason.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [reportSections.length])
-
-  const scrollToSection = (key: ReportSection['key']) => {
-    const pane = contentRef.current
-    if (!pane) return
-    const boundary = getSectionBoundaries(pane).get(key)
-    if (boundary === undefined) return
-
-    // Uses this section's rescaled boundary rather than scrollIntoView,
-    // which would clamp a near-the-end section to the pane's max scroll -
-    // the same position a later section's nav item lands on.
-    pane.scrollTo({ top: boundary, behavior: prefersReducedMotion ? 'auto' : 'smooth' })
   }
-
-  const registerSection = (key: ReportSection['key']) => (el: HTMLElement | null) => {
-    if (el) sectionRefs.current.set(key, el)
-    else sectionRefs.current.delete(key)
-  }
-
-  return { contentRef, activeKey, scrollToSection, registerSection }
-}
-
-function CaseStudies() {
-  const [selectedId, setSelectedId] = useState<string | null>(null)
-  const titleId = useId()
-
-  const selected = caseStudies.find((caseStudy) => caseStudy.id === selectedId) ?? null
-  const reportSections = selected ? reportSectionsFor(selected) : []
-  const { contentRef, activeKey, scrollToSection, registerSection } = useReadingRail(
-    reportSections,
-    selected?.id ?? null,
-  )
 
   return (
-    <section id="case-studies" className="flush-section" aria-label={sectionLabel}>
-      <MobileInfoCard label={sectionLabel} tone={sectionTone} />
-      <ParticleBackground variant="case-studies" />
-      <SectionBody>
-        {caseStudies.map((caseStudy) => (
-          <Card
-            key={caseStudy.id}
-            as="button"
-            type="button"
-            tone="alt"
-            interactive
-            className={styles.card}
-            data-testid={`case-study-card-${caseStudy.id}`}
-            onClick={() => setSelectedId(caseStudy.id)}
-          >
-            <Heading level={2}>{caseStudy.title}</Heading>
-            <p className={styles.summary}>{caseStudy.summary}</p>
-            <div className={styles.tags}>
-              {sortBySkillOrder(caseStudy.tags).map((tag) => (
-                <SkillBadge key={tag} label={tag} />
-              ))}
-            </div>
-            <span className={styles.affordance}>Read case study &rarr;</span>
-          </Card>
+    <li
+      ref={rowRef}
+      className={cx(styles.row, highlighted && styles.highlighted)}
+      data-testid={`case-study-${caseStudy.id}`}
+      data-accordion-row={caseStudy.id}
+      data-highlighted={highlighted || undefined}
+      onClick={handleRowClick}
+      onPointerEnter={(event) => event.pointerType !== 'touch' && setHighlighted(true)}
+      onPointerLeave={() => setHighlighted(false)}
+    >
+      <p className={styles.headline}>
+        <span className={styles.headlineValue}>{headline.value}</span>
+        <span className={styles.headlineLabel}>{headline.label}</span>
+      </p>
+      <Heading level={3} id={titleId} className={styles.title}>
+        {caseStudy.title}
+      </Heading>
+      <ul className={styles.tags} aria-label={`Topics: ${caseStudy.title}`}>
+        {sortBySkillOrder(caseStudy.tags).map((tag) => (
+          <li key={tag}>{tag}</li>
         ))}
-      </SectionBody>
-
-      {selected && (
-        <Modal titleId={titleId} onClose={() => setSelectedId(null)} testId="case-study-modal">
-          <IconButton
-            onClick={() => setSelectedId(null)}
-            ariaLabel="Close"
-            size={20}
-            className={styles.close}
-            testId="case-study-modal-close"
-          >
-            &times;
-          </IconButton>
-          <div className={styles.rail}>
-            <h2 id={titleId} data-testid="case-study-modal-title">
-              {selected.title}
-            </h2>
-            <div className={styles.tags}>
-              {sortBySkillOrder(selected.tags).map((tag) => (
-                <SkillBadge key={tag} label={tag} />
-              ))}
-            </div>
-            <hr className={styles.railDivider} />
-            {selected.highlights && selected.highlights.length > 0 && (
-              <div className={styles.highlights}>
-                {selected.highlights.map(({ value, label }) => (
-                  <div className={styles.highlight} key={label}>
-                    <span className={styles.highlightValue}>{value}</span>
-                    <span className={styles.highlightLabel}>{label}</span>
-                  </div>
-                ))}
+      </ul>
+      <ExpandToggle
+        ref={toggleRef}
+        className={styles.toggle}
+        expanded={open}
+        onToggle={onToggle}
+        controls={controls}
+        label={`Read case study: ${caseStudy.title}`}
+        onFocus={(event) => event.currentTarget.matches(':focus-visible') && setHighlighted(true)}
+        onBlur={() => setHighlighted(false)}
+      />
+      {figures.length > 0 && (
+        <Reveal id={figuresId} ref={figuresRef} open={open} className={styles.figures}>
+          <dl aria-label={`More results: ${caseStudy.title}`}>
+            {figures.map(({ value, label }) => (
+              <div key={label} className={styles.figure}>
+                <dt>{label}</dt>
+                <dd>{value}</dd>
               </div>
-            )}
-            <hr className={`${styles.railDivider} ${styles.railDividerBottom}`} />
-            <nav className={styles.railNav} aria-label="Case study sections">
-              {reportSections.map(({ key, label }) => (
-                <button
-                  key={key}
-                  type="button"
-                  className={
-                    key === activeKey
-                      ? `${styles.navItem} ${styles.navItemActive}`
-                      : styles.navItem
-                  }
-                  onClick={() => scrollToSection(key)}
-                >
-                  <span className={styles.dot} aria-hidden="true" />
-                  {label}
-                </button>
-              ))}
-            </nav>
-          </div>
-          <div
-            className={styles.content}
-            ref={contentRef}
-            tabIndex={0}
-            role="region"
-            aria-labelledby={titleId}
-          >
-            {selected.phases && selected.phases.length > 0 && (
-              <div className={styles.phaseStripSection} data-testid="case-study-phase-strip">
-                <span className={styles.phaseStripLabel} id={`${titleId}-phase-strip-label`}>
-                  The framework, phase by phase
-                </span>
-                {/* tabIndex + aria makes this reachable/nameable via keyboard
-                    (axe's scrollable-region-focusable) - unlike .railNav
-                    above, these phase cards are plain divs with no focusable
-                    descendant of their own to satisfy that rule instead. */}
-                <div
-                  className={styles.phaseStrip}
-                  tabIndex={0}
-                  role="group"
-                  aria-labelledby={`${titleId}-phase-strip-label`}
-                >
-                  {selected.phases.map((phase, index) => (
-                    <div className={styles.phase} key={index}>
-                      <span className={styles.phaseNumber}>{index}</span>
-                      <span className={styles.phaseName}>{phase.name}</span>
-                      <span className={styles.phaseTimeframe}>{phase.timeframe}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-            <div
-              className={styles.section}
-              ref={registerSection('problem')}
-              data-section-key="problem"
-              data-testid="case-study-section-problem"
-            >
-              <h3>Problem</h3>
-              <Paragraphs text={selected.problem} />
-            </div>
-            <div
-              className={styles.section}
-              ref={registerSection('approach')}
-              data-section-key="approach"
-              data-testid="case-study-section-approach"
-            >
-              <h3>Approach</h3>
-              <Paragraphs text={selected.approach} />
-            </div>
-            <div
-              className={styles.section}
-              ref={registerSection('outcome')}
-              data-section-key="outcome"
-              data-testid="case-study-section-outcome"
-            >
-              <h3>Outcome</h3>
-              <Paragraphs text={selected.outcome} />
-            </div>
-            {selected.futureIterations && (
-              <div
-                className={`${styles.section} ${styles.futureIterations}`}
-                ref={registerSection('futureIterations')}
-                data-section-key="futureIterations"
-                data-testid="case-study-section-futureIterations"
-              >
-                <h3>Future iterations</h3>
-                <Paragraphs text={selected.futureIterations} />
-              </div>
-            )}
-          </div>
-        </Modal>
+            ))}
+          </dl>
+        </Reveal>
       )}
+      <Reveal id={writeUpId} ref={writeUpRef} open={open} className={styles.writeUp}>
+        <article aria-labelledby={titleId} data-testid={`case-study-write-up-${caseStudy.id}`}>
+          <p className={styles.summary}>{caseStudy.summary}</p>
+          {caseStudy.phases && caseStudy.phases.length > 0 && (
+            <div className={styles.phases}>
+              <h4 id={`${titleId}-phases`}>The framework, phase by phase</h4>
+              <ol aria-labelledby={`${titleId}-phases`}>
+                {caseStudy.phases.map((phase) => (
+                  <li key={phase.name}>
+                    <span className={styles.phaseName}>{phase.name}</span>
+                    <span className={styles.phaseTime}>{phase.timeframe}</span>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          )}
+          {parts.map(({ key, label }) => (
+            <section
+              key={key}
+              className={cx(styles.part, key === 'futureIterations' && styles.reflection)}
+              aria-labelledby={`${titleId}-${key}`}
+              data-testid={`case-study-part-${key}`}
+            >
+              <h4 id={`${titleId}-${key}`}>{label}</h4>
+              <Paragraphs text={caseStudy[key] ?? ''} />
+            </section>
+          ))}
+          <button type="button" className={styles.closeFromEnd} onClick={closeFromEnd}>
+            Close case study
+          </button>
+        </article>
+      </Reveal>
+    </li>
+  )
+}
+
+// Outcome-led rows, one per case study, each opening in place: no modal,
+// no second scroll container, and the page's own scroll and back button
+// keep working while a case study is open.
+function CaseStudies() {
+  const { openId, toggle, scopeRef } = useAccordion<HTMLOListElement>()
+
+  return (
+    <section id="case-studies" aria-labelledby="case-studies-heading">
+      <SectionHeader id="case-studies-heading" title={sectionLabel} />
+      <ol ref={scopeRef} className={styles.ledger}>
+        {caseStudies.map((caseStudy) => (
+          <CaseStudyRow
+            key={caseStudy.id}
+            caseStudy={caseStudy}
+            open={openId === caseStudy.id}
+            onToggle={() => toggle(caseStudy.id)}
+          />
+        ))}
+      </ol>
     </section>
   )
 }

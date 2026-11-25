@@ -1,18 +1,9 @@
 import CopyButton from './CopyButton'
 
-// Deliberately redundant with CopyButton.test.tsx (Vitest + React Testing
-// Library): same component, same three behaviors, run through Cypress's
-// real-browser mount instead of jsdom. That's the point - the Component
-// tier of the portfolio's "Automation Examples" panel offers a Vitest vs.
-// Cypress choice the same way the E2E tier offers Playwright vs. Cypress.
-// Featured verbatim as the Component/Cypress example in codeExamples.ts -
-// keep this file's content and that copy in sync if either changes.
+// Same tests as CopyButton.test.tsx, in a real browser
 describe('CopyButton', () => {
   beforeEach(() => {
-    // Real Chrome's navigator.clipboard needs OS-level permission (and a
-    // secure context) to actually write, neither of which the component
-    // test runner grants - stub it the same way the Vitest test stubs
-    // jsdom's copy.
+    // The runner has no clipboard permission, so stub it.
     cy.window().then((win) => {
       const writeText = cy.stub().as('writeText').resolves()
       Object.defineProperty(win.navigator, 'clipboard', {
@@ -36,6 +27,7 @@ describe('CopyButton', () => {
   })
 
   it('flips its label to "Copied" and back after ~1500ms', () => {
+    // Control the clock so we don't wait out the 1.5s reset
     cy.clock()
     cy.mount(<CopyButton text="npx playwright test" />)
 

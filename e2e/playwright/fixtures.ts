@@ -5,6 +5,7 @@ type Fixtures = {
   portfolioPage: PortfolioPage
 }
 
+// Every test gets a ready-made portfolioPage
 export const test = base.extend<Fixtures>({
   portfolioPage: async ({ page }, use) => {
     await use(new PortfolioPage(page))

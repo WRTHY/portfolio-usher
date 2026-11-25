@@ -31,49 +31,71 @@
   --accent-bg: light-dark(rgba(109, 40, 217, 0.1), rgba(167, 139, 250, 0.15));
   --accent-border: light-dark(rgba(109, 40, 217, 0.4), rgba(167, 139, 250, 0.5));
   --section-alt-bg: light-dark(#f1e6cc, #1c1e26);
-  /* Deliberately darker/more saturated than --accent: a handful of small,
-     low-opacity dots needs stronger contrast than text/UI elements do to
-     stay visible against the light cream background. */
-  --particle-color: light-dark(#4c1d95, #a78bfa);
   /* light-dark() is a <color> function - it can only wrap the color
      component of a shadow, not the whole offset/blur/color value. */
   --shadow: light-dark(rgba(60, 40, 10, 0.12), rgba(0, 0, 0, 0.4)) 0 10px 24px -8px;
   /* A more pronounced variant of --shadow for chrome that has to read as
-     clearly separate from whatever's behind it rather than sit like an
-     ordinary card - the mobile menu toggle, floating over the particle
-     layer and whatever section is scrolled underneath. */
+     clearly separate from whatever's scrolled underneath it. */
   --shadow-strong: light-dark(rgba(40, 25, 5, 0.35), rgba(0, 0, 0, 0.7)) 0 6px 16px -2px;
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: 'TBJ Orcherum Mini', system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
+  /* Redesign tokens (see prototypes/hybrid). Same Cream & Violet palette,
+     plus the few roles the new layout needs. */
+  /* Hover/pressed step for violet fills (primary button, toggles). */
+  --accent-hover: light-dark(#5b21b6, #c4b5fd);
+  /* Highlighter bands behind key phrases and outcome numbers - a stronger
+     wash than --accent-bg so it reads as a mark, not a tint. */
+  --accent-wash: light-dark(rgba(109, 40, 217, 0.18), rgba(167, 139, 250, 0.26));
+  /* Text/icon color that sits on a solid --accent fill. */
+  --on-accent: light-dark(#f8f1e1, #16171d);
+  /* A raised surface a step lighter than the page (switches, pills). */
+  --surface: light-dark(#fffaf0, #1c1e26);
+  /* Color-only shadow, for recipes that set their own offset/blur. */
+  --shadow-color: light-dark(rgba(60, 40, 10, 0.28), rgba(0, 0, 0, 0.6));
 
-  /* The site's one rounded-corner radius, used by every card/panel/modal/
+  /* Terminal surfaces (opener, run report, code panels, locator tooltips)
+     stay dark in both modes - they're the "test output" material. */
+  --term: light-dark(#16171d, #0e0f13);
+  --term-line: #2e303a;
+  --term-text: #e5e7eb;
+  --term-dim: #9ca3af;
+  --term-accent: #a78bfa;
+  --term-fail: #ff6b5e;
+
+  /* Motion: one exponential ease-out for everything, and one spring kept
+     for the two signature moments (the name's letter pop, check marks). */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* General Sans (Fontshare) for running text, JetBrains Mono for code and
+     test output only; both loaded from index.html. TBJ Orcherum Mini stays
+     the display face. */
+  --sans: 'General Sans', system-ui, 'Segoe UI', Roboto, sans-serif;
+  --heading: 'TBJ Orcherum Mini', 'General Sans', system-ui, 'Segoe UI', Roboto, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, Consolas, monospace;
+
+  /* The site's one rounded-corner radius, used by every card/panel/
      floating-surface recipe - a single token instead of the literal 12px
      repeated across each of their CSS modules. */
   --radius-lg: 12px;
 
-  /* Shared page-layout tokens - the single source of truth for how far
-     section content sits from the viewport edge and how wide the standard
-     content column is. Anything that needs to line up with the rest of the
-     page's content - including elements that intentionally run wider than
-     the standard column, like the code samples panel - should reference
-     these instead of hardcoding its own margin/width. */
-  --page-gutter: 56px;
-  --page-gutter-desktop: 128px; /* clears the fixed sidebar (left: 24px + its width) */
+  /* Every button: a rectangle with rounded corners, not a pill. */
+  --radius-button: 8px;
+
+  /* Shared page-layout tokens. The page is one centered column: the sticky
+     top nav and every section line up on --page-max inside --page-gutter. */
+  --page-gutter: clamp(20px, 5vw, 64px);
+  --page-max: 1200px;
   --content-width: 640px; /* standard single-column reading width */
   --content-width-wide: 900px; /* wider two-column / media / gallery width */
-  --info-panel-width: 400px; /* InfoPanel's fixed width at desktop */
-  /* Clears both the fixed sidebar and the fixed InfoPanel that sits just right
-     of it, plus breathing room - the single source of truth for how far
-     normal section content must start so the InfoPanel never covers it. */
-  --content-clearance-desktop: calc(var(--page-gutter-desktop) + var(--info-panel-width) + 40px);
+  --nav-height: 64px;
+
 
   font: 18px/145% var(--sans);
   letter-spacing: 0.18px;
   color: var(--text);
   background: var(--bg);
   font-synthesis: none;
+  font-optical-sizing: auto;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -83,58 +105,8 @@
   }
 }
 
-/* Below this, the InfoPanel's full 400px width plus its clearance leaves
-   section content squeezed into a sliver (or negative space) between it and
-   the page's right gutter. Re-declaring the token here - rather than adding
-   a third breakpoint band inside InfoPanel/content-clearance-desktop's own
-   math - means every consumer of --info-panel-width and
-   --content-clearance-desktop picks up the smaller value for free. A plain
-   width swap at a fixed breakpoint (no transition) rather than a fluid
-   vw-based shrink, since a panel that resizes continuously while dragging
-   the window would be a much bigger distraction than one that snaps once. */
-@media (min-width: 640px) and (max-width: 1023px) {
-  :root {
-    --info-panel-width: 240px;
-  }
-}
-
-/* Below 640px the sidebar/InfoPanel are hidden entirely (see Sidebar and
-   InfoPanel module CSS) and every section runs edge-to-edge, so the fixed
-   56px gutter meant for clearing those fixed elements is just wasted width
-   on a phone - it was leaving section content at ~70% of the viewport and
-   card text well under half. Two narrowing steps rather than one: 480px
-   roughly separates "phone" from "small tablet/large phone" widths where
-   32px still reads as a deliberate margin instead of cramped. */
-@media (max-width: 639px) {
-  :root {
-    --page-gutter: 32px;
-  }
-}
-
-@media (max-width: 479px) {
-  :root {
-    --page-gutter: 20px;
-  }
-}
-
-/* The original grayscale palette, kept around as a selectable alternate
-   (data-theme="mono") rather than deleted, since more themes are coming. */
-:root[data-theme='mono'] {
-  --text: light-dark(#6b6375, #9ca3af);
-  --text-h: light-dark(#08060d, #f3f4f6);
-  --bg: light-dark(#fff, #16171d);
-  --border: light-dark(#e5e4e7, #2e303a);
-  --code-bg: light-dark(#f4f3ec, #1f2028);
-  --accent: light-dark(#aa3bff, #c084fc);
-  --accent-bg: light-dark(rgba(170, 59, 255, 0.1), rgba(192, 132, 252, 0.15));
-  --accent-border: light-dark(rgba(170, 59, 255, 0.5), rgba(192, 132, 252, 0.5));
-  --section-alt-bg: light-dark(#f7f6f3, #1c1e26);
-  --particle-color: light-dark(#7c1fd6, #c084fc);
-  --shadow: light-dark(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4)) 0 10px 15px -3px;
-}
-
-/* data-mode overrides the OS-level light/dark preference (set by the sidebar
-   toggle). Unset means "follow the system," on either theme. */
+/* data-mode overrides the OS-level light/dark preference (set by the nav's
+   theme toggle). Unset means "follow the system." */
 :root[data-mode='light'] {
   color-scheme: light;
 }
@@ -144,13 +116,13 @@
 }
 
 html {
-  scroll-snap-type: y mandatory;
   scroll-behavior: smooth;
+  /* Anchor jumps land below the sticky nav instead of under it. */
+  scroll-padding-top: calc(var(--nav-height) + 16px);
 }
 
 @media (prefers-reduced-motion: reduce) {
   html {
-    scroll-snap-type: none;
     scroll-behavior: auto;
   }
 }
@@ -165,139 +137,58 @@ body {
   margin: 0;
 }
 
-/* Base layout every full-page section shares - genuinely global (identical
-   across all organisms), not any one component's concern, so it stays here
-   rather than getting duplicated across several CSS modules. */
-section {
-  min-height: 100svh;
-  scroll-snap-align: start;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  padding: 32px var(--page-gutter);
+/* Browser surfaces the design owns too. */
+::selection {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* Every page section is a band of the one centered page column, separated
+   from the one above by a hairline. Sections are ordinary document flow: no
+   full-viewport height, no scroll-snap, no side chrome to clear. Scoped to
+   the page's own sections, so a section nested inside one (a case study's
+   Problem or Approach) stays plain. */
+main > section {
+  /* Inline padding that grows past the gutter on wide screens, so section
+     content always starts on the same left edge as the nav's wordmark. */
+  padding-block: clamp(4rem, 10vw, 7.5rem);
+  padding-inline: max(var(--page-gutter), calc((100% - var(--page-max)) / 2));
+  border-top: 1px solid var(--border);
   text-align: left;
-  /* Own stacking context, so any absolutely-positioned decoration inside a
-     section stays scoped to that section instead of comparing against
-     unrelated elements elsewhere on the page. */
-  position: relative;
-  z-index: 0;
-  overflow: hidden;
-
-  & > * {
-    max-width: var(--content-width);
-    width: 100%;
-    /* The content-alignment standard: every section's content starts this
-       far from the section's own left edge - split the difference between
-       hugging that edge (0) and being fully centered in the space the
-       sidebar leaves free (which reads as too far right on wide screens).
-       Anything that intentionally runs wider than --content-width (wider
-       media, the code samples panel) should reuse this same formula so its
-       left edge still lines up with the rest of the section's content. */
-    margin-left: max(0px, calc((100% - var(--content-width)) / 4));
-  }
 }
 
-/* Keyed off [data-viewport] (see useViewportMode.ts) rather than a raw
-   width media query - a phone in landscape is frequently wider than 640px
-   but nowhere near as tall as a real desktop viewport, so a width-only
-   check here would hand it this desktop treatment (and the fixed, 75svh
-   InfoPanel it's aligning with) despite having a fraction of the vertical
-   room that assumes. Section content starts level with the top of the
-   fixed InfoPanel (see InfoPanel.module.css's `top: 80px`) instead of
-   vertically centering - otherwise the content's start point jumps up and
-   down against the fixed panel as you scroll between sections with
-   different amounts of content. About keeps the centered hero layout
-   instead (see About.module.css). */
-:root[data-viewport='desktop'] section {
-  justify-content: flex-start;
-  padding-top: 80px;
+/* The first section sits directly under the nav, whose own hairline appears
+   once the page scrolls. */
+main > section:first-child {
+  border-top: 0;
 }
 
-/* Every section now renders its own MobileInfoCard, pinned to this same
-   top gap instead of a viewport-fixed card floating over it (see
-   MobileInfoCard.tsx/.module.css) - reserve room for it here so it never
-   overlaps that section's own heading. Sections keep centering their
-   content otherwise (unlike the desktop top-align above); the taller top
-   padding just shifts that center down a bit. The hamburger toggle at the
-   opposite corner (see Header.module.css) gets no matching reservation -
-   it's meant to float over content like any other fixed action button,
-   not carve out a permanent gap at the bottom of every section. */
-:root[data-viewport='mobile'] section {
-  padding-top: 150px;
-}
-
-/* Landscape phones get the same mobile treatment above (via
-   [data-viewport], which already accounts for their short height) but
-   150px of reserved top padding eats a much bigger share of a ~375px-tall
-   viewport than it does portrait - compact the card's reserved space
-   specifically for that case rather than shrinking it everywhere mobile
-   applies. Mirrored in MobileInfoCard.module.css's own name/section sizes -
-   110px clears the compacted card's own measured height (12px top offset +
-   ~82px tall at its landscape font sizes = 94px) with ~16px to spare,
-   rather than the two edges landing flush (or, as 90px did, overlapping by
-   a few px with zero room for error). */
-@media (max-height: 500px) and (orientation: landscape) {
-  :root[data-viewport='mobile'] section {
-    padding-top: 110px;
-  }
-}
-
-@keyframes overscroll-bump {
-  0% {
-    transform: translateY(0);
-  }
-  40% {
-    transform: translateY(-12px);
-  }
-  100% {
-    transform: translateY(0);
-  }
-}
-
-/* Global on purpose: useOverscrollBump toggles this class via a plain
-   string (element.classList.add('bump')), not through a CSS module import,
-   so the class name has to stay unscoped for the hook to find it. */
-.bump {
-  animation: overscroll-bump 0.3s ease-out;
-}
-
-/* Opt-in for every non-hero section: clears the fixed sidebar + InfoPanel
-   via left padding instead of centering. Previously repeated per-organism
-   as an identical media query keyed to that section's own #id selector
-   (see About/Experience/CaseStudies/CodeSamples) - global here since the
-   rule itself never varies, only which sections opt in. Keyed off
-   [data-viewport] rather than width for the same reason as the section
-   rule above - the sidebar/InfoPanel it's clearing don't render at all on
-   a landscape phone, so this clearance shouldn't either. */
-:root[data-viewport='desktop'] .flush-section {
-  padding-left: var(--content-clearance-desktop);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .bump {
-    animation: none;
+/* Desktop: the fixed left rail (dots, theme toggle, socials) sits at
+   left: 24px, so the gutter grows enough to keep content clear of it. The
+   centered-column formula above still takes over on wide screens. */
+@media (min-width: 1024px) {
+  :root {
+    --page-gutter: 88px;
   }
 }
 
 h1,
-h2 {
+h2,
+h3 {
   font-family: var(--heading);
   font-weight: 500;
   color: var(--text-h);
 }
 
-h1 {
-  font-size: 56px;
-  font-weight: 700;
-  letter-spacing: -1.68px;
-  margin: 16px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 12px 0;
-  }
-}
-h2 {
+/* The page's one h1 is the hero name (SpringName), which sets its own
+   scale. Card titles. Section titles use SectionHeader's own scale. */
+h2,
+h3 {
   font-size: 24px;
   line-height: 118%;
   letter-spacing: -0.24px;

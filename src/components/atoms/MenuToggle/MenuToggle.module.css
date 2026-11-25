@@ -1,71 +1,55 @@
-/* A floating card rather than bare bars - without its own surface this sat
-   directly on top of whatever card/text happened to be scrolled underneath
-   it, with nothing to visually separate the two. Border/radius/shadow come
-   from the shared .raised surface (see styles/shared.module.css); sized to
-   the 44px minimum recommended touch target rather than the previous 32px. */
+/* The hamburger in the top nav's action row, below the desktop breakpoint.
+   A rounded square like the nav's other controls; the three bars fold into an X
+   while the menu is open. 40px square, comfortably over the 24px minimum
+   target and matching the Resume button's height. */
 .toggle {
-  composes: raised from '../../../styles/shared.module.css';
-  position: relative;
-  z-index: 2;
-  display: flex;
+  display: inline-flex;
   flex-direction: column;
   justify-content: center;
   gap: 5px;
-  width: 44px;
-  height: 44px;
-  padding: 0 13px;
-  background: var(--bg);
+  width: 40px;
+  height: 40px;
+  padding: 0 11px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-button);
+  background: var(--surface);
   cursor: pointer;
-  transition: border-color 0.2s;
-  /* Overrides .raised's shadow via its --raised-shadow custom property
-     (see shared.module.css) rather than a plain box-shadow re-declaration -
-     stronger than the shared --shadow token alone since this floats over
-     the particle layer and whatever section content is scrolled
-     underneath it, and the ambient shadow alone read too faint to register
-     as a distinct, tappable surface. Layered with --shadow rather than
-     replacing it, for the same soft ambient falloff every other raised
-     surface has. The third layer is a small white glow, visible in dark
-     mode only (transparent in light, via light-dark()) - a preview of that
-     look rather than a considered final choice. */
-  --raised-shadow:
-    var(--shadow-strong),
-    var(--shadow),
-    0 0 10px light-dark(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.45));
+  transition: border-color 160ms var(--ease-out);
 
   span {
     display: block;
-    height: 2px;
+    height: 1.5px;
     background: var(--text-h);
-    border-radius: 1px;
     transition:
-      transform 0.2s,
-      opacity 0.2s;
+      transform 200ms var(--ease-out),
+      opacity 200ms var(--ease-out);
   }
 
   &:hover {
-    border-color: var(--accent-border);
+    border-color: var(--accent);
   }
 
   &[aria-expanded='true'] span:nth-child(1) {
-    transform: translateY(7px) rotate(45deg);
+    transform: translateY(6.5px) rotate(45deg);
   }
   &[aria-expanded='true'] span:nth-child(2) {
     opacity: 0;
   }
   &[aria-expanded='true'] span:nth-child(3) {
-    transform: translateY(-7px) rotate(-45deg);
+    transform: translateY(-6.5px) rotate(-45deg);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .toggle {
+  .toggle,
+  .toggle span {
     transition: none;
   }
 }
 
-/* Keyed off [data-viewport] (see useViewportMode.ts) instead of a raw width
-   media query - see index.css's matching section rule for why a landscape
-   phone needs this mobile chrome despite often being wider than 640px. */
-:root[data-viewport='desktop'] .toggle {
-  display: none;
+/* The section links fit inline from here up (see Nav.module.css). */
+@media (min-width: 1024px) {
+  .toggle {
+    display: none;
+  }
 }

@@ -3,48 +3,59 @@ import { PortfolioPage } from './pages/PortfolioPage.page'
 const CASE_STUDY_ID = 'CS 2'
 const CASE_STUDY_TITLE = `Building E2E Test Automation From Zero for Eventric's Flagship Desktop App`
 
-describe('case study modal', () => {
+describe('case studies', () => {
   const portfolioPage = new PortfolioPage()
 
   beforeEach(() => {
     portfolioPage.visit()
   })
 
-  it('clicking a tile opens the modal with that case study', () => {
+  // Closed by default - just the outcome and title
+  it('a row leads with its outcome, and keeps the write-up closed', () => {
     const { caseStudies } = portfolioPage
 
-    caseStudies.open(CASE_STUDY_ID)
-
-    const { modal } = caseStudies
-    modal.dialog.should('be.visible')
-    modal.title.should('have.text', CASE_STUDY_TITLE)
+    caseStudies.row(CASE_STUDY_ID).findByRole('heading', { level: 3 }).should('have.text', CASE_STUDY_TITLE)
+    caseStudies.row(CASE_STUDY_ID).should('contain.text', '4 hrs → 10 min')
+    caseStudies.toggle(CASE_STUDY_ID).should('have.attr', 'aria-expanded', 'false')
+    caseStudies.writeUp(CASE_STUDY_ID).should('not.be.visible')
   })
 
-  it('Escape closes the modal and returns focus to the trigger', () => {
+  // Every write-up should have the same four parts
+  it('the "+" opens the write-up in place, and closes it again', () => {
     const { caseStudies } = portfolioPage
 
     caseStudies.open(CASE_STUDY_ID)
-    caseStudies.modal.dialog.should('be.visible')
 
-    caseStudies.modal.closeWithEscape()
-    caseStudies.modal.dialog.should('not.exist')
-    // Re-queried fresh here rather than reusing a `trigger` captured before
-    // the modal opened - @testing-library/cypress's findBy* queries don't
-    // re-resolve against the live DOM on a later, separately-chained
-    // .should() the way a plain cy.get() does, so a captured-and-reused
-    // reference stays pinned to its very first (pre-open) lookup.
-    caseStudies.tile(CASE_STUDY_ID).should('have.focus')
+    caseStudies.toggle(CASE_STUDY_ID).should('have.attr', 'aria-expanded', 'true')
+    caseStudies.writeUp(CASE_STUDY_ID).should('be.visible')
+    caseStudies
+      .writeUp(CASE_STUDY_ID)
+      .findAllByRole('heading', { level: 4 })
+      .then((headings) => {
+        expect([...headings].map((heading) => heading.textContent)).to.deep.equal([
+          'Problem',
+          'Approach',
+          'Outcome',
+          'Future iterations',
+        ])
+      })
+
+    caseStudies.toggle(CASE_STUDY_ID).click()
+    caseStudies.writeUp(CASE_STUDY_ID).should('not.be.visible')
   })
 
-  it('the close button closes the modal and returns focus to the trigger', () => {
+  // Close button at the bottom of a long write-up - focus and scroll go back to the row
+  it('closing from the end of a write-up returns focus and the view to its row', () => {
     const { caseStudies } = portfolioPage
 
     caseStudies.open(CASE_STUDY_ID)
-    caseStudies.modal.dialog.should('be.visible')
+    caseStudies.closeFromEnd(CASE_STUDY_ID).click()
 
-    caseStudies.modal.close()
-    caseStudies.modal.dialog.should('not.exist')
-    // See the comment in the Escape test above.
-    caseStudies.tile(CASE_STUDY_ID).should('have.focus')
+    caseStudies.writeUp(CASE_STUDY_ID).should('not.be.visible')
+    caseStudies.toggle(CASE_STUDY_ID).should('have.focus')
+    caseStudies.row(CASE_STUDY_ID).should(($row) => {
+      const { top } = $row[0].getBoundingClientRect()
+      expect(top).to.be.within(0, Cypress.config('viewportHeight'))
+    })
   })
 })
