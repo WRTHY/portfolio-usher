@@ -3,8 +3,8 @@
 // and each section's visible title.
 export const sections = [
   { id: 'experience', label: 'Experience' },
-  { id: 'case-studies', label: 'Case Studies' },
   { id: 'projects', label: 'Projects' },
+  { id: 'case-studies', label: 'Case Studies' },
 ] as const
 
 export type SectionId = (typeof sections)[number]['id']
