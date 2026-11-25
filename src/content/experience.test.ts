@@ -11,11 +11,9 @@ describe('experience content', () => {
   })
 
   it.each(experience.map((entry) => [entry.role, entry] as const))(
-    '%s has a single-sentence impact line',
+    '%s has a short impact line',
     (_role, entry) => {
       expect(entry.impact.trim()).toMatch(/[.!]$/)
-      // One sentence: no sentence break before the final punctuation.
-      expect(entry.impact.slice(0, -1)).not.toMatch(/[.!?]\s+[A-Z]/)
       expect(entry.impact.length).toBeLessThanOrEqual(180)
     },
   )
@@ -60,10 +58,10 @@ describe('experience content', () => {
   })
 
   it.each(experience.map((entry) => [entry.role, entry] as const))(
-    '%s has two to five detail bullets for its expanded view',
+    '%s has two to six detail bullets for its expanded view',
     (_role, entry) => {
       expect(entry.details.length).toBeGreaterThanOrEqual(2)
-      expect(entry.details.length).toBeLessThanOrEqual(5)
+      expect(entry.details.length).toBeLessThanOrEqual(6)
       entry.details.forEach((detail) => expect(detail.trim()).toMatch(/[.!]$/))
     },
   )

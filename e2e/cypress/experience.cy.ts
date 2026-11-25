@@ -39,7 +39,7 @@ describe('experience ledger', () => {
     experience.toggle(role).click()
 
     experience.toggle(role).should('have.attr', 'aria-expanded', 'true')
-    experience.details(role).should('be.visible').and('contain.text', 'Maestro suite of 100+ cases')
+    experience.details(role).should('be.visible').and('contain.text', '500+ manual test cases')
     // The tools column grows into the rest of the stack beside the bullets.
     experience.moreTools(role).should('be.visible').and('contain.text', 'Qase')
     // Other roles stay closed.

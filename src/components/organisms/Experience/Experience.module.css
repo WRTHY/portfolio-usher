@@ -65,13 +65,37 @@
     grid-template-areas:
       'dates role impact tools toggle'
       '. details details tools .';
+    /* A tall tools column grows the second row, never the first: the
+       bullets stay right under the impact line. */
+    grid-template-rows: auto 1fr;
     gap: 0 1.5rem;
     align-items: baseline;
   }
 
-  .row .keyTools,
-  .row .more {
+  .row .keyTools {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* The rest of the stack runs on as wrapped names rather than one per
+     line, so a long stack doesn't make the opened row taller than its
+     bullets. A dot before every name keeps names on a shared line apart;
+     the list reaches one dot-width past the column's left edge and clips
+     it, so the dot that would start each line is cut away. */
+  .row .more {
+    --dot: 1.1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.2rem 0;
+    margin-left: calc(-1 * var(--dot));
+    clip-path: inset(0 0 0 var(--dot));
+
+    li::before {
+      content: '·';
+      display: inline-block;
+      width: var(--dot);
+      text-align: center;
+      color: color-mix(in srgb, var(--text) 55%, transparent);
+    }
   }
 
   /* Four faces at four sizes share the first line, and a shared baseline
