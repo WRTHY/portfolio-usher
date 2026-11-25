@@ -8,14 +8,13 @@ import RunReport from '../../molecules/RunReport/RunReport'
 import LocatorInspector from '../../molecules/LocatorInspector/LocatorInspector'
 import { hero } from '../../../content/hero'
 import { siteContent } from '../../../content/site'
-import { links } from '../../../content/links'
 import { locatorAttrs } from '../../../utils/locatorAttrs'
 import { cx } from '../../../utils/classNames'
 import styles from './Hero.module.css'
 
 const RUN_LABEL = 'Career highlights, formatted as a test run'
 
-// The page's first screen: name, pitch and the two actions on one side;
+// The page's first screen: name, pitch and the resume download on one side;
 // availability and the opener's test run, docked, on the other. An easter
 // egg: clicking a letter of the name unfolds the Pick locator switch under
 // it, and it can be folded away again. Turning it on lets visitors inspect
@@ -107,11 +106,9 @@ function Hero({ onNameGoneChange }: HeroProps) {
           </div>
           <p
             className={styles.lead}
-            {...locatorAttrs("getByText('QA Lead & SDET. I walk into teams')", `toContainText('${hero.lead.highlight}')`)}
+            {...locatorAttrs("getByText('Startup QA Lead & SDET')", "toContainText('Quality wrought from Chaos through Consistency')")}
           >
-            {hero.lead.before}
-            <em>{hero.lead.highlight}</em>
-            {hero.lead.after}
+            {hero.lead.map((part, i) => (part.mark ? <em key={i}>{part.text}</em> : part.text))}
           </p>
           <div className={styles.actions}>
             <Button
@@ -124,13 +121,6 @@ function Hero({ onNameGoneChange }: HeroProps) {
             >
               Download resume
               <FaArrowDown aria-hidden="true" />
-            </Button>
-            <Button
-              href={`mailto:${links.email}`}
-              variant="ghost"
-              {...locatorAttrs("getByRole('link', { name: 'Email me' })", "toHaveAttribute('href', /^mailto:/)")}
-            >
-              Email me
             </Button>
           </div>
         </div>

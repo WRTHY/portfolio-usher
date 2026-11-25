@@ -10,12 +10,13 @@ const revealPicker = (user: ReturnType<typeof userEvent.setup>) =>
   user.click(within(screen.getByRole('heading', { level: 1 })).getByText('J'))
 
 describe('Hero', () => {
-  it('leads with the name, the pitch and the two actions', () => {
+  it('leads with the name, the pitch and the resume download', () => {
     render(<Hero />)
     expect(screen.getByRole('heading', { level: 1, name: siteContent.name })).toBeInTheDocument()
-    expect(screen.getByText(hero.lead.highlight)).toBeInTheDocument()
+    const lead = screen.getByText(/Startup QA Lead & SDET/)
+    expect(lead).toHaveTextContent(hero.lead.map((part) => part.text).join(''))
+    expect([...lead.querySelectorAll('em')].map((mark) => mark.textContent)).toEqual(['Quality', 'Chaos', 'Consistency'])
     expect(screen.getByRole('link', { name: 'Download resume' })).toHaveAttribute('href', siteContent.resumeUrl)
-    expect(screen.getByRole('link', { name: 'Email me' })).toHaveAttribute('href', expect.stringMatching(/^mailto:/))
   })
 
   it('is the region named by the hero heading', () => {
@@ -69,9 +70,8 @@ describe('Hero', () => {
     await revealPicker(user)
     await user.click(screen.getByRole('switch', { name: 'Pick locator' }))
 
-    const email = screen.getByRole('link', { name: 'Email me' })
-    await user.hover(email)
-    expect(screen.getByTestId('locator-tip')).toHaveTextContent("getByRole('link', { name: 'Email me' })")
+    await user.hover(screen.getByRole('figure', { name: 'Career highlights, formatted as a test run' }))
+    expect(screen.getByTestId('locator-tip')).toHaveTextContent("getByRole('figure'")
 
     const clicked = new MouseEvent('click', { bubbles: true, cancelable: true })
     act(() => {

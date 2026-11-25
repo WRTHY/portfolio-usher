@@ -71,8 +71,8 @@ test.describe('hero locator inspector', () => {
     await hero.startPicking()
     await expect(hero.locatorTip).toContainText("getByRole('heading', { level: 1 })")
 
-    await page.getByRole('link', { name: 'Email me' }).hover()
-    await expect(hero.locatorTip).toContainText("getByRole('link', { name: 'Email me' })")
+    await page.getByRole('link', { name: 'Download resume' }).hover()
+    await expect(hero.locatorTip).toContainText("getByRole('link', { name: 'Download resume' })")
   })
 
   test('clicks pick instead of navigating while it is on', async ({ portfolioPage }) => {
@@ -80,10 +80,10 @@ test.describe('hero locator inspector', () => {
     const { hero, page } = { hero: portfolioPage.hero, page: portfolioPage.page }
     await hero.startPicking()
 
-    await page.getByRole('link', { name: 'Email me' }).click()
+    await page.getByRole('link', { name: 'Download resume' }).click()
 
     await expect(page).toHaveURL(/\/$/)
-    await expect(hero.locatorTip).toContainText("name: 'Email me'")
+    await expect(hero.locatorTip).toContainText("name: 'Download resume'")
   })
 
   test('Escape turns it off and returns focus to the switch', async ({ portfolioPage }) => {
