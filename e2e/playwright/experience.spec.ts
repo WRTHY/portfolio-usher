@@ -124,6 +124,38 @@ test.describe('experience ledger', () => {
     }).toPass()
   })
 
+  test('picking a tool fades the roles that never used it, and picking it again clears it', async ({
+    portfolioPage,
+  }) => {
+    await portfolioPage.goto()
+    const { experience } = portfolioPage
+
+    await experience.toolFilter('Selenium').click()
+
+    await expect(experience.toolFilter('Selenium')).toHaveAttribute('aria-pressed', 'true')
+    await expect(experience.skillsStatus).toHaveText('Selenium: QA Specialist')
+    await expect(experience.row('QA Specialist')).toHaveAttribute('data-tool-match', 'true')
+    await expect(experience.row('QA Lead / Senior SDET')).toHaveAttribute('data-tool-match', 'false')
+    await expect(experience.graphNode('fubo-gaming-qa-specialist')).toHaveAttribute('data-highlighted', 'true')
+
+    await experience.toolFilter('Selenium').click()
+    await expect(experience.row('QA Lead / Senior SDET')).not.toHaveAttribute('data-tool-match')
+  })
+
+  test('leaving the section clears the filter', async ({ portfolioPage }) => {
+    await portfolioPage.goto()
+    const { experience } = portfolioPage
+    await experience.toolFilter('Selenium').click()
+    await expect(experience.toolFilter('Selenium')).toHaveAttribute('aria-pressed', 'true')
+
+    // Checked while away: the section has to be seen leaving first.
+    await portfolioPage.section('case-studies').scrollIntoViewIfNeeded()
+    await expect(experience.toolFilter('Selenium')).toHaveAttribute('aria-pressed', 'false')
+
+    await experience.root.scrollIntoViewIfNeeded()
+    await expect(experience.row('QA Lead / Senior SDET')).not.toHaveAttribute('data-tool-match')
+  })
+
   test('company links open in a new tab', async ({ portfolioPage }) => {
     await portfolioPage.goto()
     const link = portfolioPage.experience.row('QA Specialist').getByRole('link', { name: 'Fubo Gaming' })

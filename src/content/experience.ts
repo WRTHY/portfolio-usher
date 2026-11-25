@@ -40,8 +40,13 @@ export type ExperienceEntry = {
   stack?: readonly string[]
 }
 
-// Placeholder (Claude's, in COPY.md): above the tool tiles under the ledger.
+// Placeholders (Claude's, in COPY.md). The heading names the tool strip for
+// screen readers; the hint sits under it until a tool is chosen.
 export const skillsHeading = 'Skills & tools'
+export const skillsHint = 'Point at or tap a tool to see where I used it.'
+// The status line's link to Projects, for a tool used there: after the
+// roles that used it, or alone ("GitHub: used in my Projects").
+export const skillsInProjects = { alone: 'used in my', link: 'Projects' }
 
 // One-line framing shown beside the Experience heading.
 export const experienceIntro =

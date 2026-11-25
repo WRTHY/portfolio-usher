@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { experience } from '../../../content/experience'
-import { skillColorway, sortBySkillOrder } from './skillColorway'
+import { gridToolsIn, skillColorway, sortBySkillOrder } from './skillColorway'
 
 describe('skillColorway', () => {
   it.each([
@@ -86,5 +86,16 @@ describe('sortBySkillOrder', () => {
     const labels = ['Jira', 'Playwright']
     sortBySkillOrder(labels)
     expect(labels).toEqual(['Jira', 'Playwright'])
+  })
+
+  it.each([
+    ['Playwright', ['Playwright']],
+    ['TypeScript/JavaScript', ['TypeScript', 'JavaScript']],
+    ['JavaScript (Node.js, React Native)', ['JavaScript', 'Node.js', 'React Native']],
+    ['Postman/Apidog', ['Postman']],
+    ['React Native Testing Library', ['RNTL']],
+    ['LaunchDarkly', []],
+  ] as const)('finds the grid tools named in %s', (label, expected) => {
+    expect(gridToolsIn(label)).toEqual(expected)
   })
 })

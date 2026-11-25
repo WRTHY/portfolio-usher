@@ -1,50 +1,92 @@
-/* The categories side by side, wrapping onto more lines as space runs out. */
+/* The categories run on as one block, each label inline before its
+   chips, so the strip stays a few lines tall. */
 .groups {
   display: flex;
   flex-wrap: wrap;
-  gap: 1.25rem 2.5rem;
+  gap: 0.6rem 1.75rem;
 }
 
 .group {
-  display: grid;
-  gap: 0.6rem;
-  align-content: start;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.6rem;
 }
 
 .groupLabel {
   margin: 0;
-  font: 400 0.75rem / 1.4 var(--mono);
+  font: 400 0.6875rem / 1.4 var(--mono);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--text);
 }
 
-.tiles {
+.chips {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem;
+  gap: 0.35rem;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-/* Category tint from the shared syntax palette, as before (see
-   syntaxPalette.ts): the one colour that marks a tool's category. */
-.tile {
-  position: relative;
-  display: grid;
-  place-items: center;
-  width: 2.5rem;
-  height: 2.5rem;
+/* On a phone each category is one row that scrolls sideways, its label
+   above, rather than a tall stack of wrapped chips. */
+@media (max-width: 639px) {
+  .groups {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap: 0.75rem;
+  }
+
+  .group {
+    display: grid;
+    gap: 0.35rem;
+    min-width: 0;
+  }
+
+  .chips {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 0.35rem;
+    scrollbar-width: thin;
+  }
+
+  .chip {
+    flex: none;
+  }
+}
+
+/* Category tint from the shared syntax palette (see syntaxPalette.ts): the
+   one colour that marks a tool's category. */
+.chip {
   border-radius: 4px;
   background: var(--skill-bg);
-  transition: translate 160ms var(--ease-out);
+  transition:
+    opacity 200ms var(--ease-out),
+    box-shadow 160ms var(--ease-out);
+}
+
+.chipButton,
+.chipBody {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.55rem 0.3rem 0.45rem;
+  border: 0;
+  border-radius: inherit;
+  background: none;
+  font: 400 0.8125rem / 1.2 var(--mono);
+  color: var(--text-h);
+}
+
+.chipButton {
+  cursor: pointer;
 }
 
 .icon {
   display: flex;
-  font-size: 1.25rem;
-  color: var(--text-h);
+  font-size: 0.9375rem;
 
   /* The hand-drawn icons only set a viewBox, so size them like the rest. */
   svg {
@@ -53,77 +95,24 @@
   }
 }
 
-/* The name, previewed above the tile on hover. */
-.preview {
-  position: absolute;
-  bottom: calc(100% + 0.4rem);
-  left: 50%;
-  z-index: 1;
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-  background: var(--text-h);
-  color: var(--bg);
-  font: 400 0.75rem / 1.3 var(--mono);
-  white-space: nowrap;
-  pointer-events: none;
-  opacity: 0;
-  translate: -50% 0.25rem;
-  transition:
-    opacity 140ms var(--ease-out),
-    translate 140ms var(--ease-out);
+/* While the ledger is filtered, the chosen tool stays at full strength and
+   the others step back. A picked tool keeps a ring, so it reads as on. */
+.filtering .chip:not(.active) {
+  opacity: 0.45;
+}
+
+.active {
+  box-shadow: inset 0 0 0 1.5px var(--text-h);
 }
 
 @media (hover: hover) {
-  .tile:hover {
-    translate: 0 -2px;
-  }
-
-  .tile:hover .preview {
-    opacity: 1;
-    translate: -50% 0;
-  }
-}
-
-/* No hover on touch screens: each tile becomes a small chip, its icon
-   beside its name. */
-@media (hover: none) {
-  .tile {
-    display: inline-flex;
-    gap: 0.35rem;
-    width: auto;
-    height: auto;
-    padding: 0.3rem 0.55rem 0.3rem 0.45rem;
-  }
-
-  .icon {
-    font-size: 0.9375rem;
-  }
-
-  .preview {
-    position: static;
-    padding: 0;
-    background: none;
-    color: var(--text-h);
-    opacity: 1;
-    translate: none;
+  .chip:has(.chipButton:hover) {
+    box-shadow: inset 0 0 0 1.5px var(--text-h);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .tile,
-  .preview {
+  .chip {
     transition: none;
   }
-}
-
-.srOnly {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
 }

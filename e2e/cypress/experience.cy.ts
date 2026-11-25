@@ -85,6 +85,30 @@ describe('experience ledger', () => {
     experience.graphNode('eventric-sdet').should('have.attr', 'data-active', 'true')
   })
 
+  it('picking a tool fades the roles that never used it, and picking it again clears it', () => {
+    experience.toolFilter('Selenium').click()
+
+    experience.toolFilter('Selenium').should('have.attr', 'aria-pressed', 'true')
+    experience.skillsStatus.should('have.text', 'Selenium: QA Specialist')
+    experience.row('QA Specialist').should('have.attr', 'data-tool-match', 'true')
+    experience.row('QA Lead / Senior SDET').should('have.attr', 'data-tool-match', 'false')
+
+    experience.toolFilter('Selenium').click()
+    experience.row('QA Lead / Senior SDET').should('not.have.attr', 'data-tool-match')
+  })
+
+  it('leaving the section clears the filter', () => {
+    experience.toolFilter('Selenium').click()
+    experience.toolFilter('Selenium').should('have.attr', 'aria-pressed', 'true')
+
+    // Checked while away: the section has to be seen leaving first.
+    portfolioPage.section('case-studies').scrollIntoView()
+    experience.toolFilter('Selenium').should('have.attr', 'aria-pressed', 'false')
+
+    cy.get('#experience').scrollIntoView()
+    experience.row('QA Lead / Senior SDET').should('not.have.attr', 'data-tool-match')
+  })
+
   it('company links open in a new tab', () => {
     experience
       .row('QA Specialist')

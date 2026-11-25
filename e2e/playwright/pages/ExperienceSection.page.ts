@@ -43,4 +43,14 @@ export class ExperienceSection {
   details(role: string): Locator {
     return this.row(role).getByRole('list', { name: `What I did as ${role}`, includeHidden: true })
   }
+
+  /** A tool in the Skills & tools strip above the ledger, which filters it. */
+  toolFilter(tool: string): Locator {
+    return this.root.getByRole('button', { name: tool, exact: true })
+  }
+
+  /** The line under the strip: a hint, or the roles that used the chosen tool. */
+  get skillsStatus(): Locator {
+    return this.root.getByTestId('skills-status')
+  }
 }
