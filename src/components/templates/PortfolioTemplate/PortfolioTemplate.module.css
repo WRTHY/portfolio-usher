@@ -50,7 +50,7 @@
   /* The empty stretch before each of the violet field's seams that the
      colour flows through. It stands in for that section's bottom padding
      (see the runways below), so the gap matches the other seams. */
-  --runway: clamp(6rem, 18vh, 10rem);
+  --runway: clamp(9rem, 26vh, 14rem);
   position: relative;
   isolation: isolate;
   margin-top: calc(-1 * var(--sheet-radius));
@@ -99,7 +99,12 @@
 .main > section[data-surface='accent'] + section::before {
   --hill-rise: 0.35;
   --hill-bump: 0.45;
-  --hill-box: calc(var(--runway) + var(--sheet-radius));
+  /* The box reaches a sheet radius down into the arriving sheet's corners,
+     and that sheet overlaps the runway by the same radius, so a box of
+     runway minus clearance stops exactly the clearance short of the last
+     line of text in the section above. */
+  --hill-clearance: 2rem;
+  --hill-box: calc(var(--runway) - var(--hill-clearance));
   /* Where the silhouette image ends at the bottom (its lower 40 of 140
      units, under the base), measured up from the box's bottom. The plane
      is solid to exactly there, so no half-transparent strip opens up
@@ -116,7 +121,7 @@
   background: var(--accent);
   mask-image:
     var(--hill-shape),
-    linear-gradient(to top, #000 calc(var(--hill-plane) + 2px), transparent calc(var(--hill-plane) + 2.5rem));
+    linear-gradient(to top, #000 calc(var(--hill-plane) + 2px), transparent calc(var(--hill-plane) + var(--hill-box) * 0.18));
   mask-repeat: no-repeat;
   /* The silhouette's viewBox is 140 tall with the bell 70 of it, and its
      base 100 down from the top. */
@@ -217,7 +222,8 @@
     --hill-bump: 0.12;
   }
   100% {
-    --hill-rise: 0.86;
+    /* Plus the plane's soft edge (18% of the box), just under the top. */
+    --hill-rise: 0.8;
     --hill-bump: 0;
   }
 }
