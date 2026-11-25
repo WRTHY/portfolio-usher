@@ -26,7 +26,7 @@ export type ExperienceEntry = {
   company: string
   companyUrl: string
   dates: string
-  /** The one sentence the Experience ledger shows: the role's headline
+  /** The short line the Experience ledger shows: the role's headline
    *  outcome, written for SDET / test automation hiring. */
   impact: string
   /** Up to four test frameworks the role automated with, each with what it
@@ -45,7 +45,7 @@ export const skillsHeading = 'Skills & tools'
 
 // One-line framing shown beside the Experience heading.
 export const experienceIntro =
-  'SDET and QA lead who builds test automation and release gates from scratch across web, desktop and mobile apps.'
+  'SDET and QA lead who builds test automation and release gates across web, desktop and mobile apps.'
 
 export const experience: readonly ExperienceEntry[] = [
   {
@@ -55,7 +55,7 @@ export const experience: readonly ExperienceEntry[] = [
     companyUrl: links.companies.eventric,
     dates: 'Jan 2025 – Aug 2026',
     impact:
-      'Built the quality program from scratch: Maestro, Playwright and Cypress automation plus release gates; 65+ release candidates reviewed, 105+ escaped defects prevented.',
+      'Matured the quality function across all company products, building a program that reviewed 65+ release candidates and prevented 105+ escaped defects.',
     keyTools: [
       { tool: 'Maestro', scope: 'mobile E2E' },
       { tool: 'Playwright', scope: 'desktop E2E' },
@@ -63,15 +63,18 @@ export const experience: readonly ExperienceEntry[] = [
       { tool: 'Jest + RNTL', scope: 'mobile component', covers: ['Jest', 'React Native Testing Library'] },
     ],
     details: [
-      'Owned QA strategy and the release process across eight products: final review, release coordination and company-wide release status.',
-      'Ran a weekly engineering-wide release review reporting to the Head of Technology, giving go/no-go visibility on every in-flight release.',
-      'Mobile (React Native): a Maestro suite of 100+ cases across 18 critical flows on every release-candidate build; 50+ Jest / React Native Testing Library specs on every PR, taking coverage from near-zero to about 30%; Reassure performance-regression tests.',
-      'Desktop and web: a Playwright framework from scratch for the Electron app (auth fixtures, helpers, a 31-file page-object architecture) and a Cypress suite of 100+ E2E tests and 50+ component specs. Hired and led a second QA engineer.',
+      'Owned QA strategy and releases across 8 products, running a weekly go/no-go review for the Head of Technology.',
+      'Rolled out Qase and led the team in writing 500+ manual test cases across 3 products.',
+      "Hired and led Eventric's second QA engineer.",
+      'Mobile app: built a Maestro E2E suite (100+ cases, all 18 critical flows), 50+ Jest / RNTL component specs taking coverage to ~30%, and Reassure performance tests.',
+      'Desktop app: architected a Playwright E2E framework with auth fixtures, navigation and wait helpers, and a 31-file page-object model.',
+      'Web app: built and maintained a Cypress E2E suite (100+ tests) and component suite (50+ specs), run weekly and on every deploy.',
     ],
     stack: [
       'TypeScript/JavaScript',
       'React',
       'React Native',
+      'Electron',
       'Maestro',
       'Playwright',
       'Cypress',
@@ -79,13 +82,14 @@ export const experience: readonly ExperienceEntry[] = [
       'React Native Testing Library',
       'Reassure',
       'Qase',
-      'Postman/Apidog',
+      'Jira',
+      'Confluence',
       'Bitbucket',
+      'Postman/Apidog',
       'LaunchDarkly',
       'Bugsnag',
       'Firebase',
-      'Jira',
-      'Confluence',
+      'Slack',
       'Figma',
     ],
   },
@@ -96,33 +100,31 @@ export const experience: readonly ExperienceEntry[] = [
     companyUrl: links.companies.eventric,
     dates: 'Mar 2023 – Jan 2025',
     impact:
-      'Built a Cypress E2E suite from scratch (20 specs, 93 flows) that runs on every pull request, plus a component-test merge gate and the first React Native test setup.',
+      "Eventric's first QA hire. Handled testing of five core products and built the company's first Cypress E2E framework and suites.",
     keyTools: [
       { tool: 'Cypress', scope: 'web E2E + component' },
       { tool: 'Jest + RNTL', scope: 'mobile component', covers: ['Jest', 'React Native Testing Library'] },
-      { tool: 'Qase', scope: 'manual test cases' },
     ],
     details: [
-      'A Cypress suite covering every critical user flow on the primary web product, integrated into Bitbucket Pipelines on every PR.',
-      'An atom- and molecule-level component suite, introduced as a permanent quality gate for PR merges.',
-      'Jest / React Native Testing Library component testing for the new mobile product, from its early stages of development.',
-      'Led test automation and QA across five products, including a desktop and a mobile app.',
-      "Started Eventric's first standing backlog grooming session, cutting the backlog's average age by 150+ days.",
+      'Started and led a backlog-refinement initiative that cut average backlog age by 150 days.',
+      "Standardized Eventric's Confluence knowledge base (25+ docs) and created bug and story templates adopted company-wide.",
+      'Met clients and users on site for feedback, and helped support diagnose high-priority user-reported issues.',
     ],
     stack: [
       'TypeScript/JavaScript',
       'React',
       'React Native',
+      'Electron',
       'Cypress',
       'Jest',
       'React Native Testing Library',
-      'Qase',
       'Postman',
       'Bugsnag',
-      'Bitbucket',
+      'Figma',
       'Jira',
       'Confluence',
-      'Figma',
+      'Bitbucket',
+      'Slack',
     ],
   },
   {
@@ -132,17 +134,16 @@ export const experience: readonly ExperienceEntry[] = [
     companyUrl: links.companies.fubo,
     dates: 'Jun 2022 – Nov 2022',
     impact:
-      'Tested a sportsbook web and native mobile app, wrote and groomed 200+ test cases, and was the sole QA on the TV-to-sportsbook and analytics API integration R&D.',
+      'Tested a sportsbook app built for web and native mobile, including TV-to-sportsbook R&D work.',
     keyTools: [
-      { tool: 'Selenium', scope: 'UI automation' },
+      { tool: 'Selenium + Cucumber', scope: 'UI automation', covers: ['Selenium/Cucumber'] },
       { tool: 'TestRail', scope: 'manual test cases' },
     ],
     details: [
-      'Manual and automated testing of core flows: onboarding, deposits and withdrawals.',
-      'Sole QA supporting R&D on the TV-service-to-sportsbook integration and a third-party analytics API integration.',
-      'Worked with domestic and international teams to meet sports-betting industry standards.',
+      'Wrote and groomed 200+ test cases across core flows: new-user onboarding, deposits and withdrawals, and the TV-to-sportsbook integration.',
+      'Created and maintained 15+ Confluence pages used department-wide for onboarding, feature testing standards and QA process.',
     ],
-    stack: ['JavaScript (Node.js, React Native)', 'Selenium', 'TestRail', 'Jira', 'Confluence', 'Bitbucket', 'Figma'],
+    stack: ['JavaScript (Node.js, React Native)', 'Selenium/Cucumber', 'TestRail', 'Confluence', 'Jira', 'Bitbucket', 'Figma'],
   },
   {
     id: 'scientific-games-software-quality-engineer',
@@ -151,12 +152,11 @@ export const experience: readonly ExperienceEntry[] = [
     companyUrl: links.companies.scientificGames,
     dates: 'Sep 2019 – Jun 2022',
     impact:
-      'Owned the full QA lifecycle for 6 video slot games, each certified on first submission, and tested and released a department-high 13 localization titles in one year.',
-    keyTools: [{ tool: 'Zephyr', scope: 'manual test cases' }],
+      'Owned the full QA lifecycle for 6 video slot games.',
+    keyTools: [{ tool: 'Tricentis qTest', scope: 'manual test cases' }],
     details: [
-      'Full QA lifecycle ownership in a regulated, certification-driven environment.',
-      "The team's subject-matter expert on jurisdictional localization testing.",
-      'Trained fellow engineers on the release process.',
+      'Full QA lifecycle ownership in a regulated environment, with every game approved and certified by Gaming Laboratories International (GLI) on first submission.',
+      'Planned and executed large-scale soak and performance testing on proprietary hardware.',
     ],
   },
 ] as const

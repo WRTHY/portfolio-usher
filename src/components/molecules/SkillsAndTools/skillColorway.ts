@@ -39,7 +39,7 @@ const extraTools: Record<string, SkillColorway> = {
   bugsnag: 'devops',
   firebase: 'devops',
   testrail: 'testing',
-  zephyr: 'testing',
+  'tricentis qtest': 'testing',
 }
 
 function lookup(name: string): SkillPosition | undefined {
@@ -71,3 +71,4 @@ export function sortBySkillOrder(labels: readonly string[]): string[] {
   const rankOf = (label: string) => skillPosition(label)?.rank ?? Number.POSITIVE_INFINITY
   return [...labels].sort((a, b) => rankOf(a) - rankOf(b))
 }
+

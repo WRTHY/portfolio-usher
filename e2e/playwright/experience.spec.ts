@@ -40,7 +40,7 @@ test.describe('experience ledger', () => {
 
     await expect(experience.toggle(role)).toHaveAttribute('aria-expanded', 'true')
     await expect(experience.details(role)).toBeVisible()
-    await expect(experience.details(role)).toContainText('Maestro suite of 100+ cases')
+    await expect(experience.details(role)).toContainText('500+ manual test cases')
     // The tools column grows into the rest of the stack beside the bullets.
     await expect(experience.moreTools(role)).toBeVisible()
     await expect(experience.moreTools(role)).toContainText('Qase')
