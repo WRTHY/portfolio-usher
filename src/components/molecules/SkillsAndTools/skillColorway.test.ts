@@ -34,9 +34,9 @@ describe('skillColorway', () => {
   })
 
   // Guards against adding a new tool to a stack and forgetting to
-  // categorize it - it would silently render as a violet pill instead.
-  // Practice skills are meant to be violet, so they're listed here as
-  // deliberate exceptions; add new ones to this list.
+  // categorize it, which would leave it ranked after every tool. Practice
+  // skills aren't tools, so they're listed here as deliberate exceptions;
+  // add new ones to this list.
   it('categorizes every Experience stack entry that is a tool', () => {
     const practiceSkills = new Set([
       'Manual Testing',

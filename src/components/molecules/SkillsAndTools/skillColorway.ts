@@ -10,8 +10,8 @@ type SkillPosition = {
 // Leaves room for each category's tools to rank inside its own block.
 const CATEGORY_STRIDE = 1000
 
-// Every tool in the Skills & Tools grid, keyed by lowercase name, so a pill
-// elsewhere on the site picks up the same category color and ordering.
+// Every tool in the Skills & Tools grid, keyed by lowercase name, so tags
+// elsewhere on the site (the case studies') sort the way the grid does.
 const positionByName = new Map<string, SkillPosition>(
   toolCategories.flatMap((category, categoryIndex) =>
     category.tools.map(
@@ -59,8 +59,8 @@ function skillPosition(label: string): SkillPosition | undefined {
   return lookup(label) ?? lookup(label.split(/[/(]/)[0])
 }
 
-// Resolves a pill label to its Skills & Tools category. Returns undefined
-// for non-tool tags like "Leadership", which keep the default accent Badge.
+// Resolves a label to its Skills & Tools category. Returns undefined for
+// non-tool tags like "Leadership".
 export function skillColorway(label: string): SkillColorway | undefined {
   return skillPosition(label)?.colorway
 }

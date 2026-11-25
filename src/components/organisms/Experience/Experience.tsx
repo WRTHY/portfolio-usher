@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useId, useMemo, useRef, useState } from 'react'
+import { Fragment, useEffect, useId, useRef, useState } from 'react'
 import type { CSSProperties, MouseEvent } from 'react'
 import { flushSync } from 'react-dom'
 import { getSectionLabel } from '../../../content/navigation'
@@ -18,6 +18,7 @@ import ExpandToggle from '../../atoms/ExpandToggle/ExpandToggle'
 import Reveal from '../../atoms/Reveal/Reveal'
 import { useAccordion } from '../../../hooks/useAccordion'
 import { isRowToggleClick } from '../../../utils/rowToggle'
+import { navHeight } from '../../../utils/navHeight'
 import SectionHeader from '../../molecules/SectionHeader/SectionHeader'
 import CareerGraph from '../../molecules/CareerGraph/CareerGraph'
 import SkillsAndTools from '../../molecules/SkillsAndTools/SkillsAndTools'
@@ -34,6 +35,10 @@ const gridToolsOf = (entry: ExperienceEntry) =>
   new Set(
     [...entry.keyTools.flatMap(({ tool, covers }) => covers ?? [tool]), ...(entry.stack ?? [])].flatMap(gridToolsIn),
   )
+
+// Both come from static content, so they're worked out once, not per render.
+const toolsByRole = new Map(experience.map((entry) => [entry.id, gridToolsOf(entry)]))
+const usedTools = new Set([...[...toolsByRole.values()].flatMap((tools) => [...tools]), ...projectTools])
 
 type ExperienceRowProps = {
   entry: ExperienceEntry
@@ -196,24 +201,17 @@ function Experience() {
   useEffect(() => {
     const section = sectionRef.current
     if (!section) return
-    const navHeight =
-      parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--nav-height')) || 64
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) return
         setPickedTool(null)
         setPreviewTool(null)
       },
-      { rootMargin: `-${navHeight}px 0px 0px 0px` },
+      { rootMargin: `-${navHeight()}px 0px 0px 0px` },
     )
     observer.observe(section)
     return () => observer.disconnect()
   }, [])
-  const toolsByRole = useMemo(() => new Map(experience.map((entry) => [entry.id, gridToolsOf(entry)])), [])
-  const usedTools = useMemo(
-    () => new Set([...[...toolsByRole.values()].flatMap((tools) => [...tools]), ...projectTools]),
-    [toolsByRole],
-  )
   const matchesTool = (id: string) => (activeTool === null ? undefined : toolsByRole.get(id)?.has(activeTool))
   const rolesWithTool = experience.filter((entry) => matchesTool(entry.id))
   const inProjects = activeTool !== null && projectTools.includes(activeTool)

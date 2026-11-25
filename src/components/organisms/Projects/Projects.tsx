@@ -36,7 +36,7 @@ type ProjectId = Project['id']
 const toggleOf = (id: ProjectId) =>
   document.getElementById(id)?.querySelector<HTMLButtonElement>(':scope > button[aria-expanded]')
 
-const examplesFor =(ids: readonly string[]) => codeExamples.filter((example) => ids.includes(example.id))
+const examplesFor = (ids: readonly string[]) => codeExamples.filter((example) => ids.includes(example.id))
 
 // Each stage's test count: the sum of the suites it runs.
 const stageCounts = Object.fromEntries(

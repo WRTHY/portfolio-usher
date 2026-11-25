@@ -19,3 +19,13 @@
   white-space: nowrap;
   min-width: 0;
 }
+
+/* Phones: the path and note wrap instead of losing their ends to an
+   ellipsis, since there's no room to show them whole on one line. */
+@media (max-width: 639px) {
+  .path,
+  .note {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+}

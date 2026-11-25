@@ -14,7 +14,6 @@
   border-bottom-color: var(--border);
 }
 
-/* Desktop: the wordmark lines up with InfoPanel's left edge below it. */
 @media (prefers-reduced-motion: reduce) {
   .header {
     transition: none;

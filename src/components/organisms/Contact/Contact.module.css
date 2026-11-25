@@ -1,10 +1,9 @@
-/* Follows the violet Projects section, so no hairline above it: the change
-   of colour already marks the edge. */
+/* The page's last sheet, after Case Studies: its top edge (hairline and
+   shadow) comes from PortfolioTemplate.module.css, like every section's. */
 .contact {
   padding-top: clamp(5rem, 12vw, 9rem);
   /* The footer follows straight on. */
   padding-bottom: 2rem;
-  border-top: 0;
 }
 
 /* The display face has one weight: never ask for bold. */
