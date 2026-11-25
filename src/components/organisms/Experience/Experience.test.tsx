@@ -2,7 +2,14 @@ import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import Experience from './Experience'
-import { education, experience, experienceIntro, remainingStack, skillsHeading } from '../../../content/experience'
+import {
+  education,
+  experience,
+  experienceIntro,
+  remainingStack,
+  skillsHeading,
+  skillsHint,
+} from '../../../content/experience'
 import { toolCategories } from '../../molecules/SkillsAndTools/toolCategories'
 
 describe('Experience', () => {
@@ -18,21 +25,90 @@ describe('Experience', () => {
     expect(screen.getByText(experienceIntro)).toBeInTheDocument()
   })
 
-  it('lists one ledger row per role, newest first, then the degree, then the tools', () => {
+  it('leads with the tools, then one ledger row per role, newest first, then the degree', () => {
     render(<Experience />)
     const rows = screen.getAllByRole('heading', { level: 3 })
     expect(rows.map((heading) => heading.textContent)).toEqual([
+      skillsHeading,
       ...experience.map((entry) => entry.role),
       education.degree,
-      skillsHeading,
     ])
   })
 
-  it('ends on every tool at a glance, grouped by category', () => {
+  it('shows every tool at a glance, grouped by category', () => {
     render(<Experience />)
     toolCategories.forEach((category) => {
       expect(screen.getByRole('list', { name: category.ariaLabel })).toBeInTheDocument()
     })
+  })
+
+  it('filters the ledger by a picked tool, fading the roles that never used it', async () => {
+    const user = userEvent.setup()
+    render(<Experience />)
+    const status = screen.getByTestId('skills-status')
+    expect(status).toHaveTextContent(skillsHint)
+    const cypress = screen.getByRole('button', { name: 'Cypress' })
+
+    await user.click(cypress)
+
+    expect(cypress).toHaveAttribute('aria-pressed', 'true')
+    const users = experience.filter((entry) => entry.keyTools.some(({ tool }) => tool === 'Cypress'))
+    experience.forEach((entry) => {
+      const used = users.includes(entry)
+      expect(screen.getByTestId(`experience-${entry.id}`)).toHaveAttribute('data-tool-match', String(used))
+      expect(status.textContent?.includes(entry.role)).toBe(used)
+    })
+
+    // Picking it again clears the filter.
+    await user.click(cypress)
+    expect(cypress).toHaveAttribute('aria-pressed', 'false')
+    expect(status).toHaveTextContent(skillsHint)
+    experience.forEach((entry) =>
+      expect(screen.getByTestId(`experience-${entry.id}`)).not.toHaveAttribute('data-tool-match'),
+    )
+  })
+
+  it('previews a tool under the pointer, and Escape clears a picked one', async () => {
+    const user = userEvent.setup()
+    render(<Experience />)
+    const status = screen.getByTestId('skills-status')
+
+    await user.hover(screen.getByRole('button', { name: 'Maestro' }))
+    expect(status).toHaveTextContent('Maestro: QA Lead / Senior SDET')
+    await user.unhover(screen.getByRole('button', { name: 'Maestro' }))
+    expect(status).toHaveTextContent(skillsHint)
+
+    await user.click(screen.getByRole('button', { name: 'Selenium' }))
+    await user.keyboard('{Escape}')
+    expect(status).toHaveTextContent(skillsHint)
+  })
+
+  it('matches Electron, the desktop app, to both Eventric roles', async () => {
+    const user = userEvent.setup()
+    render(<Experience />)
+
+    await user.click(screen.getByRole('button', { name: 'Electron' }))
+
+    experience.forEach((entry) =>
+      expect(screen.getByTestId(`experience-${entry.id}`)).toHaveAttribute(
+        'data-tool-match',
+        String(entry.company === 'Eventric Master Tour'),
+      ),
+    )
+  })
+
+  it('points tools no role used to the Projects section', async () => {
+    const user = userEvent.setup()
+    render(<Experience />)
+
+    await user.click(screen.getByRole('button', { name: 'GitHub' }))
+
+    const status = screen.getByTestId('skills-status')
+    expect(status).toHaveTextContent('GitHub: used in my Projects')
+    expect(within(status).getByRole('link', { name: 'Projects' })).toHaveAttribute('href', '#projects')
+    experience.forEach((entry) =>
+      expect(screen.getByTestId(`experience-${entry.id}`)).toHaveAttribute('data-tool-match', 'false'),
+    )
   })
 
   it('closes on the degree: the school linked out, and nothing to open', () => {

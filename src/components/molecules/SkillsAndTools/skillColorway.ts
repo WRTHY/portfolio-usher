@@ -72,3 +72,16 @@ export function sortBySkillOrder(labels: readonly string[]): string[] {
   return [...labels].sort((a, b) => rankOf(a) - rankOf(b))
 }
 
+// The grid's own spelling of each tool, keyed by lowercase name.
+const gridNameByKey = new Map(
+  toolCategories.flatMap((category) => category.tools.map((tool) => [tool.name.toLowerCase(), tool.name] as const)),
+)
+
+// Every grid tool a stack label names, in the grid's spelling: compound
+// labels name several ("TypeScript/JavaScript" is both), and aliases count
+// ("Postman/Apidog" is Postman once). Labels naming no grid tool give [].
+export function gridToolsIn(label: string): string[] {
+  const parts = [label, ...label.split(/[/(),]/)].map((part) => part.trim().toLowerCase()).filter(Boolean)
+  const names = parts.flatMap((key) => gridNameByKey.get(nameAliases[key] ?? key) ?? [])
+  return [...new Set(names)]
+}

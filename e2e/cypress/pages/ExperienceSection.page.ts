@@ -41,4 +41,14 @@ export class ExperienceSection {
   details(role: string): Cypress.Chainable<JQuery> {
     return this.row(role).find(`ul[aria-label="What I did as ${role}"]`)
   }
+
+  /** A tool in the Skills & tools strip above the ledger, which filters it. */
+  toolFilter(tool: string): Cypress.Chainable<JQuery> {
+    return cy.get('#experience').findByRole('button', { name: tool })
+  }
+
+  /** The line under the strip: a hint, or the roles that used the chosen tool. */
+  get skillsStatus(): Cypress.Chainable<JQuery> {
+    return cy.get('#experience [data-testid="skills-status"]')
+  }
 }

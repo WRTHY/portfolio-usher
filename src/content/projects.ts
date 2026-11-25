@@ -4,6 +4,22 @@
 // this one replaced; lines marked "placeholder" were written by Claude and
 // are listed in the local COPY.md for James to rewrite. The API suite's
 // opened line is still in apiTesting.ts (James).
+// The Skills & tools grid tools (see toolCategories.tsx) these two projects
+// are built, tested or shipped with. The tool strip in Experience points to
+// Projects for these, including the ones no role used (GitHub, Vercel).
+export const projectTools: readonly string[] = [
+  'Playwright',
+  'Cypress',
+  'Vitest',
+  'Postman',
+  'TypeScript',
+  'JavaScript',
+  'React',
+  'Vite',
+  'GitHub',
+  'Vercel',
+]
+
 export const projectsCopy = {
   // James. Beside each project's name; its accessible name adds the
   // project's, since the two read the same.
