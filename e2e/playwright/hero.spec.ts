@@ -148,12 +148,21 @@ test.describe('opener', () => {
   })
 
   test.describe('with reduced motion', () => {
-    test.use({ reducedMotion: 'reduce' })
+    // Through contextOptions: the top-level reducedMotion option doesn't
+    // reach the page in this Playwright version, so the test used to run
+    // with motion on.
+    test.use({ contextOptions: { reducedMotion: 'reduce' } })
 
     test('never plays', async ({ portfolioPage }) => {
       await portfolioPage.goto({ intro: true })
+      const prefersReduced = await portfolioPage.page.evaluate(
+        () => matchMedia('(prefers-reduced-motion: reduce)').matches,
+      )
+      expect(prefersReduced).toBe(true)
       await expect(portfolioPage.hero.name).toBeVisible()
-      await expect(portfolioPage.hero.opener).toHaveCount(0)
+      // A short timeout: the opener unmounts by itself after a few seconds,
+      // so the default wait would pass even if it had played.
+      await expect(portfolioPage.hero.opener).toHaveCount(0, { timeout: 500 })
     })
   })
 })
