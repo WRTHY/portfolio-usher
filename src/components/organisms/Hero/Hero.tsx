@@ -9,6 +9,7 @@ import LocatorInspector from '../../molecules/LocatorInspector/LocatorInspector'
 import { hero } from '../../../content/hero'
 import { siteContent } from '../../../content/site'
 import { locatorAttrs } from '../../../utils/locatorAttrs'
+import { navHeight } from '../../../utils/navHeight'
 import { cx } from '../../../utils/classNames'
 import styles from './Hero.module.css'
 
@@ -38,13 +39,12 @@ function Hero({ onNameGoneChange }: HeroProps) {
   useEffect(() => {
     const name = heroRef.current?.querySelector('h1')
     if (!name || !onNameGoneChange) return
-    const navHeight =
-      parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--nav-height')) || 64
+    const barHeight = navHeight()
     // Watches the band below the bar: the name counts as gone once its
     // bottom edge has passed up under the bar.
     const observer = new IntersectionObserver(
-      ([entry]) => onNameGoneChange(!entry.isIntersecting && entry.boundingClientRect.bottom < navHeight),
-      { rootMargin: `-${navHeight}px 0px 0px 0px` },
+      ([entry]) => onNameGoneChange(!entry.isIntersecting && entry.boundingClientRect.bottom < barHeight),
+      { rootMargin: `-${barHeight}px 0px 0px 0px` },
     )
     observer.observe(name)
     return () => observer.disconnect()

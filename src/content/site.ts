@@ -4,9 +4,7 @@ export const siteContent = {
   name: 'James Usher',
   tagline:
     'SDET | QE Lead',
-  quickSummary :
-    'From Chaos, Quality - I build testing from scratch so nothing ships broken',
-  resumeUrl: '/James_Usher_Resume.pdf',
+  resumeUrl: links.resume,
 } as const
 
 export const socialLinks = [

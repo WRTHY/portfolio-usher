@@ -73,7 +73,7 @@
   --heading: 'TBJ Orcherum Mini', 'General Sans', system-ui, 'Segoe UI', Roboto, sans-serif;
   --mono: 'JetBrains Mono', ui-monospace, Consolas, monospace;
 
-  /* The site's one rounded-corner radius, used by every card/panel/modal/
+  /* The site's one rounded-corner radius, used by every card/panel/
      floating-surface recipe - a single token instead of the literal 12px
      repeated across each of their CSS modules. */
   --radius-lg: 12px;
@@ -186,7 +186,7 @@ h3 {
 }
 
 /* The page's one h1 is the hero name (SpringName), which sets its own
-   scale. Card and modal titles. Section titles use SectionHeader's own scale. */
+   scale. Card titles. Section titles use SectionHeader's own scale. */
 h2,
 h3 {
   font-size: 24px;
