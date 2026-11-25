@@ -105,6 +105,22 @@
   }
 }
 
+/* Phones: tighter spacing, so the full name fits beside the theme toggle,
+   "Let's talk" and the menu from 360px up, instead of being clipped. */
+@media (max-width: 479px) {
+  .bar {
+    gap: 0.75rem;
+  }
+
+  .actions {
+    gap: 0.5rem;
+  }
+
+  .talk {
+    padding: 0 0.75rem;
+  }
+}
+
 /* Very narrow phones: the button goes, to keep the wordmark, theme toggle and
    menu on one line; the close is still at the bottom of the page. */
 @media (max-width: 359px) {
